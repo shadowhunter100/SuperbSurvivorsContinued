@@ -1,4 +1,4 @@
-require "3_Other/SuperSurvivorGroupManager"
+require "2_Group/SuperSurvivorGroupManager"
 
 function isModEnabled(modname)
 
