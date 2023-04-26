@@ -206,7 +206,7 @@ PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Fireman", Greeting = "Howdy. You
 PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Formal", Greeting = "ARRRRGGH!!!! Got you! Don\'t even think about escaping!",  Name = "Attorney", X = 7991, Y = 11449, Z = 0 , Weapon = "Base.Golfclub", Orders = "Standing Ground", isHostile = true};
 PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Formal", Greeting = "Thank God! Please help me!",  Name = "Librarian", X = 8335, Y = 11615, Z = 0 , Weapon = "Base.BaseballBat", Orders = "Standing Ground", isHostile = false};
 PresetSpawns[#PresetSpawns+1] = {Greeting = "I\'ve been to eight county fairs and a goat rodeo, but I\'ve never seen anything like that. Thanks for the rescue. Now I gotta find Rick",PerkName = "Aiming",PerkLevel = 10, isFemale=false, NoParty = true,   Name = "Abraham", X = 8211, Y = 11805, Z = 0 , Weapon = getWeapon("Base.HuntingRifle"), Orders = "Guard", isHostile = false};
-PresetSpawns[#PresetSpawns+1] = {Greeting = "Thank you for saving me. So you\'re aware, I\’m on record as stating that I\'m not combat ready or even for that matter combat inclined",PerkName = "Blunt",PerkLevel = 3, isFemale=false, NoParty = true,   Name = "Eugene", X = 8231, Y = 11816, Z = 0 , Weapon = "Base.Plank", Orders = "Guard", isHostile = false}; 
+PresetSpawns[#PresetSpawns+1] = {Greeting = "Thank you for saving me. So you\'re aware, I\'’'m on record as stating that I\'m not combat ready or even for that matter combat inclined",PerkName = "Blunt",PerkLevel = 3, isFemale=false, NoParty = true,   Name = "Eugene", X = 8231, Y = 11816, Z = 0 , Weapon = "Base.Plank", Orders = "Guard", isHostile = false}; 
 --ROSEWOOD END
 
 --RAILYARD SOUTH OF MULD
