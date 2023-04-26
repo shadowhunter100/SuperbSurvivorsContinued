@@ -1,25 +1,133 @@
 VERSION = 1,
 
-option BecomeBrave.MinimumZombieKills
+option SuperbSurviversContinued.SpawnRate
 {
-	type = integer, min = 1, max = 10000, default = 350,
-	page = BecomeBrave, translation = MinimumZombieKills,
+	type = integer, min = 1, max = 10, default = 4,
+	page = SuperbSurviversContinued, translation = SpawnRate,
 }
 
-option BecomeBrave.MaximumZombieKills
+option SuperbSurviversContinued.WifeSpawn
 {
-	type = integer, min = 1, max = 10000, default = 1500,
-	page = BecomeBrave, translation = MaximumZombieKills,
+	type = integer, min = 1, max = 1, default = 1,
+	page = SuperbSurviversContinued, translation = WifeSpawn,
 }
 
-option BecomeBrave.ConsiderTraits
+option SuperbSurviversContinued.LockNLoad
 {
-	type = boolean, default = true,
-	page = BecomeBrave, translation = ConsiderTraits,
+	type = integer, min = 1, max = 1, default = 1,
+	page = SuperbSurviversContinued, translation = LockNLoad,
 }
 
-option BecomeBrave.ConsiderOccupations
+option SuperbSurviversContinued.GunSpawnRate
 {
-	type = boolean, default = true,
-	page = BecomeBrave, translation = ConsiderOccupations,
+	type = integer, min = 1, max = 3, default = 3,
+	page = SuperbSurviversContinued, translation = GunSpawnRate,
+}
+
+option SuperbSurviversContinued.WepSpawnRate
+{
+	type = integer, min = 1, max = 10, default = 6,
+	page = SuperbSurviversContinued, translation = WepSpawnRate,
+}
+
+option SuperbSurviversContinued.HostileSpawnRate
+{
+	type = integer, min = 1, max = 4, default = 1,
+	page = SuperbSurviversContinued, translation = HostileSpawnRate,
+}
+
+option SuperbSurviversContinued.MaxHostileSpawnRate
+{
+	type = integer, min = 1, max = 20, default = 17,
+	page = SuperbSurviversContinued, translation = MaxHostileSpawnRate,
+}
+
+option SuperbSurviversContinued.InfinitAmmo
+{
+	type = integer, min = 0, max = 2, default = 2,
+	page = SuperbSurviversContinued, translation = InfinitAmmo,
+}
+
+option SuperbSurviversContinued.NoPreSetSpawn
+{
+	type = integer, min = 0, max = 1, default = 1,
+	page = SuperbSurviversContinued, translation = NoPreSetSpawn,
+}
+
+option SuperbSurviversContinued.FindWork
+{
+	type = integer, min = 0, max = 1, default = 1,
+	page = SuperbSurviversContinued, translation = FindWork,
+}
+
+option SuperbSurviversContinued.SurvivorHunger
+{
+	type = integer, min = 0, max = 1, default = 1,
+	page = SuperbSurviversContinued, translation = SurvivorHunger,
+}
+
+option SuperbSurviversContinued.SurvivorFriendliness
+{
+	type = integer, min = 0, max = 5, default = 4,
+	page = SuperbSurviversContinued, translation = SurvivorFriendliness,
+}
+
+option SuperbSurviversContinued.RaidersAtLeastHours
+{
+	type = integer, min = 0, max = 24, default = 7,
+	page = SuperbSurviversContinued, translation = RaidersAtLeastHours,
+}
+
+option SuperbSurviversContinued.RaidersAfterHours
+{
+	type = integer, min = 0, max = 24, default = 2,
+	page = SuperbSurviversContinued, translation = RaidersAfterHours,
+}
+
+option SuperbSurviversContinued.RaidersChance
+{
+	type = integer, min = 0, max = 100, default = 3,
+	page = SuperbSurviversContinued, translation = RaidersChance,
+}
+
+option SuperbSurviversContinued.Bravery
+{
+	type = integer, min = 0, max = 100, default = 2,
+	page = SuperbSurviversContinued, translation = Bravery,
+}
+
+option SuperbSurviversContinued.SSHotkey1
+{
+	type = string, default = "6",
+	page = SuperbSurviversContinued, translation = SSHotkey1,
+}
+
+option SuperbSurviversContinued.SSHotkey2
+{
+	type = string, default = "18",
+	page = SuperbSurviversContinued, translation = SSHotkey2,
+}
+
+option SuperbSurviversContinued.SSHotkey3
+{
+	type = string, default = "27",
+	page = SuperbSurviversContinued, translation = SSHotkey3,
+}
+
+option SuperbSurviversContinued.SSHotkey4
+{
+	type = string, default = "42",
+	page = SuperbSurviversContinued, translation = SSHotkey4,
+}
+
+option SuperbSurviversContinued.SafeBase
+{
+	type = integer, min = 0, max = 2, default = 1,
+	page = SuperbSurviversContinued, translation = SafeBase,
+}
+
+option SuperbSurviversContinued.DebugOptions
+{
+	type = integer, min = 0, max = 2, default = 2,
+	page = SuperbSurviversContinued, translation = DebugOptions,
 }
