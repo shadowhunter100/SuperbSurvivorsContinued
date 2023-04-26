@@ -1,4 +1,4 @@
-require "2_Other/SuperSurvivorPresetSpawns"
+require "3_Other/SuperSurvivorGroupManager"
 
 SuperSurvivor = {}
 SuperSurvivor.__index = SuperSurvivor
