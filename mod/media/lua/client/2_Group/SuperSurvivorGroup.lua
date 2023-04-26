@@ -472,7 +472,7 @@ end
 function SuperSurvivorGroup:Print()
 
 	print("GroupID: "..tostring(self.ID))
-	print(getActionText("Job_Leader")..": "..tostring(self.Leader))
+	-- print(getActionText("Job_Leader")..": "..tostring(self.Leader)) -- WIP - Commented out because 'getActionText()' was throwing an error...
 	print("MemberCount: "..tostring(#self.Members))
 	print("Members: ")
 	for i=1, #self.Members do
