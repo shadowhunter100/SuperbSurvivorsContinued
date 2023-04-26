@@ -1,0 +1,25 @@
+VERSION = 1,
+
+option BecomeBrave.MinimumZombieKills
+{
+	type = integer, min = 1, max = 10000, default = 350,
+	page = BecomeBrave, translation = MinimumZombieKills,
+}
+
+option BecomeBrave.MaximumZombieKills
+{
+	type = integer, min = 1, max = 10000, default = 1500,
+	page = BecomeBrave, translation = MaximumZombieKills,
+}
+
+option BecomeBrave.ConsiderTraits
+{
+	type = boolean, default = true,
+	page = BecomeBrave, translation = ConsiderTraits,
+}
+
+option BecomeBrave.ConsiderOccupations
+{
+	type = boolean, default = true,
+	page = BecomeBrave, translation = ConsiderOccupations,
+}
