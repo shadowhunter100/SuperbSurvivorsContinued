@@ -1,4 +1,5 @@
-require "SuperSurvivorGroup"
+require "SuperSurvivorGroup" -- comment out for local debugging, uncomment for game.
+-- require "2_Group\\SuperSurvivorGroup" -- uncomment for local debugging, comment out for game.
 
 SuperSurvivorGroupManager = {}
 SuperSurvivorGroupManager.__index = SuperSurvivorGroupManager
