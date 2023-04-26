@@ -12,11 +12,11 @@ local function debugMethodName(text)
 	end
 end
 
---- this method is for only concat strings when debug is enabled 
+--- this method is for only concat strings when debug is enabled
 ---@param action string any action that the method is doing
----@param value string the target of the action 
-local function debugMethodAction(action,value)
-	if enableDebugTable then 
+---@param value string the target of the action
+local function debugMethodAction(action, value)
+	if enableDebugTable then
 		print(action .. " : " .. value)
 	end
 end
@@ -33,31 +33,31 @@ end
 ---@param fileName string any Name
 ---@return string
 local function getFileFullPath(fileName)
-	return getWorld():getWorld()..getFileSeparator()..fileName
+	return getWorld():getWorld() .. getFileSeparator() .. fileName
 end
 
 --- Checks if a file of a savegame exists
 ---@param fileName string file to be searched
 ---@return boolean returns true if the current file exists
-function doesFileExist( fileName )
+function doesFileExist(fileName)
 	local fileTable = {}
 	local readFile = getModFileReader(modid, getFileFullPath(fileName), false)
 
-	if(readFile) then 
+	if (readFile) then
 		return true
-	else 
-		return false 
+	else
+		return false
 	end
 end
 
 --- gets a random item from a table
 ---@param t table a table
 ---@return any an random item of t table
-function table.randFrom( t )
+function table.randFrom(t)
 	local keys = {}
 
 	for key, value in pairs(t) do
-		keys[#keys+1] = key --Store keys in another table
+		keys[#keys + 1] = key --Store keys in another table
 	end
 
 	local key = ZombRand(1, #keys)
@@ -67,25 +67,25 @@ end
 --- loads a table from a .lua file
 ---@param fileName string the filename that the table will be loaded
 ---@return table a table with all data from filename or nil if not found
-function table.load( fileName )
+function table.load(fileName)
 	debugMethodName("table.load")
 	debugMethodAction("loading file", fileName)
 
 	local fileTable = {}
-	local readFile = getModFileReader(modid,getFileFullPath(fileName .. ".lua"), true)
+	local readFile = getModFileReader(modid, getFileFullPath(fileName .. ".lua"), true)
 
-	if(readFile) then
+	if (readFile) then
 		local scanLine = readFile:readLine()
-		
-		while scanLine do
-			debugMethodAction("reading line", tostring(#fileTable+1))
 
-			fileTable[#fileTable+1] = scanLine
+		while scanLine do
+			debugMethodAction("reading line", tostring(#fileTable + 1))
+
+			fileTable[#fileTable + 1] = scanLine
 			scanLine = readFile:readLine()
 
-			if not scanLine then 
+			if not scanLine then
 				debugTable("end of the file")
-				break 
+				break
 			end
 		end
 
@@ -103,21 +103,20 @@ end
 --- saves a table into a .lua file
 ---@param tbl table a table with data
 ---@param fileName string the name of the file to be created
-function table.save( tbl,fileName )
-
+function table.save(tbl, fileName)
 	debugMethodName("table.save")
 	debugMethodAction("saving file", fileName)
 	local themodID = modid
 	local thepath = getFileFullPath(fileName .. ".lua")
-	local writeFile = getModFileWriter(themodID,thepath , true, false)
-	
-		for i = 1,#tbl do
-			debugMethodAction("writing line", tostring(i))
-			writeFile:write(tbl[i].."\r\n");
-		end
-		
-		debugMethodAction("closing file", fileName)
-		writeFile:close();
+	local writeFile = getModFileWriter(themodID, thepath, true, false)
+
+	for i = 1, #tbl do
+		debugMethodAction("writing line", tostring(i))
+		writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
+	end
+
+	debugMethodAction("closing file", fileName)
+	writeFile:close();
 
 	debugMethodName("table.save")
 end
@@ -125,37 +124,36 @@ end
 --- loads a table from a file
 ---@param fileName string the filename that the table will be loaded
 ---@return table a table with all data from filename or nil if not found
-function kvtableload( fileName )
-
+function kvtableload(fileName)
 	debugMethodName("kvtableload")
 	debugMethodAction("loading file", fileName)
 
 	local fileTable = {}
-	local readFile = getModFileReader(modid,getFileFullPath(fileName) , true)
+	local readFile = getModFileReader(modid, getFileFullPath(fileName), true)
 
-	if( not readFile ) then 
-		return {} 
+	if (not readFile) then
+		return {}
 	end
 
 	local scanLine = readFile:readLine()
 	while scanLine do
-		debugMethodAction("reading line", tostring(#fileTable+1))
+		debugMethodAction("reading line", tostring(#fileTable + 1))
 
 		local values = {}
 
-		for input in scanLine:gmatch("%S+") do 
-			table.insert(values,input) 
+		for input in scanLine:gmatch("%S+") do
+			table.insert(values, input)
 		end
 
 		fileTable[values[1]] = values[2]
 
 		scanLine = readFile:readLine()
-		if not scanLine then 
+		if not scanLine then
 			debugTable("end of the file")
-			break 
+			break
 		end
 	end
-	
+
 	debugMethodAction("closing file", fileName)
 	readFile:close()
 
@@ -166,23 +164,20 @@ end
 --- saves a table into a file
 ---@param tbl table a table with data
 ---@param fileName string the name of the file to be created
-function kvtablesave( fileTable, fileName )
-
+function kvtablesave(fileTable, fileName)
 	debugMethodName("kvtablesave")
 	debugMethodAction("saving file", fileName)
 
-	if(not fileTable) then 
+	if (not fileTable) then
 		debugTable("table is empty")
-		return false 
+		return false
 	end
 
 	local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false)
-	
-	for index,value in pairs(fileTable) do
 
+	for index, value in pairs(fileTable) do
 		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n");
 		debugMethodAction("writing line", tostring(index))
-
 	end
 
 	debugMethodAction("closing file", fileName)
@@ -191,7 +186,9 @@ function kvtablesave( fileTable, fileName )
 	debugMethodName("kvtablesave")
 end
 
-
 function getSaveDir()
-	return Core.getMyDocumentFolder()..getFileSeparator().."Saves"..getFileSeparator().. getWorld():getGameMode() .. getFileSeparator() .. getWorld():getWorld().. getFileSeparator();
+	return Core.getMyDocumentFolder() ..
+	getFileSeparator() ..
+	"Saves" ..
+	getFileSeparator() .. getWorld():getGameMode() .. getFileSeparator() .. getWorld():getWorld() .. getFileSeparator();
 end
