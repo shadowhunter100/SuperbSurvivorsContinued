@@ -54,7 +54,7 @@ function SuperSurvivorGroup:isEnemy(SS, character)
 	elseif (SS:isInGroup(character)) then
 		return false
 	elseif (SS.player:getModData().isHostile ~= true and character:getModData().surender == true) then
-		return false                                                                                             -- so other npcs dont attack anyone surendering
+		return false -- so other npcs dont attack anyone surendering
 	elseif (SS.player:getModData().hitByCharacter == true) and (character:getModData().semiHostile == true) then
 		return true
 	elseif (character:getModData().isHostile ~= SS.player:getModData().isHostile) then
@@ -104,18 +104,30 @@ function SuperSurvivorGroup:getBestGroupAreaContainerForItem(item) -- returns mo
 
 	--using only "if" not "elseif" because this is a top down priority checking system, multiple if statements can be true for certain items so if certain areas are set those will be prioritized
 
-	if (has_value(overrideWood, itemtype) and self:isGroupAreaSet("WoodStorageArea")) then return self
-		:getGroupAreaContainer("WoodStorageArea") end
-	if (has_value(overrideMedical, itemtype) and self:isGroupAreaSet("MedicalStorageArea")) then return self
-		:getGroupAreaContainer("MedicalStorageArea") end
-	if (has_value(overrideTool, itemtype) and self:isGroupAreaSet("ToolStorageArea")) then return self
-		:getGroupAreaContainer("ToolStorageArea") end
-	if ((itemcategory == "Food") and self:isGroupAreaSet("FoodStorageArea")) then return self:getGroupAreaContainer(
-		"FoodStorageArea") end
-	if (((itemcategory == "Weapon") or (itemcategory == "WeaponPart")) and self:isGroupAreaSet("WeaponStorageArea")) then return
-		self:getGroupAreaContainer("WeaponStorageArea") end
-	if (((itemcategory == "Normal") or (itemcategory == "Item")) and self:isGroupAreaSet("ToolStorageArea")) then return
-		self:getGroupAreaContainer("ToolStorageArea") end
+	if (has_value(overrideWood, itemtype) and self:isGroupAreaSet("WoodStorageArea")) then
+		return self
+			:getGroupAreaContainer("WoodStorageArea")
+	end
+	if (has_value(overrideMedical, itemtype) and self:isGroupAreaSet("MedicalStorageArea")) then
+		return self
+			:getGroupAreaContainer("MedicalStorageArea")
+	end
+	if (has_value(overrideTool, itemtype) and self:isGroupAreaSet("ToolStorageArea")) then
+		return self
+			:getGroupAreaContainer("ToolStorageArea")
+	end
+	if ((itemcategory == "Food") and self:isGroupAreaSet("FoodStorageArea")) then
+		return self:getGroupAreaContainer(
+			"FoodStorageArea")
+	end
+	if (((itemcategory == "Weapon") or (itemcategory == "WeaponPart")) and self:isGroupAreaSet("WeaponStorageArea")) then
+		return
+			self:getGroupAreaContainer("WeaponStorageArea")
+	end
+	if (((itemcategory == "Normal") or (itemcategory == "Item")) and self:isGroupAreaSet("ToolStorageArea")) then
+		return
+			self:getGroupAreaContainer("ToolStorageArea")
+	end
 
 	return nil
 end
@@ -493,16 +505,18 @@ function SuperSurvivorGroup:Save()
 	local tabletoSave = {}
 	tabletoSave[1] = #self.Members
 	tabletoSave[2] = self.Leader
-	table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData") -- WIP - console.txt logged an error tracing to this line
-	table.save(self.Members, "SurvivorGroup" .. tostring(self.ID))
-	table.save(self.Bounds, "SurvivorGroup" .. tostring(self.ID) .. "Bounds")
+	-- table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData") -- WIP - console.txt logged an error tracing to this line
+	-- table.save(self.Members, "SurvivorGroup" .. tostring(self.ID))
+	-- table.save(self.Bounds, "SurvivorGroup" .. tostring(self.ID) .. "Bounds")
 
 	tabletoSave = {}
 	--print("starting save")
 	table.sort(self.GroupAreas)
+
 	for k, v in pairs(self.GroupAreas) do
 		--print("key "..tostring(k))
 		local area = self.GroupAreas[k]
+
 		for i = 1, #area do
 			table.insert(tabletoSave, area[i])
 			--print("inserting "..tostring(area[i]))

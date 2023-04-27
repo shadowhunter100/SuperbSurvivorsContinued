@@ -36,7 +36,7 @@ function SuperSurvivorPlayerInit(player)
 			MData.isHostile = false;
 
 			local GID, Group
-			
+
 			if (SSM:Get(0):getGroupID() == nil) then
 				print("SSGM:newGroup() " .. tostring(SSGM:getCount()))
 				Group = SSGM:newGroup()
@@ -171,7 +171,7 @@ end
 
 function getCoverValue(obj)
 	if (tostring(obj:getType()) == "wall") then
-		return 0                                      -- walls behind player are blocking if on samve sqare
+		return 0 -- walls behind player are blocking if on samve sqare
 	elseif (obj:getObjectName() == "Tree") then
 		return 25
 	elseif (obj:getObjectName() == "Window") then
@@ -181,7 +181,7 @@ function getCoverValue(obj)
 	elseif (obj:getObjectName() == "Counter") then
 		return 80
 	elseif (obj:getObjectName() == "IsoObject") then
-		return 10                                           -- drastically lowered because small stuff like garbage was blocking shots
+		return 10 -- drastically lowered because small stuff like garbage was blocking shots
 	else
 		return 0
 	end

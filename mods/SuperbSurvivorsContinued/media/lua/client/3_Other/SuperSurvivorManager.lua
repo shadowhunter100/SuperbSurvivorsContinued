@@ -397,7 +397,7 @@ function saveSurvivorMap(  )
 	
 	local tempTable = {}
 	tempTable[1] = SSM.SurvivorCount
-	table.save(tempTable,"SurvivorManagerInfo")
+	-- table.save(tempTable,"SurvivorManagerInfo") -- WIP - console.txt logged an error tracing to this line
 	
 	--[[
 	if(not SurvivorMap) then return false end
@@ -413,9 +413,9 @@ function saveSurvivorMap(  )
 	end
 	writeFile:close();
 	]]
-	kvtablesave(SurvivorLocX,"SurvivorLocX")
-	kvtablesave(SurvivorLocY,"SurvivorLocY")
-	kvtablesave(SurvivorLocZ,"SurvivorLocZ")
+	-- kvtablesave(SurvivorLocX,"SurvivorLocX") -- WIP - console.txt logged an error tracing to this line
+	-- kvtablesave(SurvivorLocY,"SurvivorLocY") -- WIP - console.txt logged an error tracing to this line
+	-- kvtablesave(SurvivorLocZ,"SurvivorLocZ") -- WIP - console.txt logged an error tracing to this line
 end
 
 

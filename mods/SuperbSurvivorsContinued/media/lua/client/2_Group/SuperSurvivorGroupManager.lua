@@ -55,7 +55,7 @@ function SuperSurvivorGroupManager:Save()
 	for i = 0, self.GroupCount do
 		if (self.Groups[i]) then
 			--print("saving group #"..tostring(i))
-			self.Groups[i]:Save() -- WIP - console.txt logged an error tracing to this line
+			-- self.Groups[i]:Save() -- WIP - console.txt logged an error tracing to this line
 		end
 	end
 	--print("DOne saving groups")
@@ -63,6 +63,7 @@ end
 
 function SuperSurvivorGroupManager:Print()
 	print("printing groups, groupcount:" .. tostring(self.GroupCount))
+
 	for i = 0, self.GroupCount do
 		if (self.Groups[i]) then self.Groups[i]:Print() end
 	end

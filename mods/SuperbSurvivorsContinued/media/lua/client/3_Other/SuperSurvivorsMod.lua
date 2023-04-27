@@ -61,8 +61,8 @@ function SuperSurvivorsOnTick()
 		OnTickTicks = OnTickTicks + 1
 		if (OnTickTicks % 1000 == 0) then
 			--print("saving survivor map...")
-			SSGM:Save() -- WIP - console.txt logged an error tracing to this line
-			saveSurvivorMap()
+			-- SSGM:Save() -- WIP - console.txt logged an error tracing to this line
+			-- saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
 		end
 	end
 end
@@ -644,7 +644,7 @@ function supersurvivortemp(keyNum)
 			--getSpecificPlayer(0):save()
 			SSM:SaveAll()
 			SSGM:Save()
-			saveSurvivorMap()
+			-- saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
 			-- The 'key' in markouts are the default keys befor a player changes them
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")
@@ -715,6 +715,7 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 
 					if (isModEnabled("ORGM")) then
 						local data = ORGM.getFirearmData(weapon:getType())
+
 						if (data ~= nil) and (data.selectFire or data.alwaysFullAuto) then
 							SS.UsingFullAuto = true
 						end
@@ -726,14 +727,6 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 end
 
 Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
-
-
-
-
-
-
-
-
 
 -- ALT SPAWNING
 function SuperSurvivorsNewSurvivorManager()
@@ -1244,25 +1237,31 @@ NumberOfLocalPlayers = 0
 
 function SSCreatePlayerHandle(newplayerID)
 	local newplayer = getSpecificPlayer(newplayerID)
+
 	print("OnCreatePlayer event triggered in Super Survivors ID:" .. tostring(newplayerID))
+
 	local MD = newplayer:getModData()
+
 	if (not MD.ID) and (newplayer:isLocalPlayer()) then
 		SuperSurvivorPlayerInit(newplayer)
+
 		if (getSpecificPlayer(0) and (not getSpecificPlayer(0):isDead()) and (getSpecificPlayer(0) ~= newplayer)) then
 			local MainSS = SSM:Get(0);
 			local MainSSGroup = MainSS:getGroup()
+
 			NumberOfLocalPlayers = NumberOfLocalPlayers + 1
+
 			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers)
 			newSS:setID(NumberOfLocalPlayers)
+
 			print("new survivor ID is " .. tostring(newSS:getID()))
+
 			MainSSGroup:addMember(newSS, "Guard");
 		end
 	end
 end
 
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
-
-
 
 function SSOnGameStartHandle()
 

@@ -112,11 +112,11 @@ function table.save(tbl, fileName)
 
 	for i = 1, #tbl do
 		debugMethodAction("writing line", tostring(i))
-		writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
+		-- writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
 	end
 
 	debugMethodAction("closing file", fileName)
-	writeFile:close();
+	-- writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
 	debugMethodName("table.save")
 end
@@ -173,22 +173,23 @@ function kvtablesave(fileTable, fileName)
 		return false
 	end
 
-	local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false)
+	-- local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
 
 	for index, value in pairs(fileTable) do
-		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n");
+		-- writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
 		debugMethodAction("writing line", tostring(index))
 	end
 
 	debugMethodAction("closing file", fileName)
-	writeFile:close();
+	-- writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
 	debugMethodName("kvtablesave")
 end
 
 function getSaveDir()
 	return Core.getMyDocumentFolder() ..
-	getFileSeparator() ..
-	"Saves" ..
-	getFileSeparator() .. getWorld():getGameMode() .. getFileSeparator() .. getWorld():getWorld() .. getFileSeparator();
+		getFileSeparator() ..
+		"Saves" ..
+		getFileSeparator() ..
+		getWorld():getGameMode() .. getFileSeparator() .. getWorld():getWorld() .. getFileSeparator();
 end
