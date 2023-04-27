@@ -18,9 +18,10 @@ Based on my code review of the workshop item, I have found some of the referenci
 My "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and workshop items.
 
 ## Here are the workshop items I have found, but were uncredited
-Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan
 Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.
    I have attempted to remove all references to Brita's. If you spot it, please notify me so it can be removed.
+ORGM - https://steamcommunity.com/sharedfiles/filedetails/?id=514618604 by Fenris Wolf
+Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan
 
 ## What will be done in this mod?
 In this "Continuation", I will attempt to fix the known (and unknown) issues while updating the core functionalities.
