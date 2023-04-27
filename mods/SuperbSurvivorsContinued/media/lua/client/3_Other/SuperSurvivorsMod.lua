@@ -1263,35 +1263,38 @@ end
 
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
 
+-- WIP - WHAT IS THIS SUPPOSED TO DO?
 function SSOnGameStartHandle()
 
 end
 
---Events.OnGameStart.Add(SSOnGameStartHandle)
--- Mod ID name, then the Mod's actual name
+-- WIP - The compatibility check seems unnecessary... as most of these mods seems to be abandoned...
+-- the "continued" workshop item will start from a clean slate, hopefully for the better.
+-- --Events.OnGameStart.Add(SSOnGameStartHandle)
+-- -- Mod ID name, then the Mod's actual name
 
-local function SSSpamCheck_Preset(Var1, Var2)
-	if (Option_WarningMSG == 2) then
-		if isModEnabled(Var1) then
-			print(Var2 .. " doesn't work with SuperiorSurvivors!")
-			getSpecificPlayer(0):Say(Var2 ..
-				" doesn't work with SuperiorSurvivors, please disable " ..
-				Var2 .. "! To disable this Message, check warning message option in SuperiorSurvivors.")
-		end
-	end
-end
+-- local function SSSpamCheck_Preset(Var1, Var2)
+-- 	if (Option_WarningMSG == 2) then
+-- 		if isModEnabled(Var1) then
+-- 			print(Var2 .. " doesn't work with SuperiorSurvivors!")
+-- 			getSpecificPlayer(0):Say(Var2 ..
+-- 				" doesn't work with SuperiorSurvivors, please disable " ..
+-- 				Var2 .. "! To disable this Message, check warning message option in SuperiorSurvivors.")
+-- 		end
+-- 	end
+-- end
 
--- Checks for spamming people when they use incompatible mods can be found here.
-local function SSSpamChecks()
-	--SSSpamCheck_Preset("ZM1A1","[OPEN BETA] M1A1 ABRAMS")
-	--SSSpamCheck_Preset("Amputation","TheOnlyCure")
-	--SSSpamCheck_Preset("SwapIt","SwapIt")
+-- -- Checks for spamming people when they use incompatible mods can be found here.
+-- local function SSSpamChecks()
+-- 	--SSSpamCheck_Preset("ZM1A1","[OPEN BETA] M1A1 ABRAMS")
+-- 	--SSSpamCheck_Preset("Amputation","TheOnlyCure")
+-- 	--SSSpamCheck_Preset("SwapIt","SwapIt")
 
-	SSSpamCheck_Preset("SuperSurvivors", "SuperSurvivors")
-	SSSpamCheck_Preset("SubparSurvivors", "SubparSurvivors")
-	SSSpamCheck_Preset("Survivors", "Survivors")
-	SSSpamCheck_Preset("SuperbSurvivorz", "SuperbSurvivorz")
-	--SSSpamCheck_Preset("SuperbUndressedSurvivors","SuperbUndressedSurvivors")
-end
+-- 	SSSpamCheck_Preset("SuperSurvivors", "SuperSurvivors")
+-- 	SSSpamCheck_Preset("SubparSurvivors", "SubparSurvivors")
+-- 	SSSpamCheck_Preset("Survivors", "Survivors")
+-- 	SSSpamCheck_Preset("SuperbSurvivorz", "SuperbSurvivorz")
+-- 	--SSSpamCheck_Preset("SuperbUndressedSurvivors","SuperbUndressedSurvivors")
+-- end
 
-Events.EveryOneMinute.Add(SSSpamChecks)
+-- Events.EveryOneMinute.Add(SSSpamChecks)
