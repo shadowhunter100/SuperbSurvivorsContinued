@@ -218,131 +218,44 @@ function getGunShotWoundBP(player)
 end
 
 function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
-	print("weaponhitcharacter")
+	local SSW = SSM:Get(wielder:getModData().ID);
+	local SSV = SSM:Get(victim:getModData().ID);
 
-	local SSW = SSM:Get(wielder:getModData().ID)
-	local SSV = SSM:Get(victim:getModData().ID)
-
-	if (wielder:isLocalPlayer() and SSV) then SSQM:update("AttackNPC", SSV:getName()) end
-	--if wielder ~= nil then print("PVP " .. tostring(wielder:getForname())) end
-	--if victim ~= nil then print("hit " .. tostring(victim:getForname())) end
-	--if wielder ~= nil and instanceof(weilder, "IsoPlayer") then print("wpvp " .. tostring(wielder:getCoopPVP())) end
-	--if victim ~= nil and instanceof(victim, "IsoPlayer") then print("vpvp " .. tostring(victim:getCoopPVP())) end
-
-	--if SSW ~= nil and SSW:getName() ~= nil then print("SSW " .. SSW:getName()) end
-	--if SSV ~= nil and SSV:getName() ~= nil then print("SSV " .. SSV:getName()) end
+	-- if (wielder:isLocalPlayer() and SSV) then 
+		-- SSQM:update("AttackNPC", SSV:getName());  -- WIP - console.txt logged an error tracing to this line 
+	-- end
 
 	local fakehit = false
 
 	if (SSV == nil) or (SSW == nil) then return false end
-	--print(SSW:getName() .. " / " .. SSV:getName() .. " x" .. tostring(damage))
 
 	if (victim.setAvoidDamage ~= nil) then
 		if (SSW:isInGroup(victim)) then
-			--victim:Say("cant touch this!")
-			--print("cant touch this")
-			fakehit = true
-			victim:setAvoidDamage(true)
+			fakehit = true;
+			victim:setAvoidDamage(true);
 		end
 	elseif (victim.setNoDamage ~= nil) then
 		if (SSW:isInGroup(victim)) then
-			--victim:Say("cant touch this!")
-			--print("cant touch this2")
-			fakehit = true
-			victim:setNoDamage(true)
+			fakehit = true;
+			victim:setNoDamage(true);
 		else
-			victim:setNoDamage(false)
+			victim:setNoDamage(false);
 		end
 	end
-
-	--if victim:getVehicle() ~= nil and victim:getVehicle().frontEndHealth > 3000 then
-	--	fakehit = true
-	--	victim:setNoDamage(true)
-	--end
 
 	if fakehit then return false end
 
-
-	--[[ obj cover calculations
-	if(instanceof(weapon,"HandWeapon")) and (weapon:isAimedFirearm()) and (instanceof(victim,"IsoPlayer")) then
-		
-		local angle = wielder:getAngle()
-		local dir = IsoDirections.fromAngle(angle)
-		dir = IsoDirections.reverse(dir)
-		
-		local victimSquare1 = victim:getCurrentSquare()
-		local victimSquare2 = victimSquare1:getTileInDirection(dir)
-		local coveredFire = false
-		for q=1,2 do
-			
-			local objs
-			if q == 1 then objs = victimSquare2:getObjects()
-			else objs = victimSquare1:getObjects() end
-			
-			local aimingPerk = wielder:getPerkLevel(Perks.Aiming)
-			local hitChanceBonus = 0
-			if wielder:HasTrait("Marksman") then hitChanceBonus = hitChanceBonus + 10 end
-			if(objs) then
-				for i=1, objs:size()-1 do
-					if(objs:get(i)) then
-						local obj = objs:get(i)
-						local chance = getCoverValue(obj) - (aimingPerk*3) - hitChanceBonus
-						if ZombRand(100) < chance then
-							coveredFire = true
-							break
-						end
-					end
-				end
-			end
-			if(coveredFire) then break end
-		end
-		
-		
-		
-		if coveredFire then
-			SSV:Speak("!!")
-			if(victim.setAvoidDamage ~= nil) then victim:setAvoidDamage(true) end
-			return false 	
-		
-		end
-	end
-	]]
-	--- obj cover calculations	END
-
-	-- add extra damage, bc bullet damage so low
-
-	--if(LastGuyHit == nil) or (victim ~= LastGuyHit) then
-	--	LastGuyHitCount = 1
-	--	LastGuyHit = victim
-	--elseif(victim ~= getSpecificPlayer(0)) then
-	--	LastGuyHitCount = LastGuyHitCount + 1
-	--end
-	--if(victim ~= getSpecificPlayer(0)) then wielder:Say(tostring(LastGuyHitCount)) end
-
-	--	local extraDamage = ZombRand(150,250);
-	--print("here i am31")
 	local extraDamage;
-	local shotPartshotPart = getGunShotWoundBP(victim)
+	local shotPartshotPart = getGunShotWoundBP(victim);
+
 	if (shotPartshotPart ~= nil) and (SSV:getID() ~= 0) then
-		--if( shotPartshotPart:getType() == "Head") then extraDamage = 40
-		--elseif( shotPartshotPart:getType() == "Neck") then extraDamage = 30
-		--elseif( shotPartshotPart:getType() == "Torso_Lower") then extraDamage = 30
-		--elseif( shotPartshotPart:getType() == "Torso_Upper") then extraDamage = 35
-		--end
-		extraDamage = 100 --(damage*24)
-		--print("added " .. tostring(extraDamage) .. " damage to gun shot wound on " .. tostring(shotPartshotPart:getType()) .. " to player number " .. tostring(victim:getModData().ID))
-		--	print("pre getHealth is " .. tostring(shotPartshotPart:getHealth()))
-		--print("pre getHealth is " .. tostring(victim:getBodyDamage():getHealth()))
+		extraDamage = 100; --(damage*24)
 
 		shotPartshotPart:AddDamage(extraDamage);
 		shotPartshotPart:DamageUpdate();
-		--victim:getBodyDamage():DamageFromWeapon(weapon);
+		victim:getBodyDamage():DamageFromWeapon(weapon);
 		victim:update();
-
-		--print("shotPartshotPart is " .. tostring(shotPartshotPart:getHealth()) )
 	end
-	--print("post getHealth is " .. tostring(victim:getBodyDamage():getHealth()) )
-
 
 	if instanceof(victim, "IsoPlayer") then
 		local GroupID = SSV:getGroupID()
@@ -366,7 +279,8 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 			end
 		end
 
-		wielder:getModData().semiHostile = true
+		wielder:getModData().semiHostile = true;
+
 		if (victim:getModData().surender) and weapon and weapon:isRanged() then -- defenceless player hit, they die
 			victim:getBodyDamage():getBodyPart(BodyPartType.Head):AddDamage(500);
 			victim:getBodyDamage():getBodyPart(BodyPartType.Torso_Upper):AddDamage(500);
@@ -416,15 +330,11 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 			local bodypart = bodydamage:getBodyPart(BodyPartType.FromIndex(bindex));
 			if (ZombRand(0, 100) < victim:getBodyPartClothingDefense(bindex, b3, b4)) then
 				b = false;
-				--victim:addHoleFromZombieAttacks(BloodBodyPartType.FromIndex(bindex));
 			end
 			if b == false then
 				return;
 			end
 			victim:addHole(BloodBodyPartType.FromIndex(bindex));
-			--victim:splatBloodFloorBig(0.4);
-			--victim:splatBloodFloorBig(0.4);
-			--victim:splatBloodFloorBig(0.4);
 			if (b3) then
 				if (ZombRand(0, 6) == 6) then
 					bodypart:generateDeepWound();
@@ -473,20 +383,3 @@ end
 Events.OnWeaponHitCharacter.Add(SuperSurvivorPVPHandle);
 Events.OnPlayerUpdate.Add(SuperSurvivorGlobalUpdate);
 Events.OnCharacterDeath.Add(SuperSurvivorOnDeath);
-
---function test1(wielder, weapon)
---	print "test1"
---end
---Events.OnWeaponSwingHitPoint.Add(test1);
---function test2(wielder, weapon)
---	print "attackfinished"
---end
---Events.OnPlayerAttackFinished.Add(test2);
---function test3(character, chargeDelta, weapon)
---	print("hookattack "..tostring(weapon))
---end
---Hook.Attack.Add(test3);
---function test4()
---	print "hitzombie"
---end
---Events.OnHitZombie.Add(test4)
