@@ -57,7 +57,7 @@ function SuperSurvivorManager:LoadSurvivor(ID, square)
 				self.SuperSurvivors[ID]:delete()
 			end
 		end
-		
+
 		self.SuperSurvivors[ID] = SuperSurvivor:newLoad(ID, square)
 		if (self.SuperSurvivors[ID]:Get():getPrimaryHandItem() == nil) and (self.SuperSurvivors[ID]:getWeapon() ~= nil) then
 			self.SuperSurvivors[ID]:Get():setPrimaryHandItem(self.SuperSurvivors[ID]:getWeapon())
@@ -259,7 +259,7 @@ end
 function SuperSurvivorManager:GetClosest()
 	local closestSoFar = 20
 	local closestID = 0
-	
+
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
 			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
@@ -344,16 +344,17 @@ function saveSurvivorMap()
 	if (not SurvivorMap) then return false end
 
 	local destFile = getWorld():getWorld() .. getFileSeparator() .. "SurvivorMap.lua"
-	local writeFile = getModFileWriter("SubparSurvivors", destFile, true, false)
 
+	-- WIP - Why is it writing a file here? Why is this block referencing subparSurvivors?
+	-- local writeFile = getModFileWriter("SubparSurvivors", destFile, true, false)
 
-	for index, value in pairs(SurvivorMap) do
-		for i = 1, #value do
-			writeFile:write(tostring(index) .. " " .. tostring(value[i]) .. "\r\n");
-		end
-	end
+	-- for index, value in pairs(SurvivorMap) do
+	-- 	for i = 1, #value do
+	-- 		writeFile:write(tostring(index) .. " " .. tostring(value[i]) .. "\r\n");
+	-- 	end
+	-- end
 
-	writeFile:close();
+	-- writeFile:close();
 
 	kvtablesave(SurvivorLocX, "SurvivorLocX") -- WIP - console.txt logged an error tracing to this line
 	kvtablesave(SurvivorLocY, "SurvivorLocY") -- WIP - console.txt logged an error tracing to this line
