@@ -22,35 +22,18 @@ function SetSurvivorDress(mapKey)
 end
 
 function SetSurvivorWeapon(mapKey)
-	local isBritaLoaded = isModEnabled("Brita")
-	local weapon = "Base.Pistol3"
-
-	local weaponTableBrita = {
-		[1] = "Brita.M16A3",
-		[2] = "Brita.SCARL",
-		[3] = "Brita.M4A1"
-	}
-
+	local weapon = "Base.Pistol3";
 	local weaponTableDefault = {
 		[1] = "Base.AssaultRifle",
 		[2] = "Base.AssaultRifle",
 		[3] = "Base.AssaultRifle"
-	}
+	};
 
-	-- Check if Brita is loaded then update the weapon variable accordingly.
-	if (isBritaLoaded) then
-		if (weaponTableBrita[mapKey]) then
-			weapon = weaponTableBrita[mapKey]
-		else
-			weapon = "Brita.G18"
-		end
-	else
-		if (weaponTableDefault[mapKey]) then
-			weapon = weaponTableDefault[mapKey]
-		end
+	if (weaponTableDefault[mapKey]) then
+		weapon = weaponTableDefault[mapKey];
 	end
 
-	return weapon
+	return weapon;
 end
 
 function SuperSurvivor:new(isFemale, square)
