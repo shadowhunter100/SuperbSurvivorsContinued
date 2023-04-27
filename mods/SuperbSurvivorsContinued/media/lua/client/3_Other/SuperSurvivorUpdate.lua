@@ -137,10 +137,11 @@ end
 
 function SuperSurvivorOnDeath(player)
 	if (player and player:getModData().ID ~= nil) then
-		local SS = SSM:Get(player:getModData().ID)
+		local SS = SSM:Get(player:getModData().ID);
+
 		if (SS ~= nil) then
-			SSQM:update("KillNPC", SS:getName())
-			SS:OnDeath()
+			-- SSQM:update("KillNPC", SS:getName()) -- WIP - Console.txt logged an error at this line.
+			SS:OnDeath();
 		end
 	end
 end
