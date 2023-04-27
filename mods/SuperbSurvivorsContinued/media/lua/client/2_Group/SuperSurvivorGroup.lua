@@ -318,6 +318,7 @@ function SuperSurvivorGroup:getMember(ofThisRole, closest)
 			return SSM:Get(workingID)
 		end
 	end
+	
 	return nil
 end
 
@@ -365,11 +366,13 @@ function SuperSurvivorGroup:getIdleMember(ofThisRole, closest)
 			return SSM:Get(workingID)
 		end
 	end
+
 	return nil
 end
 
 function SuperSurvivorGroup:getMembersThisCloseCount(range, referencePoint)
 	local count = 0
+
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
 		if (workingID ~= nil) and (SSM:Get(workingID)) then
@@ -382,6 +385,7 @@ end
 
 function SuperSurvivorGroup:PVPAlert(attacker)
 	local count = 0
+
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
 		local ss = SSM:Get(workingID)
@@ -413,16 +417,14 @@ function SuperSurvivorGroup:addMember(newSurvivor, Role)
 	if (currentGroup) then
 		currentGroup:removeMember(newSurvivor:getID())
 		print("removed " .. newSurvivor:getName() .. " from current group")
-	else
-		--print("no current group")
 	end
 
-
-
 	--if(newSurvivor:getGroupID() == self.ID) then return false end
-	if (Role == nil) then Role = "Worker" end
+	if (Role == nil) then 
+		Role = "Worker" 
+	end
+
 	if (newSurvivor ~= nil) and (not has_value(self.Members, newSurvivor:getID())) then
-		--	print("adding new survivor "..tostring(newSurvivor:getName()).." to group "..tostring(self.ID) .. " role:" .. tostring(Role))
 		table.insert(self.Members, newSurvivor:getID())
 
 		newSurvivor:setGroupRole(Role)
@@ -440,7 +442,6 @@ end
 
 function SuperSurvivorGroup:checkMember(newSurvivorID)
 	if (newSurvivorID ~= nil) and (not has_value(self.Members, newSurvivorID)) then
-		--	print("adding checked survivor"..newSurvivorID.." to group"..tostring(self.ID))
 		table.insert(self.Members, newSurvivorID)
 	end
 end
@@ -456,15 +457,11 @@ function SuperSurvivorGroup:removeMember(ID)
 				table.remove(self.Members, i)
 			end
 		end
-		--	print("remove success")
 		self:Print()
-	else
-		--	print("remove failed")
 	end
 end
 
 function SuperSurvivorGroup:stealingDetected(thief)
-	--	print("inside stealing detected!")
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
 		local workingSS = SSM:Get(workingID)
@@ -491,35 +488,23 @@ function SuperSurvivorGroup:getTaskCount(task)
 	return count
 end
 
-function SuperSurvivorGroup:Print()
-	print("GroupID: " .. tostring(self.ID))
-	-- print(getActionText("Job_Leader")..": "..tostring(self.Leader)) -- WIP - Commented out because 'getActionText()' was throwing an error...
-	print("MemberCount: " .. tostring(#self.Members))
-	print("Members: ")
-	for i = 1, #self.Members do
-		print("Member " .. tostring(self.Members[i]))
-	end
-end
 
 function SuperSurvivorGroup:Save()
 	local tabletoSave = {}
 	tabletoSave[1] = #self.Members
 	tabletoSave[2] = self.Leader
-	-- table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData") -- WIP - console.txt logged an error tracing to this line
-	-- table.save(self.Members, "SurvivorGroup" .. tostring(self.ID))
-	-- table.save(self.Bounds, "SurvivorGroup" .. tostring(self.ID) .. "Bounds")
+	table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData") -- WIP - console.txt logged an error tracing to this line
+	table.save(self.Members, "SurvivorGroup" .. tostring(self.ID))
+	table.save(self.Bounds, "SurvivorGroup" .. tostring(self.ID) .. "Bounds")
 
 	tabletoSave = {}
-	--print("starting save")
 	table.sort(self.GroupAreas)
 
 	for k, v in pairs(self.GroupAreas) do
-		--print("key "..tostring(k))
 		local area = self.GroupAreas[k]
 
 		for i = 1, #area do
 			table.insert(tabletoSave, area[i])
-			--print("inserting "..tostring(area[i]))
 		end
 	end
 
@@ -538,7 +523,6 @@ function SuperSurvivorGroup:Load()
 		for i = 1, #self.Members do
 			if (self.Members[i] ~= nil) then
 				self.Members[i] = tonumber(self.Members[i])
-				print(tostring(self.Members[i]) .. " is a member of group: " .. tostring(self.ID))
 			end
 		end
 	else
@@ -550,7 +534,6 @@ function SuperSurvivorGroup:Load()
 		for i = 1, #self.Bounds do
 			if (self.Bounds[i] ~= nil) then
 				self.Bounds[i] = tonumber(self.Bounds[i])
-				--print (tostring(tabletoSave[2]).. " is a member")
 			end
 		end
 	else
@@ -561,7 +544,6 @@ function SuperSurvivorGroup:Load()
 	local AreasTable = table.load("SurvivorGroup" .. tostring(self.ID) .. "Areas")
 
 	if (AreasTable) then
-		print("starting load")
 		table.sort(self.GroupAreas)
 		local gcount = 1
 		for k, v in pairs(self.GroupAreas) do
@@ -569,14 +551,19 @@ function SuperSurvivorGroup:Load()
 			if not AreasTable[gcount] then break end
 			for i = 1, 5 do
 				self.GroupAreas[k][i] = tonumber(AreasTable[gcount])
-				--print("loading "..tostring(AreasTable[gcount]))
 				gcount = gcount + 1
 			end
 		end
-	else
-		print("no areas file found for this group")
 	end
+end
 
-
-	--print ("DONE loading group#"..tostring(self.ID))
+-- DEBUG FUNCTIONS BELOW
+function SuperSurvivorGroup:Print()
+	print("GroupID: " .. tostring(self.ID))
+	print("MemberCount: " .. tostring(#self.Members))
+	print("Members: ")
+	
+	for i = 1, #self.Members do
+		print("Member " .. tostring(self.Members[i]))
+	end
 end

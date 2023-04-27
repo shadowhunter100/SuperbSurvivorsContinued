@@ -3917,7 +3917,7 @@ function SuperSurvivor:checkVictimCoverValue(victim)
 
 	totalCover = totalCover / blockingObjects
 
-	return totalCover - 10 -- WIP - workarounf for now
+	return totalCover - 10 -- WIP - workaround for now
 end
 
 --- gets the weapon damager based on a rng and distance from the target

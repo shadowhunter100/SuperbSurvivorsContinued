@@ -60,9 +60,8 @@ function SuperSurvivorsOnTick()
 		SSM:update()
 		OnTickTicks = OnTickTicks + 1
 		if (OnTickTicks % 1000 == 0) then
-			--print("saving survivor map...")
-			-- SSGM:Save() -- WIP - console.txt logged an error tracing to this line
-			-- saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
+			SSGM:Save() -- WIP - console.txt logged an error tracing to this line
+			saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
 		end
 	end
 end
@@ -644,7 +643,8 @@ function supersurvivortemp(keyNum)
 			--getSpecificPlayer(0):save()
 			SSM:SaveAll()
 			SSGM:Save()
-			-- saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
+			saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
+			
 			-- The 'key' in markouts are the default keys befor a player changes them
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")

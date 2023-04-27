@@ -31,10 +31,6 @@ function SuperSurvivorGroupManager:getCount()
 end
 
 function SuperSurvivorGroupManager:newGroup()
-	--print("created new group with ID of " .. tostring(self.GroupCount))
-	--self.Groups[self.GroupCount] = SuperSurvivorGroup:new(self.GroupCount)
-	--self.GroupCount = self.GroupCount + 1
-	--return self.Groups[self.GroupCount-1]
 	self:Print()
 
 	local groupID = self.GroupCount
@@ -44,21 +40,17 @@ function SuperSurvivorGroupManager:newGroup()
 		end
 	end
 
-	--print("created new group with ID of " .. tostring(groupID))
 	self.Groups[groupID] = SuperSurvivorGroup:new(groupID)
 	self.GroupCount = groupID + 1
 	return self.Groups[groupID]
 end
 
 function SuperSurvivorGroupManager:Save()
-	--print("saving groups:")
 	for i = 0, self.GroupCount do
 		if (self.Groups[i]) then
-			--print("saving group #"..tostring(i))
-			-- self.Groups[i]:Save() -- WIP - console.txt logged an error tracing to this line
+			self.Groups[i]:Save() -- WIP - console.txt logged an error tracing to this line
 		end
 	end
-	--print("DOne saving groups")
 end
 
 function SuperSurvivorGroupManager:Print()

@@ -91,13 +91,10 @@ function table.load(fileName)
 
 		debugMethodAction("closing file", fileName)
 		readFile:close()
-
-		debugMethodName("table.load")
-		return fileTable
 	end
 
 	debugMethodName("table.load")
-	return nil
+	return fileTable
 end
 
 --- saves a table into a .lua file
@@ -112,11 +109,11 @@ function table.save(tbl, fileName)
 
 	for i = 1, #tbl do
 		debugMethodAction("writing line", tostring(i))
-		-- writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
+		writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
 	end
 
 	debugMethodAction("closing file", fileName)
-	-- writeFile:close(); -- WIP - console.txt logged an error tracing to this line
+	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
 	debugMethodName("table.save")
 end
@@ -148,6 +145,7 @@ function kvtableload(fileName)
 		fileTable[values[1]] = values[2]
 
 		scanLine = readFile:readLine()
+
 		if not scanLine then
 			debugTable("end of the file")
 			break
@@ -173,15 +171,15 @@ function kvtablesave(fileTable, fileName)
 		return false
 	end
 
-	-- local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
+	local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
 
 	for index, value in pairs(fileTable) do
-		-- writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
+		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
 		debugMethodAction("writing line", tostring(index))
 	end
 
 	debugMethodAction("closing file", fileName)
-	-- writeFile:close(); -- WIP - console.txt logged an error tracing to this line
+	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
 	debugMethodName("kvtablesave")
 end
