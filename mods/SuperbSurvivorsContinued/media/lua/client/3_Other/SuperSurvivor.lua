@@ -3346,12 +3346,12 @@ end
 function SuperSurvivor:OnDeath()
 	print(self:getName() .. " has died")
 
-	-- Cannibal support
-	if not self.player:getBodyDamage():isInfected() then
-		for i = 1, ZombRand(1, 10) do
-			self.player:getInventory():AddItem("Subpar.StrangeMeat")
-		end
-	end
+	-- Cannibal support -- WIP - This actually does not work, console also logged an error as Subpar referred to another mod...
+	-- if not self.player:getBodyDamage():isInfected() then
+	-- 	for i = 1, ZombRand(1, 10) do
+	-- 		self.player:getInventory():AddItem("Subpar.StrangeMeat")
+	-- 	end
+	-- end
 
 	local ID = self:getID()
 	SSM:OnDeath(ID)
