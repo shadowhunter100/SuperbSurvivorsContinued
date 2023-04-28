@@ -448,65 +448,15 @@ Events.OnAIStateChange:Add(SuperSurvivorTest)
 -- WIP - Whoever wrote this function didn't consider the keybinding issues... This needs to be rewritten.
 function supersurvivortemp(keyNum)
 	if (getSpecificPlayer(0)) then
-		--getSpecificPlayer(0):Say(tostring(keyNum))
-
+		getSpecificPlayer(0):Say(tostring(GlobalTestVariable));
+		getSpecificPlayer(0):Say(tostring(GFollowDistance));
 
 		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
 			--SuperSurvivorsRaiderManager()
 
 			--if DebugOptions == true then -- This should prevent the infamous 6 key spawning
 			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare())
-			--end	
-
-			--for i=1, 4 do ss:Get():LevelPerk(Perks.FromString("Farming")) end
-			--ss:setAIMode("FollowRoute")
-		elseif (keyNum == 46) then -- c key
-			--local evts = Events
-			--evts:lol()
-		elseif (keyNum == 199) then -- home key
-
-		elseif (keyNum == 200) then -- up key
-
-		elseif (keyNum == 208) then -- down key
-			--	local f = getSpecificPlayer(0):getStats():getFatigue() + 0.1;
-			--getSpecificPlayer(0):getStats():setFatigue(f);
-
-			--ISTimedActionQueue.add(ISGetHitFromBehindAction:new(getSpecificPlayer(0),getSpecificPlayer(0)))
-
-			--[[
-		elseif( keyNum == 200) then -- up key
-			
-			GOffsety = GOffsety - 1;
-			if(VehicleController ~= nil) then
-				getSpecificPlayer(0):Say("going up")
-				--VehicleController:accelerator(true);
-				local cc = VehicleController:getClientControls()
-				cc.forward = true
-				VehicleController:setClientControls(cc)
-			end
-		elseif( keyNum == 208) then -- down key
-		GOffsety = GOffsety + 1;
-			if(LastVehicle ~= nil) then
-				local cc = LastVehicle:getController():getClientControls()
-				cc.backward = true
-				LastVehicle:getController():setClientControls(cc)
-			end
-		elseif( keyNum == 203) then -- left key
-		
-		GOffsetx = GOffsetx - 1;
-			if(LastVehicle ~= nil) then
-				local cc = LastVehicle:getController():getClientControls()
-				cc.steering = cc.steering - 1;
-				LastVehicle:getController():setClientControls(cc)
-			end
-		elseif( keyNum == 205) then -- right key
-		GOffsetx = GOffsetx + 1;
-			if(LastVehicle ~= nil) then
-				local cc = LastVehicle:getController():getClientControls()
-				cc.steering = cc.steering + 1;
-				LastVehicle:getController():setClientControls(cc)
-			end
-			]]
+			--end
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
 			if (GFollowDistance ~= 50) then GFollowDistance = GFollowDistance + 1 end
 			getSpecificPlayer(0):Say("Spread out more(" .. tostring(GFollowDistance) .. ")")
@@ -649,7 +599,7 @@ function supersurvivortemp(keyNum)
 	end
 end
 
--- Events.OnKeyPressed.Add(supersurvivortemp);
+Events.OnKeyPressed.Add(supersurvivortemp);
 
 
 function SuperSurvivorsOnEquipPrimary(player, weapon)
@@ -1196,9 +1146,34 @@ function SSCreatePlayerHandle(newplayerID)
 	end
 end
 
+local stringTest = "localStringTest";
+
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
 
 -- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
+function SuperSurvivorSays1()
+	getSpecificPlayer(0):Say(GFollowDistance);
+end
+
+-- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
+function SuperSurvivorSays2()
+	getSpecificPlayer(0):Say(SpeakEnabled);
+end
+
+-- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
+function SuperSurvivorSays3()
+	getSpecificPlayer(0):Say(GlobalTestVariable);
+end
+-- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
+function SuperSurvivorSays4()
+	getSpecificPlayer(0):Say(stringTest);
+end
+
+-- Events.OnKeyPressed.Add(SuperSurvivorSays1);
+-- Events.OnKeyPressed.Add(SuperSurvivorSays2);
+-- Events.OnKeyPressed.Add(SuperSurvivorSays3);
+-- Events.OnKeyPressed.Add(SuperSurvivorSays4);
+
 function SuperSurvivorOnCreateLivingChar(character)
 	print("OnCreateLivingChar:" .. tostring(character))
 	if (instanceof(character, "IsoZombie")) then

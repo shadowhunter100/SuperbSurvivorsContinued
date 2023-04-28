@@ -594,28 +594,6 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	Buddy:getTraits():add("Lucky")
 	Buddy:getTraits():add("KeenHearing")
 
-	-- The whole achievement seems unneeded... commented out until further notice.
-	-- -- achievements mod compatibility to stop errors--------
-	-- if (Buddy:getModData().ThingsIDropped == nil) then
-	-- 	Buddy:getModData().ThingsIDropped = {}
-	-- end
-	-- if (Buddy:getModData().CheckPointCounts == nil) then
-	-- 	Buddy:getModData().CheckPointCounts = {}
-	-- end
-	-- if (Buddy:getModData().KilledWithCounts == nil) then
-	-- 	Buddy:getModData().KilledWithCounts = {}
-	-- end
-	-- if (Buddy:getModData().ThingsIDid == nil) then
-	-- 	Buddy:getModData().ThingsIDid = {}
-	-- end
-	-- if (Buddy:getModData().ThingsIAte == nil) then
-	-- 	Buddy:getModData().ThingsIAte = {}
-	-- end
-	-- if (Buddy:getModData().ThingsICrafted == nil) then
-	-- 	Buddy:getModData().ThingsICrafted = {}
-	-- end
-	-- achievements mod compatibility to stop errors--------END
-
 	Buddy:getModData().bWalking = false
 	Buddy:getModData().isHostile = false
 	Buddy:getModData().RWP = SuperSurvivorGetOptionValue("SurvivorFriendliness")
