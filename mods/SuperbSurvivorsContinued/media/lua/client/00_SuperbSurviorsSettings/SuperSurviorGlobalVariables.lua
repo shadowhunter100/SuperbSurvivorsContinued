@@ -12,7 +12,7 @@ GFollowDistance = 5; -- Update: Don't try to turn gfollowdistance into a variabl
 PVPDefault = Option_ForcePVP;
 
 -- Global String
-StringTest = "Thsi is a Global String Test";
+StringTest = "This is a Global String Test";
 
 -- Global Survivor Orders
 -- This was moved out of the "SuperSurvivorUtilities.lua" file.
