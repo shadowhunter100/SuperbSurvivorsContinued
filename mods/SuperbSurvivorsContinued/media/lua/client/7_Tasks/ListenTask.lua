@@ -2,11 +2,10 @@ ListenTask = {}
 ListenTask.__index = ListenTask
 
 function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
-
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
-		
+
 	o.WasSelfInit = selfInitiated
 	o.Aite = TalkToMe
 	o.SSAite = SSM:Get(TalkToMe:getModData().ID)
@@ -19,16 +18,15 @@ function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
 	o.parent:DebugSay("ListenTask is about to trigger a StopWalk! ")
 	o.parent:StopWalk()
 	superSurvivor:Speak(getSpeech("Respond"))
-	
-	return o
 
+	return o
 end
 
 function ListenTask:isComplete()
-	if(self.TicksSinceLastExchange > 15) or (self.parent:getDangerSeenCount() > 0) or (self.parent:needToFollow()) then
-		if(not self.parent:isInGroup(self.Aite)) then 
-			self.parent:Speak(getDialogue("Bye1")) 
-		end 
+	if (self.TicksSinceLastExchange > 15) or (self.parent:getDangerSeenCount() > 0) or (self.parent:needToFollow()) then
+		if (not self.parent:isInGroup(self.Aite)) then
+			self.parent:Speak(GetDialogue("Bye1"))
+		end
 		return true
 	else
 		return false
@@ -36,8 +34,11 @@ function ListenTask:isComplete()
 end
 
 function ListenTask:isValid()
-	if not self.parent or not self.Aite or not self.SSAite then return false 
-	else return true end
+	if not self.parent or not self.Aite or not self.SSAite then
+		return false
+	else
+		return true
+	end
 end
 
 function ListenTask:Talked()
@@ -45,36 +46,37 @@ function ListenTask:Talked()
 end
 
 function ListenTask:update()
-	
-	if(not self:isValid()) then return false end
-	
-	if(self.parent:isInAction() == false) then
+	if (not self:isValid()) then return false end
+
+	if (self.parent:isInAction() == false) then
 		self.TicksSinceLastExchange = self.TicksSinceLastExchange + 1
-		local distance = getDistanceBetween(self.parent.player,self.Aite)
+		local distance = getDistanceBetween(self.parent.player, self.Aite)
 		if (distance > 1.8) then
-			self.parent:walkTo(self.Aite:getCurrentSquare()) 				 		
+			self.parent:walkTo(self.Aite:getCurrentSquare())
 		else
 			self.parent:DebugSay("ListenTask is about to trigger a StopWalk! Path B")
 			self.parent:StopWalk()
 			self.parent.player:faceThisObject(self.Aite)
-			if(self.Spoke == false) then
+			if (self.Spoke == false) then
 				self.Spoke = true
 				self.TicksSinceLastExchange = 0
 				self.parent:SpokeTo(self.Aite:getModData().ID)
-				if(self.parent:Get():getModData().InitGreeting ~= nil) and (not self.IsNPConNPC) then self.parent:Speak(self.parent:Get():getModData().InitGreeting) 
-				elseif(self.WasSelfInit) then self.parent:Speak(getDialogue("HiThere"))				
-				else self.parent:Speak(getDialogue("WhatYouWant")) end
-			elseif(self.parent.player:isLocalPlayer() == false) then
-				if(ZombRand(2) == 0) and 
-				(self.parent:isSpeaking()==false) and 
-				(self.SSAite:isSpeaking() == false) and (not NoIdleChatter) then
-					self.parent:Speak(getSpeech("IdleChatter"))					
+				if (self.parent:Get():getModData().InitGreeting ~= nil) and (not self.IsNPConNPC) then
+					self.parent:Speak(self.parent:Get():getModData().InitGreeting)
+				elseif (self.WasSelfInit) then
+					self.parent:Speak(GetDialogue("HiThere"))
+				else
+					self.parent:Speak(GetDialogue("WhatYouWant"))
+				end
+			elseif (self.parent.player:isLocalPlayer() == false) then
+				if (ZombRand(2) == 0) and
+					(self.parent:isSpeaking() == false) and
+					(self.SSAite:isSpeaking() == false) and (not NoIdleChatter) then
+					self.parent:Speak(getSpeech("IdleChatter"))
 				end
 			end
 		end
-	
 	else
 		self.TicksSinceLastExchange = self.TicksSinceLastExchange + 0.5
 	end
-
 end

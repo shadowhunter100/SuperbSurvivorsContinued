@@ -551,7 +551,7 @@ function AIManager(TaskMangerIn)
 		ASuperSurvivor:getTaskManager():clear()
 		if (ASuperSurvivor:Get():getStats():getHunger() > 0.40) then ASuperSurvivor:Get():getStats():setHunger(0.40) end
 		if (ASuperSurvivor:Get():getStats():getThirst() > 0.40) then ASuperSurvivor:Get():getStats():setThirst(0.40) end
-		ASuperSurvivor:Speak(getDialogue("LeaveGroupHungry"))
+		ASuperSurvivor:Speak(GetDialogue("LeaveGroupHungry"))
 	elseif (TaskMangerIn:getCurrentTask() ~= "Enter New Building") and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory") and (IsInAction == false) and (TaskMangerIn:getCurrentTask() ~= "Eat Food") and (TaskMangerIn:getCurrentTask() ~= "Find This") and (TaskMangerIn:getCurrentTask() ~= "First Aide") and (TaskMangerIn:getCurrentTask() ~= "Listen") and (((ASuperSurvivor:isHungry()) and (IsInBase)) or ASuperSurvivor:isVHungry()) and (ASuperSurvivor:getDangerSeenCount() == 0) then
 		if (not ASuperSurvivor:hasFood()) and (ASuperSurvivor:getNoFoodNearBy() == false) and ((getSpecificPlayer(0) == nil) or (not getSpecificPlayer(0):isAsleep())) then
 			if (HisGroup) then
@@ -605,7 +605,7 @@ function AIManager(TaskMangerIn)
 		and (ASuperSurvivor:getDangerSeenCount() == 0) and (TaskMangerIn:getCurrentTask() ~= "First Aide")
 		and (ASuperSurvivor:Get():CanSee(ASuperSurvivor.LastSurvivorSeen))
 	then
-		ASuperSurvivor:Speak(getDialogue("HeyYou"))
+		ASuperSurvivor:Speak(GetDialogue("HeyYou"))
 		ASuperSurvivor:SpokeTo(ASuperSurvivor.LastSurvivorSeen:getModData().ID)
 		ASuperSurvivor:DebugSay("Listen Task Condition Met! Reference Number 0005")
 		TaskMangerIn:AddToTop(ListenTask:new(ASuperSurvivor, ASuperSurvivor.LastSurvivorSeen, true))

@@ -1,5 +1,9 @@
 -- thanks and some credit to Fenris_Wolf from ORGM mod for creating this hotkeys file!  I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 
+local function getOptionText(text)
+	return getText("UI_Option_SS_" .. text)
+end
+
 function SuperSurvivorGetOption(option)
 	if (SuperSurvivorOptions[option] ~= nil) then
 		return tonumber(SuperSurvivorOptions[option])

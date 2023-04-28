@@ -318,7 +318,7 @@ function SuperSurvivorGroup:getMember(ofThisRole, closest)
 			return SSM:Get(workingID)
 		end
 	end
-	
+
 	return nil
 end
 
@@ -420,8 +420,8 @@ function SuperSurvivorGroup:addMember(newSurvivor, Role)
 	end
 
 	--if(newSurvivor:getGroupID() == self.ID) then return false end
-	if (Role == nil) then 
-		Role = "Worker" 
+	if (Role == nil) then
+		Role = "Worker"
 	end
 
 	if (newSurvivor ~= nil) and (not has_value(self.Members, newSurvivor:getID())) then
@@ -467,11 +467,11 @@ function SuperSurvivorGroup:stealingDetected(thief)
 		local workingSS = SSM:Get(workingID)
 		if (workingID ~= nil) and (thief ~= nil) and (thief:getModData().ID ~= nil) and (workingSS ~= nil) and (workingSS:getGroupID() == self.ID) then
 			if (self:getWarnPlayer(thief:getModData().ID)) and SSM:Get(workingID):Get():CanSee(thief) then
-				SSM:Get(workingID):Speak(getDialogue("IAttackFoodThief"))
+				SSM:Get(workingID):Speak(GetDialogue("IAttackFoodThief"))
 				thief:getModData().semiHostile = true
 				SSM:Get(workingID):Get():getModData().hitByCharacter = true
 			elseif (not self:getWarnPlayer(thief:getModData().ID)) and SSM:Get(workingID):Get():CanSee(thief) then
-				SSM:Get(workingID):Speak(getDialogue("IWarnFoodThief"))
+				SSM:Get(workingID):Speak(GetDialogue("IWarnFoodThief"))
 				self:WarnPlayer(thief:getModData().ID)
 			end
 		end
@@ -487,7 +487,6 @@ function SuperSurvivorGroup:getTaskCount(task)
 
 	return count
 end
-
 
 function SuperSurvivorGroup:Save()
 	local tabletoSave = {}
@@ -562,7 +561,7 @@ function SuperSurvivorGroup:Print()
 	print("GroupID: " .. tostring(self.ID))
 	print("MemberCount: " .. tostring(#self.Members))
 	print("Members: ")
-	
+
 	for i = 1, #self.Members do
 		print("Member " .. tostring(self.Members[i]))
 	end

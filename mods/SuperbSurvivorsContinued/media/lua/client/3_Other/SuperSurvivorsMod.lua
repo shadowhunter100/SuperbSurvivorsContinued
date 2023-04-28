@@ -141,7 +141,6 @@ function SuperSurvivorRandomSpawn(square)
 	end
 
 	if (ASuperSurvivor ~= nil) then
-
 		if (ZombRand(100) < (ChanceToSpawnWithGun + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(getWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)]), true)
 			-- make sure they have at least some ability to use the gun
@@ -362,7 +361,6 @@ function SuperSurvivorsOnCharacterCollide(playerOne, PlayerTwo)
 		end
 	end
 	if (playerTwo ~= nil) then
-
 		if (playerTwo:isNPC()) then
 			print("trying to cancel collision p2")
 			playerTwo:setLastCollidedW(false)
@@ -507,7 +505,7 @@ function supersurvivortemp(keyNum)
 
 			local SS = SSM:GetClosestNonParty()
 			if (SS) then
-				mySS:Speak(getDialogue("HeyYou"))
+				mySS:Speak(GetDialogue("HeyYou"))
 				SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false))
 			end
 		elseif (keyNum == getCore():getKey("Toggle Group Window")) then
@@ -1064,10 +1062,10 @@ function SuperSurvivorsRaiderManager()
 		if (success) and (spawnSquare) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
 			if (getSpecificPlayer(0):isAsleep()) then
-				getSpecificPlayer(0):Say(getDialogue("IGotABadFeeling"))
+				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"))
 				getSpecificPlayer(0):forceAwake()
 			else
-				getSpecificPlayer(0):Say(getDialogue("WhatWasThatSound"));
+				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
 			end
 			-- RAIDER GROUPS
 			local RaiderGroup = SSGM:newGroup()
@@ -1164,6 +1162,7 @@ end
 function SuperSurvivorSays3()
 	getSpecificPlayer(0):Say(GlobalTestVariable);
 end
+
 -- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
 function SuperSurvivorSays4()
 	getSpecificPlayer(0):Say(stringTest);

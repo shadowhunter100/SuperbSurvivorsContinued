@@ -18,7 +18,7 @@ function FollowTask:new(superSurvivor, FollowMeplayer)
 	else
 		o.FollowChar = FollowMeplayer
 		superSurvivor.player:getModData().FollowCharID = FollowMeplayer:getModData()
-		.ID                                                                       -- save last follow obj id to mod data so can be reused on load
+			.ID -- save last follow obj id to mod data so can be reused on load
 	end
 
 	o.followSS = SSM:Get(o.FollowChar:getModData().ID)
@@ -108,7 +108,7 @@ function FollowTask:update()
 	if (true) then -- self.parent:isInAction() == false) then -- for some reason this is true when they doing nothing sometimes...
 		if (self.InBaseAtStart == true) and (not self.parent:isInBase()) then
 			if (ZombRand(2) == 0) then
-				self.parent:Speak(getDialogue("WeLooting"))
+				self.parent:Speak(GetDialogue("WeLooting"))
 			end
 			self.InBaseAtStart = false
 		end
@@ -226,15 +226,17 @@ function FollowTask:update()
 						self.parent:StopWalk()
 						local distance = getDistanceBetween(self.parent.player, doorsquare)
 						print(self.parent:getName() ..
-						": adding enter vehicle timed actions and waiting, dist:" .. tostring(distance))
+							": adding enter vehicle timed actions and waiting, dist:" .. tostring(distance))
 
 						if (distance > 3) then
 							ISTimedActionQueue.add(ISWalkToTimedAction:new(self.parent:Get(), doorsquare))
 						else
 							self.parent:StopWalk()
 							ISTimedActionQueue.add(ISEnterVehicle:new(self.parent:Get(), self.FollowChar:getVehicle(), 1))
-							if (self.MySeat ~= 1) then ISTimedActionQueue.add(ISSwitchVehicleSeat:new(self.parent:Get(),
-									self.MySeat)) end
+							if (self.MySeat ~= 1) then
+								ISTimedActionQueue.add(ISSwitchVehicleSeat:new(self.parent:Get(),
+									self.MySeat))
+							end
 						end
 						--ISTimedActionQueue.add(ISEnterVehicle:new(self.parent:Get(), self.FollowChar:getVehicle(), doorseat))
 						--
