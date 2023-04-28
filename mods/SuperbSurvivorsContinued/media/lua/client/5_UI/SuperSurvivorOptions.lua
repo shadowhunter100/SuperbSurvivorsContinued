@@ -40,19 +40,14 @@ function SuperSurvivorGetOptionValue(option)
 		return 1000
 	elseif (option == "SpawnRate") and (num == 12) then
 		return 400
-
-		--elseif(option == "GunSpawnRate") and (num == 1) then return 0	-- For now marked out for testing. Does well? Remove this line if you want.
-		--elseif(option == "GunSpawnRate") and (num == 2) then return 1	-- For now marked out for testing. Does well? Remove this line if you want.
-		--elseif(option == "GunSpawnRate") and (num == 3) then return 2	-- For now marked out for testing. Does well? Remove this line if you want.
-		--elseif(option == "GunSpawnRate") then return (num * 5) - 15	-- For now marked out for testing. Does well? Remove this line if you want.
 	elseif (option == "WepSpawnRate") then
-		return (num - 1)                                       -- then return (num * 5) - 5	-- Marked out old instead of removing it to test
+		return (num - 1)
 	elseif (option == "GunSpawnRate") then
-		return (num - 1)                                       -- then return (num * 5) - 5	-- Marked out old instead of removing it to test
+		return (num - 1)
 	elseif (option == "HostileSpawnRate") then
-		return (num - 1)                                       -- then return (num * 5) - 5
+		return (num - 1)
 	elseif (option == "MaxHostileSpawnRate") then
-		return (num - 1)                                       -- then return (num * 5) - 5
+		return (num - 1)
 	elseif (option == "InfinitAmmo") then
 		return (num ~= 1)
 	elseif (option == "NoPreSetSpawn") then
@@ -74,7 +69,7 @@ function SuperSurvivorGetOptionValue(option)
 	elseif (option == "SurvivorHunger") then
 		return (num ~= 1)
 	elseif (option == "SurvivorFriendliness") then
-		return (10 - ((num - 1) * 2))                                    -- 1 = 10, 2 = 8, 3 = 6
+		return (10 - ((num - 1) * 2)) -- 1 = 10, 2 = 8, 3 = 6
 	elseif (option == "RaidersAtLeastHours") and (num == 21) then
 		return 24
 	elseif (option == "RaidersAtLeastHours") and (num == 22) then
@@ -90,7 +85,7 @@ function SuperSurvivorGetOptionValue(option)
 	elseif (option == "RaidersAfterHours") then
 		return (((num - 2) * 5) * 24)
 	elseif (option == "RaidersChance") then
-		return ((num + 2) * 24 * 14)                                 -- (6 * 24 * 14)
+		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
 	elseif (option == "Option_FollowDistance") then
 		return (num + 2)
 	elseif (option == "Option_Perception_Bonus") then
@@ -120,21 +115,21 @@ function SuperSurvivorGetOptionValue(option)
 	elseif (option == "Bravery") and (num == 6) then
 		return 20
 	elseif (option == "AltSpawn") and (num == 1) then
-		return 1                                           -- If false
+		return 1   -- If false
 	elseif (option == "AltSpawn") and (num == 2) then
-		return 2                                           -- If true
+		return 2   -- If true
 	elseif (option == "AltSpawn") and (num == 3) then
-		return 3                                           -- If true
+		return 3   -- If true
 	elseif (option == "AltSpawn") and (num == 4) then
-		return 4                                           -- If true
+		return 4   -- If true
 	elseif (option == "AltSpawn") and (num == 5) then
-		return 5                                           -- If true
+		return 5   -- If true
 	elseif (option == "AltSpawn") and (num == 6) then
-		return 6                                           -- If true
+		return 6   -- If true
 	elseif (option == "AltSpawn") and (num == 7) then
-		return 7                                           -- If true
+		return 7   -- If true
 	elseif (option == "AltSpawnPercent") then
-		return (num - 1)                                   -- % chance. in this case, 'num - 1' will make it goto 0 for what 'option 1' is.
+		return (num - 1) -- % chance. in this case, 'num - 1' will make it goto 0 for what 'option 1' is.
 	elseif (option == "AltSpawnAmount") and (num == 1) then
 		return 1
 	elseif (option == "AltSpawnAmount") and (num == 2) then
@@ -220,8 +215,6 @@ if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["Survi
 if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
 
 if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
-
-
 if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
 
 if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
@@ -431,7 +424,9 @@ if index then
 				-- if keyTextElement is nil or doesn't have a ISLabel, break out of the
 				-- "repeat ... until true"  loop, and continue with the "for .. do ... end"
 				-- loop
-				if not keyTextElement or not keyTextElement.txt then break end
+				if not keyTextElement or not keyTextElement.txt then
+					break;
+				end
 				local label = keyTextElement.txt -- our ISLabel item is stored in keyTextElement.txt
 				-- We need to do a few things here to prep the new entries.
 				-- 1) We wont have a proper translation, and the translation will be set to
@@ -492,8 +487,6 @@ if index then
 			until true
 		end
 
-
-
 		----- Survivor options in Game Options -----
 		local spacing = 3
 		local spacing2x = 20
@@ -508,9 +501,7 @@ if index then
 		local splitpoint = self:getWidth() / 3;
 		-------------------------------------------
 
-
 		y = y + spacing2x
-
 
 		local options =
 		{
@@ -530,9 +521,7 @@ if index then
 		self:addCustomCombo('SpawnRate', splitpoint, y, comboWidth, getOptionText("SurvivorSpawnRate"), options,
 			getOptionText("SurvivorSpawnRateDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options =
 		{
@@ -560,9 +549,7 @@ if index then
 		self:addCustomCombo('AltSpawnAmount', splitpoint, y, comboWidth, getOptionText("AltSpawnAmount"), options,
 			getOptionText("AltSpawnAmountDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options =
 		{
@@ -607,9 +594,7 @@ if index then
 		self:addCustomCombo('RaidersChance', splitpoint, y, comboWidth, getOptionText("RaidersChance"), options,
 			getOptionText("RaidersChanceDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = NPC_Options_ZeroToOneHundred()
 		self:addCustomCombo('WepSpawnRate', splitpoint, y, comboWidth, getOptionText("WepSpawnRate"), options,
@@ -619,9 +604,7 @@ if index then
 		self:addCustomCombo('GunSpawnRate', splitpoint, y, comboWidth, getOptionText("ChancetoSpawnWithGun"), options,
 			getOptionText("ChancetoSpawnWithGunDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = { getOptionText("Off"), getOptionText("On") }
 		self:addCustomCombo('ForcePVP', splitpoint, y, comboWidth, getOptionText("PVPInfoBar"), options,
@@ -631,14 +614,11 @@ if index then
 		self:addCustomCombo('HostileSpawnRate', splitpoint, y, comboWidth, getOptionText("ChancetobeHostile"), options,
 			getOptionText("ChancetobeHostileDesc"))
 
-
 		local options = NPC_Options_ZeroToOneHundred() -- Hostile Over Time Odds
 		self:addCustomCombo('MaxHostileSpawnRate', splitpoint, y, comboWidth, getOptionText("MaxHostileSpawnRate"),
 			options, getOptionText("MaxHostileSpawnRateDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = NPC_Options_OffOn()
 		self:addCustomCombo('Option_Display_Survivor_Names', splitpoint, y, comboWidth,
@@ -652,9 +632,7 @@ if index then
 		self:addCustomCombo('RoleplayMessage', splitpoint, y, comboWidth, getOptionText("RoleplayMessage"), options,
 			getOptionText("RoleplayMessageDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = NPC_Options_OffOn()
 		self:addCustomCombo('WifeSpawn', splitpoint, y, comboWidth, getOptionText("WifeSpawn"), options,
@@ -664,9 +642,7 @@ if index then
 		self:addCustomCombo('LockNLoad', splitpoint, y, comboWidth, getOptionText("LockNLoad"), options,
 			getOptionText("LockNLoadDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = { "3", "4", "5", "6", "7", "8", "9", "10" }
 		self:addCustomCombo('FollowDistance', splitpoint, y, comboWidth, getOptionText("FollowGlobalRange"), options,
@@ -680,9 +656,7 @@ if index then
 		self:addCustomCombo('Panic_Distance', splitpoint, y, comboWidth, getOptionText("Panic_Distance"), options,
 			getOptionText("Panic_DistanceDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options =
 		{
@@ -710,9 +684,7 @@ if index then
 		self:addCustomCombo('NoIdleChatter', splitpoint, y, comboWidth, "No Idle Chatter", options,
 			"Prevent NPCs from randomly chattering on about things while they follow you among other times.")
 
-
 		y = y + spacing4x
-
 
 		local options = NPC_Options_OffOn()
 		self:addCustomCombo('InfinitAmmo', splitpoint, y, comboWidth, getOptionText("InfinitAmmo"), options,
@@ -734,9 +706,7 @@ if index then
 		self:addCustomCombo('SurvivorBases', splitpoint, y, comboWidth, getOptionText("SurvivorBases"), options,
 			getOptionText("SurvivorBasesDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = SSHotKeyOptions
 		self:addCustomCombo('SSHotkey1', splitpoint, y, comboWidth, getOptionText("hotkey1"), options,
@@ -754,9 +724,7 @@ if index then
 		self:addCustomCombo('SSHotkey4', splitpoint, y, comboWidth, getOptionText("hotkey4"), options,
 			getOptionText("hotkeyDesc"))
 
-
 		y = y + spacing4x
-
 
 		local options = NPC_Options_OffOn()
 		self:addCustomCombo('DebugOptions', splitpoint, y, comboWidth, getOptionText("DebugOptions"), options,
@@ -773,8 +741,6 @@ if index then
 		local options = NPC_Options_OffOn()
 		self:addCustomCombo('WarningMSG', splitpoint, y, comboWidth, getOptionText("WarningMSG"), options,
 			getOptionText("WarningMSGDesc"))
-
-
 
 		-- Controls the rest of the menu, don't put options under this line you're reading --
 		self.addY = self.addY + MainOptions.translatorPane:getHeight() + 22;
