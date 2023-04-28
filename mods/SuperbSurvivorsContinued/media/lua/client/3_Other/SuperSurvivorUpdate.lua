@@ -81,11 +81,10 @@ function SuperSurvivorPlayerInit(player)
 				wife:WearThis("Hat_Army")
 			end
 
-
-
-			local gun = player:getInventory():AddItem("Base.BaseballBat");
+			local bat = player:getInventory():AddItem("Base.BaseballBat");
 			local gun = player:getInventory():AddItem("Base.Pistol");
 			local mag
+
 			for i = 1, 4 do
 				mag = player:getInventory():AddItem(gun:getMagazineType());
 				mag:setCurrentAmmoCount(15)
@@ -97,17 +96,9 @@ function SuperSurvivorPlayerInit(player)
 			player:getInventory():AddItem("Base.Bullets9mmBox");
 
 			--gun:setClip(mag)
-			if (isModEnabled("Silencer")) then
-				gun:setCanon(instanceItem("Silencer.Silencer"))
-			end
-
 			if (wife) then
 				local pistol = wife:Get():getInventory():AddItem("Base.HuntingRifle");
 				wife:Get():getInventory():AddItem("Base.308Clip");
-
-				if (isModEnabled("Silencer")) then
-					pistol:setCanon(instanceItem("Silencer.Silencer"))
-				end
 				wife:Get():setPrimaryHandItem(pistol)
 				wife:Get():setSecondaryHandItem(pistol)
 
@@ -116,10 +107,13 @@ function SuperSurvivorPlayerInit(player)
 				end
 			end
 
-
-
-			for i = 1, 8 do player:LevelPerk(Perks.FromString("Aiming")) end
-			for i = 1, 8 do player:LevelPerk(Perks.FromString("Reloading")) end
+			for i = 1, 8 do 
+				player:LevelPerk(Perks.FromString("Aiming")) 
+			end
+			
+			for i = 1, 8 do 
+				player:LevelPerk(Perks.FromString("Reloading")) 
+			end
 
 			if (wife) then
 				for i = 1, 8 do wife:Get():LevelPerk(Perks.FromString("Aiming")) end
@@ -128,7 +122,8 @@ function SuperSurvivorPlayerInit(player)
 			player:getModData().LockNLoad = true
 		end
 
-		local mydesc = getSpecificPlayer(0):getDescriptor()
+		local mydesc = getSpecificPlayer(0):getDescriptor();
+		
 		if (SSM:Get(0)) then SSM:Get(0):setName(mydesc:getForename()) end
 	else
 		print("finished initing player index " .. tostring(player:getPlayerNum()))

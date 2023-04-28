@@ -8,55 +8,6 @@ SurvivorRandomSuits["Legendary"]["Bathrobe1"] = {
   "Base.Shoes_Slippers"
 }
 
-if(isModEnabled("Brita_2")) then
-	SurvivorRandomSuits["VeryRare"]["Army"] = {
-    "Base.Hat_BeretArmy", -- HEAD
-    "Base.Tshirt_ArmyGreen", "Base.Jacket_CoatArmy", "Brita_2.Bag_Plate_Carrier", "Brita_2.Bag_D3M", -- BODY 
-    "Base.Trousers_ArmyService", -- LEGS
-    "Base.Shoes_ArmyBoots" --- FEET
-  }
-	SurvivorRandomSuits["VeryRare"]["ArmyCamo"] = {
-    "Brita_2.Hat_FAST_Opscore", "Brita_2.Hat_Sordin", 
-    "Base.Tshirt_CamoDesert", "Base.Shirt_CamoDesert", "Base.Jacket_ArmyCamoDesert", "Brita_2.Bag_Plate_Carrier", "Brita_2.Bag_D3M", 
-    "Base.Trousers_CamoDesert", 
-    "Base.Shoes_ArmyBootsDesert"
-  }
-	SurvivorRandomSuits["VeryRare"]["MarinesCamo"] = {
-    "Base.Hat_Army", "Brita_2.Hat_Helmet_Headset", 
-    "Base.Tshirt_CamoGreen", "Base.Shirt_CamoGreen", "Base.Jacket_ArmyCamoGreen", "Base.Vest_BulletArmy", "Brita_2.Bag_D3M", 
-    "Base.Trousers_CamoGreen", 
-    "Base.Shoes_ArmyBoots"
-  }
-else
-	SurvivorRandomSuits["VeryRare"]["Army"] = {
-    "Base.Hat_BeretArmy", 
-    "Base.Tshirt_ArmyGreen", "Base.Jacket_CoatArmy", "Base.Bag_ALICEpack", 
-    "Base.Trousers_ArmyService", 
-    "Base.Shoes_ArmyBoots"
-  }
-	SurvivorRandomSuits["VeryRare"]["ArmyCamo"] = {
-    "Base.Tshirt_CamoDesert", 
-    "Base.Shirt_CamoDesert", "Base.Jacket_ArmyCamoDesert", "Base.Bag_ALICEpack", 
-    "Base.Trousers_CamoDesert", 
-    "Base.Shoes_ArmyBootsDesert"
-  }
-	SurvivorRandomSuits["VeryRare"]["MarinesCamo"] = {
-    "Base.Hat_Army", 
-    "Base.Tshirt_CamoGreen", "Base.Shirt_CamoGreen", "Base.Jacket_ArmyCamoGreen", "Base.Bag_ALICEpack", "Base.Vest_BulletArmy", 
-    "Base.Trousers_CamoGreen", 
-    "Base.Shoes_ArmyBoots"
-  }
-end
-
-if (isModEnabled("TWDRG")) then
-	SurvivorRandomSuits["Rare"]["Sheriff1"] = {
-    "TWDRG.Hat_Police_Sheriff", 
-    "TWDRG.TShirt_Police_Sheriff", "TWDRG.Shirt_Police_Sheriff", "TWDRG.Jacket_Police_Sheriff", "TWDRG.Vest_BulletPolice_Sheriff", 
-    "TWDRG.Trousers_Police_Sheriff", 
-    "Base.Shoes_BlackBoots"
-  }
-end
-
 SurvivorRandomSuits["Rare"]["Bride1F"] = {
   "Base.WeddingDress", "Base.Shirt_FormalWhite", 
   "Base.Socks_Long", "Base.Shoes_Black"

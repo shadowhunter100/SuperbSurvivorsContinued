@@ -195,17 +195,7 @@ function show_survivor_info(member_index)
     text_info = text_info..getText("ContextMenu_SS_AmmoType")..": "..tostring(group_member.player:getModData().ammotype).."\n"
     text_info = text_info..getText("ContextMenu_SS_AmmoBoxType")..": "..tostring(group_member.player:getModData().ammoBoxtype).."\n"
     text_info = text_info.."\n"
-    if isModEnabled("ArmorMod") then
-        local ID = group_member:getID()
-        if MyHeadArmor[ID] then text_info = text_info..getText("ContextMenu_SS_HeadArmor")..": "..tostring(MyHeadArmor[ID]:getDisplayName()).."\n" end
-        if MyBodyArmor[ID] then text_info = text_info..getText("ContextMenu_SS_BodyArmor")..": "..tostring(MyBodyArmor[ID]:getDisplayName()).."\n" end
-        if MyArmArmor[ID] then text_info = text_info..getText("ContextMenu_SS_ArmArmor")..": "..tostring(MyArmArmor[ID]:getDisplayName()).."\n" end
-        if MyHandArmor[ID] then text_info = text_info..getText("ContextMenu_SS_HandArmor")..": "..tostring(MyHandArmor[ID]:getDisplayName()).."\n" end
-        if MyShieldArmor[ID] then text_info = text_info..getText("ContextMenu_SS_ShieldArmor")..": "..tostring(MyShieldArmor[ID]:getDisplayName()).."\n" end
-        if MyLegArmor[ID] then text_info = text_info..getText("ContextMenu_SS_LegArmor")..": "..tostring(MyLegArmor[ID]:getDisplayName()).."\n" end
-        if MyFeetArmor[ID] then text_info = text_info..getText("ContextMenu_SS_FeetArmor")..": "..tostring(MyFeetArmor[ID]:getDisplayName()).."\n" end
-        text_info = text_info.."\n"
-    end
+
     text_info = text_info..getText("ContextMenu_SS_SurvivorID")..": "..tostring(group_member:getID()).."\n"
     text_info = text_info..getText("ContextMenu_SS_GroupID")..": "..tostring(group_member:getGroupID()).."\n"
     text_info = text_info..getText("ContextMenu_SS_GroupRole")..": "..tostring(group_member:getGroupRole()).."\n"

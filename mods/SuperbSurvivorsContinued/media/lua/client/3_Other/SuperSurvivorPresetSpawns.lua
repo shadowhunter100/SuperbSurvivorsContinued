@@ -1,26 +1,6 @@
 require "2_Group/SuperSurvivorGroupManager"
 
-function isModEnabled(modname)
-
-	local actmods = getActivatedMods();
-	for i=0, actmods:size()-1, 1 do
-		if actmods:get(i) == modname then
-			return true;
-		end
-	end
-	return false;
-end
-
-
 function getWeapon(kind)
-
-	if(isModEnabled("ORGM")) then
-		if kind == "Base.Shotgun" then return "ORGM.Rem870" end
-		if kind == "Base.HuntingRifle" then return "ORGM.Garand" end
-		if kind == "Base.VarmintRifle" then return "ORGM.AR15" end
-		if kind == "Base.Pistol" then return "ORGM.Ber92" end
-		return kind;
-	end
 	return kind;
 end
 
@@ -321,16 +301,7 @@ PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID
 PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Worker", GroupID = BlockadeGroupID, NoParty=true,Greeting = "I\'m supposed to take down all these trees.",PerkName = "Axe",PerkLevel = 5,  Name = "Worker", X = 12555, Y = (-2*300) + 4478, Z = 0 , Weapon = "Base.Axe", Orders = "Explore", isHostile = false};
 PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting = "I tried to warn everyone, no one would listen.",PerkName = "Aiming",PerkLevel = 6,  Name = "Private Manning", X = 12467, Y = (-2*300) + 4409, Z = 0 , Weapon = getWeapon("Base.Pistol"), Orders = "Patrol",  Patrolling=true, PX=0,PY=9, isHostile = false};
 PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! Your not allowed in here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12497, Y = (-2*300) + 4366, Z = 3 , Weapon = getWeapon("Base.Pistol"), Orders = "Patrol", isHostile = false, Patrolling=true, PX=-4,PY=-7}; 
-PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! Your not allowed in here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12537, Y = (-2*300) + 4368, Z = 0 , Weapon = getWeapon("Base.AssaultRifle"), Orders = "Patrol", isHostile = false, Patrolling=true, PX=-25,PY=1}; 
-	if isModEnabled("SurvivorQuests") then
-			PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! You're not allowed up here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12505, Y = 3742, Z = 0 , Weapon = "Base.AssaultRifle", Orders = "Patrol", isHostile = false, Patrolling=true, PX=0,PY=-7}; 
-			PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! You're not allowed over here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12506, Y =3752, Z = 0 , Weapon = "Base.Pistol", Orders = "Guard", isHostile = false}; 
-			PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! You're not allowed in here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12499, Y = 3764, Z = 0 , Weapon = "Base.AssaultRifle", Orders = "Guard", isHostile = false}; 
-			PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! You're not allowed over here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12459, Y = 3759, Z = 0 , Weapon = "Base.Pistol", Orders = "Guard", isHostile = false}; 
-			PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! You're not alloweed over here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12459, Y = 3778, Z = 0 , Weapon = "Base.AssaultRifle", Orders = "Guard", isHostile = false}; 
-			
-	end
-	
+PresetSpawns[#PresetSpawns+1] = {Suit = "Preset_Army", GroupID = BlockadeGroupID, Greeting="Hey! Your not allowed in here!",PerkName = "Aiming", PerkLevel = 5, NoParty = true, isFemale=false,   Name = "Soldier", X = 12537, Y = (-2*300) + 4368, Z = 0 , Weapon = getWeapon("Base.AssaultRifle"), Orders = "Patrol", isHostile = false, Patrolling=true, PX=-25,PY=1};
 
 PresetSpawns[#PresetSpawns+1] = {X = 12484, Y = 4443, Z = 0 , itemType="RandomCannedFood", count = 30, isItemSpawn = true,GroupID=BlockadeGroupID}
 PresetSpawns[#PresetSpawns+1] = {X = 12484, Y = 4444, Z = 0 , itemType="RandomCannedFood", count = 30, isItemSpawn = true,GroupID=BlockadeGroupID}

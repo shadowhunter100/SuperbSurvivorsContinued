@@ -62,14 +62,13 @@ function CleanInvTask:update()
 				self.parent.player:setClothingItem_Back(nil)
 			end
 			
-			local droppedSomething = false
-			local armorModEnabled = (isModEnabled("ArmorMod"))
-			local square = self.parent:getFacingSquare()
-			local inv = self.parent.player:getInventory()
-			local bag = self.parent:getBag()
-			local pweapon = self.parent.player:getPrimaryHandItem()
+			local droppedSomething = false;
+			local square = self.parent:getFacingSquare();
+			local inv = self.parent.player:getInventory();
+			local bag = self.parent:getBag();
+			local pweapon = self.parent.player:getPrimaryHandItem();
 			if(pweapon == nil) then pweapon = 0 end
-			local sweapon = self.parent.player:getSecondaryHandItem()
+			local sweapon = self.parent.player:getSecondaryHandItem();
 			if(sweapon == nil) then sweapon = 0 end
 			
 			-- exlude ammo types and ammo box types
@@ -169,7 +168,7 @@ function CleanInvTask:update()
 						if(item ~= nil) then
 							if (item:isBroken()) or (
 								(not item:isEquipped())
-								and (armorModEnabled == false or (ArmorisArmorEquipped(self.parent.player,item) == false))
+								and ((ArmorisArmorEquipped(self.parent.player,item) == false))
 								and (item ~= pweapon)
 								and (item ~= self.parent.LastGunUsed)
 								and (item ~= self.parent.LastMeleUsed)

@@ -3441,7 +3441,6 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 
 	if (weapon:isAimedFirearm()) then
 
-		if (isModEnabled("ORGM")) then ORGM.setupGun(ORGM.getFirearmData(weapon), weapon) end
 		self:setGunWep(weapon)
 	else
 		self:setMeleWep(weapon)
@@ -3571,8 +3570,6 @@ function SuperSurvivor:openBoxForGun()
 	end
 
 	if (ammoBox) then
-		local ORGMEnabled = false
-		if (isModEnabled("ORGM")) then ORGMEnabled = true end
 
 		local ammotype = self.AmmoTypes[index]
 		local inv = self.player:getInventory()
@@ -3583,15 +3580,12 @@ function SuperSurvivor:openBoxForGun()
 		local groupcount = tempBullet:getCount()
 		local count = 0
 
-		if ORGMEnabled then
-			count = ORGM.getAmmoData(ammotype).BoxCount
-		else
-			count = (getBoxCount(ammoBox:getType()) / groupcount)
-		end
+		count = (getBoxCount(ammoBox:getType()) / groupcount)
 
 		for i = 1, count do
 			inv:AddItem(modl .. ammotype)
 		end
+		
 		self:RoleplaySpeak(getActionText("Opens_Before") .. ammoBox:getDisplayName() .. getActionText("Opens_After"))
 		ammoBox:getContainer():Remove(ammoBox)
 		return self.player:getInventory():FindAndReturn(ammotype);

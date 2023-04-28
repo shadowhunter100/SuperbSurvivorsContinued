@@ -286,26 +286,18 @@ function SuperSurvivorsInit()
 
 	SurvivorsCreatePVPButton()
 
-	if (isModEnabled("Achievement")) and (AchievementList ~= nil) then
-		AchievementList["MakingFriends"] = { "Making Friends", "Get someone to join your group" }
-		AchievementsEnabled = true
-	else
-		AchievementsEnabled = false
-	end
+	AchievementsEnabled = false;
 
 	SurvivorTogglePVP()
 
-	if (IsoPlayer.getCoopPVP() == true) then SurvivorTogglePVP() end
-	if (Option_ForcePVP == 1) then SurvivorTogglePVP() end
+	if (IsoPlayer.getCoopPVP() == true or Option_ForcePVP == 1) then
+		SurvivorTogglePVP();
+	end
 
-	local player = getSpecificPlayer(0)
+	local player = getSpecificPlayer(0);
 	player:getModData().isHostile = false
 	player:getModData().ID = 0
 
-	--print("prizon")
-	--print(player:getX())
-	--print(player:getY())
-	--if(player:getX() >= 7590 and player:getX() < 7780) and (player:getY() <= 11978 and player:getY() > 11766) then -- if spawn in prizon
 	if (player:getX() >= 7679 and player:getX() <= 7680) and (player:getY() >= 11937 and player:getY() <= 11938) then -- if spawn in prizon
 		local keyid = player:getBuilding():getDef():getKeyId();
 
@@ -315,14 +307,6 @@ function SuperSurvivorsInit()
 			player:getCurrentSquare():getE():AddWorldInventoryItem(key, 0.5, 0.5, 0);
 			player:getInventory():Remove(key);
 		end
-
-		--local zlist = getCell():getZombieList() ;
-		--if(zlist ~= nil) then
-		--	for i=0, zlist:size()-1 do
-		--		zlist:get(i):removeFromWorld();
-		--	end
-		--end
-
 		--PVPDefault = true 	-- true or false : should pvp be on or off at game start true=on false=off
 		--ChanceToSpawnWithGun = 100 	-- choose from 0 to 100 (this is a % but dont put a % after the number)
 		--ChanceToBeHostileNPC = 100
@@ -331,53 +315,15 @@ function SuperSurvivorsInit()
 		--local DeadGuardSquare = nil
 		if (DeadGuardSquare ~= nil) then
 			local SuperSurvivorDeadGuard = SSM:spawnSurvivor(false, DeadGuardSquare);
-			local DeadGuard = SuperSurvivorDeadGuard.player
-			if (isModEnabled("Hydrocraft")) then
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCArmarmorswat");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCArmorswat");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCHelmswat");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCLegarmorswat");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCBootriot");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCGloveriot");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCShieldriot");
-				DeadGuard:getInventory():AddItem("Hydrocraft.HCGPS");
-			end
-			if (isModEnabled("ArmorMod")) then
-				DeadGuard:getInventory():AddItem("Armor.ArmorArmarmorswat");
-				DeadGuard:getInventory():AddItem("Armor.ArmorArmorswat");
-				DeadGuard:getInventory():AddItem("Armor.ArmorHelmswat");
-				DeadGuard:getInventory():AddItem("Armor.ArmorLegarmorswat");
-				DeadGuard:getInventory():AddItem("Armor.ArmorBootriot");
-				DeadGuard:getInventory():AddItem("Armor.ArmorGloveriot");
-				DeadGuard:getInventory():AddItem("Armor.ArmorShieldriot");
-			end
-			if (isModEnabled("ORGM")) then
-				DeadGuard:getInventory():AddItem("ORGM.Uzi");
-				DeadGuard:getInventory():AddItem("ORGM.Ammo_9x19mm_HP_Can");
-				DeadGuard:getInventory():AddItem("ORGM.Ammo_9x19mm_HP_Can");
-			else
-				SuperSurvivorDeadGuard:giveWeapon("Base.Pistol");
-				--DeadGuard:getInventory():AddItem("Base.Pistol");
-				--DeadGuard:getInventory():AddItem("Base.BulletsBox");
-				--DeadGuard:getInventory():AddItem("Base.BulletsBox");
-				--DeadGuard:getInventory():AddItem("Base.BulletsBox");
-				--DeadGuard:getInventory():AddItem("Base.BulletsBox");
-			end
+			local DeadGuard = SuperSurvivorDeadGuard.player;
 
-
+			SuperSurvivorDeadGuard:giveWeapon("Base.Pistol");
 			DeadGuard:Kill(nil);
 		end
 	end
 end
 
 Events.OnGameStart.Add(SuperSurvivorsInit)
-
-function SuperSurvivorsOnLoad()
-
-end
-
---Events.OnLoad.Add(SuperSurvivorsOnLoad)
-
 
 function SuperSurvivorsOnCharacterCollide(playerOne, PlayerTwo)
 	if (playerOne ~= nil) then
@@ -401,9 +347,8 @@ end
 --Events.OnCharacterCollide.Add(SuperSurvivorsOnCharacterCollide)
 
 function SuperSurvivorsOnSwing(player, weapon)
-	--print("onswing")
+	local ID = player:getModData().ID;
 
-	local ID = player:getModData().ID
 	if (ID ~= nil) then
 		local SS = SSM:Get(ID)
 		if (SS) and not player:isLocalPlayer() then
@@ -702,24 +647,16 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 
 				if (ammotypes ~= nil) and (ID ~= nil) then
 					SS.AmmoTypes = ammotypes
-					player:getModData().ammotype = ""
-					player:getModData().ammoBoxtype = ""
+					player:getModData().ammotype = "";
+					player:getModData().ammoBoxtype = "";
+
 					for i = 1, #SS.AmmoTypes do
 						SS.AmmoBoxTypes[i] = getAmmoBox(SS.AmmoTypes[i])
 						player:getModData().ammotype = player:getModData().ammotype .. " " .. SS.AmmoTypes[i]
 						player:getModData().ammoBoxtype = player:getModData().ammoBoxtype .. " " .. SS.AmmoBoxTypes[i]
 					end
 
-
-					SS.LastGunUsed = weapon
-
-					if (isModEnabled("ORGM")) then
-						local data = ORGM.getFirearmData(weapon:getType())
-
-						if (data ~= nil) and (data.selectFire or data.alwaysFullAuto) then
-							SS.UsingFullAuto = true
-						end
-					end
+					SS.LastGunUsed = weapon;
 				end
 			end
 		end
@@ -739,11 +676,8 @@ function SuperSurvivorsNewSurvivorManager()
 
 	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48)
 	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC) and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC) then
-		FinalChanceToBeHostile =
-			MaxChanceToBeHostileNPC
+		FinalChanceToBeHostile = MaxChanceToBeHostileNPC
 	end
-
-
 
 	if (getSpecificPlayer(0) == nil) then return false end
 	--this unrelated to raiders but need this to run every once in a while
@@ -1262,39 +1196,3 @@ function SSCreatePlayerHandle(newplayerID)
 end
 
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
-
--- WIP - WHAT IS THIS SUPPOSED TO DO?
-function SSOnGameStartHandle()
-
-end
-
--- WIP - The compatibility check seems unnecessary... as most of these mods seems to be abandoned...
--- the "continued" workshop item will start from a clean slate, hopefully for the better.
--- --Events.OnGameStart.Add(SSOnGameStartHandle)
--- -- Mod ID name, then the Mod's actual name
-
--- local function SSSpamCheck_Preset(Var1, Var2)
--- 	if (Option_WarningMSG == 2) then
--- 		if isModEnabled(Var1) then
--- 			print(Var2 .. " doesn't work with SuperiorSurvivors!")
--- 			getSpecificPlayer(0):Say(Var2 ..
--- 				" doesn't work with SuperiorSurvivors, please disable " ..
--- 				Var2 .. "! To disable this Message, check warning message option in SuperiorSurvivors.")
--- 		end
--- 	end
--- end
-
--- -- Checks for spamming people when they use incompatible mods can be found here.
--- local function SSSpamChecks()
--- 	--SSSpamCheck_Preset("ZM1A1","[OPEN BETA] M1A1 ABRAMS")
--- 	--SSSpamCheck_Preset("Amputation","TheOnlyCure")
--- 	--SSSpamCheck_Preset("SwapIt","SwapIt")
-
--- 	SSSpamCheck_Preset("SuperSurvivors", "SuperSurvivors")
--- 	SSSpamCheck_Preset("SubparSurvivors", "SubparSurvivors")
--- 	SSSpamCheck_Preset("Survivors", "Survivors")
--- 	SSSpamCheck_Preset("SuperbSurvivorz", "SuperbSurvivorz")
--- 	--SSSpamCheck_Preset("SuperbUndressedSurvivors","SuperbUndressedSurvivors")
--- end
-
--- Events.EveryOneMinute.Add(SSSpamChecks)
