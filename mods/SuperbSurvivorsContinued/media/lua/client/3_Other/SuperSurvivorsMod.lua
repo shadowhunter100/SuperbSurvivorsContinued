@@ -227,7 +227,7 @@ function SuperSurvivorsLoadGridsquare(square)
 			--end
 			SurvivorMap[key] = {} -- i think this is faster			
 		end
-		
+
 		if (square:getModData().SurvivorSquareLoaded == nil)
 			and (square:getZ() == 0 or square:isOutside() == false)
 			and (not SuperSurvivorPresetSpawn(square))
@@ -273,7 +273,6 @@ function SuperSurvivorsLoadGridsquare(square)
 end
 
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
-
 
 function SuperSurvivorOnCreateLivingChar(character)
 	print("OnCreateLivingChar:" .. tostring(character))
@@ -411,16 +410,6 @@ function SuperSurvivorsHotKeyOrder(index)
 	end
 end
 
---[[
---x1,x2,y1,y2
-local ZNoSpawnAreas = {
-{1,2,4,5}
-}
-function SuperSurvivorDeSpawnZombies(thissquare)
-
-	if(thissquare)
-
-end]]
 function SuperSurvivorTest(ob1)
 	local o = ob1
 	local stop
@@ -429,6 +418,8 @@ end
 
 Events.OnAIStateChange:Add(SuperSurvivorTest)
 
+-- Cows: Who thought it was a good idea to use numeric keys as the keybinding for orders? By default, the numeric keys were used for quick access to slot items...
+-- WIP - Whoever wrote this function didn't consider the keybinding issues... This needs to be rewritten.
 function supersurvivortemp(keyNum)
 	if (getSpecificPlayer(0)) then
 		--getSpecificPlayer(0):Say(tostring(keyNum))
@@ -872,20 +863,6 @@ function SuperSurSurvivorSpawnGenFiftyPercent()
 		return false
 	end
 end
-
--- Non Debug version, not merged
---function SuperSurvivorDoRandomSpawns()
---	local RealAlternativeSpawning = AlternativeSpawning - 1
---	for i = RealAlternativeSpawning,1,-1
---	do
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then	SuperSurSurvivorSpawnGenFivePercent() 	end
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then	SuperSurSurvivorSpawnGenTenPercent() 	end
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then	SuperSurSurvivorSpawnGenTwentyPercent() end
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then	SuperSurSurvivorSpawnGenThirtyPercent() end
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then	SuperSurSurvivorSpawnGenFourtyPercent() end
---		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then	SuperSurSurvivorSpawnGenFiftyPercent()	end	
---	end
---end
 
 -- Debug version
 function SuperSurvivorDoRandomSpawns()

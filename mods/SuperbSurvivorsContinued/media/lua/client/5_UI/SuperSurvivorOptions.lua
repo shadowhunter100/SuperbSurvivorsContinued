@@ -153,7 +153,6 @@ function SuperSurvivorSetOption(option, ToValue)
 end
 
 function SaveSurvivorOptions()
-	--local destFile = "SurvivorOptions.lua"
 	local writeFile = getFileWriter("SurvivorOptions.lua", true, false)
 
 	for index, value in pairs(SuperSurvivorOptions) do
@@ -241,7 +240,6 @@ if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"
 
 
 local GameOption = ISBaseObject:derive("GameOption")
-local GameOptions = ISBaseObject:derive("GameOptions")
 
 function GameOption:new(name, control, arg1, arg2)
 	local o = {}
@@ -315,9 +313,11 @@ end
 hotkey options
 ]]
 SSHotKeyOptions = {}
+
 for i = 1, #Orders do
 	SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]]
 end
+
 for i = 1, #Orders do
 	table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]])
 end
@@ -334,6 +334,8 @@ for i, b in ipairs(keyBinding) do
 end
 
 if index then
+	-- Cows: Who thought it was a good idea to use numeric keys as the keybinding for orders? By default, the numeric keys were already used for attachments and belt items...
+	-- WIP - The keybinding needs to be reworked.
 	-- we got a index, first lets insert our new entries
 	table.insert(keyBinding, index + 1, { value = "Call Closest Group Member", key = 20 })
 	table.insert(keyBinding, index + 2, { value = "Call Closest Non-Group Member", key = 21 })
