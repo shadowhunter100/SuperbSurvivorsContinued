@@ -227,8 +227,11 @@ function SuperSurvivorsLoadGridsquare(square)
 			--end
 			SurvivorMap[key] = {} -- i think this is faster			
 		end
-
-		if (square:getModData().SurvivorSquareLoaded == nil) and (square:getZ() == 0 or square:isOutside() == false) and (not SuperSurvivorPresetSpawn(square)) then
+		
+		if (square:getModData().SurvivorSquareLoaded == nil)
+			and (square:getZ() == 0 or square:isOutside() == false)
+			and (not SuperSurvivorPresetSpawn(square))
+		then
 			SurvivorMap[key] = {}
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
