@@ -308,11 +308,12 @@ function GameOption:onChangeVolumeControl(control, volume)
 end
 
 -- -- -- -- --
+SSHotKeyOptions = {};
 
---[[
-hotkey options
-]]
-SSHotKeyOptions = {}
+-- WIP - Why are Orders already in the Options menu? Can't even assign a new hotkey to it.
+function getContextMenuText(text)
+	return getText("ContextMenu_SS_" .. text)
+end
 
 for i = 1, #Orders do
 	SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]]
