@@ -5,8 +5,11 @@
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCell()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCore()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileReader(java.lang.String,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileSeparator()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileWriter(java.lang.String,boolean,boolean)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getGameTime()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getModFileReader(java.lang.String,java.lang.String,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getModFileWriter(java.lang.String,java.lang.String,boolean,boolean)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSpecificPlayer(int)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getText(java.lang.String)
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getWorld()
@@ -17,6 +20,7 @@
 // https://projectzomboid.com/modding/zombie/core/Core.html#addKeyBinding(java.lang.String,java.lang.Integer)
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.html
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.Perks.html
+// https://projectzomboid.com/modding/zombie/iso/objects/RainManager.html
 // https://www.projectzomboid.com/modding/zombie/characters/SurvivorFactory.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#triggerEvent(java.lang.String)
 // https://projectzomboid.com/modding/zombie/ui/UIFont.html
@@ -24,15 +28,20 @@
 {
     "Lua.diagnostics.globals": [
         "BloodBodyPartType",
+        "BloodClothingType",
         "checkSaveFileExists",
         "getCell",
         "getCore",
-        "getFileReader",
+        "getFileReader",        
+        "getFileSeparator",
         "getFileWriter",
         "getGameTime",
+        "getModFileReader",
+        "getModFileWriter",
         "getSpecificPlayer",
         "getText",
         "getWorld",
+        "instanceof",
         "instanceItem",
         "IsoCamera",
         "IsoPlayer",
@@ -40,10 +49,10 @@
         "keyBinding",
         "PerkFactory",
         "Perks",
+        "RainManager",
         "SurvivorFactory",
-        "ZombRand",
-        "UIFont",
         "triggerEvent",
-        "BloodClothingType"
+        "UIFont",
+        "ZombRand",
     ]
 }
