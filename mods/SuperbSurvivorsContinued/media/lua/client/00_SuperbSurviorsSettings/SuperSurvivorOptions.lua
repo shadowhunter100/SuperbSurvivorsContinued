@@ -165,10 +165,20 @@ function SaveSurvivorOptions()
 	writeFile:close();
 end
 
+local function doesOptionsFileExist()
+	local readFile = getFileReader("SurvivorOptions.lua", false)
+
+	if (readFile) then
+		return true
+	else
+		return false
+	end
+end
+
 function LoadSurvivorOptions()
 	if (doesOptionsFileExist() == false) then
 		print("could not load survivor options file")
-		return nil
+		return {}
 	end
 
 	local fileTable = {}
@@ -188,16 +198,6 @@ function LoadSurvivorOptions()
 	return fileTable
 end
 
-function doesOptionsFileExist()
-	local fileTable = {}
-	local readFile = getFileReader("SurvivorOptions.lua", false)
-
-	if (readFile) then
-		return true
-	else
-		return false
-	end
-end
 
 SuperSurvivorOptions = LoadSurvivorOptions()
 if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
