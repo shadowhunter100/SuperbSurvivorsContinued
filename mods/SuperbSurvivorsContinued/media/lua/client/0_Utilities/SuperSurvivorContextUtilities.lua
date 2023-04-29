@@ -404,6 +404,7 @@ function getSquaresNearWindow(cs)
 
 end
 
+-- WIP - THIS FUNCTION HAS NO REFERENCES IN THE MOD, IS IT DEPRECATED?
 --- get the closets window of a building, based on character's position
 ---@param building any building to be searched
 ---@param character any

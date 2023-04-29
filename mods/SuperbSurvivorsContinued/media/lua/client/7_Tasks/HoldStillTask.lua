@@ -8,7 +8,7 @@ function HoldStillTask:new(superSurvivor, playerInitiated)
 	self.__index = self
 		
 	o.wasplayerInitiated = playerInitiated
-	o.Aite = TalkToMe
+	o.Aite = TalkToMe -- WIP - TalkToMe is an undeclared variable...
 	o.parent = superSurvivor
 	o.Name = "Hold Still"
 	o.OnGoing = true
