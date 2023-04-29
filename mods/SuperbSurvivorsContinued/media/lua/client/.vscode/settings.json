@@ -1,0 +1,49 @@
+// Defined under PZ modding documentation, sorted alphabetically
+// https://projectzomboid.com/modding/zombie/characterTextures/BloodBodyPartType.html
+// https://projectzomboid.com/modding/zombie/characterTextures/BloodClothingType.html
+// https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#checkSaveFileExists(java.lang.String)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCell()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCore()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileReader(java.lang.String,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileWriter(java.lang.String,boolean,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getGameTime()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSpecificPlayer(int)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getText(java.lang.String)
+// https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getWorld()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#instanceItem(java.lang.String)
+// https://projectzomboid.com/modding/zombie/iso/IsoCamera.html
+// https://www.projectzomboid.com/modding/zombie/characters/IsoPlayer.html
+// https://projectzomboid.com/modding/zombie/iso/IsoUtils.html
+// https://projectzomboid.com/modding/zombie/core/Core.html#addKeyBinding(java.lang.String,java.lang.Integer)
+// https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.html
+// https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.Perks.html
+// https://www.projectzomboid.com/modding/zombie/characters/SurvivorFactory.html
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#triggerEvent(java.lang.String)
+// https://projectzomboid.com/modding/zombie/ui/UIFont.html
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#ZombRand(double)
+{
+    "Lua.diagnostics.globals": [
+        "BloodBodyPartType",
+        "checkSaveFileExists",
+        "getCell",
+        "getCore",
+        "getFileReader",
+        "getFileWriter",
+        "getGameTime",
+        "getSpecificPlayer",
+        "getText",
+        "getWorld",
+        "instanceItem",
+        "IsoCamera",
+        "IsoPlayer",
+        "IsoUtils",
+        "keyBinding",
+        "PerkFactory",
+        "Perks",
+        "SurvivorFactory",
+        "ZombRand",
+        "UIFont",
+        "triggerEvent",
+        "BloodClothingType"
+    ]
+}

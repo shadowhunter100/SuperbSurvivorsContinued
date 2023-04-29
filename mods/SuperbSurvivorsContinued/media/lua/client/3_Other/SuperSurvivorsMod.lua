@@ -771,7 +771,7 @@ function SuperSurvivorsNewSurvivorManager()
 			--local number = ZombRand(1,3)
 			--setRandomSurvivorSuit(raider,"Rare","Bandit"..tostring(number))
 
-			getRandomSurvivorSuit(raider) -- Even if it says 'raider' it's not giving raider outfits
+			GetRandomSurvivorSuit(raider) -- Even if it says 'raider' it's not giving raider outfits
 		end
 		ChanceToSpawnWithGun = oldGunSpawnChance
 		RaiderGroup:AllSpokeTo()

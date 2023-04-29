@@ -4300,7 +4300,7 @@ function SuperSurvivor:SuitUp(SuitName)
 		setRandomSurvivorSuit(self, "Preset", SuitName)
 		-- Do the normal outfit selection otherwise
 	else
-		getRandomSurvivorSuit(self)
+		GetRandomSurvivorSuit(self)
 
 		local hoursSurvived = math.min(math.floor(getGameTime():getWorldAgeHours() / 24.0), 28)
 		local result = ZombRand(1, 72) + hoursSurvived

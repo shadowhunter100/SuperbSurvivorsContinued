@@ -11,8 +11,8 @@ end
 
 --- Gets a random outfit for a survivor
 ---@param SS any survivor that will wear the outfit
-function getRandomSurvivorSuit(SS)
-	debugSuits(" ----- getRandomSurvivorSuit -----")
+function GetRandomSurvivorSuit(SS)
+	debugSuits(" ----- GetRandomSurvivorSuit -----")
 
 	local roll = ZombRand(0,101)
 	local tempTable = nil
@@ -67,7 +67,7 @@ function getRandomSurvivorSuit(SS)
 		end
 	end
 
-	debugSuits(" ----- getRandomSurvivorSuit -----")
+	debugSuits(" ----- GetRandomSurvivorSuit -----")
 end
 
 ---@alias rarity
