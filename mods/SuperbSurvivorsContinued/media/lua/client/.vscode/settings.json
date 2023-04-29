@@ -13,6 +13,7 @@
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSpecificPlayer(int)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getText(java.lang.String)
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getWorld()
+// https://projectzomboid.com/modding/zombie/core/ImmutableColor.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#instanceItem(java.lang.String)
 // https://projectzomboid.com/modding/zombie/iso/IsoCamera.html
 // https://www.projectzomboid.com/modding/zombie/characters/IsoPlayer.html
@@ -32,7 +33,7 @@
         "checkSaveFileExists",
         "getCell",
         "getCore",
-        "getFileReader",        
+        "getFileReader",
         "getFileSeparator",
         "getFileWriter",
         "getGameTime",
@@ -41,6 +42,7 @@
         "getSpecificPlayer",
         "getText",
         "getWorld",
+        "ImmutableColor",
         "instanceof",
         "instanceItem",
         "IsoCamera",

@@ -3604,7 +3604,7 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 		--	= COLOR - White, Grey, Blond, Sand, Brown, Red, Pink, Purple, Blue, Black
 		--	================================================
 		if (PresetSpawn.Color ~= nil) then
-			SuperSurvivor:Get():getHumanVisual():setHairColor(getPresetColor(PresetSpawn.Color))
+			SuperSurvivor:Get():getHumanVisual():setHairColor(GetPresetColor(PresetSpawn.Color))
 		end
 		--	Arsenal[26]'s changes -- end
 
