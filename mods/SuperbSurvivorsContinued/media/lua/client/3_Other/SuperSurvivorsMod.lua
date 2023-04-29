@@ -218,7 +218,7 @@ function SuperSurvivorsLoadGridsquare(square)
 				RaidsStartAfterThisManyHours = 9999999;
 			end
 
-			if (doesFileExist("SurvivorLocX")) then
+			if (DoesFileExist("SurvivorLocX")) then
 				SurvivorMap = loadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
 				-- print("Survivor map loaded")
 			else

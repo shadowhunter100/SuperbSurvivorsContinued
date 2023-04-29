@@ -62,10 +62,10 @@ function SuperSurvivorGroupManager:Print()
 end
 
 function SuperSurvivorGroupManager:Load()
-	if (doesFileExist("SurvivorGroup0.lua")) then -- only load if any groups detected at all
+	if (DoesFileExist("SurvivorGroup0.lua")) then -- only load if any groups detected at all
 		self.GroupCount = 0
 		print("loading groups")
-		while doesFileExist("SurvivorGroup" .. tostring(self.GroupCount) .. ".lua") do
+		while DoesFileExist("SurvivorGroup" .. tostring(self.GroupCount) .. ".lua") do
 			print("loading group#" .. tostring(self.GroupCount))
 			local newGroup = self:newGroup()
 			newGroup:Load()

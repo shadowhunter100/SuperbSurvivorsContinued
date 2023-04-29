@@ -39,7 +39,7 @@ end
 --- Checks if a file of a savegame exists
 ---@param fileName string file to be searched
 ---@return boolean returns true if the current file exists
-function doesFileExist(fileName)
+function DoesFileExist(fileName)
 	local fileTable = {}
 	local readFile = getModFileReader(modid, getFileFullPath(fileName), false)
 
