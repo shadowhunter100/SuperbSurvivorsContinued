@@ -1,24 +1,34 @@
 // Defined under PZ modding documentation, sorted alphabetically
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodBodyPartType.html
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodClothingType.html
+// https://projectzomboid.com/modding/zombie/ui/UI_BodyPart.html#BodyPartType
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#checkSaveFileExists(java.lang.String)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCell()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCore()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileReader(java.lang.String,boolean)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileSeparator()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileWriter(java.lang.String,boolean,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getGameSpeed()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getGameTime()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getModFileReader(java.lang.String,java.lang.String,boolean)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getModFileWriter(java.lang.String,java.lang.String,boolean,boolean)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getMouseX()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getMouseY()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSpecificPlayer(int)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getText(java.lang.String)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getTextManager()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getTexture(java.lang.String)
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getWorld()
 // https://projectzomboid.com/modding/zombie/core/ImmutableColor.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#instanceItem(java.lang.String)
+// instanceof is a core java function... but also accessible as of build 41 - https://theindiestone.com/forums/index.php?/topic/23364-all-lua-functions-list/ 
 // https://projectzomboid.com/modding/zombie/iso/IsoCamera.html
 // https://www.projectzomboid.com/modding/zombie/characters/IsoPlayer.html
 // https://projectzomboid.com/modding/zombie/iso/IsoUtils.html
 // https://projectzomboid.com/modding/zombie/core/Core.html#addKeyBinding(java.lang.String,java.lang.Integer)
+// https://projectzomboid.com/modding/zombie/characters/BodyDamage/Metabolics.html
+// https://projectzomboid.com/modding/zombie/characters/Moodles/MoodleType.html
+// https://projectzomboid.com/modding/zombie/input/Mouse.html
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.html
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.Perks.html
 // https://projectzomboid.com/modding/zombie/iso/objects/RainManager.html
@@ -30,17 +40,23 @@
     "Lua.diagnostics.globals": [
         "BloodBodyPartType",
         "BloodClothingType",
+        "BodyPartType",
         "checkSaveFileExists",
         "getCell",
         "getCore",
         "getFileReader",
         "getFileSeparator",
         "getFileWriter",
+        "getGameSpeed",
         "getGameTime",
         "getModFileReader",
         "getModFileWriter",
+        "getMouseX",
+        "getMouseY",
         "getSpecificPlayer",
         "getText",
+        "getTextManager",
+        "getTexture",
         "getWorld",
         "ImmutableColor",
         "instanceof",
@@ -49,6 +65,9 @@
         "IsoPlayer",
         "IsoUtils",
         "keyBinding",
+        "Metabolics",
+        "MoodleType",
+        "Mouse",
         "PerkFactory",
         "Perks",
         "RainManager",

@@ -48,6 +48,7 @@ function AttackTask:update()
 
 		-- Controls the Range of how far / close the NPC should be
 		if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
+			-- WIP - When and where was "weapon" assigned a value? This is still unassigned...
 			if (self.parent:needToReadyGun(weapon)) then
 				self.parent:ReadyGun(weapon)
 			else
@@ -69,7 +70,6 @@ function AttackTask:update()
 		local weapon = self.parent.player:getPrimaryHandItem()
 
 		if (not weapon or (not self.parent:usingGun()) or ISReloadWeaponAction.canShoot(weapon)) then
-
 			if (self.parent:hasGun()) then -- Gun related conditions
 				if (self.parent:needToReadyGun(weapon)) then
 					self.parent:ReadyGun(weapon)
@@ -88,8 +88,8 @@ function AttackTask:update()
 				end
 			end
 
-			if (instanceof(self.parent.LastEnemeySeen, "IsoPlayer")) then 
-				self.parent:Wait(5) 
+			if (instanceof(self.parent.LastEnemeySeen, "IsoPlayer")) then
+				self.parent:Wait(5)
 			end -- nerf attack speed of player vs player attacking
 		elseif (self.parent:usingGun()) then
 			if (self.parent:ReadyGun(weapon) == false) then self.parent:reEquipMele() end

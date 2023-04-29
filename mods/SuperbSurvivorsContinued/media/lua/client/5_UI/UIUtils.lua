@@ -2,12 +2,13 @@
 -- RGB functions
 --****************************************************
 function rgb_to_dec(color)
-    return { r = color.r/255, g = color.g/255, b = color.b/255, a = color.a }
+    return { r = color.r / 255, g = color.g / 255, b = color.b / 255, a = color.a }
 end
 
 function hex_to_rgb(hex, opacity)
     hex = hex:gsub("#", "")
-    return { r = tonumber(hex:sub(1, 2), 16), g = tonumber(hex:sub(3, 4), 16), b = tonumber(hex:sub(5, 6), 16), a = opacity }
+    return { r = tonumber(hex:sub(1, 2), 16), g = tonumber(hex:sub(3, 4), 16), b = tonumber(hex:sub(5, 6), 16),
+        a = opacity }
 end
 
 function hex_to_dec(hex, opacity)
@@ -93,17 +94,18 @@ function get_member_info(member_index)
     elseif member.getName ~= nil and member:isInCell() == false then
         name = member:getName()
         local coords = getCoordsFromID(member:getID())
+        -- WIP - WHAT IS "COORD"? IS THIS A TYPO?
         if coord == 0 then
             SSM:LoadSurvivor(member:getID(), getSpecificPlayer(0):getCurrentSquare())
             coords = "0"
         end
         role = coords
-    elseif not checkSaveFileExists("Survivor"..tostring(member)) then
-        name = getContextMenuText("MIASurvivor").."["..tostring(member).."]"
+    elseif not checkSaveFileExists("Survivor" .. tostring(member)) then
+        name = getContextMenuText("MIASurvivor") .. "[" .. tostring(member) .. "]"
         role = getText("IGUI_health_Deceased")
         group:removeMember(member)
     else
-        name = getContextMenuText("MIASurvivor").."["..tostring(member).."]"
+        name = getContextMenuText("MIASurvivor") .. "[" .. tostring(member) .. "]"
         local coords = getCoordsFromID(member)
         if coords == 0 then
             SSM:LoadSurvivor(member, getSpecificPlayer(0):getCurrentSquare())
@@ -119,7 +121,7 @@ function give_order(order_index, member_index)
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
     if member then
-        getSpecificPlayer(0):Say(getActionText("CallName_Before")..member:getName()..getActionText("CallName_After"))
+        getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
         SurvivorOrder(nil, member.player, Orders[order_index], nil)
     end
