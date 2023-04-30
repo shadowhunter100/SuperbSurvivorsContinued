@@ -351,27 +351,6 @@ end
 
 Events.OnGameStart.Add(SuperSurvivorsInit)
 
-function SuperSurvivorsOnCharacterCollide(playerOne, PlayerTwo)
-	if (playerOne ~= nil) then
-		if (playerOne:isNPC()) then
-			print("trying to cancel collision p1")
-			playerOne:setLastCollidedW(false)
-			playerOne:setLastCollidedN(false)
-			playerOne:setTripping(false)
-		end
-	end
-	if (playerTwo ~= nil) then
-		if (playerTwo:isNPC()) then
-			print("trying to cancel collision p2")
-			playerTwo:setLastCollidedW(false)
-			playerTwo:setLastCollidedN(false)
-			playerTwo:setTripping(false)
-		end
-	end
-end
-
---Events.OnCharacterCollide.Add(SuperSurvivorsOnCharacterCollide)
-
 function SuperSurvivorsOnSwing(player, weapon)
 	local ID = player:getModData().ID;
 
