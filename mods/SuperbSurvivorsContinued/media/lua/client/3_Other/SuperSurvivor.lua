@@ -622,9 +622,9 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	local nameToSet
 	if (Buddy:getModData().Name == nil) then
 		if Buddy:isFemale() then
-			nameToSet = GetRandomName("GirlNames")
+			nameToSet = getRandomName("GirlNames")
 		else
-			nameToSet = GetRandomName("BoyNames")
+			nameToSet = getRandomName("BoyNames")
 		end
 	else
 		nameToSet = Buddy:getModData().Name
