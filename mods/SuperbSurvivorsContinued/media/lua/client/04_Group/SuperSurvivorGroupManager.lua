@@ -73,28 +73,3 @@ function SuperSurvivorGroupManager:Load()
 end
 
 SSGM = SuperSurvivorGroupManager:new()
-
-HillTopGroup = SSGM:newGroup() -- 0
-HillTopGroupID = HillTopGroup:getID()
-
-HillTopGroup:setBounds({ 11707, 11753, 7917, 7967, 0 })
-HillTopGroup:setGroupArea("ForageArea", 11686, 11706, 7912, 7967, 0)
-HillTopGroup:setGroupArea("CorpseStorageArea", 11691, 11691, 7936, 7936, 0)
-HillTopGroup:setGroupArea("FoodStorageArea", 11715, 11715, 7926, 7926, 0)
-HillTopGroup:setGroupArea("GuardArea", 11707, 11711, 7938, 7946, 0)
-HillTopGroup:setGroupArea("ChopTreeArea", 11679, 11700, 7951, 7973, 0)
-HillTopGroup:setGroupArea("FarmingArea", 11741, 11746, 7939, 7949, 0)
-
-BlockadeGroup = SSGM:newGroup() -- 1
-BlockadeGroup:setGroupArea("FarmingArea", 12473, 12475, 4438, 4476, 0)
-BlockadeGroup:setGroupArea("ForageArea", 12483, 12484, 4442, 4443, 0)
-
-BlockadeGroupID = BlockadeGroup:getID()
-WoodburyGroup = SSGM:newGroup() -- 2
-WoodburyGroupID = WoodburyGroup:getID()
-LoslokosGroup = SSGM:newGroup() -- 3s
-LoslokosGroupID = LoslokosGroup:getID()
-Gang1Group = SSGM:newGroup()    -- 4
-Gang1GroupID = Gang1Group:getID()
-Gang2Group = SSGM:newGroup()    -- 5
-Gang2GroupID = Gang2Group:getID()
