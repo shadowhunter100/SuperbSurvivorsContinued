@@ -1,6 +1,6 @@
 -- this file only has methods related to deal with files
 
-local modid = "SuperbSurvivors"
+local modName = "SuperbSurvivorsContinued"
 
 --- DEBUG ---
 
@@ -40,13 +40,12 @@ end
 ---@param fileName string file to be searched
 ---@return boolean returns true if the current file exists
 function DoesFileExist(fileName)
-	local fileTable = {}
-	local readFile = getModFileReader(modid, getFileFullPath(fileName), false)
+	local readFile = getModFileReader(modName, getFileFullPath(fileName), false)
 
 	if (readFile) then
-		return true
+		return true;
 	else
-		return false
+		return false;
 	end
 end
 
@@ -72,7 +71,7 @@ function table.load(fileName)
 	debugMethodAction("loading file", fileName)
 
 	local fileTable = {}
-	local readFile = getModFileReader(modid, getFileFullPath(fileName .. ".lua"), true)
+	local readFile = getModFileReader(modName, getFileFullPath(fileName .. ".lua"), true)
 
 	if (readFile) then
 		local scanLine = readFile:readLine()
@@ -103,9 +102,8 @@ end
 function table.save(tbl, fileName)
 	debugMethodName("table.save")
 	debugMethodAction("saving file", fileName)
-	local themodID = modid
 	local thepath = getFileFullPath(fileName .. ".lua")
-	local writeFile = getModFileWriter(themodID, thepath, true, false)
+	local writeFile = getModFileWriter(modName, thepath, true, false)
 
 	for i = 1, #tbl do
 		debugMethodAction("writing line", tostring(i))
@@ -126,7 +124,7 @@ function kvtableload(fileName)
 	debugMethodAction("loading file", fileName)
 
 	local fileTable = {}
-	local readFile = getModFileReader(modid, getFileFullPath(fileName), true)
+	local readFile = getModFileReader(modName, getFileFullPath(fileName), true)
 
 	if (not readFile) then
 		return {}
@@ -171,7 +169,7 @@ function kvtablesave(fileTable, fileName)
 		return false
 	end
 
-	local writeFile = getModFileWriter(modid, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
+	local writeFile = getModFileWriter(modName, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
 
 	for index, value in pairs(fileTable) do
 		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
