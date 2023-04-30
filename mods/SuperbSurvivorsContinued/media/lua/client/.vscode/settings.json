@@ -34,6 +34,7 @@
 // https://projectzomboid.com/modding/zombie/iso/objects/RainManager.html
 // https://www.projectzomboid.com/modding/zombie/characters/SurvivorFactory.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#triggerEvent(java.lang.String)
+// https://projectzomboid.com/modding/zombie/ui/TextDrawObject.html
 // https://projectzomboid.com/modding/zombie/ui/UIFont.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#ZombRand(double)
 {
@@ -72,6 +73,7 @@
         "Perks",
         "RainManager",
         "SurvivorFactory",
+        "TextDrawObject",
         "triggerEvent",
         "UIFont",
         "ZombRand",
