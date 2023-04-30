@@ -121,8 +121,8 @@ end
 --- loads a table from a file
 ---@param fileName string the filename that the table will be loaded
 ---@return table a table with all data from filename or nil if not found
-function kvtableload(fileName)
-	debugMethodName("kvtableload")
+function KVTableLoad(fileName)
+	debugMethodName("KVTableLoad")
 	debugMethodAction("loading file", fileName)
 
 	local fileTable = {}
@@ -155,19 +155,19 @@ function kvtableload(fileName)
 	debugMethodAction("closing file", fileName)
 	readFile:close()
 
-	debugMethodName("kvtableload")
+	debugMethodName("KVTableLoad")
 	return fileTable
 end
 
 --- saves a table into a file
----@param tbl table a table with data
+---@param fileTable table a table with data
 ---@param fileName string the name of the file to be created
-function kvtablesave(fileTable, fileName)
-	debugMethodName("kvtablesave")
-	debugMethodAction("saving file", fileName)
+function KVTableSave(fileTable, fileName)
+	debugMethodName("KVTableSave");
+	debugMethodAction("saving file", fileName);
 
 	if (not fileTable) then
-		debugTable("table is empty")
+		debugTable("table is empty");
 		return false
 	end
 
@@ -175,16 +175,16 @@ function kvtablesave(fileTable, fileName)
 
 	for index, value in pairs(fileTable) do
 		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
-		debugMethodAction("writing line", tostring(index))
+		debugMethodAction("writing line", tostring(index));
 	end
 
-	debugMethodAction("closing file", fileName)
+	debugMethodAction("closing file", fileName);
 	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
-	debugMethodName("kvtablesave")
+	debugMethodName("KVTableSave");
 end
 
-function getSaveDir()
+function GetSaveDir()
 	return Core.getMyDocumentFolder() ..
 		getFileSeparator() ..
 		"Saves" ..
