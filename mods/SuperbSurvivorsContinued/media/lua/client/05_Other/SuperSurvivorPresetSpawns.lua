@@ -1,4 +1,4 @@
-require "2_Group/SuperSurvivorGroupManager"
+require "04_Group/SuperSurvivorGroupManager"
 
 function getWeapon(kind)
 	return kind;

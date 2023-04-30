@@ -1,4 +1,4 @@
-require "0_Utilities/SuperSurvivorSuitsList"
+require "02_Utilities/SuperSurvivorSuitsList"
 -- this file has the functions for survivor's suits
 
 local enableDebugSuits = false

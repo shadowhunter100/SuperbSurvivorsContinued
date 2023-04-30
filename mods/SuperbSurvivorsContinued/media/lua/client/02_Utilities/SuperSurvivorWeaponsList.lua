@@ -1,4 +1,4 @@
-require "0_Utilities/SuperSurvivorWeaponsRegistry"
+require "02_Utilities/SuperSurvivorWeaponsRegistry"
 
 --weapon tables:
 MeleWeapons = {

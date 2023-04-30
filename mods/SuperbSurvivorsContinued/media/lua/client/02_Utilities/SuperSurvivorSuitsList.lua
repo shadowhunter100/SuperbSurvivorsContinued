@@ -1,4 +1,4 @@
-require "0_Utilities/SuperSurvivorSuitsRegistry"
+require "02_Utilities/SuperSurvivorSuitsRegistry"
 
 -- this file has the survivor's suits
 
