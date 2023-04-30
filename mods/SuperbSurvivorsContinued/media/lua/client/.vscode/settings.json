@@ -3,7 +3,6 @@
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodClothingType.html
 // https://projectzomboid.com/modding/zombie/ui/UI_BodyPart.html#BodyPartType
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#checkSaveFileExists(java.lang.String)
-// https://projectzomboid.com/modding/zombie/core/Core.html#getMyDocumentFolder()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCell()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCore()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getFileReader(java.lang.String,boolean)
@@ -43,8 +42,7 @@
         "BloodBodyPartType",
         "BloodClothingType",
         "BodyPartType",
-        "checkSaveFileExists",        
-        "Core",
+        "checkSaveFileExists",
         "getCell",
         "getCore",
         "getFileReader",

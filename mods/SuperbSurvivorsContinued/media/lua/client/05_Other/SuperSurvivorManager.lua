@@ -317,9 +317,9 @@ function loadSurvivorMap()
 		print("SurvivorManagerInfo was not found. this save file could be corrupt");
 	end
 
-	SurvivorLocX = KVTableLoad("SurvivorLocX")
-	SurvivorLocY = KVTableLoad("SurvivorLocY")
-	SurvivorLocZ = KVTableLoad("SurvivorLocZ")
+	SurvivorLocX = kvtableload("SurvivorLocX")
+	SurvivorLocY = kvtableload("SurvivorLocY")
+	SurvivorLocZ = kvtableload("SurvivorLocZ")
 
 	local fileTable = {}
 
@@ -356,7 +356,7 @@ function saveSurvivorMap()
 
 	-- writeFile:close();
 
-	KVTableSave(SurvivorLocX, "SurvivorLocX"); -- WIP - console.txt logged an error tracing to this line
-	KVTableSave(SurvivorLocY, "SurvivorLocY"); -- WIP - console.txt logged an error tracing to this line
-	KVTableSave(SurvivorLocZ, "SurvivorLocZ"); -- WIP - console.txt logged an error tracing to this line
+	kvtablesave(SurvivorLocX, "SurvivorLocX") -- WIP - console.txt logged an error tracing to this line
+	kvtablesave(SurvivorLocY, "SurvivorLocY") -- WIP - console.txt logged an error tracing to this line
+	kvtablesave(SurvivorLocZ, "SurvivorLocZ") -- WIP - console.txt logged an error tracing to this line
 end
