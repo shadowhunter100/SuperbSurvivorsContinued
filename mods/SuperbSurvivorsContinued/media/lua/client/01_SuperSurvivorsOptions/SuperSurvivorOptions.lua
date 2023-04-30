@@ -1,5 +1,3 @@
-require "SuperSurvivorOrders";
-
 -- thanks and some credit to Fenris_Wolf from ORGM mod for creating this hotkeys file!  I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 
 local function getOptionText(text)
@@ -199,7 +197,6 @@ function LoadSurvivorOptions()
 	print("Loaded survivor options file")
 	return fileTable
 end
-
 
 SuperSurvivorOptions = LoadSurvivorOptions()
 if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
