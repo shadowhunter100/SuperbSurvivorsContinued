@@ -468,12 +468,6 @@ function AIManager(TaskMangerIn)
 		end
 	end
 
-
-	--- end of high priority ai actions
-	if (TaskMangerIn:getCurrentTask() == "Give Reward To Player") or (TaskMangerIn:getCurrentTask() == "Direct Dialogue") then -- if quest related action only allow high priority AI to interupt
-		return TaskMangerIn
-	end
-
 	-- ----------------------------- --
 	-- If NPC is Starving or drhydrating, force leave group
 	-- To do - Give player option to let this task happen or not too
