@@ -135,7 +135,6 @@ function SuperSurvivorOnDeath(player)
 		local SS = SSM:Get(player:getModData().ID);
 
 		if (SS ~= nil) then
-			-- SSQM:update("KillNPC", SS:getName()) -- WIP - Console.txt logged an error at this line.
 			SS:OnDeath();
 		end
 	end
@@ -215,10 +214,6 @@ end
 function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 	local SSW = SSM:Get(wielder:getModData().ID);
 	local SSV = SSM:Get(victim:getModData().ID);
-
-	-- if (wielder:isLocalPlayer() and SSV) then 
-		-- SSQM:update("AttackNPC", SSV:getName());  -- WIP - console.txt logged an error tracing to this line 
-	-- end
 
 	local fakehit = false
 

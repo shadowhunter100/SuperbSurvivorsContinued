@@ -30,8 +30,6 @@ function DialogueTask:new(superSurvivor, TalkToMe, Dialogue, isYesOrNoQuestion, 
 
 	if (isYesOrNoQuestion) and (YesResultActions == nil) then
 		print("Warning: YesResultActions=nil on question dialogue!")
-	else
-		print("SSQM: YesResultActions were detected making DialogueTask for " .. tostring(superSurvivor:getName()))
 	end
 
 	if (not o.Dialogue) then return nil end
@@ -86,7 +84,6 @@ function DialogueTask:update()
 			else
 				self.Current = 99999
 				self.parent:Wait(1)
-				print("SSQM: added task QuestionDialogueTaskW")
 
 				-- WIP - When and where was "myDialogueWindow" initiated? if this is a quest related item, it should be removed.
 				myDialogueWindow:start(self.parent, self.Dialogue, self.isYesOrNoQuestion)
