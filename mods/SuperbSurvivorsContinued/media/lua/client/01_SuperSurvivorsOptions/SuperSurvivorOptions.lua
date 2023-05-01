@@ -4,6 +4,98 @@ local function getOptionText(text)
 	return getText("UI_Option_SS_" .. text)
 end
 
+local function doesOptionsFileExist()
+	local readFile = getFileReader("SurvivorOptions.lua", false)
+
+	if (readFile) then
+		return true;
+	else
+		return false;
+	end
+end
+
+function LoadSurvivorOptions()
+	if (doesOptionsFileExist() == false) then
+		print("could not load survivor options file")
+		return {}
+	end
+
+	local fileTable = {};
+	local readFile = getFileReader("SurvivorOptions.lua", false);
+	local scanLine = readFile:readLine();
+
+	while scanLine do
+		local values = {};
+
+		for input in scanLine:gmatch("%S+") do
+			table.insert(values, input);
+		end
+
+		--print("loading line: "..values[1] .. " " .. values[2])
+		if (fileTable[values[1]] == nil) then
+			fileTable[values[1]] = {};
+		end
+
+		fileTable[values[1]] = tonumber(values[2]);
+		scanLine = readFile:readLine();
+
+		if (not scanLine) then
+			break;
+		end
+	end
+
+	readFile:close();
+
+	print("Loaded survivor options file");
+	return fileTable
+end
+
+SuperSurvivorOptions = LoadSurvivorOptions();
+
+local GameOption = ISBaseObject:derive("GameOption");
+
+if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
+if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
+if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
+if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
+if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
+if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
+if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
+if (not SuperSurvivorOptions["MaxHostileSpawnRate"]) then SuperSurvivorOptions["MaxHostileSpawnRate"] = 17 end
+if (not SuperSurvivorOptions["InfinitAmmo"]) then SuperSurvivorOptions["InfinitAmmo"] = 2 end
+if (not SuperSurvivorOptions["NoPreSetSpawn"]) then SuperSurvivorOptions["NoPreSetSpawn"] = 2 end
+if (not SuperSurvivorOptions["NoIdleChatter"]) then SuperSurvivorOptions["NoIdleChatter"] = 2 end
+if (not SuperSurvivorOptions["SafeBase"]) then SuperSurvivorOptions["SafeBase"] = 2 end
+if (not SuperSurvivorOptions["SurvivorBases"]) then SuperSurvivorOptions["SurvivorBases"] = 2 end
+if (not SuperSurvivorOptions["FindWork"]) then SuperSurvivorOptions["FindWork"] = 2 end
+if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["SurvivorHunger"] = 2 end
+if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
+
+if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
+if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
+
+if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
+if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
+if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
+if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
+if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
+if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
+
+if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
+
+if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
+if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
+
+if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
+
+if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
+if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
+if (not SuperSurvivorOptions["AltSpawnAmount"]) then SuperSurvivorOptions["AltSpawnAmount"] = 1 end
+if (not SuperSurvivorOptions["SSHotkey1"]) then SuperSurvivorOptions["SSHotkey1"] = 6 end
+if (not SuperSurvivorOptions["SSHotkey2"]) then SuperSurvivorOptions["SSHotkey2"] = 10 end
+if (not SuperSurvivorOptions["SSHotkey3"]) then SuperSurvivorOptions["SSHotkey3"] = 27 end
+if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"] = 42 end
+
 function SuperSurvivorGetOption(option)
 	if (SuperSurvivorOptions[option] ~= nil) then
 		return tonumber(SuperSurvivorOptions[option])
@@ -165,85 +257,6 @@ function SaveSurvivorOptions()
 	writeFile:close();
 end
 
-local function doesOptionsFileExist()
-	local readFile = getFileReader("SurvivorOptions.lua", false)
-
-	if (readFile) then
-		return true
-	else
-		return false
-	end
-end
-
-function LoadSurvivorOptions()
-	if (doesOptionsFileExist() == false) then
-		print("could not load survivor options file")
-		return {}
-	end
-
-	local fileTable = {}
-	local readFile = getFileReader("SurvivorOptions.lua", false)
-	local scanLine = readFile:readLine()
-	while scanLine do
-		local values = {}
-		for input in scanLine:gmatch("%S+") do table.insert(values, input) end
-		--print("loading line: "..values[1] .. " " .. values[2])
-		if (fileTable[values[1]] == nil) then fileTable[values[1]] = {} end
-		fileTable[values[1]] = tonumber(values[2])
-		scanLine = readFile:readLine()
-		if not scanLine then break end
-	end
-	readFile:close()
-	print("Loaded survivor options file")
-	return fileTable
-end
-
-SuperSurvivorOptions = LoadSurvivorOptions()
-if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
-if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
-if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
-if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
-if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
-if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["MaxHostileSpawnRate"]) then SuperSurvivorOptions["MaxHostileSpawnRate"] = 17 end
-if (not SuperSurvivorOptions["InfinitAmmo"]) then SuperSurvivorOptions["InfinitAmmo"] = 2 end
-if (not SuperSurvivorOptions["NoPreSetSpawn"]) then SuperSurvivorOptions["NoPreSetSpawn"] = 2 end
-if (not SuperSurvivorOptions["NoIdleChatter"]) then SuperSurvivorOptions["NoIdleChatter"] = 2 end
-if (not SuperSurvivorOptions["SafeBase"]) then SuperSurvivorOptions["SafeBase"] = 2 end
-if (not SuperSurvivorOptions["SurvivorBases"]) then SuperSurvivorOptions["SurvivorBases"] = 2 end
-if (not SuperSurvivorOptions["FindWork"]) then SuperSurvivorOptions["FindWork"] = 2 end
-if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["SurvivorHunger"] = 2 end
-if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
-
-if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
-if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
-
-if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
-if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
-if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
-if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
-if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
-if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
-
-if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
-
-if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
-if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
-
-if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
-
-if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
-if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
-if (not SuperSurvivorOptions["AltSpawnAmount"]) then SuperSurvivorOptions["AltSpawnAmount"] = 1 end
-if (not SuperSurvivorOptions["SSHotkey1"]) then SuperSurvivorOptions["SSHotkey1"] = 6 end
-if (not SuperSurvivorOptions["SSHotkey2"]) then SuperSurvivorOptions["SSHotkey2"] = 10 end
-if (not SuperSurvivorOptions["SSHotkey3"]) then SuperSurvivorOptions["SSHotkey3"] = 27 end
-if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"] = 42 end
-
-
-local GameOption = ISBaseObject:derive("GameOption")
-
 function GameOption:new(name, control, arg1, arg2)
 	local o = {}
 	setmetatable(o, self)
@@ -267,18 +280,22 @@ function GameOption:new(name, control, arg1, arg2)
 	return o
 end
 
+-- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:toUI()
 	print('ERROR: option "' .. self.name .. '" missing toUI()')
 end
 
+-- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:apply()
 	print('ERROR: option "' .. self.name .. '" missing apply()')
 end
 
+-- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:resetLua()
 	MainOptions.instance.resetLua = true
 end
 
+-- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:restartRequired(oldValue, newValue)
 	if getCore():getOptionOnStartup(self.name) == nil then
 		getCore():setOptionOnStartup(self.name, oldValue)
@@ -308,6 +325,50 @@ function GameOption:onChangeVolumeControl(control, volume)
 	if self.onChange then
 		self:onChange(control, volume)
 	end
+end
+
+function SuperSurvivorsRefreshSettings()
+	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
+
+	Option_Perception_Bonus = SuperSurvivorGetOptionValue("Option_Perception_Bonus")
+
+	Option_Display_Survivor_Names = SuperSurvivorGetOptionValue("Option_Display_Survivor_Names")
+	Option_Display_Hostile_Color = SuperSurvivorGetOptionValue("Option_Display_Hostile_Color")
+
+	Option_Panic_Distance = SuperSurvivorGetOptionValue("Option_Panic_Distance")
+
+	Option_ForcePVP = SuperSurvivorGetOptionValue("Option_ForcePVP")
+	Option_FollowDistance = SuperSurvivorGetOptionValue("Option_FollowDistance")
+	SuperSurvivorBravery = SuperSurvivorGetOptionValue("Bravery")
+	RoleplayMessage = SuperSurvivorGetOptionValue('RoleplayMessage')
+
+	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")
+	AltSpawnGroupSize = SuperSurvivorGetOptionValue("AltSpawnAmount")
+	AltSpawnPercent = SuperSurvivorGetOptionValue("AltSpawnPercent")
+	NoPreSetSpawn = SuperSurvivorGetOptionValue("NoPreSetSpawn")
+	NoIdleChatter = SuperSurvivorGetOptionValue("NoIdleChatter")
+
+	DebugOptions = SuperSurvivorGetOptionValue("DebugOptions")
+	DebugOption_DebugSay = SuperSurvivorGetOptionValue("DebugSay")
+	DebugOption_DebugSay_Distance = SuperSurvivorGetOptionValue("DebugSay_Distance")
+
+	SafeBase = SuperSurvivorGetOptionValue("SafeBase")
+	SurvivorBases = SuperSurvivorGetOptionValue("SurvivorBases")
+	SuperSurvivorSpawnRate = SuperSurvivorGetOptionValue("SpawnRate")
+	ChanceToSpawnWithGun = SuperSurvivorGetOptionValue("GunSpawnRate")
+	ChanceToSpawnWithWep = SuperSurvivorGetOptionValue("WepSpawnRate")
+	ChanceToBeHostileNPC = SuperSurvivorGetOptionValue("HostileSpawnRate")
+	MaxChanceToBeHostileNPC = SuperSurvivorGetOptionValue("MaxHostileSpawnRate") -- Fixed, it used to contain 'HostileSpawnRate', previously making MaxHostileSpawnRate a useless option
+
+	SurvivorInfiniteAmmo = SuperSurvivorGetOptionValue("InfinitAmmo")
+	SurvivorHunger = SuperSurvivorGetOptionValue("SurvivorHunger")
+	SurvivorsFindWorkThemselves = SuperSurvivorGetOptionValue("FindWork")
+
+
+	RaidsAtLeastEveryThisManyHours = SuperSurvivorGetOptionValue("RaidersAtLeastHours") --(60 * 24)
+	RaidsStartAfterThisManyHours = SuperSurvivorGetOptionValue("RaidersAfterHours")  -- (5 * 24)
+
+	RaidChanceForEveryTenMinutes = SuperSurvivorGetOptionValue("RaidersChance")      --(6 * 24 * 14)
 end
 
 -- -- -- -- --
@@ -345,7 +406,7 @@ if index then
 	table.insert(keyBinding, index + 2, { value = "Call Closest Non-Group Member", key = 21 })
 	table.insert(keyBinding, index + 3, { value = "Ask Closest Group Member to Follow", key = 34 })
 	table.insert(keyBinding, index + 4, { value = "Toggle Group Window", key = 22 })
-	table.insert(keyBinding, index + 5, { value = "Spawn Wild Survivor", key = 7 })
+	table.insert(keyBinding, index + 5, { value = "Spawn Wild Survivor", key = 199 }) -- Used to be key "6", updated to "Home" button 
 	table.insert(keyBinding, index + 6, { value = "Lower Follow Distance", key = 74 })
 	table.insert(keyBinding, index + 7, { value = "Raise Follow Distance", key = 78 })
 	table.insert(keyBinding, index + 8, { value = "Open Quest Info Window", key = 23 })
@@ -365,7 +426,8 @@ if index then
 			spawnrateCombo:setToolTipMap({ defaultTooltip = description });
 		end
 
-		gameOption = GameOption:new(id, spawnrateCombo)
+		local gameOption = GameOption:new(id, spawnrateCombo);
+
 		function gameOption.toUI(self)
 			local box = self.control
 			box.selected = SuperSurvivorGetOption(id)
@@ -754,3 +816,6 @@ if index then
 		self.mainPanel:setScrollHeight(y + self.addY + 20)
 	end
 end
+
+
+SuperSurvivorsRefreshSettings()
