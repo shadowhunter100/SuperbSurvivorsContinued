@@ -425,9 +425,6 @@ Events.OnAIStateChange:Add(SuperSurvivorTest)
 -- WIP - Whoever wrote this function didn't consider the keybinding issues... This needs to be rewritten.
 function supersurvivortemp(keyNum)
 	if (getSpecificPlayer(0)) then
-		getSpecificPlayer(0):Say(tostring(GlobalTestVariable));
-		getSpecificPlayer(0):Say(tostring(GFollowDistance));
-
 		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
 			--SuperSurvivorsRaiderManager()
 
