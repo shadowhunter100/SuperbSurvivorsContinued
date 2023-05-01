@@ -441,22 +441,18 @@ function DebugCharacterSwap(test, SS)
 end
 
 function AnswerTriggerQuestionYes(test, SS)
-	print("SSQM: Answered Yes to question of survivor " .. tostring(SS:getName()))
 	if (SS.YesResultActions == nil) then print("warning AnswerTriggerQuestionYes detect nil YesResultActions") end
-	SSQM:QuestionAnswered(SS.TriggerName, "YES", SS.NoResultActions, SS.YesResultActions)
 	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option
+	SS.HasBikuri = false   -- erase question option -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
 	SS.YesResultActions = nil -- erase question option
 	SS.TriggerName = nil   -- erase question option
 end
 
 function AnswerTriggerQuestionNo(test, SS)
-	print("SSQM: Answered No to question of survivor " .. tostring(SS:getName()))
 	if (SS.NoResultActions == nil) then print("warning AnswerTriggerQuestionNo detect nil NoResultActions") end
-	SSQM:QuestionAnswered(SS.TriggerName, "NO", SS.NoResultActions, SS.YesResultActions)
 	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option
+	SS.HasBikuri = false   -- erase question option  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
 	SS.YesResultActions = nil -- erase question option
 	SS.TriggerName = nil   -- erase question option
@@ -695,20 +691,16 @@ function ViewSurvivorInfo(test, ss)
 end
 
 function TalkToSurvivor(test, SS)
-	if (SS.HasQuestion or SS.HasBikuri) then
-		SSQM:TalkedTo(SS:getName())
-	else
-		getSpecificPlayer(0):Say(getSpeech("HelloThere"))
+	getSpecificPlayer(0):Say(getSpeech("HelloThere"))
 
-		if SS:Get():CanSee(getSpecificPlayer(0)) then
-			if (SS:Get():getModData().Greeting ~= nil) then
-				SS:Speak(SS:Get():getModData().Greeting)
-			else
-				SS:Speak(getSpeech("IdleChatter"))
-			end
+	if SS:Get():CanSee(getSpecificPlayer(0)) then
+		if (SS:Get():getModData().Greeting ~= nil) then
+			SS:Speak(SS:Get():getModData().Greeting)
 		else
-			SS:Speak(GetDialogue("WhoSaidThat"));
+			SS:Speak(getSpeech("IdleChatter"))
 		end
+	else
+		SS:Speak(GetDialogue("WhoSaidThat"));
 	end
 end
 
