@@ -1,15 +1,4 @@
 -- this file has methods related to world context
-
-local enableDebugContext = false
-
---- Prints a debug message when enableDebugContext is true
----@param text string
-local function debugContext(text)
-	if enableDebugContext then
-		print(text)
-	end
-end
-
 --- SQUARES ---
 
 ---@alias direction
@@ -23,6 +12,11 @@ end
 ---@param dir direction
 ---@return any the adjacent square
 function GetAdjSquare(square, dir)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetAdjSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"square: " .. tostring(square) ..
+		" | dir: " .. tostring(dir));
+
 	if (dir == 'N') then
 		return getCell():getGridSquare(square:getX(), square:getY() - 1, square:getZ());
 	elseif (dir == 'E') then
@@ -38,20 +32,28 @@ end
 ---@param from any start square
 ---@param to any target square
 ---@return table returns a table with the squares between the start and target squares (includes the target square)
-function getSquaresBetween(from, to)
-	local fromX = math.ceil(from:getX())
-	local fromY = math.ceil(from:getY())
+function GetSquaresBetween(from, to)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetSquaresBetween() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"from: " .. tostring(from) ..
+		" | to: " .. tostring(to));
 
-	local toX = math.ceil(to:getX())
-	local toY = math.ceil(to:getY())
+	local fromX = math.ceil(from:getX());
+	local fromY = math.ceil(from:getY());
 
-	local squares = {}
-	local pos = 0
-	local sqr = from
+	local toX = math.ceil(to:getX());
+	local toY = math.ceil(to:getY());
 
-	debugContext("----- getSquaresBetween -----")
-	debugContext("from x : " .. tostring(fromX) .. " from y : " .. tostring(fromY))
-	debugContext("to x : " .. tostring(toX) .. " to y : " .. tostring(toY))
+	local squares = {};
+	local pos = 0;
+	local sqr = from;
+
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"from x : " .. tostring(fromX) ..
+		" to x : " .. tostring(toX));
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"from y : " .. tostring(fromY) ..
+		" to y : " .. tostring(toY));
 
 	repeat
 		if fromY < toY then
@@ -70,22 +72,30 @@ function getSquaresBetween(from, to)
 			fromX = fromX - 1
 		end
 
-		debugContext("getting square x : " .. tostring(fromX) .. " y : " .. tostring(fromY))
+		CreateLogLine("SuperSurvivorContextUtilities",
+			"fromX updated: " .. tostring(fromX) ..
+			" | fromY updated: " .. tostring(fromY))
 
 		if sqr ~= nil then
-			debugContext("saving square x : " ..
-				tostring(fromX) .. " y : " .. tostring(fromY) .. " into position : " .. tostring(pos))
+			CreateLogLine("SuperSurvivorContextUtilities",
+				"saving square x : " .. tostring(fromX) ..
+				" y : " .. tostring(fromY) ..
+				" into position : " .. tostring(pos))
 			squares[pos] = sqr
 			pos = pos + 1
 		end
 	until fromX == toX and fromY == toY
 
-	debugContext("total squares : " .. tostring(pos))
-	debugContext("----- getSquaresBetween -----")
+	CreateLogLine("SuperSurvivorContextUtilities", "total squares : " .. tostring(pos))
+	CreateLogLine("SuperSurvivorContextUtilities", "----- END GetSquaresBetween -----")
 	return squares
 end
 
-function getOutsideSquare(square, building)
+function GetOutsideSquare(square, building)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetOutsideSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"square: " .. tostring(square) ..
+		" | building: " .. tostring(building));
 	if (not building) or (not square) then
 		return nil
 	end
@@ -113,24 +123,23 @@ function getOutsideSquare(square, building)
 	end
 end
 
--- TODO: remove this function and use getFleeSquareAlt
---- gets a random square awyas from the 'attackGuy'
----@param fleeGuy any
----@param attackGuy any
----@return any returns a random square away from attackGuy
-function getFleeSquare(fleeGuy, attackGuy)
-	return getFleeSquareAlt(fleeGuy, attackGuy, 7)
-end
-
---- New Function where you can choose the distance
 ---@param fleeGuy any
 ---@param attackGuy any
 ---@param distanceToFlee number distance that the flee guy will search for
 ---@return any returns a random square in a distance away from attackGuy
-function getFleeSquareAlt(fleeGuy, attackGuy, distanceToFlee)
-	local distance = distanceToFlee
+function GetFleeSquare(fleeGuy, attackGuy, distanceToFlee)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetFleeSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		" | fleeGuy: " .. tostring(fleeGuy) ..
+		" | attackGuy: " .. tostring(attackGuy) ..
+		" | distanceToFlee: " .. tostring(distanceToFlee));
+	local distance = 7;
 	local tempx = (fleeGuy:getX() - attackGuy:getX());
 	local tempy = (fleeGuy:getY() - attackGuy:getY());
+
+	if (distanceToFlee) then
+		distance = distanceToFlee;
+	end
 
 	if (tempx < 0) then
 		tempx = -distance;
@@ -154,7 +163,14 @@ end
 ---@param x number
 ---@param y number
 ---@param z number
-function getTowardsSquare(moveguy, x, y, z)
+function GetTowardsSquare(moveguy, x, y, z)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetTowardsSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"moveGuy: " .. tostring(moveguy) ..
+		" | x: " .. tostring(x) ..
+		" | y: " .. tostring(y) ..
+		" | z: " .. tostring(z)
+	);
 	local distance = 15
 	local tempx = (moveguy:getX() - x);
 	local tempy = (moveguy:getY() - y);
@@ -187,27 +203,37 @@ end
 --- gets the coordinate from a npc survivor
 ---@param id any if of the npc survivor
 ---@return any
-function getCoordsFromID(id)
-	debugContext("----- getCoordsFromID -----")
-	debugContext("id : " .. id)
+function GetCoordsFromID(id)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetCoordsFromID() called");
+	CreateLogLine("SuperSurvivorContextUtilities", "id: " .. tostring(id));
+
 	for k, v in pairs(SurvivorMap) do
 		for i = 1, #v do
 			if (v[i] == id) then
-				return k
+				CreateLogLine("SuperSurvivorContextUtilities", "SurvivorMap: " ..
+					"id: " .. tostring(id) ..
+					" | value: " .. tostring(v) ..
+					" | index: " .. tostring(i)
+				);
+				return k;
 			end
 		end
 	end
-	debugContext("no survivor found")
-	debugContext("----- getCoordsFromID -----")
 
 	return 0
 end
 
+-- WIP - getDistanceBetween() should have been capitalized as a global function...
 --- gets the distance between 2 things (objects, zombies, npcs or players)
 ---@param z1 any instance one
 ---@param z2 any instance two
 ---@return number the distance between the 2 instances
 function getDistanceBetween(z1, z2)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: getDistanceBetween() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"z1: " .. tostring(z1) ..
+		" | z2: " .. tostring(z2)
+	);
 	if (z1 == nil) or (z2 == nil) then
 		return -1
 	end
@@ -233,7 +259,14 @@ end
 ---@param Bx number
 ---@param By number
 ---@return number the distance between the 2 points
-function getDistanceBetweenPoints(Ax, Ay, Bx, By)
+function GetDistanceBetweenPoints(Ax, Ay, Bx, By)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDistanceBetweenPoints() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"Ax: " .. tostring(Ax) ..
+		"| Ay: " .. tostring(Ay) ..
+		"| Bx: " .. tostring(Bx) ..
+		"| By: " .. tostring(By)
+	);
 	if (Ax == nil) or (Bx == nil) then
 		return -1
 	end
@@ -251,7 +284,12 @@ end
 --- checks if the square is inside of the area 'area'
 ---@param sq any
 ---@param area table a table with 4 positions representing a square of points(number)
-function isSquareInArea(sq, area)
+function IsSquareInArea(sq, area)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: IsSquareInArea() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"sq: " .. tostring(sq) ..
+		" | area: " .. tostring(area)
+	);
 	local x1 = area[1]
 	local x2 = area[2]
 	local y1 = area[3]
@@ -271,7 +309,15 @@ end
 ---@param y2 number
 ---@param z  number
 ---@return any the center square given the coordinates
-function getCenterSquareFromArea(x1, x2, y1, y2, z)
+function GetCenterSquareFromArea(x1, x2, y1, y2, z)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetCenterSquareFromArea() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"x1: " .. tostring(x1) ..
+		" | x2: " .. tostring(x2) ..
+		" | y1: " .. tostring(y1) ..
+		" | y2: " .. tostring(y2) ..
+		" | z: " .. tostring(z)
+	);
 	local xdiff = x2 - x1
 	local ydiff = y2 - y1
 
@@ -282,16 +328,24 @@ end
 
 --- gets a random square inside of an area
 ---@param area any
-function getRandomAreaSquare(area)
+function GetRandomAreaSquare(area)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomAreaSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"area: " .. tostring(area)
+	);
 	local x1 = area[1]
 	local x2 = area[2]
 	local y1 = area[3]
 	local y2 = area[4]
-	--print(tostring(x1)..","..tostring(y1).." : " .. tostring(x2)..","..tostring(y2))
+	CreateLogLine("SuperSurvivorContextUtilities",
+		"x1: " .. tostring(x1) ..
+		" | x2: " .. tostring(x2) ..
+		" | y1: " .. tostring(y1) ..
+		" | y2: " .. tostring(y2)
+	);
 	if (x1 ~= nil) then
 		local xrand = ZombRand(x1, x2)
 		local yrand = ZombRand(y1, y2)
-
 		local result = getCell():getGridSquare(xrand, yrand, area[5])
 
 		return result
@@ -302,11 +356,13 @@ end
 
 --- OBJECTS ---
 
+-- WIP - Doesn't seem to be referenced anywhere in the mod project...
 --- Searches and return all objects of a type inside of a building
 ---@param building any current building
 ---@param objectName string object name to be searched
 ---@return table returns a list with every object found inside the building
-function getAllObjectsFromBuilding(building, objectName)
+function GetAllObjectsFromBuilding(building, objectName)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetAllObjectsFromBuilding() called");
 	local bdef = building:getDef()
 
 	local bdefX = bdef:getX()
@@ -319,8 +375,6 @@ function getAllObjectsFromBuilding(building, objectName)
 	local objects = {}
 	local objectCount = 0
 
-	debugContext(" ----- getAllObjectsFromBuilding ----- ")
-
 	for x = bdefX - 1, bdWidth do
 		for y = bdefY - 1, bdHeight do
 			local sq = getCell():getGridSquare(x, y, bdefZ)
@@ -330,15 +384,17 @@ function getAllObjectsFromBuilding(building, objectName)
 					local object = Objs:get(j)
 					if (instanceof(object, objectName)) then
 						objects[objectCount] = object
-						objectCount = objectCount + 1
-						debugContext("found object x : " .. tostring(x) .. " y :" .. tostring(y))
-						debugContext("object count : " .. tostring(objectCount))
+						objectCount = objectCount + 1;
+						CreateLogLine("SuperSurvivorContextUtilities",
+							"found object x : " .. tostring(x) ..
+							" y :" .. tostring(y)
+						);
+						CreateLogLine("SuperSurvivorContextUtilities", "object count : " .. tostring(objectCount))
 					end
 				end
 			end
 		end
 	end
-	debugContext(" ----- getAllObjectsFromBuilding ----- ")
 
 	return objects
 end
@@ -350,7 +406,8 @@ end
 --- gets a window square
 ---@param cs any a square
 ---@return any the window object if found or nil
-function getSquaresWindow(cs)
+local function getSquaresWindow(cs)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: getSquaresWindow() called");
 	if not cs then
 		return nil
 	end
@@ -370,7 +427,8 @@ end
 --- gets the nearest adjacent window square of 'cs'
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
-function getSquaresNearWindow(cs)
+function GetSquaresNearWindow(cs)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetSquaresNearWindow() called");
 	local directions = { "N", "E", "S", "W" }
 
 	for k, dir in ipairs(directions) do
@@ -385,12 +443,28 @@ function getSquaresNearWindow(cs)
 	return nil
 end
 
--- WIP - THIS FUNCTION HAS NO REFERENCES IN THE MOD, IS IT DEPRECATED?
---- get the closets window of a building, based on character's position
+--- checks if the window is barricated from both sides
+---@param window any
+---@param character any
+local function windowHasBarricade(window, character)
+	local thisSide = window:getBarricadeForCharacter(character)
+	local oppositeSide = window:getBarricadeOppositeCharacter(character)
+
+	if (thisSide == nil) and (oppositeSide == nil) then
+		return false
+	else
+		return true
+	end
+end
+
+-- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- renamed "getCloseWindow()" "to "GetNearestWindow()"
+-- get the nearest window of a building, based on character's position
 ---@param building any building to be searched
 ---@param character any
 ---@return any return the closest window or nil if not found
-function getCloseWindow(building, character)
+function GetNearestWindow(building, character)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetNearestWindow() called");
 	local WindowOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -425,20 +499,6 @@ function getCloseWindow(building, character)
 	return WindowOut
 end
 
---- checks if the window is barricated from both sides
----@param window any
----@param character any
-function windowHasBarricade(window, character)
-	local thisSide = window:getBarricadeForCharacter(character)
-	local oppositeSide = window:getBarricadeOppositeCharacter(character)
-
-	if (thisSide == nil) and (oppositeSide == nil) then
-		return false
-	else
-		return true
-	end
-end
-
 --- END WINDOWS ----
 
 --- DOORS ----
@@ -447,7 +507,8 @@ end
 ---@param door any
 ---@param player any
 ---@return any returns the inside square of a door or nil if not found
-function getDoorsInsideSquare(door, player)
+function GetDoorsInsideSquare(door, player)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDoorsInsideSquare() called");
 	if (player == nil) or not (instanceof(door, "IsoDoor")) then
 		return nil
 	end
@@ -471,7 +532,8 @@ end
 ---@param door any
 ---@param player any
 ---@return any returns the inside outside of a door or nil if not found
-function getDoorsOutsideSquare(door, player)
+function GetDoorsOutsideSquare(door, player)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDoorsOutsideSquare() called");
 	if (player == nil) or not (instanceof(door, "IsoDoor")) then
 		return nil
 	end
@@ -495,7 +557,8 @@ end
 ---@param building any
 ---@param character any
 ---@return any returns the closest exterior unlocked door or nil if not found
-function getUnlockedDoor(building, character)
+function GetUnlockedDoor(building, character)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetUnlockedDoor() called");
 	local DoorOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -503,6 +566,7 @@ function getUnlockedDoor(building, character)
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, character:getZ())
+
 			if (sq) then
 				local Objs = sq:getObjects();
 				for j = 0, Objs:size() - 1 do
@@ -520,14 +584,18 @@ function getUnlockedDoor(building, character)
 			end
 		end
 	end
+
 	return DoorOut
 end
 
+-- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- renamed "getDoor()" to "GetNearestDoor()"
 --- gets the closest door inside of a 'building' based on a 'character' position
 ---@param building any
 ---@param character any
 ---@return any returns the closest exterior door or nil if not found
-function getDoor(building, character)
+function GetNearestDoor(building, character)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: getNearestDoor() called");
 	local DoorOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -562,6 +630,7 @@ end
 ---@param building any
 ---@return integer returns the amount of zombies found in the building
 function NumberOfZombiesInOrAroundBuilding(building)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: NumberOfZombiesInOrAroundBuilding() called");
 	local count = 0
 	local padding = 10
 	local bdef = building:getDef()
@@ -593,7 +662,8 @@ end
 --- gets a random square inside of a building
 ---@param building any
 ---@return any returns a random square inside of the building
-function getRandomBuildingSquare(building)
+function GetRandomBuildingSquare(building)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomBuildingSquare() called");
 	local bdef = building:getDef()
 	local x = ZombRand(bdef:getX(), (bdef:getX() + bdef:getW()))
 	local y = ZombRand(bdef:getY(), (bdef:getY() + bdef:getH()))
@@ -609,7 +679,8 @@ end
 --- gets a random and free square inside of a building (it tries 100 of times until it finds so be careful using it)
 ---@param building any
 ---@return any returns a random square inside of the building
-function getRandomFreeBuildingSquare(building)
+function GetRandomFreeBuildingSquare(building)
+	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomFreeBuildingSquare() called");
 	if (building == nil) then
 		return nil
 	end

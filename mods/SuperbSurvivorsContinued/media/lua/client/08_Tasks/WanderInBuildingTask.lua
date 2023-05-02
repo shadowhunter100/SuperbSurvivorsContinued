@@ -44,7 +44,7 @@ function WanderInBuildingTask:update()
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) and (ZombRand(4) == 0) then
-		local sq = getRandomBuildingSquare(self.Building)
+		local sq = GetRandomBuildingSquare(self.Building)
 		if (sq ~= nil) and (not sq:isOutside()) then
 			self.parent:walkTo(sq);
 		else

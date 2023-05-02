@@ -646,7 +646,7 @@ function SuperSurvivorsNewSurvivorManager()
 
 	local bounds = hisGroup:getBounds()
 	local center
-	if (bounds) then center = getCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
+	if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
 	if not center then center = getSpecificPlayer(0):getCurrentSquare() end
 
 	local spawnSquare
@@ -987,7 +987,7 @@ function SuperSurvivorsRaiderManager()
 
 		local bounds = hisGroup:getBounds()
 		local center
-		if (bounds) then center = getCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
+		if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
 		if not center then center = getSpecificPlayer(0):getCurrentSquare() end
 
 		local spawnSquare

@@ -34,7 +34,7 @@ function WanderInAreaTask:update()
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) and (ZombRand(4) == 0) then
-		local sq = getRandomAreaSquare(self.Area)
+		local sq = GetRandomAreaSquare(self.Area)
 		if (sq ~= nil) then
 			self.parent:walkTo(sq);
 		else

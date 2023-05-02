@@ -1,51 +1,5 @@
 --this file has methods related to looting
 
---- DEBUG ---
-local enableDebugLoot = false
-
-local function debugLoot(text)
-	if enableDebugLoot then
-		print(text)
-	end
-end
-
-local function debugMethodName(methodName)
-	if enableDebugLoot then
-		print(" ----- " .. methodName .. " ----- ")
-	end
-end
-
-local function debugItemsFound(count)
-	if enableDebugLoot then
-		print(tostring(count) .. " items found")
-	end
-end
-
-local function debugItemNotFound(category)
-	if enableDebugLoot then
-		print(category .. " not found")
-	end
-end
-
-local function debugEmptyContainer()
-	if enableDebugLoot then
-		print("container is empty")
-	end
-end
-
-local function debugItem(category, itemName, value)
-	if enableDebugLoot then
-		print(category .. " : " .. tostring(itemName) .. " - " .. tostring(value))
-	end
-end
-
-local function debugFoodScore(bullet, change, score)
-	if enableDebugLoot then
-		print("\t" .. bullet .. " " .. change .. " score : " .. tostring(score))
-	end
-end
---- END DEBUG ---
-
 --- CATEGORIES ---
 
 ---@alias itemCategory
@@ -59,6 +13,7 @@ end
 ---@param survivor any survivor searching for item (only in food searching)
 ---@return any returns the item insde of the container with the selected category or nil if not found
 function FindItemByCategory(container, category, survivor)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindItemByCategory() called");
 	if (category == "Food") then
 		return FindAndReturnBestFood(container, survivor)
 	elseif (category == "Water") then
@@ -74,7 +29,8 @@ end
 ---@param item any
 ---@param category itemCategory category to be checked
 ---@return boolean returns true if the item belongs to the category
-function hasCategory(item, category)
+function HasCategory(item, category)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: HasCategory() called");
 	if (category == "Water") and (isItemWater(item)) then
 		return true
 	elseif (category == "Weapon") and (item:getCategory() == category) and (item:getMaxDamage() > 0.1) then
@@ -91,30 +47,25 @@ end
 ---@param container any container to be searched
 ---@return any returns the first weapon inside the container or nil if not found
 function FindAndReturnWeapon(container)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnWeapon() called");
 	if (not container) then
 		return nil
 	end
 
-	debugMethodName("FindAndReturnWeapon")
 	local items = container:getItems()
 
 	if (items ~= nil) and (items:size() > 0) then
 		local count = items:size()
-		debugItemsFound(count)
 
 		for i = 1, count - 1 do
 			local item = items:get(i)
 			if (item ~= nil) and (item:getCategory() == "Weapon") and (item:getMaxDamage() > 0.1) then
-				debugItem("weapon", item:getDisplayName(), item:getMaxDamage())
 				return item
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "no weapon found");
 	end
-
-	debugItemNotFound("weapon")
-	debugMethodName("FindAndReturnWeapon")
 
 	return nil
 end
@@ -123,39 +74,37 @@ end
 ---@param container any container to be searched
 ---@return any returns the best weapon inside the container or nil if not found
 function FindAndReturnBestWeapon(container)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestWeapon() called");
 	if (container == nil) then
 		return nil
 	end
-
-	debugMethodName("FindAndReturnBestWeapon")
 
 	local items = container:getItems()
 	local bestItem = nil
 
 	if (items ~= nil) and (items:size() > 0) then
 		local itemSize = items:size()
-		debugItemsFound(itemSize)
 
 		for i = 1, itemSize - 1 do
 			local item = items:get(i)
 			if (item ~= nil) and (item:getCategory() == "Weapon") then
 				if (item:getMaxDamage() > 0.1) and (bestItem == nil or bestItem:getMaxDamage() < item:getMaxDamage()) then
 					bestItem = item
-					debugItem("best weapon", bestItem:getDisplayName(), bestItem:getMaxDamage())
 				end
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "no weapon found");
 	end
 
 	if (bestItem ~= nil) then
-		debugItem("best weapon", bestItem:getDisplayName(), bestItem:getMaxDamage())
+		CreateLogLine("SuperSurvivorLootUtilities",
+		"best weapon" .. tostring(bestItem:getDisplayName()) ..
+		" | maxDamage: " .. tostring(bestItem:getMaxDamage())
+	);
 	else
-		debugItemNotFound("weapon")
+		CreateLogLine("SuperSurvivorLootUtilities", "no best weapon found");
 	end
-
-	debugMethodName("FindAndReturnBestWeapon")
 
 	return bestItem
 end
@@ -170,32 +119,29 @@ local FoodsToExlude = { "Bleach", "Cigarettes", "HCCigar", "Antibiotics", "Teaba
 ---@param thisItemContainer any
 ---@return any returns the first found food inside the container
 function FindAndReturnFood(thisItemContainer)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnFood() called");
 	if (not thisItemContainer) then
 		return nil
 	end
 
-	debugMethodName("FindAndReturnFood")
 	local items = thisItemContainer:getItems()
 
 	if (items ~= nil) and (items:size() > 0) then
 		local count = items:size()
-		debugItemsFound(count)
 
 		for i = 1, count - 1 do
 			local item = items:get(i)
+
 			if (item ~= nil) and (item:getCategory() == "Food") then
+
 				if not (item:getPoisonPower() > 1) and not (has_value(FoodsToExlude, item:getType())) then
-					debugItem("food", item:getDisplayName(), "")
 					return item
 				end
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "empty container food");
 	end
-
-	debugItemNotFound()
-	debugMethodName("FindAndReturnFood")
 
 	return nil
 end
@@ -204,48 +150,36 @@ end
 ---@param item any any food item
 ---@return number returns the score of the food
 function GetFoodScore(item) -- TODO: improve food searching (and the logging)
-	debugMethodName("GetFoodScore")
-	debugLoot("food : " .. item:getDisplayName())
-	debugLoot("hunger change : " .. item:getHungerChange())
-
+	CreateLogLine("SuperSurvivorLootUtilities", "function: GetFoodScore() called");
 	local score = 1.0
 
 	if (item:getUnhappyChange() > 0) then
 		score = score - math.floor(item:getUnhappyChange() / (item:getHungerChange() * -10.0))
-		debugFoodScore("-", "unhappy", score)
 	elseif (item:getUnhappyChange() < 0) then
 		score = score + 1
-		debugFoodScore("+", "happy", score)
 	end
 
 	if (item:getBoredomChange() > 0) then
 		score = score - math.floor(item:getBoredomChange() / (item:getHungerChange() * -10.0) / 2.0)
-		debugFoodScore("-", "bored", score)
 	elseif (item:getBoredomChange() < 0) then
 		score = score + 1
-		debugFoodScore("+", "unbored", score)
 	end
 
 	if (item:isFresh()) then
 		score = score + 2
-		debugFoodScore("+", "fresh", score)
 	elseif (item:IsRotten()) then
 		score = score - 10
-		debugFoodScore("-", "rotten", score)
 	end
 
 	if (item:isAlcoholic()) then
 		score = score - 5
-		debugFoodScore("-", "alcoholic", score)
 	end
 	if (item:isSpice()) then
 		score = score - 5
-		debugFoodScore("-", "spice", score)
 	end
 
 	if (item:isbDangerousUncooked()) and not (item:isCooked()) then
 		score = score - 10
-		debugFoodScore("-", "raw", score)
 	end
 	--if(item:isBurnt()) then Score = Score - 1 end
 
@@ -254,42 +188,31 @@ function GetFoodScore(item) -- TODO: improve food searching (and the logging)
 		-- save the canned food
 		if string.match(item:getDisplayName(), "Open") then
 			score = score + 3
-			debugFoodScore("-", "open canned", score)
 		elseif string.match(item:getDisplayName(), "Canned") then
 			score = score - 5
-			debugFoodScore("-", "canned", score)
 		elseif (item:getDisplayName() == "Dog Food") then
 			score = score - 10
-			debugFoodScore("-", "dog food", score)
 		elseif (item:getHungerChange()) == nil or (item:getHungerChange() == 0) then
 			score = -9999
-			debugFoodScore("-", "unknown", score)
 		end -- unidentified, probably canned from a mod
 
 		if (item:isCooked()) then
 			score = score + 5
-			debugFoodScore("+", "cooked", score)
 		end
 	elseif (foodType == "Fruits") or (foodType == "Vegetables") then
 		score = score + 1
-		debugFoodScore("+", "produce", score)
 	elseif (foodType == "Pasta") or (foodType == "Rice") then
 		score = score - 2
-		debugFoodScore("+", "dry goods", score)
 	elseif ((foodType == "Egg") or (foodType == "Meat")) or item:isIsCookable() then
-		debugFoodScore("+", "meat ", score)
 		if (item:isCooked()) then
 			score = score + 2
-			debugFoodScore("+", "cooked", score)
 		end
 	elseif (foodType == "Coffee") then
 		score = score - 5
-		debugFoodScore("-", "coffee", score)
 	else
-		debugFoodScore("-", "unknown", score)
+		CreateLogLine("SuperSurvivorLootUtilities", "unknown food");
 	end
 
-	debugMethodName("GetFoodScore")
 	return score
 end
 
@@ -298,12 +221,12 @@ end
 ---@param survivor any
 ---@return any returns the best food on the ground based on a score system
 function FindAndReturnBestFoodOnFloor(sq, survivor)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestFoodOnFloor() called");
 	if (not sq) then
 		return nil
 	end
 	local bestFood = nil
 	local bestScore = 1
-	debugMethodName("FindAndReturnBestFoodOnFloor")
 
 	if (survivor == nil) or (survivor:isStarving()) then
 		-- if starving, willing to eat anything
@@ -317,7 +240,6 @@ function FindAndReturnBestFoodOnFloor(sq, survivor)
 	local count = items:size()
 
 	if count > 0 then
-		debugItemsFound(count)
 
 		for j = 0, count - 1 do
 			local item = items:get(j):getItem()
@@ -327,15 +249,15 @@ function FindAndReturnBestFoodOnFloor(sq, survivor)
 				if Score > bestScore then
 					bestFood = item
 					bestScore = Score
-					debugItem("best food", bestFood:getDisplayName(), tostring(bestScore))
+					CreateLogLine("SuperSurvivorLootUtilities",
+					"best food: " .. tostring(bestFood:getDisplayName()) ..
+					" | food score: " .. tostring(bestScore));
 				end
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no food");
 	end
-
-	debugMethodName("FindAndReturnBestFoodOnFloor")
 
 	return bestFood
 end
@@ -345,13 +267,12 @@ end
 ---@param survivor any
 ---@return any returns the best food based on a score system
 function FindAndReturnBestFood(thisItemContainer, survivor)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestFood() called");
 	if (not thisItemContainer) then
 		return nil
 	end
 
 	local items = thisItemContainer:getItems()
-	local ID = -1
-
 	local bestFood = nil
 	local bestScore = 1
 
@@ -361,13 +282,12 @@ function FindAndReturnBestFood(thisItemContainer, survivor)
 		bestScore = -10
 	end
 
-	debugMethodName("FindAndReturnBestFood")
-
 	if (items ~= nil) and (items:size() > 0) then
 		local count = items:size()
-		debugItemsFound(count)
+
 		for i = 1, count - 1 do
 			local item = items:get(i)
+
 			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not has_value(FoodsToExlude, item:getType())) then
 				local Score = GetFoodScore(item)
 
@@ -375,15 +295,15 @@ function FindAndReturnBestFood(thisItemContainer, survivor)
 				if Score > bestScore then
 					bestFood = item
 					bestScore = Score
-					debugItem("best food", bestFood:getDisplayName(), bestScore)
+					CreateLogLine("SuperSurvivorLootUtilities",
+					"best food: " .. tostring(bestFood:getDisplayName()) ..
+					" | food score: " .. tostring(bestScore));
 				end
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no food");
 	end
-
-	debugMethodName("FindAndReturnBestFood")
 
 	return bestFood
 end
@@ -396,29 +316,26 @@ end
 ---@param container any
 ---@return any returns the first water found
 function FindAndReturnWater(container)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnWater() called");
 	if (not container) then
 		return nil
 	end
 
 	local items = container:getItems()
-	debugMethodName("FindAndReturnBestFood")
 
 	if (items ~= nil) and (items:size() > 0) then
 		local count = items:size()
-		debugItemsFound(count)
+
 		for i = 1, count - 1 do
 			local item = items:get(i)
 			if (item ~= nil) and isItemWater(item) then
-				debugLoot("water found")
+				CreateLogLine("SuperSurvivorLootUtilities", "Water found");
 				return item
 			end
 		end
 	else
-		debugEmptyContainer()
+		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no water");
 	end
-
-	debugItemNotFound("water")
-	debugMethodName("FindAndReturnBestFood")
 	return nil
 end
 
@@ -426,6 +343,7 @@ end
 ---@param item any
 ---@return boolean return true if the current it is a water source (and is not Bleach)
 function isItemWater(item)
+	CreateLogLine("SuperSurvivorLootUtilities", "function: isItemWater() called");
 	return ((item:isWaterSource()) and (item:getType() ~= "Bleach"))
 end
 

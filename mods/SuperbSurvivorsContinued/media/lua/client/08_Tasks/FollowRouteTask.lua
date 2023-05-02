@@ -33,7 +33,7 @@ function FollowRouteTask:new(superSurvivor, RouteID)
 
 	for p = 1, #o.TheRoute do
 		tempPoint = o.TheRoute[p]
-		tempDistance = getDistanceBetweenPoints(ssX, ssY, tempPoint["x"], tempPoint["y"])
+		tempDistance = GetDistanceBetweenPoints(ssX, ssY, tempPoint["x"], tempPoint["y"])
 		if (tempDistance < closestSoFar) then
 			o.CurrentRoutePoint = p
 			closestSoFar = tempDistance

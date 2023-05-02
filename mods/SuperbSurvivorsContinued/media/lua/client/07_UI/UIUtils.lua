@@ -93,9 +93,9 @@ function get_member_info(member_index)
         group:removeMember(member:getID())
     elseif member.getName ~= nil and member:isInCell() == false then
         name = member:getName()
-        local coords = getCoordsFromID(member:getID())
+        local coords = GetCoordsFromID(member:getID())
         -- WIP - WHAT IS "COORD"? IS THIS A TYPO?
-        if coord == 0 then
+        if coords == 0 then
             SSM:LoadSurvivor(member:getID(), getSpecificPlayer(0):getCurrentSquare())
             coords = "0"
         end
@@ -106,7 +106,7 @@ function get_member_info(member_index)
         group:removeMember(member)
     else
         name = getContextMenuText("MIASurvivor") .. "[" .. tostring(member) .. "]"
-        local coords = getCoordsFromID(member)
+        local coords = GetCoordsFromID(member)
         if coords == 0 then
             SSM:LoadSurvivor(member, getSpecificPlayer(0):getCurrentSquare())
             coords = "0"

@@ -76,7 +76,7 @@ function GatherWoodTask:update()
 			for x = minx, maxx do
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, 0);
-					if (Square ~= nil) and (self.BringHereSquare ~= Square) and (self.WoodStorageArea ~= nil) and (isSquareInArea(Square, self.WoodStorageArea) == false) then
+					if (Square ~= nil) and (self.BringHereSquare ~= Square) and (self.WoodStorageArea ~= nil) and (IsSquareInArea(Square, self.WoodStorageArea) == false) then
 						local distance = getDistanceBetween(Square, player);
 						local closeobjects = Square:getWorldObjects();
 						for i = 0, closeobjects:size() - 1 do

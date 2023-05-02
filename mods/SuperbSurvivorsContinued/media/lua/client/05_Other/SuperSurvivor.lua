@@ -975,7 +975,7 @@ end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
 	if (SafeBase) then -- if safe base mode on survivors consider other claimed buildings already explored
-		local tempsquare = getRandomBuildingSquare(building)
+		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
 			local tempgroup = SSGM:GetGroupIdFromSquare(tempsquare)
@@ -1042,7 +1042,7 @@ end
 function SuperSurvivor:getBuildingExplored(building)
 	if self:isTargetBuildingClaimed(building) then return true end
 
-	local sq = getRandomBuildingSquare(building)
+	local sq = GetRandomBuildingSquare(building)
 
 	if (sq) then
 		if (self:getExplore(sq) > 0) then
@@ -1644,7 +1644,7 @@ function SuperSurvivor:walkTo(square)
 end
 
 function SuperSurvivor:walkTowards(x, y, z)
-	local towardsSquare = getTowardsSquare(self:Get(), x, y, z)
+	local towardsSquare = GetTowardsSquare(self:Get(), x, y, z)
 	if (towardsSquare == nil) then return false end
 
 	self:WalkToPoint(towardsSquare:getX(), towardsSquare:getY(), towardsSquare:getZ())
@@ -3842,7 +3842,7 @@ function SuperSurvivor:checkVictimCoverValue(victim)
 	local totalCover      = 0
 	local blockingObjects = 0
 
-	local squares         = getSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
+	local squares = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
 
 	for _, square in ipairs(squares) do
 		local objs = square:getObjects()

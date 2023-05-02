@@ -628,7 +628,7 @@ function AIManager(TaskMangerIn)
 					if (getDistanceBetween(HisGroup:getGroupAreaCenterSquare("GuardArea"), NPC:Get():getCurrentSquare()) > 10) then
 						TaskMangerIn:clear()
 						TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor,
-							getRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
+							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
 						NPC:DebugSay("GuardTask Cond_000_Cleared")
 					else
 						NPC:DebugSay("GuardTask Cond_000_failed_clear")
@@ -638,7 +638,7 @@ function AIManager(TaskMangerIn)
 				if (getDistanceBetween(HisGroup:getGroupAreaCenterSquare("GuardArea"), NPC:Get():getCurrentSquare()) <= 10) then
 					if (HisGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (HisGroup:getGroupArea("GuardArea")) then
 						TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor,
-							getRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
+							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
 						NPC:DebugSay("GuardTask Cond_0001")
 					end
 				end
@@ -699,7 +699,7 @@ function AIManager(TaskMangerIn)
 
 					local gotoSquare
 					if (medicalarea) and (medicalarea[1] ~= 0) then
-						gotoSquare = getCenterSquareFromArea(medicalarea[1],
+						gotoSquare = GetCenterSquareFromArea(medicalarea[1],
 							medicalarea[2], medicalarea[3], medicalarea[4], medicalarea[5])
 					end
 					if (not gotoSquare) then gotoSquare = CenterBaseSquare end
@@ -864,7 +864,7 @@ function AIManager(TaskMangerIn)
 							local dropSquare = CenterBaseSquare
 							local woodstoragearea = HisGroup:getGroupArea("WoodStorageArea")
 							if (woodstoragearea[1] ~= 0) then
-								dropSquare = getCenterSquareFromArea(woodstoragearea[1],
+								dropSquare = GetCenterSquareFromArea(woodstoragearea[1],
 									woodstoragearea[2], woodstoragearea[3], woodstoragearea[4], woodstoragearea[5])
 							end
 							TaskMangerIn:AddToTop(GatherWoodTask:new(ASuperSurvivor, dropSquare))
@@ -875,7 +875,7 @@ function AIManager(TaskMangerIn)
 							local dropSquare = getCell():getGridSquare(baseBounds[1] - 5, baseBounds[3] - 5, 0)
 							local storagearea = HisGroup:getGroupArea("CorpseStorageArea")
 							if (storagearea[1] ~= 0) then
-								dropSquare = getCenterSquareFromArea(storagearea[1],
+								dropSquare = GetCenterSquareFromArea(storagearea[1],
 									storagearea[2], storagearea[3], storagearea[4], storagearea[5])
 							end
 							if (dropSquare) then
@@ -925,7 +925,7 @@ function AIManager(TaskMangerIn)
 
 							local gotoSquare
 							if (medicalarea) and (medicalarea[1] ~= 0) then
-								gotoSquare = getCenterSquareFromArea(
+								gotoSquare = GetCenterSquareFromArea(
 									medicalarea[1], medicalarea[2], medicalarea[3], medicalarea[4], medicalarea[5])
 							end
 							if (not gotoSquare) then gotoSquare = CenterBaseSquare end
