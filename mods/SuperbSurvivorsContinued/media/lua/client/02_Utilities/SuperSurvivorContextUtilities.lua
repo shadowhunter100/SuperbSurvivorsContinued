@@ -224,6 +224,8 @@ function GetCoordsFromID(id)
 end
 
 -- WIP - getDistanceBetween() should have been capitalized as a global function...
+-- WIP - this function is literally spammed between all active instances, slowing down the game performance drastically.
+-- WIP - in about 30 seconds, this function was called over 11,000 times.
 --- gets the distance between 2 things (objects, zombies, npcs or players)
 ---@param z1 any instance one
 ---@param z2 any instance two
