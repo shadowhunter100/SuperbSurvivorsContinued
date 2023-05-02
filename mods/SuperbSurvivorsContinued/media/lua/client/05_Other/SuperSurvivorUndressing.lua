@@ -22,7 +22,7 @@ function ISUnequipClothingAction:getWasSuccessful()
 end
 
 function ISUnequipClothingAction:start()
-    
+
 end
 
 function ISUnequipClothingAction:isComplete()
@@ -35,7 +35,7 @@ end
 
 function ISUnequipClothingAction:perform()
     self.character:setWornItem(self.item:getBodyLocation(), nil)
-    ISTimedActionQueue.add(ISDropItemAction:new(self.character,self.item,1))
+    ISTimedActionQueue.add(ISDropItemAction:new(self.character, self.item, 1))
     self.Complete = true
     return nil
 end
@@ -63,7 +63,7 @@ function SuperSurvivor:UnequipClothes()
     local allOfType = inventory:getItems()
 
     if allOfType and allOfType:size() > 0 then
-		SS:DebugSay("SuperbUndressing UnequipClothes is about to trigger a StopWalk!")
+        SS:DebugSay("SuperbUndressing UnequipClothes is about to trigger a StopWalk!")
         SS:StopWalk()
 
         for i = 1, allOfType:size() do
@@ -81,15 +81,11 @@ function SuperSurvivor:UnequipClothes()
 
     self.player:initSpritePartsEmpty();
     triggerEvent("OnClothingUpdated", self.player)
-
 end
 
-
 local function functionThatConnectsThisModToSuperbSurvivorsTaskManagerLogic(o)
-    
     local SS = SSM:Get(o:getModData().ID)
     SS:UnequipClothes()
-
 end
 
 
@@ -100,24 +96,25 @@ function SuperbUndressedSurvivorsLogic(context, o)
     if (id ~= 0) and (SS:getGroupID() == SSM:Get(0):getGroupID()) and SS:getGroupID() ~= nil then
         local selectOption = context:addOption(SS:getName() .. getContextMenuText("AddClothing"), worldobjects, nil)
         local clothingmenu = context:getNew(context);
-        clothingmenu:addOption(getContextMenuText("RemoveClothing"), nil, function() functionThatConnectsThisModToSuperbSurvivorsTaskManagerLogic(o) end, o, nil)
-        context:addSubMenu(selectOption, clothingmenu);  --Add ">"
+        clothingmenu:addOption(getContextMenuText("RemoveClothing"), nil,
+            function() functionThatConnectsThisModToSuperbSurvivorsTaskManagerLogic(o) end, o, nil)
+        context:addSubMenu(selectOption, clothingmenu); --Add ">"
     end
 end
 
 function clickHandler(square, context)
-    if(square ~= nil) then
-		for i=0,square:getMovingObjects():size()-1 do
-			local o = square:getMovingObjects():get(i)
-			if(instanceof(o, "IsoPlayer")) then
-				SuperbUndressedSurvivorsLogic(context, o)
-			end			
-		end		
-	end
+    if (square ~= nil) then
+        for i = 0, square:getMovingObjects():size() - 1 do
+            local o = square:getMovingObjects():get(i)
+            if (instanceof(o, "IsoPlayer")) then
+                SuperbUndressedSurvivorsLogic(context, o)
+            end
+        end
+    end
 end
 
 function teste(player, context, worldobjects, test)
-    if player ~= 0 then 
+    if player ~= 0 then
         return
     end
 
@@ -125,28 +122,28 @@ function teste(player, context, worldobjects, test)
 
     clickHandler(square, context)
 
-    if(square ~= nil) then
-		local osquare = square:getN();
-		if(osquare ~= nil) then
-            clickHandler(osquare:getE(),context);
-            clickHandler(osquare:getW(),context);
-            clickHandler(osquare,context);
-		end
-		osquare = square:getS();
-		if(osquare ~= nil) then
-            clickHandler(osquare:getE(),context);
-            clickHandler(osquare:getW(),context);
-            clickHandler(osquare,context);
-		end
-		osquare = square:getE();
-		if(osquare ~= nil) then
-            clickHandler(osquare,context);
-		end
-		osquare = square:getW();
-		if(osquare ~= nil) then
-            clickHandler(osquare,context);
-		end
-	end
+    if (square ~= nil) then
+        local osquare = square:getN();
+        if (osquare ~= nil) then
+            clickHandler(osquare:getE(), context);
+            clickHandler(osquare:getW(), context);
+            clickHandler(osquare, context);
+        end
+        osquare = square:getS();
+        if (osquare ~= nil) then
+            clickHandler(osquare:getE(), context);
+            clickHandler(osquare:getW(), context);
+            clickHandler(osquare, context);
+        end
+        osquare = square:getE();
+        if (osquare ~= nil) then
+            clickHandler(osquare, context);
+        end
+        osquare = square:getW();
+        if (osquare ~= nil) then
+            clickHandler(osquare, context);
+        end
+    end
 end
 
 Events.OnFillWorldObjectContextMenu.Add(teste)

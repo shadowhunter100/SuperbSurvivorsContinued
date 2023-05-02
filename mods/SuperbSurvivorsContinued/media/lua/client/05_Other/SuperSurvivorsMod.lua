@@ -488,7 +488,6 @@ function supersurvivortemp(keyNum)
 			local mySS = SSM:Get(0)
 
 			if (mySS:getGroupID() ~= nil) then
-			
 				local myGroup = SSGM:Get(mySS:getGroupID());
 
 				if (myGroup ~= nil) then
