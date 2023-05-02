@@ -6,6 +6,7 @@ The code files in this repo are based on the Steam workshop item as of April 25,
 
 Original GitHub repo:  
 * https://github.com/DartVonRyuu/SuperiorSurvivors_Revisited
+* Permission to work on and update the mod by Ryuu: https://github.com/DartVonRyuu/SuperiorSurvivors_Revisited/discussions/52#discussioncomment-5738269
 
 Since there has no updates for months and I felt this was too much to be abandoned to rot, I have decide to do what I can to make NPCs viable in PZ.
 
