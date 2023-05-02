@@ -40,8 +40,8 @@ In other words, I don't have the time nor will to make a "super" All-in-One plat
 If you want to write a story and/or quest mod for a spawned NPC, go for it - but please to remember properly credit the referenced sources.  
 
 ### *The mod will be strictly based on vanilla PZ.*
-Hilltop Survivor Camp and other non-core functionalities (such as 3rd party mod compatibilities) will be removed.  
-The quest system, in whatever state it was in, will not be included either.  
-You can find the modded area by MayRum here https://steamcommunity.com/sharedfiles/filedetails/?id=2132007014
+* Hilltop Survivor Camp and other non-core functionalities (such as 3rd party mod compatibilities) will be removed.  
+* The quest system, in whatever state it was in, will not be included either.  
+* You can find the modded area by MayRum here https://steamcommunity.com/sharedfiles/filedetails/?id=2132007014
 
 ## *I am personally new to LUA scripting, if you are reading this and can help, please feel free to do so.*
