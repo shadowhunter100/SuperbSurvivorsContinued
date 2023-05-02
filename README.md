@@ -14,8 +14,9 @@ At least until whenever the official NPCs are added to the game.
 ### If you believe your work was used in this mod, please reach out and we can work to resolve your issues.
 PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-policy/
 
-Based on my code review of the workshop item, I have found some of the referencing functions from other mods but were uncredited.
-My "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and workshop items.
+Based on my code review of the workshop item, I have found some of the referencing functions from other mods but were uncredited.  
+
+__My "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__  
 
 ## Here are the workshop items I have found, but were uncredited
 Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.
@@ -24,11 +25,11 @@ ORGM - https://steamcommunity.com/sharedfiles/filedetails/?id=514618604 by Fenri
 Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan
 
 ## What will be done in this mod?
-In this "Continuation", I will attempt to fix the known (and unknown) issues while updating the core functionalities.
+In this "Continuation", I will attempt to fix the known (and unknown) issues while updating the core functionalities.  
 
-Beyond that, I will also attempt to look at what can be rewritten so that other mods may use it and extended to their own mods.
+Beyond that, I will also attempt to look at what can be rewritten so that other mods may use it and extended to their own mods.  
 
-Don't expect any new features such as a quest system or storyboard.
+Don't expect any new features such as a quest system or storyboard.  
 
 ## Why no new features?
 A functional NPC spawning framework is all I plan for this continuation.
@@ -45,6 +46,5 @@ If you want to write a story and/or quest mod for a spawned NPC, go for it - but
 Hilltop Survivor Camp and other non-core functionalities (such as 3rd party mod compatibilities) will be removed.  
 The quest system, in whatever state it was in, will not be included either.  
 You can find the modded area by MayRum here https://steamcommunity.com/sharedfiles/filedetails/?id=2132007014
-
 
 ## I am personally new to LUA scripting, if you are reading this and can help, please feel free to do so.
