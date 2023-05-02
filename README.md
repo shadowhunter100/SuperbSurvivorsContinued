@@ -1,7 +1,7 @@
 # SuperbSurvivorsContinued
 
 ## All original code credits goes to the original creators, Ryuu and nolanritchie*
-The files in this repo is copied from the Steam workshop as of April 25, 2023.  
+The code files in this repo are based on the Steam workshop item as of April 25, 2023.  
 * https://steamcommunity.com/sharedfiles/filedetails/?id=1905148104
 
 Original GitHub repo:  
