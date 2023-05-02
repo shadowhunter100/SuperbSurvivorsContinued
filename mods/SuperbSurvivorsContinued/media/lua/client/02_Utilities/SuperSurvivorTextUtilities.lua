@@ -1,6 +1,5 @@
-
 function getActionText(text)
-	return getText("IGUI_SS_" .. text)
+  return getText("IGUI_SS_" .. text)
 end
 
 function getName(name)
