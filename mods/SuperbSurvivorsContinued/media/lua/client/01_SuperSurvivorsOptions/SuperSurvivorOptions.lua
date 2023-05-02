@@ -1,12 +1,14 @@
 -- thanks and some credit to Fenris_Wolf from ORGM mod for creating this hotkeys file!  I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 
+local isLocalLoggingEnabled = true;
+
 local function getOptionText(text)
-	CreateLogLine("SuperSurvivorOptions", "function: getOptionText() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: getOptionText() called");
 	return getText("UI_Option_SS_" .. text)
 end
 
 local function doesOptionsFileExist()
-	CreateLogLine("SuperSurvivorOptions", "function: doesOptionsFileExist() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: doesOptionsFileExist() called");
 	local readFile = getFileReader("SurvivorOptions.lua", false)
 
 	if (readFile) then
@@ -17,9 +19,10 @@ local function doesOptionsFileExist()
 end
 
 local function loadSurvivorOptions()
-	CreateLogLine("SuperSurvivorOptions", "function: loadSurvivorOptions() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: loadSurvivorOptions() called");
 	if (doesOptionsFileExist() == false) then
-		CreateLogLine("SuperSurvivorOptions", "function: LoadSurvivorOptions() - failed to load survivor options file");
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+			"function: LoadSurvivorOptions() - failed to load survivor options file");
 		return {}
 	end
 
@@ -57,9 +60,9 @@ local GameOption = ISBaseObject:derive("GameOption");
 
 -- WIP - Consider reducing the number of options... the "experimental" options don't even exist or they do not work at all.
 local function setDefaultSurivorOptions()
-	CreateLogLine("SuperSurvivorOptions", "function: setDefaultSurivorOptions() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: setDefaultSurivorOptions() called");
 	if (not SuperSurvivorOptions) then
-		CreateLogLine("SuperSurvivorOptions",
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
 			"function: setDefaultSurivorOptions() - No Options found... creating default option values");
 		SuperSurvivorOptions = {};
 	end
@@ -108,7 +111,7 @@ end
 setDefaultSurivorOptions();
 
 function SuperSurvivorGetOptionValue(option)
-	CreateLogLine("SuperSurvivorOptions", "function: SuperSurvivorGetOptionValue() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorGetOptionValue() called");
 	local num = 1;
 
 	-- Check if the SuperSurvivorOption is not equal to nil and update the num accordingly.
@@ -118,7 +121,7 @@ function SuperSurvivorGetOptionValue(option)
 		num = tonumber(SuperSurvivorOptions[option]);
 	end
 
-	CreateLogLine("SuperSurvivorOptions", tostring(option) .. " : " .. tostring(num));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(option) .. " : " .. tostring(num));
 
 	if (option == "WifeSpawn") then
 		return (num ~= 1)
@@ -256,7 +259,7 @@ function SuperSurvivorGetOptionValue(option)
 end
 
 local function saveSurvivorOptions()
-	CreateLogLine("SuperSurvivorOptions", "function: saveSurvivorOptions() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: saveSurvivorOptions() called");
 	local writeFile = getFileWriter("SurvivorOptions.lua", true, false)
 
 	for index, value in pairs(SuperSurvivorOptions) do
@@ -266,17 +269,18 @@ local function saveSurvivorOptions()
 end
 
 local function SuperSurvivorSetOption(option, ToValue)
-	CreateLogLine("SuperSurvivorOptions", "function: SuperSurvivorSetOption() called");
-	CreateLogLine("SuperSurvivorOptions", tostring(option) .. " : " .. tostring(ToValue));
-	CreateLogLine("SuperSurvivorOptions", tostring(SuperSurvivorOptions[option]));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorSetOption() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(option) .. " : " .. tostring(ToValue));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(SuperSurvivorOptions[option]));
 	SuperSurvivorOptions[option] = ToValue
 	saveSurvivorOptions();
 end
 
 function GameOption:new(name, control, arg1, arg2)
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:new() called");
-	CreateLogLine("SuperSurvivorOptions", "name and control - " .. tostring(name) .. tostring(control));
-	CreateLogLine("SuperSurvivorOptions", "arguments - " .. tostring(arg1) .. tostring(arg2));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:new() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"name and control - " .. tostring(name) .. tostring(control));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "arguments - " .. tostring(arg1) .. tostring(arg2));
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -301,25 +305,25 @@ end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:toUI()
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:toUI() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:toUI() called");
 	print('ERROR: option "' .. self.name .. '" missing toUI()')
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:apply()
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:apply() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:apply() called");
 	print('ERROR: option "' .. self.name .. '" missing apply()')
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:resetLua()
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:resetLua() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:resetLua() called");
 	MainOptions.instance.resetLua = true
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:restartRequired(oldValue, newValue)
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:restartRequired() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:restartRequired() called");
 	if getCore():getOptionOnStartup(self.name) == nil then
 		getCore():setOptionOnStartup(self.name, oldValue)
 	end
@@ -330,7 +334,7 @@ function GameOption:restartRequired(oldValue, newValue)
 end
 
 function GameOption:onChangeComboBox(box)
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:onChangeComboBox() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeComboBox() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(box)
@@ -338,7 +342,7 @@ function GameOption:onChangeComboBox(box)
 end
 
 function GameOption:onChangeTickBox(index, selected)
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:onChangeTickBox() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeTickBox() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(index, selected)
@@ -346,7 +350,7 @@ function GameOption:onChangeTickBox(index, selected)
 end
 
 function GameOption:onChangeVolumeControl(control, volume)
-	CreateLogLine("SuperSurvivorOptions", "function: GameOption:onChangeVolumeControl() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeVolumeControl() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(control, volume)
@@ -354,7 +358,7 @@ function GameOption:onChangeVolumeControl(control, volume)
 end
 
 function SuperSurvivorsRefreshSettings()
-	CreateLogLine("SuperSurvivorOptions", "function: SuperSurvivorsRefreshSettings() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorsRefreshSettings() called");
 	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
 
 	Option_Perception_Bonus = SuperSurvivorGetOptionValue("Option_Perception_Bonus")
@@ -405,16 +409,16 @@ SSHotKeyOptions = {};
 
 -- WIP - getContextMenuText() is considered a global function... need to update casing to reflect that.
 function getContextMenuText(text)
-	CreateLogLine("SuperSurvivorOptions", "function: getContextMenuText() called" .. " : " .. text);
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: getContextMenuText() called" .. " : " .. text);
 	return getText("ContextMenu_SS_" .. text)
 end
 
 -- WIP - Why are Orders already in the Options menu? Can't even assign a new hotkey to it.
 local function insertOrders()
-	CreateLogLine("SuperSurvivorOptions", "function: insertOrders() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: insertOrders() called");
 
 	for i = 1, #Orders do
-		CreateLogLine("SuperSurvivorOptions", "Order = " .. OrderDisplayName[Orders[i]]);
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "Order = " .. OrderDisplayName[Orders[i]]);
 		SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]];
 		table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]]);
 	end
@@ -426,7 +430,7 @@ insertOrders();
 -- ----------------------- --
 --TODO: separate UI into sections (spawn , raiders , hotkeys)
 function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, options, description)
-	CreateLogLine("SuperSurvivorOptions", "function: MainOptions:addCustomCombo() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: MainOptions:addCustomCombo() called");
 	local spawnrateCombo = self:addCombo(splitpoint, y, comboWidth, 20, label, options, 1)
 	if description then
 		spawnrateCombo:setToolTipMap({ defaultTooltip = description });
@@ -444,15 +448,15 @@ function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, option
 
 		if box.options[box.selected] then
 			SuperSurvivorSetOption(id, box.selected)
-			CreateLogLine("SuperSurvivorOptions", "setting " .. id .. " option");
+			CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "setting " .. id .. " option");
 			SuperSurvivorsRefreshSettings()
 		else
-			CreateLogLine("SuperSurvivorOptions", "could not set " .. id .. " option");
+			CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "could not set " .. id .. " option");
 		end
 	end
 
 	function gameOption:onChange(box)
-		CreateLogLine("SuperSurvivorOptions", "option changed to " .. tostring(box.selected));
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "option changed to " .. tostring(box.selected));
 	end
 
 	self.gameOptions:add(gameOption)
@@ -466,12 +470,12 @@ end
 -- ---------------------------------------- --
 
 function NPC_Options_OffOn() -- Because Order of position Matters of if 'Off' and 'On' is first in the options in question
-	CreateLogLine("SuperSurvivorOptions", "function: NPC_Options_OffOn() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: NPC_Options_OffOn() called");
 	return { getOptionText("Off"), getOptionText("On") }
 end
 
 function NPC_Options_ZeroToOneHundred()
-	CreateLogLine("SuperSurvivorOptions", "function: NPC_Options_ZeroToOneHundred() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: NPC_Options_ZeroToOneHundred() called");
 	return { "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%", "15%",
 		"16%", "17%", "18%", "19%", "20%", "21%", "22%", "23%", "24%", "25%", "26%", "27%", "28%", "29%", "30%",
 		"31%", "32%", "33%", "34%", "35%", "36%", "37%", "38%", "39%", "40%", "41%", "42%", "43%", "44%", "45%",
@@ -482,7 +486,8 @@ function NPC_Options_ZeroToOneHundred()
 end
 
 function NPC_Options_ZeroToOneHundredAbsolute()
-	CreateLogLine("SuperSurvivorOptions", "function: NPC_Options_ZeroToOneHundredAbsolute() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"function: NPC_Options_ZeroToOneHundredAbsolute() called");
 
 	return { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
 		"19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
@@ -497,7 +502,7 @@ local oldCreate = MainOptions.create
 
 -- overwrite it
 function MainOptions:create()
-	CreateLogLine("SuperSurvivorOptions", "function: MainOptions:create() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: MainOptions:create() called");
 	oldCreate(self)
 	for _, keyTextElement in pairs(MainOptions.keyText) do
 		repeat
@@ -827,9 +832,9 @@ function MainOptions:create()
 end
 
 local function logKeyBindings()
-	CreateLogLine("SuperSurvivorOptions", "function: logKeyBindings() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: logKeyBindings() called");
 	for i, b in ipairs(keyBinding) do
-		CreateLogLine("SuperSurvivorOptions", tostring(b.value) .. " = " .. tostring(i));
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(b.value) .. " = " .. tostring(i));
 	end
 end
 

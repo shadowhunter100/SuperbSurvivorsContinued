@@ -5,10 +5,12 @@
     Maybe look into ModOptions to handle the key bindings?
 --]]
 
+local isLocalLoggingEnabled = true;
+
 -- WIP - The keybinding needs to be reworked.
 -- Using the global keyBinding table, to store all our binding values
 local function insertKeyBinding()
-	CreateLogLine("SuperSurvivorsKeyBindings", "function: insertKeyBinding() called");
+	CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "function: insertKeyBinding() called");
 	local index = nil -- index will be the position we want to insert into the table
 
 	for i, b in ipairs(keyBinding) do
@@ -20,7 +22,7 @@ local function insertKeyBinding()
 	end
 
 	if index then
-		CreateLogLine("SuperSurvivorsKeyBindings", "Inserting keyBinding ...");
+		CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "Inserting keyBinding ...");
 		-- we got a index, first lets insert our new entries
 		table.insert(keyBinding, index + 1, { value = "Call Closest Group Member", key = 55 })    -- Used to be key "T", updated to "numpad *" button
 		table.insert(keyBinding, index + 2, { value = "Call Closest Non-Group Member", key = 181 }) -- Used to be key "Y", updated to "numpad /" button

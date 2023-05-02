@@ -1,5 +1,6 @@
 --this file has methods related to looting
 
+local isLocalLoggingEnabled = true;
 --- CATEGORIES ---
 
 ---@alias itemCategory
@@ -13,7 +14,7 @@
 ---@param survivor any survivor searching for item (only in food searching)
 ---@return any returns the item insde of the container with the selected category or nil if not found
 function FindItemByCategory(container, category, survivor)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindItemByCategory() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindItemByCategory() called");
 	if (category == "Food") then
 		return FindAndReturnBestFood(container, survivor)
 	elseif (category == "Water") then
@@ -30,7 +31,7 @@ end
 ---@param category itemCategory category to be checked
 ---@return boolean returns true if the item belongs to the category
 function HasCategory(item, category)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: HasCategory() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: HasCategory() called");
 	if (category == "Water") and (isItemWater(item)) then
 		return true
 	elseif (category == "Weapon") and (item:getCategory() == category) and (item:getMaxDamage() > 0.1) then
@@ -47,7 +48,7 @@ end
 ---@param container any container to be searched
 ---@return any returns the first weapon inside the container or nil if not found
 function FindAndReturnWeapon(container)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnWeapon() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnWeapon() called");
 	if (not container) then
 		return nil
 	end
@@ -64,7 +65,7 @@ function FindAndReturnWeapon(container)
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "no weapon found");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "no weapon found");
 	end
 
 	return nil
@@ -74,7 +75,7 @@ end
 ---@param container any container to be searched
 ---@return any returns the best weapon inside the container or nil if not found
 function FindAndReturnBestWeapon(container)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestWeapon() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnBestWeapon() called");
 	if (container == nil) then
 		return nil
 	end
@@ -94,16 +95,16 @@ function FindAndReturnBestWeapon(container)
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "no weapon found");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "no weapon found");
 	end
 
 	if (bestItem ~= nil) then
-		CreateLogLine("SuperSurvivorLootUtilities",
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled,
 		"best weapon" .. tostring(bestItem:getDisplayName()) ..
 		" | maxDamage: " .. tostring(bestItem:getMaxDamage())
 	);
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "no best weapon found");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "no best weapon found");
 	end
 
 	return bestItem
@@ -119,7 +120,7 @@ local FoodsToExlude = { "Bleach", "Cigarettes", "HCCigar", "Antibiotics", "Teaba
 ---@param thisItemContainer any
 ---@return any returns the first found food inside the container
 function FindAndReturnFood(thisItemContainer)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnFood() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnFood() called");
 	if (not thisItemContainer) then
 		return nil
 	end
@@ -140,7 +141,7 @@ function FindAndReturnFood(thisItemContainer)
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "empty container food");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "empty container food");
 	end
 
 	return nil
@@ -150,7 +151,7 @@ end
 ---@param item any any food item
 ---@return number returns the score of the food
 function GetFoodScore(item) -- TODO: improve food searching (and the logging)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: GetFoodScore() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: GetFoodScore() called");
 	local score = 1.0
 
 	if (item:getUnhappyChange() > 0) then
@@ -210,7 +211,7 @@ function GetFoodScore(item) -- TODO: improve food searching (and the logging)
 	elseif (foodType == "Coffee") then
 		score = score - 5
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "unknown food");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "unknown food");
 	end
 
 	return score
@@ -221,7 +222,7 @@ end
 ---@param survivor any
 ---@return any returns the best food on the ground based on a score system
 function FindAndReturnBestFoodOnFloor(sq, survivor)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestFoodOnFloor() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnBestFoodOnFloor() called");
 	if (not sq) then
 		return nil
 	end
@@ -249,14 +250,14 @@ function FindAndReturnBestFoodOnFloor(sq, survivor)
 				if Score > bestScore then
 					bestFood = item
 					bestScore = Score
-					CreateLogLine("SuperSurvivorLootUtilities",
+					CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled,
 					"best food: " .. tostring(bestFood:getDisplayName()) ..
 					" | food score: " .. tostring(bestScore));
 				end
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no food");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Empty container, no food");
 	end
 
 	return bestFood
@@ -267,7 +268,7 @@ end
 ---@param survivor any
 ---@return any returns the best food based on a score system
 function FindAndReturnBestFood(thisItemContainer, survivor)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnBestFood() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnBestFood() called");
 	if (not thisItemContainer) then
 		return nil
 	end
@@ -295,14 +296,14 @@ function FindAndReturnBestFood(thisItemContainer, survivor)
 				if Score > bestScore then
 					bestFood = item
 					bestScore = Score
-					CreateLogLine("SuperSurvivorLootUtilities",
+					CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled,
 					"best food: " .. tostring(bestFood:getDisplayName()) ..
 					" | food score: " .. tostring(bestScore));
 				end
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no food");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Empty container, no food");
 	end
 
 	return bestFood
@@ -316,7 +317,7 @@ end
 ---@param container any
 ---@return any returns the first water found
 function FindAndReturnWater(container)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: FindAndReturnWater() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: FindAndReturnWater() called");
 	if (not container) then
 		return nil
 	end
@@ -329,12 +330,12 @@ function FindAndReturnWater(container)
 		for i = 1, count - 1 do
 			local item = items:get(i)
 			if (item ~= nil) and isItemWater(item) then
-				CreateLogLine("SuperSurvivorLootUtilities", "Water found");
+				CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Water found");
 				return item
 			end
 		end
 	else
-		CreateLogLine("SuperSurvivorLootUtilities", "Empty container, no water");
+		CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Empty container, no water");
 	end
 	return nil
 end
@@ -343,7 +344,7 @@ end
 ---@param item any
 ---@return boolean return true if the current it is a water source (and is not Bleach)
 function isItemWater(item)
-	CreateLogLine("SuperSurvivorLootUtilities", "function: isItemWater() called");
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: isItemWater() called");
 	return ((item:isWaterSource()) and (item:getType() ~= "Bleach"))
 end
 

@@ -4,7 +4,7 @@
 -- Otherwise, you can expect a "nil" return when a global variable is referenced before it is loaded.
 
 -- Global Boolean
-IsLoggingEnabled = true;
+IsGlobalLoggingEnabled = true;
 SpeakEnabled = true;
 
 -- Global Integer

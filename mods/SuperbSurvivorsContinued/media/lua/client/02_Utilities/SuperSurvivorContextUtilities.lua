@@ -1,6 +1,8 @@
 -- this file has methods related to world context
 --- SQUARES ---
 
+local isLocalLoggingEnabled = true;
+
 ---@alias direction
 ---| '"N"' # North
 ---| '"S"' # South
@@ -12,8 +14,8 @@
 ---@param dir direction
 ---@return any the adjacent square
 function GetAdjSquare(square, dir)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetAdjSquare() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetAdjSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"square: " .. tostring(square) ..
 		" | dir: " .. tostring(dir));
 
@@ -33,8 +35,8 @@ end
 ---@param to any target square
 ---@return table returns a table with the squares between the start and target squares (includes the target square)
 function GetSquaresBetween(from, to)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetSquaresBetween() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetSquaresBetween() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"from: " .. tostring(from) ..
 		" | to: " .. tostring(to));
 
@@ -48,10 +50,10 @@ function GetSquaresBetween(from, to)
 	local pos = 0;
 	local sqr = from;
 
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"from x : " .. tostring(fromX) ..
 		" to x : " .. tostring(toX));
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"from y : " .. tostring(fromY) ..
 		" to y : " .. tostring(toY));
 
@@ -72,12 +74,12 @@ function GetSquaresBetween(from, to)
 			fromX = fromX - 1
 		end
 
-		CreateLogLine("SuperSurvivorContextUtilities",
+		CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 			"fromX updated: " .. tostring(fromX) ..
 			" | fromY updated: " .. tostring(fromY))
 
 		if sqr ~= nil then
-			CreateLogLine("SuperSurvivorContextUtilities",
+			CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 				"saving square x : " .. tostring(fromX) ..
 				" y : " .. tostring(fromY) ..
 				" into position : " .. tostring(pos))
@@ -86,14 +88,14 @@ function GetSquaresBetween(from, to)
 		end
 	until fromX == toX and fromY == toY
 
-	CreateLogLine("SuperSurvivorContextUtilities", "total squares : " .. tostring(pos))
-	CreateLogLine("SuperSurvivorContextUtilities", "----- END GetSquaresBetween -----")
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "total squares : " .. tostring(pos))
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "----- END GetSquaresBetween -----")
 	return squares
 end
 
 function GetOutsideSquare(square, building)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetOutsideSquare() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetOutsideSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"square: " .. tostring(square) ..
 		" | building: " .. tostring(building));
 	if (not building) or (not square) then
@@ -128,8 +130,8 @@ end
 ---@param distanceToFlee number distance that the flee guy will search for
 ---@return any returns a random square in a distance away from attackGuy
 function GetFleeSquare(fleeGuy, attackGuy, distanceToFlee)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetFleeSquare() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetFleeSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		" | fleeGuy: " .. tostring(fleeGuy) ..
 		" | attackGuy: " .. tostring(attackGuy) ..
 		" | distanceToFlee: " .. tostring(distanceToFlee));
@@ -164,8 +166,8 @@ end
 ---@param y number
 ---@param z number
 function GetTowardsSquare(moveguy, x, y, z)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetTowardsSquare() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetTowardsSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"moveGuy: " .. tostring(moveguy) ..
 		" | x: " .. tostring(x) ..
 		" | y: " .. tostring(y) ..
@@ -204,13 +206,13 @@ end
 ---@param id any if of the npc survivor
 ---@return any
 function GetCoordsFromID(id)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetCoordsFromID() called");
-	CreateLogLine("SuperSurvivorContextUtilities", "id: " .. tostring(id));
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetCoordsFromID() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "id: " .. tostring(id));
 
 	for k, v in pairs(SurvivorMap) do
 		for i = 1, #v do
 			if (v[i] == id) then
-				CreateLogLine("SuperSurvivorContextUtilities", "SurvivorMap: " ..
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "SurvivorMap: " ..
 					"id: " .. tostring(id) ..
 					" | value: " .. tostring(v) ..
 					" | index: " .. tostring(i)
@@ -231,8 +233,8 @@ end
 ---@param z2 any instance two
 ---@return number the distance between the 2 instances
 function getDistanceBetween(z1, z2)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: getDistanceBetween() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: getDistanceBetween() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"z1: " .. tostring(z1) ..
 		" | z2: " .. tostring(z2)
 	);
@@ -262,8 +264,8 @@ end
 ---@param By number
 ---@return number the distance between the 2 points
 function GetDistanceBetweenPoints(Ax, Ay, Bx, By)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDistanceBetweenPoints() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetDistanceBetweenPoints() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"Ax: " .. tostring(Ax) ..
 		"| Ay: " .. tostring(Ay) ..
 		"| Bx: " .. tostring(Bx) ..
@@ -287,8 +289,8 @@ end
 ---@param sq any
 ---@param area table a table with 4 positions representing a square of points(number)
 function IsSquareInArea(sq, area)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: IsSquareInArea() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: IsSquareInArea() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"sq: " .. tostring(sq) ..
 		" | area: " .. tostring(area)
 	);
@@ -312,8 +314,8 @@ end
 ---@param z  number
 ---@return any the center square given the coordinates
 function GetCenterSquareFromArea(x1, x2, y1, y2, z)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetCenterSquareFromArea() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetCenterSquareFromArea() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"x1: " .. tostring(x1) ..
 		" | x2: " .. tostring(x2) ..
 		" | y1: " .. tostring(y1) ..
@@ -331,15 +333,15 @@ end
 --- gets a random square inside of an area
 ---@param area any
 function GetRandomAreaSquare(area)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomAreaSquare() called");
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetRandomAreaSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"area: " .. tostring(area)
 	);
 	local x1 = area[1]
 	local x2 = area[2]
 	local y1 = area[3]
 	local y2 = area[4]
-	CreateLogLine("SuperSurvivorContextUtilities",
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"x1: " .. tostring(x1) ..
 		" | x2: " .. tostring(x2) ..
 		" | y1: " .. tostring(y1) ..
@@ -364,7 +366,7 @@ end
 ---@param objectName string object name to be searched
 ---@return table returns a list with every object found inside the building
 function GetAllObjectsFromBuilding(building, objectName)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetAllObjectsFromBuilding() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetAllObjectsFromBuilding() called");
 	local bdef = building:getDef()
 
 	local bdefX = bdef:getX()
@@ -387,11 +389,12 @@ function GetAllObjectsFromBuilding(building, objectName)
 					if (instanceof(object, objectName)) then
 						objects[objectCount] = object
 						objectCount = objectCount + 1;
-						CreateLogLine("SuperSurvivorContextUtilities",
+						CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 							"found object x : " .. tostring(x) ..
 							" y :" .. tostring(y)
 						);
-						CreateLogLine("SuperSurvivorContextUtilities", "object count : " .. tostring(objectCount))
+						CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+							"object count : " .. tostring(objectCount))
 					end
 				end
 			end
@@ -409,7 +412,7 @@ end
 ---@param cs any a square
 ---@return any the window object if found or nil
 local function getSquaresWindow(cs)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: getSquaresWindow() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: getSquaresWindow() called");
 	if not cs then
 		return nil
 	end
@@ -430,7 +433,7 @@ end
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
 function GetSquaresNearWindow(cs)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetSquaresNearWindow() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetSquaresNearWindow() called");
 	local directions = { "N", "E", "S", "W" }
 
 	for k, dir in ipairs(directions) do
@@ -466,7 +469,7 @@ end
 ---@param character any
 ---@return any return the closest window or nil if not found
 function GetNearestWindow(building, character)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetNearestWindow() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetNearestWindow() called");
 	local WindowOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -510,7 +513,7 @@ end
 ---@param player any
 ---@return any returns the inside square of a door or nil if not found
 function GetDoorsInsideSquare(door, player)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDoorsInsideSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetDoorsInsideSquare() called");
 	if (player == nil) or not (instanceof(door, "IsoDoor")) then
 		return nil
 	end
@@ -535,7 +538,7 @@ end
 ---@param player any
 ---@return any returns the inside outside of a door or nil if not found
 function GetDoorsOutsideSquare(door, player)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetDoorsOutsideSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetDoorsOutsideSquare() called");
 	if (player == nil) or not (instanceof(door, "IsoDoor")) then
 		return nil
 	end
@@ -560,7 +563,7 @@ end
 ---@param character any
 ---@return any returns the closest exterior unlocked door or nil if not found
 function GetUnlockedDoor(building, character)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetUnlockedDoor() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetUnlockedDoor() called");
 	local DoorOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -597,7 +600,7 @@ end
 ---@param character any
 ---@return any returns the closest exterior door or nil if not found
 function GetNearestDoor(building, character)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: getNearestDoor() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: getNearestDoor() called");
 	local DoorOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -632,7 +635,8 @@ end
 ---@param building any
 ---@return integer returns the amount of zombies found in the building
 function NumberOfZombiesInOrAroundBuilding(building)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: NumberOfZombiesInOrAroundBuilding() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"function: NumberOfZombiesInOrAroundBuilding() called");
 	local count = 0
 	local padding = 10
 	local bdef = building:getDef()
@@ -665,7 +669,7 @@ end
 ---@param building any
 ---@return any returns a random square inside of the building
 function GetRandomBuildingSquare(building)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomBuildingSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetRandomBuildingSquare() called");
 	local bdef = building:getDef()
 	local x = ZombRand(bdef:getX(), (bdef:getX() + bdef:getW()))
 	local y = ZombRand(bdef:getY(), (bdef:getY() + bdef:getH()))
@@ -682,7 +686,8 @@ end
 ---@param building any
 ---@return any returns a random square inside of the building
 function GetRandomFreeBuildingSquare(building)
-	CreateLogLine("SuperSurvivorContextUtilities", "function: GetRandomFreeBuildingSquare() called");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"function: GetRandomFreeBuildingSquare() called");
 	if (building == nil) then
 		return nil
 	end
