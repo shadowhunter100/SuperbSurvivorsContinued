@@ -80,7 +80,7 @@ Events.OnRenderTick.Add(SuperSurvivorsOnTick);
 function SuperSurvivorSoldierSpawn(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
-	ASuperSurvivor:giveWeapon(getWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)]), true);
+	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -93,7 +93,7 @@ function SuperSurvivorSoldierSpawnMelee(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
 
-	ASuperSurvivor:giveWeapon(getWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]), true);
+	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true);
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -106,7 +106,7 @@ function SuperSurvivorSoldierSpawnHostile(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
 
-	ASuperSurvivor:giveWeapon(getWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)]), true);
+	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -120,7 +120,7 @@ function SuperSurvivorSoldierSpawnMeleeHostile(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
 
-	ASuperSurvivor:giveWeapon(getWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]), true);
+	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true);
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -142,7 +142,7 @@ function SuperSurvivorRandomSpawn(square)
 
 	if (ASuperSurvivor ~= nil) then
 		if (ZombRand(100) < (ChanceToSpawnWithGun + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(getWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)]), true)
+			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
