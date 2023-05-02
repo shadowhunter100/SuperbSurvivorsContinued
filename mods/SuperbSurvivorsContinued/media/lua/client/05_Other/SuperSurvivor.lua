@@ -4227,7 +4227,7 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 								local item = items:get(j):getItem()
 
 								if (tempDistance < closestSoFar) and (item ~= nil) and (not item:isBroken()) and
-									(((TypeOrCategory == "Category") and (hasCategory(item, itemType))) or
+									(((TypeOrCategory == "Category") and (HasCategory(item, itemType))) or
 										((TypeOrCategory == "Type") and (tostring(item:getType()) == itemType or tostring(item:getName()) == itemType))) then
 									--print("hit "..tempDistance)
 									itemtoReturn = item
