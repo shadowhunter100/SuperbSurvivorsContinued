@@ -8,7 +8,7 @@ Original GitHub repo: https://github.com/DartVonRyuu/SuperiorSurvivors_Revisited
 
 Since there has no updates for months and I felt this was too much to be abandoned to rot, I have decide to do what I can to make NPCs viable in PZ.
 
-* *At least until whenever the official NPCs are added to the game.* *
+* *At least until whenever the official NPCs are added to the game.*
 
 ## *It is important to know there were many other authors and creators who have contributed (unknowingly) to Superb Survivors.
 ### If you believe your work was used in this mod, please reach out and we can work to resolve your issues.
@@ -16,7 +16,7 @@ PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-pol
 
 Based on the current code review of the workshop item, I have found some of the referencing functions from other mods but were uncredited.  
 
-__This "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__
+*__This "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__*
 
 ## Here are the workshop items I have found, but were uncredited
 Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.
