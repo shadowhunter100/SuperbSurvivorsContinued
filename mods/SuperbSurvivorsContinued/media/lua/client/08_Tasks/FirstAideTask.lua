@@ -49,7 +49,7 @@ function FirstAideTask:update()
 		if (bp:HasInjury()) and (bp:bandaged() == false) then
 			self.WorkingBP = bp
 			self.parent:RoleplaySpeak(getActionText("BandageBP_Before") ..
-			tostring(BodyPartType.getDisplayName(bp:getType())) .. getActionText("BandageBP_After"))
+				tostring(BodyPartType.getDisplayName(bp:getType())) .. getActionText("BandageBP_After"))
 			local item
 			item = self.parent.player:getInventory():getItemFromType("RippedSheets")
 			if (item == nil) then item = self.parent.player:getInventory():AddItem("Base.RippedSheets") end

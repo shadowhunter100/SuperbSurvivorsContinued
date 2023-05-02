@@ -155,14 +155,16 @@ function FindUnlootedBuildingTask:update()
 			local attempts = self.parent:getWalkToAttempt(self.TargetSquare)
 			if (attempts < 6) then
 				self.parent:DebugSay("Find Unlooted Building Task - trying to get to square inside x" ..
-				tostring(attempts))
+					tostring(attempts))
 				--self.parent:WalkToAttempt(self.TargetSquare)
 
 				-- WIP - What is "Square"?
 				self.parent:walkTo(self.parent:FindClosestOutsideSquare(Square))
 				--self.parent:WalkToAttempt(self.parent:FindClosestOutsideSquare(Square))
-				if (self.TargetSquare:getRoom() ~= nil) then self.parent.TargetBuilding = self.TargetSquare:getRoom()
-					:getBuilding() end
+				if (self.TargetSquare:getRoom() ~= nil) then
+					self.parent.TargetBuilding = self.TargetSquare:getRoom()
+						:getBuilding()
+				end
 			else
 				self.parent:DebugSay("giving up on building")
 				self.parent:MarkAttemptedBuildingExplored(self.parent.TargetBuilding)
