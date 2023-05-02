@@ -12,8 +12,9 @@ function AttackTask:new(superSurvivor)
 	o.OnGoing = false
 	o.parent:Speak("starting attack")
 	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
-	-- WIP - Why is the ticks being set again? all the survivors initiated with tick of 2 in SuperSurvivor.lua...
-	o.parent:Set_AtkTicks(0) -- should not have to wait/delay on first attack, only after the first swing/shot
+	-- WIP - Why was the ticks being set again? all the survivors initiated with tick of 2 in SuperSurvivor.lua...
+	-- WIP - commented out until further notice.
+	-- o.parent:Set_AtkTicks(0) -- should not have to wait/delay on first attack, only after the first swing/shot
 
 	return o
 end

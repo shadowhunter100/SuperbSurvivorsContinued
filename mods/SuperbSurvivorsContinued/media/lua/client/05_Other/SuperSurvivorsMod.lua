@@ -613,6 +613,7 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 	if (getSpecificPlayer(0) == nil) then return false end
+	-- WIP - WHY DOES THIS NEED TO RUN?
 	--this unrelated to raiders but need this to run every once in a while
 	getSpecificPlayer(0):getModData().hitByCharacter = false;
 	getSpecificPlayer(0):getModData().semiHostile = false;
@@ -701,6 +702,7 @@ function SuperSurvivorsNewSurvivorManager()
 		ChanceToSpawnWithGun    = ChanceToSpawnWithGun --* 1.5
 
 		for i = 1, GroupSize do
+			-- WIP - once again, "raider" is an undeclared variable... is it global or not?
 			raider = SuperSurvivorRandomSpawn(spawnSquare)
 			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
 			--else RaiderGroup:addMember(raider,"Guard") end

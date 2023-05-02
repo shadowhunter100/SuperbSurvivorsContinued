@@ -1,3 +1,8 @@
+--[[ 
+  WIP - Where are those "speeches" coming from? Are those from Conditional-Speech? mod on the workshop?
+  https://steamcommunity.com/sharedfiles/filedetails/?id=2398253681
+  If yes, why was the mod not credited?
+--]]
 
 function GetDialogue(text)
   return getText("GameSound_Dialogues_SS_" .. text)
