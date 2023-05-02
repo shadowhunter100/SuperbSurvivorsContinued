@@ -1,9 +1,5 @@
 require "04_Group/SuperSurvivorGroupManager"
 
-function getWeapon(kind)
-	return kind;
-end
-
 if (not PresetSpawns) then
 	PresetSpawns = {};
 end
@@ -14,7 +10,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 6123,
 	Y = 5302,
 	Z = 0,
-	Weapon = getWeapon("Base.SpearKnife"),
+	Weapon = "Base.SpearKnife",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -143,7 +139,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11690,
 	Y = 8363,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	isHostile = false
 };
 PresetSpawns[#PresetSpawns + 1] = {
@@ -153,7 +149,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 1018,
 	Y = 6765,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	isHostile = true
 };
 PresetSpawns[#PresetSpawns + 1] = {
@@ -162,7 +158,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11979,
 	Y = 6816,
 	Z = 0,
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -172,7 +168,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 10635,
 	Y = 10411,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = false,
 	PerkName = "Aiming",
@@ -189,7 +185,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11899,
 	Y = 6937,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -200,7 +196,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11900,
 	Y = 6937,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -211,7 +207,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11901,
 	Y = 6937,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -221,7 +217,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12066,
 	Y = 6759,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -233,7 +229,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12067,
 	Y = 6759,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -246,7 +242,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12068,
 	Y = 6759,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -306,7 +302,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12009,
 	Y = 6919,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -317,7 +313,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12310,
 	Y = 6729,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -330,7 +326,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12313,
 	Y = 6729,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -343,7 +339,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12316,
 	Y = 6729,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -370,7 +366,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12132,
 	Y = 7085,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -382,7 +378,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12133,
 	Y = 7084,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -394,7 +390,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12130,
 	Y = 7083,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -420,7 +416,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12138,
 	Y = 7098,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -432,7 +428,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12146,
 	Y = 7098,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -444,7 +440,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12134,
 	Y = 7099,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true,
 	Patrolling = true,
@@ -486,7 +482,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11827,
 	Y = 6574,
 	Z = 0,
-	Weapon = getWeapon("Base.HuntingRifle"),
+	Weapon = "Base.HuntingRifle",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -497,7 +493,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12070,
 	Y = 7140,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -544,7 +540,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11955,
 	Y = 6879,
 	Z = 1,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Guard",
 	isHostile = false
 };
@@ -555,7 +551,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11905,
 	Y = 6852,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -617,7 +613,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11991,
 	Y = 6945,
 	Z = 2,
-	Weapon = getWeapon("Base.HuntingRifle"),
+	Weapon = "Base.HuntingRifle",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -704,7 +700,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 9833,
 	Y = 9517,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = false,
 	Patrolling = true,
@@ -736,7 +732,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 9833,
 	Y = 9519,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Guard",
 	isHostile = false
 };
@@ -778,7 +774,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 9799,
 	Y = 9503,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Patrol",
 	isHostile = false,
 	Patrolling = true,
@@ -850,7 +846,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 10787,
 	Y = 10172,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -875,7 +871,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 10627,
 	Y = 9410,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -905,7 +901,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 9987,
 	Y = 10962,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = false
 };
@@ -993,7 +989,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8211,
 	Y = 11805,
 	Z = 0,
-	Weapon = getWeapon("Base.HuntingRifle"),
+	Weapon = "Base.HuntingRifle",
 	Orders = "Guard",
 	isHostile = false
 };
@@ -1045,7 +1041,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 12475,
 	Y = 8969,
 	Z = 0,
-	Weapon = getWeapon("Base.HuntingRifle"),
+	Weapon = "Base.HuntingRifle",
 	Orders = "Patrol",
 	isHostile = false,
 	Patrolling = true,
@@ -1067,7 +1063,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 11608,
 	Y = 9303,
 	Z = 0,
-	Weapon = getWeapon("Base.HuntingRifle"),
+	Weapon = "Base.HuntingRifle",
 	Orders = "Patrol",
 	isHostile = false,
 	Patrolling = true,
@@ -1087,7 +1083,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 13643,
 	Y = 5868,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Patrol",
 	isHostile = false,
 	Patrolling = true,
@@ -1116,7 +1112,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 13923,
 	Y = 5824,
 	Z = 2,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -1161,7 +1157,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8217,
 	Y = 11810,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -1173,7 +1169,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8256,
 	Y = 11845,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Guard",
 	isHostile = true
 };
@@ -1182,7 +1178,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8255,
 	Y = 11850,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -1191,7 +1187,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8248,
 	Y = 11859,
 	Z = 0,
-	Weapon = getWeapon("Base.AssaultRifle"),
+	Weapon = "Base.AssaultRifle",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -1200,7 +1196,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8235,
 	Y = 11837,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -1211,7 +1207,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 8226,
 	Y = 11869,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Patrol",
 	isHostile = true,
 	Patrolling = true,
@@ -1255,7 +1251,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 9207,
 	Y = 12143,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Guard",
 	isHostile = false
 };
@@ -1268,7 +1264,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 14421,
 	Y = 4628,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Guard",
 	isHostile = false
 };
@@ -1287,7 +1283,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7753,
 	Y = 11884,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -1302,7 +1298,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7753,
 	Y = 11889,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Standing Ground",
 	isHostile = true
 };
@@ -1318,7 +1314,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7743,
 	Y = 11905,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Guard",
 	isHostile = true
 };
@@ -1333,7 +1329,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7709,
 	Y = 11878,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Guard",
 	isHostile = true
 };
@@ -1349,7 +1345,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7680,
 	Y = 11878,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1364,7 +1360,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7680,
 	Y = 11878,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1380,7 +1376,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7651,
 	Y = 11855,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1395,7 +1391,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7651,
 	Y = 11855,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1411,7 +1407,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7729,
 	Y = 11913,
 	Z = 0,
-	Weapon = getWeapon("Base.Shotgun"),
+	Weapon = "Base.Shotgun",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1426,7 +1422,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	X = 7729,
 	Y = 11913,
 	Z = 0,
-	Weapon = getWeapon("Base.Pistol"),
+	Weapon = "Base.Pistol",
 	Orders = "Explore",
 	isHostile = true
 };
@@ -1606,9 +1602,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1621,9 +1616,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1636,9 +1630,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1651,9 +1644,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1666,9 +1658,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1681,9 +1672,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
-	Weapon = getWeapon("Base.HuntingKnife"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. getSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
 };
@@ -1843,6 +1833,7 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 			SuperSurvivor:SuitUp(PresetSpawn.Suit)
 		end
 
+		-- WIP - WHAT ARE THE CHANGES? THIS MAKES NO SENSE AND I SEE NO NUMBER VALUE ASSIGNED
 		--	Arsenal[26]'s changes -- start
 		--	NOTE : This previously started at line #455, didn't work since NPC not spawned yet.
 		--	NOTE : I've always started additional PresetSpawn parameters way down here without issues.
