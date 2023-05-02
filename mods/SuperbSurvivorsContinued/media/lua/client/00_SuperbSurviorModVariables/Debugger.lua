@@ -1,5 +1,6 @@
+require "00_SuperbSurviorModVariables.SuperSurviorGlobalVariables";
+
 local modId = "SuperbSurvivorsContinued";
-local isLoggingEnabled = true;
 
 --[[
     Credit to "haram gaming#4572" in PZ Discord for providing a text file writing example.
@@ -7,11 +8,11 @@ local isLoggingEnabled = true;
     CreateLogLine will create a log file under the "<user>/Zomboid/Lua/<modId>/logs".
 --]]
 function CreateLogLine(fileName, newLine)
-    if (isLoggingEnabled) then
+    if (IsLoggingEnabled) then
         local timestamp = os.time();
         local formattedTimeDay = os.date("%Y-%m-%d", timestamp);
         local formattedTime = os.date("%Y-%m-%d %H:%M:%S", timestamp);
-        local file = getFileWriter(modId .. "/logs/" .. formattedTimeDay .. "_" .. modId .. fileName .. "_Logs.txt", true, true);
+        local file = getFileWriter(modId .. "/logs/" .. formattedTimeDay .. "_" .. modId .. "_".. fileName .. "_Logs.txt", true, true);
         local content = formattedTime .. " : " .. "CreateLogLine called";
 
         if newLine then

@@ -274,7 +274,7 @@ local function SuperSurvivorSetOption(option, ToValue)
 end
 
 function GameOption:new(name, control, arg1, arg2)
-	CreateLogLine("function: GameOption:new() called");
+	CreateLogLine("SuperSurvivorOptions", "function: GameOption:new() called");
 	CreateLogLine("SuperSurvivorOptions", "name and control - " .. tostring(name) .. tostring(control));
 	CreateLogLine("SuperSurvivorOptions", "arguments - " .. tostring(arg1) .. tostring(arg2));
 	local o = {}
@@ -414,7 +414,7 @@ local function insertOrders()
 	CreateLogLine("SuperSurvivorOptions", "function: insertOrders() called");
 
 	for i = 1, #Orders do
-		CreateLogLine("SuperSurvivorOptions", "Orders" .. OrderDisplayName[Orders[i]]);
+		CreateLogLine("SuperSurvivorOptions", "Order = " .. OrderDisplayName[Orders[i]]);
 		SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]];
 		table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]]);
 	end
@@ -829,8 +829,10 @@ end
 local function logKeyBindings()
 	CreateLogLine("SuperSurvivorOptions", "function: logKeyBindings() called");
 	for i, b in ipairs(keyBinding) do
-		CreateLogLine(tostring(b.value) .. " = " .. tostring(i));
+		CreateLogLine("SuperSurvivorOptions", tostring(b.value) .. " = " .. tostring(i));
 	end
 end
 
-logKeyBindings();
+if (IsLoggingEnabled) then
+	logKeyBindings();
+end
