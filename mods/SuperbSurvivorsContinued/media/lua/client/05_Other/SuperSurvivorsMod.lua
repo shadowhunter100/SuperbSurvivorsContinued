@@ -254,7 +254,10 @@ function SuperSurvivorsLoadGridsquare(square)
 			SurvivorMap[key] = {}
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
-			if (SuperSurvivorSpawnRate ~= 0) and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0) and (square:getZoneType() == "TownZone") and (not square:isSolid()) then
+
+			if (SuperSurvivorSpawnRate ~= 0) and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0)
+				and (square:getZoneType() == "TownZone")
+				and (not square:isSolid()) then
 				-- NON ALT SPAWNING GROUPS
 				if (ZombRand(15) == 0) then -- spawn group
 					local hours = getGameTime():getWorldAgeHours();
@@ -425,12 +428,8 @@ Events.OnAIStateChange:Add(SuperSurvivorTest)
 -- WIP - Whoever wrote this function didn't consider the keybinding issues... This needs to be rewritten.
 function supersurvivortemp(keyNum)
 	if (getSpecificPlayer(0)) then
-		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
-			--SuperSurvivorsRaiderManager()
-
-			--if DebugOptions == true then -- This should prevent the infamous 6 key spawning
+		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then
 			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare())
-			--end
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
 			if (GFollowDistance ~= 50) then GFollowDistance = GFollowDistance + 1 end
 			getSpecificPlayer(0):Say("Spread out more(" .. tostring(GFollowDistance) .. ")")
@@ -439,7 +438,6 @@ function supersurvivortemp(keyNum)
 			getSpecificPlayer(0):Say("Stay closer(" .. tostring(GFollowDistance) .. ")")
 		elseif (keyNum == 0) then
 			local attacker = getSpecificPlayer(0)
-			local victim = getSpecificPlayer(0)
 			local weapon = attacker:getPrimaryHandItem()
 			local angle = getSpecificPlayer(0):getAngle()
 			local dir = IsoDirections.fromAngle(angle)
@@ -478,22 +476,21 @@ function supersurvivortemp(keyNum)
 			getSpecificPlayer(0):Say(tostring(coveredFire))
 		elseif (keyNum == getCore():getKey("Call Closest Non-Group Member")) then
 			local mySS = SSM:Get(0)
+			local SS = SSM:GetClosestNonParty();
 
-			local SS = SSM:GetClosestNonParty()
 			if (SS) then
-				mySS:Speak(GetDialogue("HeyYou"))
-				SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false))
+				mySS:Speak(GetDialogue("HeyYou"));
+				SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false));
 			end
 		elseif (keyNum == getCore():getKey("Toggle Group Window")) then
-			-- Old menu.
-			--myGroupWindow:setVisible(not myGroupWindow:getIsVisible())
-			--if(myGroupWindow:getIsVisible()) then myGroupWindow:Update()
-			--else mySurvivorInfoWindow:setVisible(false) end
-			window_super_survivors_visibility()
+			window_super_survivors_visibility();
 		elseif (keyNum == getCore():getKey("Ask Closest Group Member to Follow")) then
 			local mySS = SSM:Get(0)
+
 			if (mySS:getGroupID() ~= nil) then
-				local myGroup = SSGM:Get(mySS:getGroupID())
+			
+				local myGroup = SSGM:Get(mySS:getGroupID());
+
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
 					if (member) then
@@ -501,13 +498,7 @@ function supersurvivortemp(keyNum)
 							member:Get():getForname() .. getActionText("ComeWithMe_After"))
 						member:getTaskManager():clear()
 						member:getTaskManager():AddToTop(FollowTask:new(member, mySS:Get()))
-						--mySS:DebugSay("Follow Task triggered in supersurvivorsmod - path a")
-					else
-						--print("getClosestMember returned nil")
 					end
-				else
-					--mySS:DebugSay("no group")
-					--print("cant call close member bc no group for player detected")
 				end
 			end
 		elseif (keyNum == getCore():getKey("Call Closest Group Member")) then -- t key
@@ -559,7 +550,6 @@ function supersurvivortemp(keyNum)
 			end
 			if (not dest) then dest = self.parent.player:getCurrentSquare() end
 
-
 			if (storagecontainer) then
 				getSpecificPlayer(0):Say(tostring(storagecontainer));
 				GTask = CleanInvTask:new(SS, dest, false);
@@ -574,7 +564,6 @@ function supersurvivortemp(keyNum)
 end
 
 Events.OnKeyPressed.Add(supersurvivortemp);
-
 
 function SuperSurvivorsOnEquipPrimary(player, weapon)
 	if (player:isLocalPlayer() == false) then
