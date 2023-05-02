@@ -16,7 +16,7 @@ PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-pol
 
 Based on my code review of the workshop item, I have found some of the referencing functions from other mods but were uncredited.  
 
-__My "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__  
+_ _ __My "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__  _ _
 
 ## Here are the workshop items I have found, but were uncredited
 Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.
