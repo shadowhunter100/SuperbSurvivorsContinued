@@ -113,7 +113,7 @@ function GroupWindow:Update()
 				print("post removal members count is:" .. tostring(Group:getMemberCount()))
 			elseif (value.getName ~= nil) and (value:isInCell() == false) then
 				name = value:getName()
-				local coords = getCoordsFromID(value:getID())
+				local coords = GetCoordsFromID(value:getID())
 				if (coords == 0) then
 					print("re-loading survivor who has no loc on survivor map")
 					SSM:LoadSurvivor(value:getID(), getSpecificPlayer(0):getCurrentSquare())
@@ -131,7 +131,7 @@ function GroupWindow:Update()
 				--Group:Print()
 			else
 				name = getContextMenuText("MIASurvivor") .. "[" .. tostring(value) .. "]"
-				local coords = getCoordsFromID(value)
+				local coords = GetCoordsFromID(value)
 				if (coords == 0) then
 					print("re-loading survivor who has no loc on survivor map")
 					SSM:LoadSurvivor(value, getSpecificPlayer(0):getCurrentSquare())

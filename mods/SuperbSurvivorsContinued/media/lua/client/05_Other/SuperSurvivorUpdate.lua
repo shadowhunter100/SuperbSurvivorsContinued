@@ -107,12 +107,12 @@ function SuperSurvivorPlayerInit(player)
 				end
 			end
 
-			for i = 1, 8 do 
-				player:LevelPerk(Perks.FromString("Aiming")) 
+			for i = 1, 8 do
+				player:LevelPerk(Perks.FromString("Aiming"))
 			end
-			
-			for i = 1, 8 do 
-				player:LevelPerk(Perks.FromString("Reloading")) 
+
+			for i = 1, 8 do
+				player:LevelPerk(Perks.FromString("Reloading"))
 			end
 
 			if (wife) then
@@ -123,7 +123,7 @@ function SuperSurvivorPlayerInit(player)
 		end
 
 		local mydesc = getSpecificPlayer(0):getDescriptor();
-		
+
 		if (SSM:Get(0)) then SSM:Get(0):setName(mydesc:getForename()) end
 	else
 		print("finished initing player index " .. tostring(player:getPlayerNum()))

@@ -64,7 +64,7 @@ function getAmmoBox(bullets)
 	elseif (bullets == "50BMGBullets") then
 		return "50BMGBox"
 	elseif (bullets == "Nails") then
-		return "NailsBox"                           -- For Nailgun Mod
+		return "NailsBox" -- For Nailgun Mod
 	end
 
 	return ""
@@ -123,7 +123,7 @@ function getBoxCount(box)
 	elseif (box == "50BMGBox") then
 		return 10
 	elseif (box == "NailsBox") then
-		return 100                          -- For Nailgun Mod
+		return 100 -- For Nailgun Mod
 	else
 		return 0
 	end

@@ -36,10 +36,10 @@ end
 
 function SpiralSearch:next()
 	if (self.ix == self.iy
-	or (self.ix < 0 and self.ix == 0-self.iy)
-	or (self.ix > 0 and self.ix == 1-self.iy)) then
+			or (self.ix < 0 and self.ix == 0 - self.iy)
+			or (self.ix > 0 and self.ix == 1 - self.iy)) then
 		-- change direction
-		local dx = 0-self.deltay
+		local dx = 0 - self.deltay
 		local dy = self.deltax
 		self.deltax = dx
 		self.deltay = dy

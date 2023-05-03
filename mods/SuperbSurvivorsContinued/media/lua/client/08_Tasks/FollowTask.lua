@@ -155,7 +155,7 @@ function FollowTask:update()
 			ropeSquare = self.parent:findNearestSheetRopeSquare(true)
 			if (ropeSquare) then
 				--self.parent:Speak("here i am")
-				local window = getSquaresNearWindow(ropeSquare)
+				local window = GetSquaresNearWindow(ropeSquare)
 				if (window) then
 					self.parent:DebugSay("FollowTask is about to trigger a StopWalk! Path A")
 					self.parent:StopWalk()

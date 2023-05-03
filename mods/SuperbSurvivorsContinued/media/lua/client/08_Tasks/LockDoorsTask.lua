@@ -40,7 +40,7 @@ function LockDoorsTask:update()
 		local door;
 		local building = self.parent:getBuilding();
 		if (building ~= nil) then
-			door = getUnlockedDoor(building, self.parent.player)
+			door = GetUnlockedDoor(building, self.parent.player)
 			if (not door) then
 				self.parent:DebugSay("door NOT found")
 				self.Complete = true
@@ -55,10 +55,10 @@ function LockDoorsTask:update()
 		end
 
 
-		local distance = getDistanceBetween(self.parent.player, getDoorsInsideSquare(door));
+		local distance = getDistanceBetween(self.parent.player, GetDoorsInsideSquare(door));
 		if (distance > 2) or (self.parent.player:getZ() ~= door:getZ()) then
 			self.parent:DebugSay("walking to door")
-			self.parent:walkToDirect(getDoorsInsideSquare(door))
+			self.parent:walkToDirect(GetDoorsInsideSquare(door))
 		else
 			if (door:IsOpen()) then
 				door:ToggleDoor(self.parent.player)

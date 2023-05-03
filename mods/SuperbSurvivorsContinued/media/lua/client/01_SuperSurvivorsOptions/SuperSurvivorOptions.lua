@@ -1,10 +1,15 @@
 -- thanks and some credit to Fenris_Wolf from ORGM mod for creating this hotkeys file!  I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 
+local isLocalLoggingEnabled = true;
+
 local function getOptionText(text)
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: getOptionText() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, text);
 	return getText("UI_Option_SS_" .. text)
 end
 
 local function doesOptionsFileExist()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: doesOptionsFileExist() called");
 	local readFile = getFileReader("SurvivorOptions.lua", false)
 
 	if (readFile) then
@@ -14,9 +19,11 @@ local function doesOptionsFileExist()
 	end
 end
 
-function LoadSurvivorOptions()
+local function loadSurvivorOptions()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: loadSurvivorOptions() called");
 	if (doesOptionsFileExist() == false) then
-		print("could not load survivor options file")
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+			"function: LoadSurvivorOptions() - failed to load survivor options file");
 		return {}
 	end
 
@@ -31,7 +38,6 @@ function LoadSurvivorOptions()
 			table.insert(values, input);
 		end
 
-		--print("loading line: "..values[1] .. " " .. values[2])
 		if (fileTable[values[1]] == nil) then
 			fileTable[values[1]] = {};
 		end
@@ -46,71 +52,76 @@ function LoadSurvivorOptions()
 
 	readFile:close();
 
-	print("Loaded survivor options file");
 	return fileTable
 end
 
-SuperSurvivorOptions = LoadSurvivorOptions();
+SuperSurvivorOptions = loadSurvivorOptions();
 
-local GameOption = ISBaseObject:derive("GameOption");
 
-if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
-if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
-if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
-if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
-if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
-if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["MaxHostileSpawnRate"]) then SuperSurvivorOptions["MaxHostileSpawnRate"] = 17 end
-if (not SuperSurvivorOptions["InfinitAmmo"]) then SuperSurvivorOptions["InfinitAmmo"] = 2 end
-if (not SuperSurvivorOptions["NoPreSetSpawn"]) then SuperSurvivorOptions["NoPreSetSpawn"] = 2 end
-if (not SuperSurvivorOptions["NoIdleChatter"]) then SuperSurvivorOptions["NoIdleChatter"] = 2 end
-if (not SuperSurvivorOptions["SafeBase"]) then SuperSurvivorOptions["SafeBase"] = 2 end
-if (not SuperSurvivorOptions["SurvivorBases"]) then SuperSurvivorOptions["SurvivorBases"] = 2 end
-if (not SuperSurvivorOptions["FindWork"]) then SuperSurvivorOptions["FindWork"] = 2 end
-if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["SurvivorHunger"] = 2 end
-if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
-
-if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
-if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
-
-if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
-if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
-if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
-if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
-if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
-if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
-
-if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
-
-if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
-if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
-
-if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
-
-if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
-if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
-if (not SuperSurvivorOptions["AltSpawnAmount"]) then SuperSurvivorOptions["AltSpawnAmount"] = 1 end
-if (not SuperSurvivorOptions["SSHotkey1"]) then SuperSurvivorOptions["SSHotkey1"] = 6 end
-if (not SuperSurvivorOptions["SSHotkey2"]) then SuperSurvivorOptions["SSHotkey2"] = 10 end
-if (not SuperSurvivorOptions["SSHotkey3"]) then SuperSurvivorOptions["SSHotkey3"] = 27 end
-if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"] = 42 end
-
--- WIP - This "SuperSurvivorGetOption" is confusing... why even duplicate the option reference?
-function SuperSurvivorGetOption(option)
-	if (SuperSurvivorOptions[option] ~= nil) then
-		CreateLogLine("function: SuperSurvivorGetOption");
-		CreateLogLine(tostring(option) .. " : " .. tostring(tonumber(SuperSurvivorOptions[option])));
-		return tonumber(SuperSurvivorOptions[option]);
-	else
-		return 1
+-- WIP - Consider reducing the number of options... the "experimental" options don't even exist or they do not work at all.
+local function setDefaultSurivorOptions()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: setDefaultSurivorOptions() called");
+	if (not SuperSurvivorOptions) then
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+			"function: setDefaultSurivorOptions() - No Options found... creating default option values");
+		SuperSurvivorOptions = {};
 	end
+	if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
+	if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
+	if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
+	if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
+	if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
+	if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
+	if (not SuperSurvivorOptions["MaxHostileSpawnRate"]) then SuperSurvivorOptions["MaxHostileSpawnRate"] = 17 end
+	if (not SuperSurvivorOptions["InfinitAmmo"]) then SuperSurvivorOptions["InfinitAmmo"] = 2 end
+	if (not SuperSurvivorOptions["NoPreSetSpawn"]) then SuperSurvivorOptions["NoPreSetSpawn"] = 2 end
+	if (not SuperSurvivorOptions["NoIdleChatter"]) then SuperSurvivorOptions["NoIdleChatter"] = 2 end
+	if (not SuperSurvivorOptions["SafeBase"]) then SuperSurvivorOptions["SafeBase"] = 2 end
+	if (not SuperSurvivorOptions["SurvivorBases"]) then SuperSurvivorOptions["SurvivorBases"] = 2 end
+	if (not SuperSurvivorOptions["FindWork"]) then SuperSurvivorOptions["FindWork"] = 2 end
+	if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["SurvivorHunger"] = 2 end
+	if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
+
+	if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
+	if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
+
+	if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
+	if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
+	if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
+	if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
+	if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
+	if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
+
+	if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
+
+	if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
+	if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
+
+	if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
+
+	if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
+	if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
+	if (not SuperSurvivorOptions["AltSpawnAmount"]) then SuperSurvivorOptions["AltSpawnAmount"] = 1 end
+	if (not SuperSurvivorOptions["SSHotkey1"]) then SuperSurvivorOptions["SSHotkey1"] = 6 end
+	if (not SuperSurvivorOptions["SSHotkey2"]) then SuperSurvivorOptions["SSHotkey2"] = 10 end
+	if (not SuperSurvivorOptions["SSHotkey3"]) then SuperSurvivorOptions["SSHotkey3"] = 27 end
+	if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"] = 42 end
 end
 
+setDefaultSurivorOptions();
+
 function SuperSurvivorGetOptionValue(option)
-	local num = tonumber(SuperSurvivorOptions[option]);
-	CreateLogLine("function: SuperSurvivorGetOptionValue");
-	CreateLogLine(tostring(option) .. " : " .. tostring(num));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorGetOptionValue() called");
+	local num = 1;
+
+	-- Check if the SuperSurvivorOption is not equal to nil and update the num accordingly.
+	if (tonumber(SuperSurvivorOptions[option]) ~= nil) then
+		-- vscode settings, cannot cast a possible "nil" type to number type... but the condition check will address that.
+		---@diagnostic disable-next-line: cast-local-type
+		num = tonumber(SuperSurvivorOptions[option]);
+	end
+
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(option) .. " : " .. tostring(num));
 
 	if (option == "WifeSpawn") then
 		return (num ~= 1)
@@ -247,7 +258,8 @@ function SuperSurvivorGetOptionValue(option)
 	end
 end
 
-local function SaveSurvivorOptions()
+local function saveSurvivorOptions()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: saveSurvivorOptions() called");
 	local writeFile = getFileWriter("SurvivorOptions.lua", true, false)
 
 	for index, value in pairs(SuperSurvivorOptions) do
@@ -257,15 +269,21 @@ local function SaveSurvivorOptions()
 end
 
 local function SuperSurvivorSetOption(option, ToValue)
-	CreateLogLine("function: SuperSurvivorGetOptionValue");
-	CreateLogLine(tostring(option) .. " : " .. tostring(ToValue));
-	CreateLogLine(tostring(SuperSurvivorOptions[option]));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorSetOption() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(option) .. " : " .. tostring(ToValue));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(SuperSurvivorOptions[option]));
 	SuperSurvivorOptions[option] = ToValue
-	SaveSurvivorOptions();
+	saveSurvivorOptions();
 end
 
+local GameOption = ISBaseObject:derive("GameOption");
+
 function GameOption:new(name, control, arg1, arg2)
-	CreateLogLine("function: GameOption:new()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:new() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"name and control - " .. tostring(name) .. tostring(control));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"arguments - " .. tostring(arg1) .. " | " .. tostring(arg2));
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -290,25 +308,25 @@ end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:toUI()
-	CreateLogLine("function: GameOption:toUI()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:toUI() called");
 	print('ERROR: option "' .. self.name .. '" missing toUI()')
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:apply()
-	CreateLogLine("function: GameOption:apply()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:apply() called");
 	print('ERROR: option "' .. self.name .. '" missing apply()')
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:resetLua()
-	CreateLogLine("function: GameOption:resetLua()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:resetLua() called");
 	MainOptions.instance.resetLua = true
 end
 
 -- WIP - WHAT IS THIS SUPPOSED TO DO?
 function GameOption:restartRequired(oldValue, newValue)
-	CreateLogLine("function: GameOption:restartRequired()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:restartRequired() called");
 	if getCore():getOptionOnStartup(self.name) == nil then
 		getCore():setOptionOnStartup(self.name, oldValue)
 	end
@@ -319,7 +337,7 @@ function GameOption:restartRequired(oldValue, newValue)
 end
 
 function GameOption:onChangeComboBox(box)
-	CreateLogLine("function: GameOption:onChangeComboBox()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeComboBox() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(box)
@@ -327,7 +345,7 @@ function GameOption:onChangeComboBox(box)
 end
 
 function GameOption:onChangeTickBox(index, selected)
-	CreateLogLine("function: GameOption:onChangeTickBox()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeTickBox() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(index, selected)
@@ -335,7 +353,7 @@ function GameOption:onChangeTickBox(index, selected)
 end
 
 function GameOption:onChangeVolumeControl(control, volume)
-	CreateLogLine("function: GameOption:onChangeVolumeControl()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:onChangeVolumeControl() called");
 	self.gameOptions:onChange(self)
 	if self.onChange then
 		self:onChange(control, volume)
@@ -343,7 +361,7 @@ function GameOption:onChangeVolumeControl(control, volume)
 end
 
 function SuperSurvivorsRefreshSettings()
-	CreateLogLine("function: SuperSurvivorsRefreshSettings()");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: SuperSurvivorsRefreshSettings() called");
 	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
 
 	Option_Perception_Bonus = SuperSurvivorGetOptionValue("Option_Perception_Bonus")
@@ -392,50 +410,63 @@ SuperSurvivorsRefreshSettings();
 -- -- -- -- --
 SSHotKeyOptions = {};
 
--- WIP - Why are Orders already in the Options menu? Can't even assign a new hotkey to it.
+-- WIP - getContextMenuText() is considered a global function... need to update casing to reflect that.
 function getContextMenuText(text)
-	CreateLogLine("function: getContextMenuText()" .. " : " .. text);
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: getContextMenuText() called" .. " : " .. text);
 	return getText("ContextMenu_SS_" .. text)
 end
 
-for i = 1, #Orders do
-	CreateLogLine("Orders" .. OrderDisplayName[Orders[i]]);
-	SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]];
-	table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]]);
+-- WIP - Why are Orders already in the Options menu? Can't even assign a new hotkey to it.
+local function insertOrders()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: insertOrders() called");
+
+	for i = 1, #Orders do
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "Order = " .. OrderDisplayName[Orders[i]]);
+		SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]];
+		table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]]);
+	end
 end
+
+insertOrders();
 -- ----------------------- --
 -- Options Menu controller --
 -- ----------------------- --
 --TODO: separate UI into sections (spawn , raiders , hotkeys)
 function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, options, description)
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: MainOptions:addCustomCombo() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"id: " .. tostring(id) ..
+		" | label: " .. tostring(label)
+	);
 	local spawnrateCombo = self:addCombo(splitpoint, y, comboWidth, 20, label, options, 1)
 	if description then
 		spawnrateCombo:setToolTipMap({ defaultTooltip = description });
 	end
 
-	local gameOption = GameOption:new(id, spawnrateCombo);
+	SuperbSurvivor_gameOption = GameOption:new(id, spawnrateCombo);
 
-	function gameOption.toUI(self)
+	function SuperbSurvivor_gameOption.toUI(self)
 		local box = self.control
-		box.selected = SuperSurvivorGetOption(id)
+		box.selected = tonumber(SuperSurvivorOptions[id])
 	end
 
-	function gameOption.apply(self)
+	function SuperbSurvivor_gameOption.apply(self)
 		local box = self.control
+
 		if box.options[box.selected] then
 			SuperSurvivorSetOption(id, box.selected)
-			print("setting " .. id .. " option")
+			CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "setting " .. id .. " option");
 			SuperSurvivorsRefreshSettings()
 		else
-			print("error could not set " .. id .. " option")
+			CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "could not set " .. id .. " option");
 		end
 	end
 
-	function gameOption:onChange(box)
-		print("option changed to " .. tostring(box.selected))
+	function SuperbSurvivor_gameOption:onChange(box)
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "option changed to " .. tostring(box.selected));
 	end
 
-	self.gameOptions:add(gameOption)
+	self.gameOptions:add(SuperbSurvivor_gameOption)
 end
 
 -- ---------------------------------------- --
@@ -446,10 +477,12 @@ end
 -- ---------------------------------------- --
 
 function NPC_Options_OffOn() -- Because Order of position Matters of if 'Off' and 'On' is first in the options in question
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: NPC_Options_OffOn() called");
 	return { getOptionText("Off"), getOptionText("On") }
 end
 
 function NPC_Options_ZeroToOneHundred()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: NPC_Options_ZeroToOneHundred() called");
 	return { "0%", "1%", "2%", "3%", "4%", "5%", "6%", "7%", "8%", "9%", "10%", "11%", "12%", "13%", "14%", "15%",
 		"16%", "17%", "18%", "19%", "20%", "21%", "22%", "23%", "24%", "25%", "26%", "27%", "28%", "29%", "30%",
 		"31%", "32%", "33%", "34%", "35%", "36%", "37%", "38%", "39%", "40%", "41%", "42%", "43%", "44%", "45%",
@@ -460,6 +493,9 @@ function NPC_Options_ZeroToOneHundred()
 end
 
 function NPC_Options_ZeroToOneHundredAbsolute()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"function: NPC_Options_ZeroToOneHundredAbsolute() called");
+
 	return { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
 		"19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
 		"37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54",
@@ -473,6 +509,7 @@ local oldCreate = MainOptions.create
 
 -- overwrite it
 function MainOptions:create()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: MainOptions:create() called");
 	oldCreate(self)
 	for _, keyTextElement in pairs(MainOptions.keyText) do
 		repeat
@@ -482,6 +519,8 @@ function MainOptions:create()
 			if not keyTextElement or not keyTextElement.txt then
 				break;
 			end
+			-- WIP - CANNOT SEEM TO FIND THIS "keyTextElement.txt file in zomboid folder nor mod folder..."
+			-- WIP - are we looking at "keys.ini" under Zomboid/Lua?
 			local label = keyTextElement.txt -- our ISLabel item is stored in keyTextElement.txt
 			-- We need to do a few things here to prep the new entries.
 			-- 1) We wont have a proper translation, and the translation will be set to
@@ -799,7 +838,13 @@ function MainOptions:create()
 	self.mainPanel:setScrollHeight(y + self.addY + 20)
 end
 
-CreateLogLine("Begin logging keybind actions...");
-for i, b in ipairs(keyBinding) do
-	CreateLogLine(tostring(i) .. " : " .. tostring(b.value));
+local function logKeyBindings()
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: logKeyBindings() called");
+	for i, b in ipairs(keyBinding) do
+		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, tostring(b.value) .. " = " .. tostring(i));
+	end
+end
+
+if (IsLoggingEnabled) then
+	logKeyBindings();
 end

@@ -107,7 +107,7 @@ function AttemptEntryIntoBuildingTask:update()
 	end
 
 	if (self.parent:isInAction() == false) then
-		if (self.TargetSquare == nil) then self.TargetSquare = getRandomFreeBuildingSquare(self.parent.TargetBuilding) end
+		if (self.TargetSquare == nil) then self.TargetSquare = GetRandomFreeBuildingSquare(self.parent.TargetBuilding) end
 
 		if (self.TargetSquare ~= nil) then
 			local door = self.parent:inFrontOfDoor()
@@ -144,7 +144,7 @@ function AttemptEntryIntoBuildingTask:update()
 			elseif self.TryWindow then
 				if (self.Window == nil) then
 					-- If the line below this marked out line doesn't work? change them.
-					--	self.Window = getCloseWindow(self.parent.TargetBuilding,self.parent.player)
+					--	self.Window = GetNearestWindow(self.parent.TargetBuilding,self.parent.player)
 					--	Update: So far it works. If you want to make NPCs not break the window barricades, use the Alt line
 					--	self.Window = self.parent:getUnBarricadedWindowAlt(self.parent.TargetBuilding)
 					self.Window = self.parent:getUnBarricadedWindow(self.parent.TargetBuilding)
@@ -167,7 +167,7 @@ function AttemptEntryIntoBuildingTask:update()
 					local distanceToWindow = getDistanceBetween(self.Window, self.parent.player)
 
 					if distanceToWindow > 1.0 then
-						local outsidesquare = getOutsideSquare(self.Window, self.parent.TargetBuilding)
+						local outsidesquare = GetOutsideSquare(self.Window, self.parent.TargetBuilding)
 						if (outsidesquare == nil) or (self.parent:getWalkToAttempt(outsidesquare) > 10) then
 							self.TryWindow = nil
 							self.TryBreakDoor = true
@@ -214,7 +214,7 @@ function AttemptEntryIntoBuildingTask:update()
 				end
 			elseif self.TryBreakDoor then
 				--				--if(debugOutput) then print( self.parent:getName() .. " " .."on try break down door") end
-				local doorSquare = getDoorsOutsideSquare(self.Door, self.parent.player)
+				local doorSquare = GetDoorsOutsideSquare(self.Door, self.parent.player)
 
 				if (doorSquare == nil) then
 					self:giveUpOnBuilding()

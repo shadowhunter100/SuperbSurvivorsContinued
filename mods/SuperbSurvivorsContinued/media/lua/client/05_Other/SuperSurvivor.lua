@@ -58,11 +58,11 @@ function SuperSurvivor:new(isFemale, square)
 	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
 	survivorObject.userName:ReadString(survivorObject.player:getForname())
 
-	survivorObject.Bikuri = TextDrawObject.new(); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setAllowAnyImage(true); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultFont(UIFont.Large);  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultColors(255, 255, 0, 255);  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:ReadString("!")  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri = TextDrawObject.new();          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:setAllowAnyImage(true);          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:setDefaultFont(UIFont.Large);    -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:setDefaultColors(255, 255, 0, 255); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:ReadString("!")                  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 
 	survivorObject.NoResultActions = {}
 	survivorObject.YesResultActions = {}
@@ -170,11 +170,11 @@ function SuperSurvivor:newLoad(ID, square)
 	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
 	survivorObject.userName:ReadString(survivorObject.player:getForname())
 
-	survivorObject.Bikuri = TextDrawObject.new() -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setAllowAnyImage(true); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultFont(UIFont.Large); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri = TextDrawObject.new()           -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:setAllowAnyImage(true);          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:setDefaultFont(UIFont.Large);    -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	survivorObject.Bikuri:setDefaultColors(255, 255, 0, 255); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:ReadString("!") -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	survivorObject.Bikuri:ReadString("!")                  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 
 	survivorObject.NoResultActions = {}
 	survivorObject.YesResultActions = {}
@@ -440,7 +440,7 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 	sy = sy - self.userName:getHeight()
 
 	self.userName:AddBatchedDraw(sx, sy, true)
-	
+
 	-- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	if (self.HasQuestion or self.HasBikuri) then
 		sy = sy - self.Bikuri:getHeight()
@@ -975,7 +975,7 @@ end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
 	if (SafeBase) then -- if safe base mode on survivors consider other claimed buildings already explored
-		local tempsquare = getRandomBuildingSquare(building)
+		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
 			local tempgroup = SSGM:GetGroupIdFromSquare(tempsquare)
@@ -1042,7 +1042,7 @@ end
 function SuperSurvivor:getBuildingExplored(building)
 	if self:isTargetBuildingClaimed(building) then return true end
 
-	local sq = getRandomBuildingSquare(building)
+	local sq = GetRandomBuildingSquare(building)
 
 	if (sq) then
 		if (self:getExplore(sq) > 0) then
@@ -1644,7 +1644,7 @@ function SuperSurvivor:walkTo(square)
 end
 
 function SuperSurvivor:walkTowards(x, y, z)
-	local towardsSquare = getTowardsSquare(self:Get(), x, y, z)
+	local towardsSquare = GetTowardsSquare(self:Get(), x, y, z)
 	if (towardsSquare == nil) then return false end
 
 	self:WalkToPoint(towardsSquare:getX(), towardsSquare:getY(), towardsSquare:getZ())
@@ -3842,7 +3842,7 @@ function SuperSurvivor:checkVictimCoverValue(victim)
 	local totalCover      = 0
 	local blockingObjects = 0
 
-	local squares         = getSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
+	local squares = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
 
 	for _, square in ipairs(squares) do
 		local objs = square:getObjects()
@@ -4227,7 +4227,7 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 								local item = items:get(j):getItem()
 
 								if (tempDistance < closestSoFar) and (item ~= nil) and (not item:isBroken()) and
-									(((TypeOrCategory == "Category") and (hasCategory(item, itemType))) or
+									(((TypeOrCategory == "Category") and (HasCategory(item, itemType))) or
 										((TypeOrCategory == "Type") and (tostring(item:getType()) == itemType or tostring(item:getName()) == itemType))) then
 									--print("hit "..tempDistance)
 									itemtoReturn = item

@@ -40,6 +40,6 @@ function FleeFromHereTask:update()
 	self.parent:setSneaking(false)
 	self.parent:setRunning(true)
 
-	self.parent:walkTo(getFleeSquare(self.parent.player, self.fleeFromHere))
+	self.parent:walkTo(GetFleeSquare(self.parent.player, self.fleeFromHere, 7))
 	self.parent:NPC_EnforceWalkNearMainPlayer()
 end

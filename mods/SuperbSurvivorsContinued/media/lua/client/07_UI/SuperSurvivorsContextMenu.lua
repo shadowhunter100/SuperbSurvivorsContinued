@@ -79,7 +79,7 @@ function SurvivorOrder(test, player, order, orderParam)
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
 			local storagearea = ASuperSurvivor:getGroup():getGroupArea("CorpseStorageArea")
 			if (storagearea[1] ~= 0) then
-				dropSquare = getCenterSquareFromArea(storagearea[1], storagearea[2], storagearea[3], storagearea[4],
+				dropSquare = GetCenterSquareFromArea(storagearea[1], storagearea[2], storagearea[3], storagearea[4],
 					storagearea[5])
 			end
 			TaskMangerIn:AddToTop(PileCorpsesTask:new(ASuperSurvivor, dropSquare))
@@ -90,7 +90,7 @@ function SurvivorOrder(test, player, order, orderParam)
 				ASuperSurvivor:Speak(getContextMenuText("IGoGuard"))
 				TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, area))
 				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
-				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, getRandomAreaSquare(area)))
+				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, GetRandomAreaSquare(area)))
 				ASuperSurvivor:Speak("And Where are you wanting me to guard at again? Show me an area to guard at.")
 			else
 				print("settubg player current square as guard sqwuarte")
@@ -147,7 +147,7 @@ function SurvivorOrder(test, player, order, orderParam)
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
 			local woodstoragearea = ASuperSurvivor:getGroup():getGroupArea("WoodStorageArea")
 			if (woodstoragearea[1] ~= 0) then
-				dropSquare = getCenterSquareFromArea(woodstoragearea[1], woodstoragearea
+				dropSquare = GetCenterSquareFromArea(woodstoragearea[1], woodstoragearea
 					[2], woodstoragearea[3], woodstoragearea[4], woodstoragearea[5])
 			end
 			TaskMangerIn:AddToTop(GatherWoodTask:new(ASuperSurvivor, dropSquare))

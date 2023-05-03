@@ -47,12 +47,12 @@ function AIManager_Companion(TMI)
 	-- --------------------------------------- --
 	if (NPC:getGroupRole() == "Companion") then
 		-- Keep the follower near the player
-		if ((DistanceBetweenMainPlayer > 8) and (getSpecificPlayer(0):isOutside() and NPC:Get():isOutside()))         -- Both Outside
+		if ((DistanceBetweenMainPlayer > 8) and (getSpecificPlayer(0):isOutside() and NPC:Get():isOutside()))    -- Both Outside
 			or ((DistanceBetweenMainPlayer > 5) and (not getSpecificPlayer(0):isOutside() and not NPC:Get():isOutside())) -- Both Inside
 			or ((DistanceBetweenMainPlayer > 5) and (getSpecificPlayer(0):isOutside() and not NPC:Get():isOutside())) -- Player Outside / NPC Inside
 			or ((DistanceBetweenMainPlayer > 5) and (not getSpecificPlayer(0):isOutside() and NPC:Get():isOutside())) -- Player Inside / NPC Outside
 		then
-			if (DistanceBetweenMainPlayer > 10) then                                                                  -- Double checker
+			if (DistanceBetweenMainPlayer > 10) then                                                             -- Double checker
 				TMI:clear()
 				TMI:AddToTop(FollowTask:new(NPC, getSpecificPlayer(0)))
 				NPC:DebugSay("Companion Went FAR too far away, CLEARING TASKS - and returning companion!")

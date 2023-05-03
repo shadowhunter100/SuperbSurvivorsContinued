@@ -85,7 +85,7 @@ end
 function SuperSurvivorGroup:getGroupAreaCenterSquare(thisArea)
 	local area = self.GroupAreas[thisArea]
 	if (area[1] ~= 0) then
-		return getCenterSquareFromArea(area[1], area[2], area[3], area[4], area[5])
+		return GetCenterSquareFromArea(area[1], area[2], area[3], area[4], area[5])
 	else
 		return nil
 	end
