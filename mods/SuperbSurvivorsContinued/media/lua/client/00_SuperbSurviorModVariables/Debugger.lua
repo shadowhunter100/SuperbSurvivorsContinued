@@ -1,7 +1,7 @@
 require "00_SuperbSurviorModVariables.SuperSurviorGlobalVariables";
 
 local modId = "SuperbSurvivorsContinued";
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 --[[
     Credit to "haram gaming#4572" in PZ Discord for providing a text file writing example.

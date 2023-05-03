@@ -1,6 +1,6 @@
 --this file has methods related to looting
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 --- CATEGORIES ---
 
 ---@alias itemCategory
