@@ -1,49 +1,45 @@
 require "02_Utilities/SuperSurvivorWeaponsList"
 
+-- WIP - ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
 OnTickTicks = 0;
 SuperSurvivorSelectAnArea = false;
 SuperSurvivorMouseDownTicks = 0;
 
--- local playerSurvivor = getSpecificPlayer(0); -- WIP not sure why there are so many "getSpecificPlayer(0)" calls when a local variable should work...
--- getSpecificPlayer(0):Say("") -- this is the function call for player character to "say" a text above their head.
-
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function SuperSurvivorsOnTick()
 	if (SuperSurvivorSelectAnArea) then
 		if (Mouse.isLeftDown()) then
-			SuperSurvivorMouseDownTicks = SuperSurvivorMouseDownTicks + 1;
+			SuperSurvivorMouseDownTicks = SuperSurvivorMouseDownTicks + 1
 		else
-			SuperSurvivorMouseDownTicks = 0;
-			SuperSurvivorSelectingArea = 0;
+			SuperSurvivorMouseDownTicks = 0
+			SuperSurvivorSelectingArea = 0
 		end
 
 		if (SuperSurvivorMouseDownTicks > 15) then -- 10 acts instant, so a left click would reset the select area finalization.
 			if (Highlightcenter == nil) or (not SuperSurvivorSelectingArea) then
-				Highlightcenter = getMouseSquare();
-				HighlightX1 = getMouseSquareX();
-				HighlightX2 = getMouseSquareX();
-				HighlightY1 = getMouseSquareY();
-				HighlightY2 = getMouseSquareY();
+				Highlightcenter = getMouseSquare()
+				HighlightX1 = getMouseSquareX()
+				HighlightX2 = getMouseSquareX()
+				HighlightY1 = getMouseSquareY()
+				HighlightY2 = getMouseSquareY()
 			end
 
 			SuperSurvivorSelectingArea = true
 
-			if (HighlightX1 == nil) or (HighlightX1 > getMouseSquareX()) then HighlightX1 = getMouseSquareX(); end
-			if (HighlightX2 == nil) or (HighlightX2 <= getMouseSquareX()) then HighlightX2 = getMouseSquareX(); end
-			if (HighlightY1 == nil) or (HighlightY1 > getMouseSquareY()) then HighlightY1 = getMouseSquareY(); end
-			if (HighlightY2 == nil) or (HighlightY2 <= getMouseSquareY()) then HighlightY2 = getMouseSquareY(); end
+			if (HighlightX1 == nil) or (HighlightX1 > getMouseSquareX()) then HighlightX1 = getMouseSquareX() end
+			if (HighlightX2 == nil) or (HighlightX2 <= getMouseSquareX()) then HighlightX2 = getMouseSquareX() end
+			if (HighlightY1 == nil) or (HighlightY1 > getMouseSquareY()) then HighlightY1 = getMouseSquareY() end
+			if (HighlightY2 == nil) or (HighlightY2 <= getMouseSquareY()) then HighlightY2 = getMouseSquareY() end
 		elseif (SuperSurvivorSelectingArea) then
-			SuperSurvivorSelectingArea = false;
-			--print("Done:"..tostring(HighlightX1)..","..tostring(HighlightX2).." : "..tostring(HighlightY1)..","..tostring(HighlightY2))
+			SuperSurvivorSelectingArea = false
 		end
 
 		if (Mouse.isLeftPressed()) then
-			SuperSurvivorSelectAreaHOLD = false; -- I did a folder scan, this var doesn't do anything?
-			SuperSurvivorSelectingArea = false; -- new
+			SuperSurvivorSelectAreaHOLD = false -- I did a folder scan, this var doesn't do anything?
+			SuperSurvivorSelectingArea = false -- new
 		end
-
 
 		if (HighlightX1) and (HighlightX2) then
 			local x1 = HighlightX1
@@ -53,238 +49,191 @@ function SuperSurvivorsOnTick()
 
 			for xx = x1, x2 do
 				for yy = y1, y2 do
-					local sq = getCell():getGridSquare(xx, yy, getSpecificPlayer(0):getZ());
-
-					if (sq) and (sq:getFloor()) then
-						sq:getFloor():setHighlighted(true);
-					end
+					local sq = getCell():getGridSquare(xx, yy, getSpecificPlayer(0):getZ())
+					if (sq) and (sq:getFloor()) then sq:getFloor():setHighlighted(true) end
 				end
 			end
 		end
 	end
 
-	--if getSpecificPlayer(0) ~= nil then getSpecificPlayer(0):Say(tostring(getCell()~= nil) ..",".. tostring(SSM ~= nil) ..",".. tostring(UIManager.isShowPausedMessage()) ..",".. tostring(getGameSpeed()) ) end
-
 	if SSM ~= nil and getGameSpeed() ~= 0 then
-		SSM:update();
-		OnTickTicks = OnTickTicks + 1;
+		SSM:update()
+		OnTickTicks = OnTickTicks + 1
 
 		if (OnTickTicks % 1000 == 0) then
-			SSGM:Save(); -- WIP - console.txt logged an error tracing to this line
-			saveSurvivorMap(); -- WIP - console.txt logged an error tracing to this line
+			SSGM:Save()
+			saveSurvivorMap()
 		end
 	end
 end
 
-Events.OnRenderTick.Add(SuperSurvivorsOnTick);
-
+Events.OnRenderTick.Add(SuperSurvivorsOnTick)
 
 function SuperSurvivorSoldierSpawn(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
+	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
+
+	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 
-	return ASuperSurvivor;
+	return ASuperSurvivor
 end
 
 function SuperSurvivorSoldierSpawnMelee(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
+	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true);
+	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 
-	return ASuperSurvivor;
+	return ASuperSurvivor
 end
 
 function SuperSurvivorSoldierSpawnHostile(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
+	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
+	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor:setHostile(true);
+	ASuperSurvivor:setHostile(true)
 
-	return ASuperSurvivor;
+	return ASuperSurvivor
 end
 
 function SuperSurvivorSoldierSpawnMeleeHostile(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo");
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
+	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true);
+	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor:setHostile(true);
+	ASuperSurvivor:setHostile(true)
 
-	return ASuperSurvivor;
+	return ASuperSurvivor
 end
 
 function SuperSurvivorRandomSpawn(square)
-	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48);
+	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 
+	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48)
 	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC) and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC) then
-		-- WIP there is a type warning here... 'MaxChanceToBeHostileNPC' is potentially a boolean rather than a number.
 		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
 	end
 
 	if (ASuperSurvivor ~= nil) then
 		if (ZombRand(100) < (ChanceToSpawnWithGun + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
+			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 		elseif (ZombRand(100) < (ChanceToSpawnWithWep + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true);
+			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 		end
-
-		if (ZombRand(100) < FinalChanceToBeHostile) then
-			ASuperSurvivor:setHostile(true);
-		end
+		if (ZombRand(100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
 	end
 
 	-- clear the immediate area
 	local zlist = getCell():getZombieList();
-
 	if (zlist ~= nil) then
 		for i = zlist:size() - 1, 0, -1 do
-			-- WIP - undeclared 'z' global variable?...
 			z = zlist:get(i);
-
-			if (z ~= nil
-					and (math.abs(z:getX() - square:getX()) < 2)
-					and (math.abs(z:getY() - square:getY()) < 2)
-					and (z:getZ() == square:getZ())
-				) then
-				print("delete zombie " .. z:getX() .. " " .. square:getX() .. " " .. z:getY() .. " " .. square:getY())
+			if z ~= nil and (math.abs(z:getX() - square:getX()) < 2) and (math.abs(z:getY() - square:getY()) < 2) and (z:getZ() == square:getZ()) then
 				z:removeFromWorld();
 			end
 		end
 	end
 
-	return ASuperSurvivor;
+	return ASuperSurvivor
 end
 
 function SuperSurvivorsLoadGridsquare(square)
 	if (square ~= nil) then
-		local x = square:getX();
-		local y = square:getY();
-		local z = square:getZ();
-		local key = x .. y .. z;
+		local x = square:getX()
+		local y = square:getY()
+		local z = square:getZ()
+		local key = x .. y .. z
 
 		if (SurvivorMap == nil) then
 			local sc = 1;
 			RPresetSpawns = {};
-
 			while PresetSpawns[sc] do
-				if PresetSpawns[sc].Z == nil then
-					PresetSpawns[sc].Z = 0;
-				end
-
+				if PresetSpawns[sc].Z == nil then PresetSpawns[sc].Z = 0 end
 				local pindex = PresetSpawns[sc].X .. PresetSpawns[sc].Y .. PresetSpawns[sc].Z;
-				--print("pindex:"..pindex.." for index: "..sc);
 				RPresetSpawns[pindex] = PresetSpawns[sc];
 				RPresetSpawns[pindex].ID = sc;
-				sc = sc + 1; -- WIP - Why even bother doing a while loop here? it's a single call...
+				sc = sc + 1;
 			end
-			--print(tostring(sc).." preset survivors set into RPresetSpawns");
 
-			SSM:init();
-			SSGM:Load();
+			SSM:init()
+			SSGM:Load()
 
-			-- WIP - WHAT IS THIS SUPPOSED TO DO?
 			-- I don't think we need this now? But Further testing is needed
+			-- WIP - IS IT SAFE TO REMOVE? AND WHICH ARE NOT SAFE TO REMOVE?
 			local gameVersion = getCore():getGameVersion()
-			IsDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() > 50 and gameVersion:getMinor() < 53);
-			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53);
+			IsDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() > 50 and gameVersion:getMinor() < 53)
+			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
 
 			if IsDamageBroken then
-				MaxChanceToBeHostileNPC = 0;
+				MaxChanceToBeHostileNPC = 0
 			end
-
 			if IsDamageBroken then
-				RaidsStartAfterThisManyHours = 9999999;
+				RaidsStartAfterThisManyHours = 9999999
 			end
 
 			if (DoesFileExist("SurvivorLocX")) then
 				SurvivorMap = loadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
-				-- print("Survivor map loaded")
 			else
-				SurvivorMap = {};
-				SurvivorLocX = {};
-				SurvivorLocY = {};
-				SurvivorLocZ = {};
-				-- print("Survivor map set")
-				-- SuperSurvivorPlayerInit(getSpecificPlayer(0)) move to on create character
+				SurvivorMap = {}
+				SurvivorLocX = {}
+				SurvivorLocY = {}
+				SurvivorLocZ = {}
 			end
 		end
 
-		-- WIP - WHAT IS THIS SUPPOSED TO DO?
 		if (key) and (SurvivorMap[key] ~= nil) and (#SurvivorMap[key] > 0) then
 			local i = 1;
-			--table.sort(SurvivorMap[key]);
+
 			while (SurvivorMap[key][i] ~= nil) do
 				SSM:LoadSurvivor(SurvivorMap[key][i], square);
 				i = i + 1;
 			end
 			i = 1;
-			--while(SurvivorMap[key][i]) do								
-			--	table.remove(SurvivorMap[key],SurvivorMap[key][i]);			
-			--	i = i + 1;
-			--end
+
 			SurvivorMap[key] = {} -- i think this is faster			
 		end
 
-		if (square:getModData().SurvivorSquareLoaded == nil)
-			and (square:getZ() == 0 or square:isOutside() == false)
-			and (not SuperSurvivorPresetSpawn(square))
-		then
+		if (square:getModData().SurvivorSquareLoaded == nil) and (square:getZ() == 0 or square:isOutside() == false) and (not SuperSurvivorPresetSpawn(square)) then
 			SurvivorMap[key] = {}
 			square:getModData().SurvivorSquareLoaded = true
-			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
+			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 
-			if (SuperSurvivorSpawnRate ~= 0) and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0)
-				and (square:getZoneType() == "TownZone")
-				and (not square:isSolid()) then
+			if (SuperSurvivorSpawnRate ~= 0) and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0) and (square:getZoneType() == "TownZone") and (not square:isSolid()) then
 				-- NON ALT SPAWNING GROUPS
 				if (ZombRand(15) == 0) then -- spawn group
-					local hours = getGameTime():getWorldAgeHours();
-					local RaiderGroup = SSGM:newGroup();
-
-					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then
-						RaiderGroup = SSGM:newGroup();
-					end
-
+					local hours = getGameTime():getWorldAgeHours()
+					local RaiderGroup = SSGM:newGroup()
+					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then RaiderGroup = SSGM:newGroup() end
 					local GroupSize = ZombRand(2, 5) + math.floor(hours / (24 * 30))
-					if (GroupSize > 10) then
-						GroupSize = 10;
-					end
-
-					if (GroupSize < 2) then
-						GroupSize = 2;
-					end
-
-					local oldGunSpawnChance = ChanceToSpawnWithGun;
-					-- ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5 -- -- WIP - WHAT IS THIS SUPPOSED TO DO? Why was it reassigning itself?
-					local groupHostility;
-					local Leader;
+					if (GroupSize > 10) then GroupSize = 10 end
+					if (GroupSize < 2) then GroupSize = 2 end
+					local oldGunSpawnChance = ChanceToSpawnWithGun
+					ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5
+					local groupHostility
+					local Leader
 
 					for i = 1, GroupSize do
-						-- WIP - undeclared 'raider' global variable?...
 						raider = SuperSurvivorRandomSpawn(square)
 						if (i == 1) then
 							RaiderGroup:addMember(raider, "Leader")
@@ -294,15 +243,13 @@ function SuperSurvivorsLoadGridsquare(square)
 							RaiderGroup:addMember(raider, "Guard")
 							raider:setHostile(groupHostility)
 							raider:getTaskManager():AddToTop(FollowTask:new(raider, Leader:Get()))
-							--	--mySS:DebugSay("Follow task in survivorsmod lua - Path b")
 						end
 
 						if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
 					end
-					-- WIP - WHAT IS THIS SUPPOSED TO DO? Why is it reassigning itself?
-					ChanceToSpawnWithGun = oldGunSpawnChance;
+					ChanceToSpawnWithGun = oldGunSpawnChance
 				else
-					SuperSurvivorRandomSpawn(square);
+					SuperSurvivorRandomSpawn(square)
 				end
 			end
 		end
@@ -311,21 +258,20 @@ end
 
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
 
-
 function SuperSurvivorsInit()
-	print("GAMESTART!");
-
-	GroupWindowCreate();
+	GroupWindowCreate()
 
 	SurvivorsCreatePVPButton()
+	AchievementsEnabled = false
 
-	AchievementsEnabled = false;
+	SurvivorTogglePVP()
 
-	if (IsoPlayer.getCoopPVP() == true or Option_ForcePVP == 1) then
-		SurvivorTogglePVP();
+	if (IsoPlayer.getCoopPVP() == true
+			or Option_ForcePVP == 1) then
+		SurvivorTogglePVP()
 	end
 
-	local player = getSpecificPlayer(0);
+	local player = getSpecificPlayer(0)
 	player:getModData().isHostile = false
 	player:getModData().ID = 0
 
@@ -338,17 +284,14 @@ function SuperSurvivorsInit()
 			player:getCurrentSquare():getE():AddWorldInventoryItem(key, 0.5, 0.5, 0);
 			player:getInventory():Remove(key);
 		end
-		--PVPDefault = true 	-- true or false : should pvp be on or off at game start true=on false=off
-		--ChanceToSpawnWithGun = 100 	-- choose from 0 to 100 (this is a % but dont put a % after the number)
-		--ChanceToBeHostileNPC = 100
 
 		local DeadGuardSquare = getCell():getGridSquare(7685, 11937, 1);
-		--local DeadGuardSquare = nil
+
 		if (DeadGuardSquare ~= nil) then
 			local SuperSurvivorDeadGuard = SSM:spawnSurvivor(false, DeadGuardSquare);
-			local DeadGuard = SuperSurvivorDeadGuard.player;
-
+			local DeadGuard = SuperSurvivorDeadGuard.player
 			SuperSurvivorDeadGuard:giveWeapon("Base.Pistol");
+
 			DeadGuard:Kill(nil);
 		end
 	end
@@ -357,8 +300,7 @@ end
 Events.OnGameStart.Add(SuperSurvivorsInit)
 
 function SuperSurvivorsOnSwing(player, weapon)
-	local ID = player:getModData().ID;
-
+	local ID = player:getModData().ID
 	if (ID ~= nil) then
 		local SS = SSM:Get(ID)
 		if (SS) and not player:isLocalPlayer() then
@@ -381,13 +323,9 @@ function SuperSurvivorsOnSwing(player, weapon)
 			if (weapon:isRoundChambered()) then
 				local range = weapon:getSoundRadius()
 				local volume = weapon:getSoundVolume()
-				--getWorldSoundManager():addWorldSound(player:getX(), player:getY(), range, volume)
-				--AddWorldSound(player,range)
 				addSound(player, player:getX(), player:getY(), player:getZ(), range, volume)
 				getSoundManager():PlayWorldSound(weapon:getSwingSound(), player:getCurrentSquare(), 0.5, range, 1.0,
 					false)
-
-				--print("gunshot sound made!" ..tostring(weapon:getSwingSound())..","..tostring(range))
 			end
 
 			player:NPCSetAttack(false)
@@ -428,17 +366,21 @@ Events.OnAIStateChange:Add(SuperSurvivorTest)
 
 -- WIP - Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
-	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "SuperSurvivorKeyBindAction() called");
-	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(keyNum));
 	if (getSpecificPlayer(0)) then
-		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then
-			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare())
+		--getSpecificPlayer(0):Say(tostring(keyNum))
+
+		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
+			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare());
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
-			if (GFollowDistance ~= 50) then GFollowDistance = GFollowDistance + 1 end
-			getSpecificPlayer(0):Say("Spread out more(" .. tostring(GFollowDistance) .. ")")
+			if (GFollowDistance ~= 50) then
+				GFollowDistance = GFollowDistance + 1;
+			end
+			getSpecificPlayer(0):Say("Spread out more(" .. tostring(GFollowDistance) .. ")");
 		elseif (keyNum == getCore():getKey("Lower Follow Distance")) then
-			if (GFollowDistance ~= 0) then GFollowDistance = GFollowDistance - 1 end
-			getSpecificPlayer(0):Say("Stay closer(" .. tostring(GFollowDistance) .. ")")
+			if (GFollowDistance ~= 0) then
+				GFollowDistance = GFollowDistance - 1;
+			end
+			getSpecificPlayer(0):Say("Stay closer(" .. tostring(GFollowDistance) .. ")");
 		elseif (keyNum == 0) then
 			local attacker = getSpecificPlayer(0)
 			local weapon = attacker:getPrimaryHandItem()
@@ -450,6 +392,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 			local victimSquare1 = getSpecificPlayer(0):getCurrentSquare()
 			local victimSquare2 = victimSquare1:getTileInDirection(dir)
 			local coveredFire = false
+
 			for q = 1, 2 do
 				local objs
 				if q == 1 then
@@ -460,7 +403,8 @@ function SuperSurvivorKeyBindAction(keyNum)
 
 				local aimingPerk = attacker:getPerkLevel(Perks.Aiming)
 				local hitChance = weapon:getHitChance() + weapon:getAimingPerkHitChanceModifier() * aimingPerk
-				local movePenalty = attacker:getBeenMovingFor() - (weapon:getAimingTime() + aimingPerk * 2)
+				local movePenalty = attacker:getBeenMovingFor() - (weapon:getAimingTime() + aimingPerk * 2);
+
 				if movePenalty < 0 then movePenalty = 0 end
 				if attacker:HasTrait("Marksman") then hitChance = hitChance + 20 end
 
@@ -473,26 +417,25 @@ function SuperSurvivorKeyBindAction(keyNum)
 						--getSpecificPlayer(0):Say(tostring(objs:get(i):getObjectName()))
 					end
 				end
+
 				if (coveredFire) then break end
 			end
 
 			getSpecificPlayer(0):Say(tostring(coveredFire))
 		elseif (keyNum == getCore():getKey("Call Closest Non-Group Member")) then
 			local mySS = SSM:Get(0)
-			local SS = SSM:GetClosestNonParty();
 
+			local SS = SSM:GetClosestNonParty()
 			if (SS) then
-				mySS:Speak(GetDialogue("HeyYou"));
-				SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false));
+				mySS:Speak(GetDialogue("HeyYou"))
+				SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false))
 			end
 		elseif (keyNum == getCore():getKey("Toggle Group Window")) then
-			window_super_survivors_visibility();
+			window_super_survivors_visibility()
 		elseif (keyNum == getCore():getKey("Ask Closest Group Member to Follow")) then
 			local mySS = SSM:Get(0)
-
 			if (mySS:getGroupID() ~= nil) then
-				local myGroup = SSGM:Get(mySS:getGroupID());
-
+				local myGroup = SSGM:Get(mySS:getGroupID())
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
 					if (member) then
@@ -500,51 +443,49 @@ function SuperSurvivorKeyBindAction(keyNum)
 							member:Get():getForname() .. getActionText("ComeWithMe_After"))
 						member:getTaskManager():clear()
 						member:getTaskManager():AddToTop(FollowTask:new(member, mySS:Get()))
+						--mySS:DebugSay("Follow Task triggered in supersurvivorsmod - path a")
+					else
+						--("getClosestMember returned nil")
 					end
+				else
+					--mySS:DebugSay("no group")
+					--("cant call close member bc no group for player detected")
 				end
 			end
 		elseif (keyNum == getCore():getKey("Call Closest Group Member")) then -- t key
 			local mySS = SSM:Get(0)
 			if (mySS:getGroupID() ~= nil) then
 				local myGroup = SSGM:Get(mySS:getGroupID())
-
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
-
 					if (member) then
 						mySS:Get():Say(member:Get():getForname() .. ", come here.")
 						member:getTaskManager():AddToTop(ListenTask:new(member, mySS:Get(), false))
 					else
-						--print("getClosestMember returned nil")
+						--("getClosestMember returned nil")
 					end
 				else
 					--mySS:DebugSay("no group")
-					--print("cant call close member bc no group for player detected")
+					--("cant call close member bc no group for player detected")
 				end
 			end
 		elseif (keyNum == 1) then -- esc key
+			--getSpecificPlayer(0):save()
 			SSM:SaveAll()
 			SSGM:Save()
-			saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
+			saveSurvivorMap()
+			-- The 'key' in markouts are the default keys befor a player changes them
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
-			local index = SuperSurvivorOptions["SSHotkey1"];
-			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
-			getSpecificPlayer(0):Say(tostring(index));
+			local index = SuperSurvivorGetOption("SSHotkey1")
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key
-			local index = SuperSurvivorOptions["SSHotkey2"];
-			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
-			getSpecificPlayer(0):Say(tostring(index));
+			local index = SuperSurvivorGetOption("SSHotkey2")
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key
-			local index = SuperSurvivorOptions["SSHotkey3"];
-			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
-			getSpecificPlayer(0):Say(tostring(index));
+			local index = SuperSurvivorGetOption("SSHotkey3")
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key
-			local index = SuperSurvivorOptions["SSHotkey4"];
-			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
-			getSpecificPlayer(0):Say(tostring(index));
+			local index = SuperSurvivorGetOption("SSHotkey4")
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == 0) then
 			local SS = SSM:Get(0);
@@ -557,11 +498,14 @@ function SuperSurvivorKeyBindAction(keyNum)
 			else
 				dest = Group:getGroupAreaCenterSquare("FoodStorageArea")
 			end
-			if (not dest) then dest = self.parent.player:getCurrentSquare() end
+			-- WIP - where did this "self" come from? commented out until further notice...
+			-- if (not dest) then dest = self.parent.player:getCurrentSquare() end
 
 			if (storagecontainer) then
 				getSpecificPlayer(0):Say(tostring(storagecontainer));
 				GTask = CleanInvTask:new(SS, dest, false);
+			else
+
 			end
 		elseif (keyNum == 0) then
 			getSpecificPlayer(0):Say(tostring("updating"));
@@ -570,7 +514,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 	end
 end
 
-Events.OnKeyPressed.Add(SuperSurvivorHotKeyAction);
+Events.OnKeyPressed.Add(SuperSurvivorKeyBindAction);
 
 function SuperSurvivorsOnEquipPrimary(player, weapon)
 	if (player:isLocalPlayer() == false) then
@@ -587,9 +531,8 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 
 				if (ammotypes ~= nil) and (ID ~= nil) then
 					SS.AmmoTypes = ammotypes
-					player:getModData().ammotype = "";
-					player:getModData().ammoBoxtype = "";
-
+					player:getModData().ammotype = ""
+					player:getModData().ammoBoxtype = ""
 					for i = 1, #SS.AmmoTypes do
 						SS.AmmoBoxTypes[i] = getAmmoBox(SS.AmmoTypes[i])
 						player:getModData().ammotype = player:getModData().ammotype .. " " .. SS.AmmoTypes[i]
@@ -613,41 +556,26 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
+	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48);
 
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48)
-	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC) and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC) then
+	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC)
+		and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC)
+	then
 		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
 	end
 
 	if (getSpecificPlayer(0) == nil) then return false end
-	-- WIP - WHY DOES THIS NEED TO RUN?
 	--this unrelated to raiders but need this to run every once in a while
-	getSpecificPlayer(0):getModData().hitByCharacter = false;
-	getSpecificPlayer(0):getModData().semiHostile = false;
-	getSpecificPlayer(0):getModData().dealBreaker = nil;
+	-- WIP - WHY DOES THIS NEED TO RUN?
+	getSpecificPlayer(0):getModData().hitByCharacter = false
+	getSpecificPlayer(0):getModData().semiHostile = false
+	getSpecificPlayer(0):getModData().dealBreaker = nil
 
 	if (getSpecificPlayer(0):isAsleep()) then
-		SSM:AsleepHealAll();
+		SSM:AsleepHealAll()
 	end
 
-	--	if(getSpecificPlayer(0):getModData().LastRaidTime == nil) then getSpecificPlayer(0):getModData().LastRaidTime = (RaidsStartAfterThisManyHours + 2) end
-
-	--	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime
-
 	local mySS = SSM:Get(0)
-	--local hours = math.floor(getGameTime():getWorldAgeHours())
-	--local chance = RaidChanceForEveryTenMinutes
-	--if(mySS ~= nil and not mySS:isInBase()) then
-	--	chance = (RaidChanceForEveryTenMinutes*1.5)
-	--end
-
-	--local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours)
-	--local RaiderResult = (ZombRand(chance) == 0)
-	--local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours)
-	--local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= 1) -- The timer will now not care
-
-	--	if RaidersStartTimePassed and ( RaiderResult or RaiderAtLeastTimedExceeded ) and mySS ~= nil then
-
 	local hisGroup = mySS:getGroup()
 
 	if (hisGroup == nil) then return false end
@@ -665,9 +593,6 @@ function SuperSurvivorsNewSurvivorManager()
 
 	for i = 1, 10 do
 		local spawnLocation = ZombRand(4)
-		local x = 0;
-		local y = 0;
-
 		if (spawnLocation == 0) then
 			--mySS:Speak("spawn from north")
 			x = center:getX() + (ZombRand(drange) - range);
@@ -712,7 +637,6 @@ function SuperSurvivorsNewSurvivorManager()
 		ChanceToSpawnWithGun    = ChanceToSpawnWithGun --* 1.5
 
 		for i = 1, GroupSize do
-			-- WIP - once again, "raider" is an undeclared variable... is it global or not?
 			raider = SuperSurvivorRandomSpawn(spawnSquare)
 			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
 			--else RaiderGroup:addMember(raider,"Guard") end
@@ -745,9 +669,6 @@ function SuperSurvivorsNewSurvivorManager()
 				bag:AddItem(food)
 			end
 
-			--local number = ZombRand(1,3)
-			--setRandomSurvivorSuit(raider,"Rare","Bandit"..tostring(number))
-
 			GetRandomSurvivorSuit(raider) -- Even if it says 'raider' it's not giving raider outfits
 		end
 		ChanceToSpawnWithGun = oldGunSpawnChance
@@ -758,9 +679,7 @@ end
 function SuperSurSurvivorSpawnGenFivePercent()
 	if (AlternativeSpawning == 2) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenTenPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenTenPercent said no. AlternativeSpawning was not 1 ('2')")
 		return false
 	end
 end
@@ -768,9 +687,7 @@ end
 function SuperSurSurvivorSpawnGenTenPercent()
 	if (AlternativeSpawning == 3) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenTenPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenTenPercent said no. AlternativeSpawning was not 2 ('3')")
 		return false
 	end
 end
@@ -778,9 +695,7 @@ end
 function SuperSurSurvivorSpawnGenTwentyPercent()
 	if (AlternativeSpawning == 4) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenTwentyPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenTwentyPercent said no. AlternativeSpawning was not 3 ('4')")
 		return false
 	end
 end
@@ -788,9 +703,7 @@ end
 function SuperSurSurvivorSpawnGenThirtyPercent()
 	if (AlternativeSpawning == 5) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenThirtyPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenThirtyPercent said no. AlternativeSpawning was not 4 ('5')")
 		return false
 	end
 end
@@ -798,9 +711,7 @@ end
 function SuperSurSurvivorSpawnGenFourtyPercent()
 	if (AlternativeSpawning == 6) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenFourtyPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenFourtyPercent said no. AlternativeSpawning was not 5 ('6') ")
 		return false
 	end
 end
@@ -808,15 +719,186 @@ end
 function SuperSurSurvivorSpawnGenFiftyPercent()
 	if (AlternativeSpawning == 7) then
 		SuperSurvivorsNewSurvivorManager()
-		print("SuperSurSurvivorSpawnGenFiftyPercent said yes.")
 	else
-		print("SuperSurSurvivorSpawnGenFiftyPercent said no. AlternativeSpawning was not 6 ('7') ")
 		return false
 	end
 end
 
--- Debug version
 function SuperSurvivorDoRandomSpawns()
+	local RealAlternativeSpawning = AlternativeSpawning - 1
+	for i = RealAlternativeSpawning, 1, -1 do
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then
+			SuperSurSurvivorSpawnGenFivePercent();
+		end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then
+			SuperSurSurvivorSpawnGenTenPercent();
+		end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then
+			SuperSurSurvivorSpawnGenTwentyPercent()
+		end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then
+			SuperSurSurvivorSpawnGenThirtyPercent()
+		end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
+			SuperSurSurvivorSpawnGenFourtyPercent()
+		end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then SuperSurSurvivorSpawnGenFiftyPercent() end
+	end
+end
+
+Events.EveryHours.Add(SuperSurvivorDoRandomSpawns);
+-- Yes the variables have 'percent' in the name, that's because before this version, I had made alt spawning work different.
+-- Do not be confused, the naming scheme means nothing here.
+
+function SuperSurvivorsRaiderManager()
+	if (getSpecificPlayer(0) == nil) then return false end
+	--this unrelated to raiders but need this to run every once in a while
+	getSpecificPlayer(0):getModData().hitByCharacter = false
+	getSpecificPlayer(0):getModData().semiHostile = false
+	getSpecificPlayer(0):getModData().dealBreaker = nil
+
+	if (getSpecificPlayer(0):isAsleep()) then
+		SSM:AsleepHealAll()
+	end
+
+	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then getSpecificPlayer(0):getModData().LastRaidTime = (RaidsStartAfterThisManyHours + 2) end
+	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime
+
+	local mySS = SSM:Get(0)
+	local hours = math.floor(getGameTime():getWorldAgeHours())
+	local chance = RaidChanceForEveryTenMinutes
+	if (mySS ~= nil and not mySS:isInBase()) then
+		chance = (RaidChanceForEveryTenMinutes * 1.5)
+	end
+
+	local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours)
+	local RaiderResult = (ZombRand(chance) == 0)
+	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours)
+
+	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
+		local hisGroup = mySS:getGroup()
+
+		if (hisGroup == nil) then return false end
+
+		local bounds = hisGroup:getBounds()
+		local center
+		if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
+		if not center then center = getSpecificPlayer(0):getCurrentSquare() end
+
+		local spawnSquare
+
+		local success = false
+		local range = 45
+		local drange = range * 2
+
+		for i = 1, 10 do
+			local spawnLocation = ZombRand(4)
+			if (spawnLocation == 0) then
+				--mySS:Speak("spawn from north")
+				x = center:getX() + (ZombRand(drange) - range);
+				y = center:getY() - range;
+			elseif (spawnLocation == 1) then
+				--mySS:Speak("spawn from east")
+				x = center:getX() + range;
+				y = center:getY() + (ZombRand(drange) - range);
+			elseif (spawnLocation == 2) then
+				--mySS:Speak("spawn from south")
+				x = center:getX() + (ZombRand(drange) - range);
+				y = center:getY() + range;
+			elseif (spawnLocation == 3) then
+				--mySS:Speak("spawn from west")
+				x = center:getX() - range;
+				y = center:getY() + (ZombRand(drange) - range);
+			end
+
+			spawnSquare = getCell():getGridSquare(x, y, 0)
+
+			if (spawnSquare ~= nil) and (not hisGroup:IsInBounds(spawnSquare)) and spawnSquare:isOutside() and (not spawnSquare:IsOnScreen()) and (not spawnSquare:isSolid()) and (spawnSquare:isSolidFloor()) then
+				success = true
+				break
+			end
+		end
+
+
+		if (success) and (spawnSquare) then
+			getSpecificPlayer(0):getModData().LastRaidTime = hours
+			if (getSpecificPlayer(0):isAsleep()) then
+				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"))
+				getSpecificPlayer(0):forceAwake()
+			else
+				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
+			end
+			-- RAIDER GROUPS
+			local RaiderGroup = SSGM:newGroup()
+			local GroupSize = ZombRand(1, hisGroup:getMemberCount()) + math.floor(hours / (24 * 30))
+			if (GroupSize > 10) then
+				GroupSize = 10
+			elseif (GroupSize < 2) then
+				GroupSize = 2
+			end
+
+			for i = 1, GroupSize do
+				-- WIP - why is "raider" a global variable? it wasn't even initiated previously...
+				raider = SuperSurvivorRandomSpawn(spawnSquare)
+				if (i == 1) then
+					RaiderGroup:addMember(raider, "Leader")
+				else
+					RaiderGroup:addMember(raider, "Guard")
+				end
+				raider:setHostile(true)
+				raider.player:getModData().isRobber = true
+				local name = raider:getName()
+				raider:setName("Raider " .. name)
+				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()))
+				if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+
+				local food, bag
+				bag = raider:getBag()
+				local count = ZombRand(0, 3)
+				for i = 1, count do
+					food = "Base.CannedCorn"
+					bag:AddItem(food)
+				end
+				local count = ZombRand(0, 3)
+				for i = 1, count do
+					food = "Base.Apple"
+					bag:AddItem(food)
+				end
+
+				local number = ZombRand(1, 3)
+				setRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
+			end
+
+			RaiderGroup:AllSpokeTo()
+		end
+	end
+end
+
+Events.EveryTenMinutes.Add(SuperSurvivorsRaiderManager);
+NumberOfLocalPlayers = 0
+
+function SSCreatePlayerHandle(newplayerID)
+	local newplayer = getSpecificPlayer(newplayerID)
+	local MD = newplayer:getModData()
+
+	if (not MD.ID) and (newplayer:isLocalPlayer()) then
+		SuperSurvivorPlayerInit(newplayer)
+
+		if (getSpecificPlayer(0) and (not getSpecificPlayer(0):isDead()) and (getSpecificPlayer(0) ~= newplayer)) then
+			local MainSS = SSM:Get(0);
+			local MainSSGroup = MainSS:getGroup()
+			NumberOfLocalPlayers = NumberOfLocalPlayers + 1
+			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers)
+			newSS:setID(NumberOfLocalPlayers)
+			MainSSGroup:addMember(newSS, "Guard");
+		end
+	end
+end
+
+Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
+
+-- DEBUG FUNCTIONS BELOW
+function SuperSurvivorDoRandomSpawnsDebug()
 	if (DebugOptions == true) then
 		local RealAlternativeSpawning = AlternativeSpawning - 1
 		for i = RealAlternativeSpawning, 1, -1
@@ -929,214 +1011,5 @@ function SuperSurvivorDoRandomSpawns()
 			print("")
 			print("---------------- SuperSurvivorDoRandomSpawns() FINISH -----------------------")
 		end
-	else -- if (DebugOptions == false)
-		local RealAlternativeSpawning = AlternativeSpawning - 1
-		for i = RealAlternativeSpawning, 1, -1
-		do
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then SuperSurSurvivorSpawnGenFivePercent() end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then SuperSurSurvivorSpawnGenTenPercent() end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then
-				SuperSurSurvivorSpawnGenTwentyPercent()
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then
-				SuperSurSurvivorSpawnGenThirtyPercent()
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
-				SuperSurSurvivorSpawnGenFourtyPercent()
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then SuperSurSurvivorSpawnGenFiftyPercent() end
-		end
 	end
 end
-
-Events.EveryHours.Add(SuperSurvivorDoRandomSpawns);
--- Yes the variables have 'percent' in the name, that's because before this version, I had made alt spawning work different.
--- Do not be confused, the naming scheme means nothing here.
-
-function SuperSurvivorsRaiderManager()
-	if (getSpecificPlayer(0) == nil) then return false end
-	--this unrelated to raiders but need this to run every once in a while
-	getSpecificPlayer(0):getModData().hitByCharacter = false
-	getSpecificPlayer(0):getModData().semiHostile = false
-	getSpecificPlayer(0):getModData().dealBreaker = nil
-
-	if (getSpecificPlayer(0):isAsleep()) then
-		SSM:AsleepHealAll()
-	end
-	--end
-
-	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then getSpecificPlayer(0):getModData().LastRaidTime = (RaidsStartAfterThisManyHours + 2) end
-	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime
-
-	--rediculous amount of raiders ---
-	--RaidsAtLeastEveryThisManyHours = 1
-	--RaidsStartAfterThisManyHours = 0
-	--RaidChanceForEveryTenMinutes = 4
-	--rediculous amount of raiders ---	END
-
-	local mySS = SSM:Get(0)
-	local hours = math.floor(getGameTime():getWorldAgeHours())
-	local chance = RaidChanceForEveryTenMinutes
-	if (mySS ~= nil and not mySS:isInBase()) then
-		chance = (RaidChanceForEveryTenMinutes * 1.5)
-	end
-
-	local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours)
-	local RaiderResult = (ZombRand(chance) == 0)
-	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours)
-
-	print("Last raid time is: " .. tostring(LastRaidTime) .. ". Current time is:" .. tostring(hours))
-	print("Raiders start time is passed?: " .. tostring(RaidersStartTimePassed))
-	print("chance for raiders is 1 in " .. tostring(chance) .. " result is " .. tostring(RaiderResult))
-	print("At least this many days (" ..
-		tostring(RaidsAtLeastEveryThisManyHours) .. ") time exceeded: " .. tostring(RaiderAtLeastTimedExceeded))
-
-	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
-		local hisGroup = mySS:getGroup()
-
-		if (hisGroup == nil) then return false end
-
-		local bounds = hisGroup:getBounds()
-		local center
-		if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
-		if not center then center = getSpecificPlayer(0):getCurrentSquare() end
-
-		local spawnSquare
-
-		local success = false
-		local range = 45
-		local drange = range * 2
-
-		for i = 1, 10 do
-			local spawnLocation = ZombRand(4)
-			local x = 0;
-			local y = 0;
-
-			if (spawnLocation == 0) then
-				--mySS:Speak("spawn from north")
-				x = center:getX() + (ZombRand(drange) - range);
-				y = center:getY() - range;
-			elseif (spawnLocation == 1) then
-				--mySS:Speak("spawn from east")
-				x = center:getX() + range;
-				y = center:getY() + (ZombRand(drange) - range);
-			elseif (spawnLocation == 2) then
-				--mySS:Speak("spawn from south")
-				x = center:getX() + (ZombRand(drange) - range);
-				y = center:getY() + range;
-			elseif (spawnLocation == 3) then
-				--mySS:Speak("spawn from west")
-				x = center:getX() - range;
-				y = center:getY() + (ZombRand(drange) - range);
-			end
-
-			spawnSquare = getCell():getGridSquare(x, y, 0)
-
-			if (spawnSquare ~= nil) and (not hisGroup:IsInBounds(spawnSquare)) and spawnSquare:isOutside() and (not spawnSquare:IsOnScreen()) and (not spawnSquare:isSolid()) and (spawnSquare:isSolidFloor()) then
-				success = true
-				break
-			end
-		end
-
-
-		if (success) and (spawnSquare) then
-			getSpecificPlayer(0):getModData().LastRaidTime = hours
-			if (getSpecificPlayer(0):isAsleep()) then
-				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"))
-				getSpecificPlayer(0):forceAwake()
-			else
-				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
-			end
-			-- RAIDER GROUPS
-			local RaiderGroup = SSGM:newGroup()
-			local GroupSize = ZombRand(1, hisGroup:getMemberCount()) + math.floor(hours / (24 * 30))
-			if (GroupSize > 10) then
-				GroupSize = 10
-			elseif (GroupSize < 2) then
-				GroupSize = 2
-			end
-			local oldGunSpawnChance = ChanceToSpawnWithGun
-			ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5
-			print("raider group size:" .. tostring(GroupSize))
-			for i = 1, GroupSize do
-				print("Creating Raider...")
-				raider = SuperSurvivorRandomSpawn(spawnSquare)
-				if (i == 1) then
-					RaiderGroup:addMember(raider, "Leader")
-				else
-					RaiderGroup:addMember(raider, "Guard")
-				end
-				raider:setHostile(true)
-				raider.player:getModData().isRobber = true
-				local name = raider:getName()
-				raider:setName("Raider " .. name)
-				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()))
-				if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
-
-				local food, bag
-				bag = raider:getBag()
-				local count = ZombRand(0, 3)
-				for i = 1, count do
-					food = "Base.CannedCorn"
-					bag:AddItem(food)
-				end
-				local count = ZombRand(0, 3)
-				for i = 1, count do
-					food = "Base.Apple"
-					bag:AddItem(food)
-				end
-
-				local number = ZombRand(1, 3)
-				setRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
-			end
-			ChanceToSpawnWithGun = oldGunSpawnChance
-			RaiderGroup:AllSpokeTo()
-		end
-	end
-end
-
-Events.EveryTenMinutes.Add(SuperSurvivorsRaiderManager);
-NumberOfLocalPlayers = 0;
-
-function SSCreatePlayerHandle(newplayerID)
-	local newplayer = getSpecificPlayer(newplayerID)
-
-	print("OnCreatePlayer event triggered in Super Survivors ID:" .. tostring(newplayerID))
-
-	local MD = newplayer:getModData()
-
-	if (not MD.ID) and (newplayer:isLocalPlayer()) then
-		SuperSurvivorPlayerInit(newplayer)
-
-		if (getSpecificPlayer(0) and (not getSpecificPlayer(0):isDead()) and (getSpecificPlayer(0) ~= newplayer)) then
-			local MainSS = SSM:Get(0);
-			local MainSSGroup = MainSS:getGroup()
-
-			NumberOfLocalPlayers = NumberOfLocalPlayers + 1
-
-			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers)
-			newSS:setID(NumberOfLocalPlayers)
-
-			print("new survivor ID is " .. tostring(newSS:getID()))
-
-			MainSSGroup:addMember(newSS, "Guard");
-		end
-	end
-end
-
-Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
-
--- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
-function SuperSurvivorSays1()
-	getSpecificPlayer(0):Say(GFollowDistance);
-end
--- Events.OnKeyPressed.Add(SuperSurvivorSays1);
-
-function SuperSurvivorOnCreateLivingChar(character)
-	print("OnCreateLivingChar:" .. tostring(character))
-	if (instanceof(character, "IsoZombie")) then
-		print("It's a zombie!")
-	end
-end
-
-Events.OnCreateLivingCharacter.Add(SuperSurvivorOnCreateLivingChar)

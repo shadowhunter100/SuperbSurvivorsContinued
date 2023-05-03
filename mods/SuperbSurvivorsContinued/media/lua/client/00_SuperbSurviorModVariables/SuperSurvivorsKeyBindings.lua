@@ -5,7 +5,7 @@
     Maybe look into ModOptions to handle the key bindings?
 --]]
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 -- WIP - The keybinding needs to be reworked.
 -- Using the global keyBinding table, to store all our binding values
