@@ -8,6 +8,8 @@ SuperSurvivorMouseDownTicks = 0;
 -- local playerSurvivor = getSpecificPlayer(0); -- WIP not sure why there are so many "getSpecificPlayer(0)" calls when a local variable should work...
 -- getSpecificPlayer(0):Say("") -- this is the function call for player character to "say" a text above their head.
 
+local isLocalLoggingEnabled = true;
+
 function SuperSurvivorsOnTick()
 	if (SuperSurvivorSelectAnArea) then
 		if (Mouse.isLeftDown()) then
@@ -424,9 +426,10 @@ end
 
 Events.OnAIStateChange:Add(SuperSurvivorTest)
 
--- Cows: Who thought it was a good idea to use numeric keys as the keybinding for orders? By default, the numeric keys were used for quick access to slot items...
--- WIP - Whoever wrote this function didn't consider the keybinding issues... This needs to be rewritten.
-function supersurvivortemp(keyNum)
+-- WIP - Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
+function SuperSurvivorKeyBindAction(keyNum)
+	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "SuperSurvivorKeyBindAction() called");
+	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(keyNum));
 	if (getSpecificPlayer(0)) then
 		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then
 			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare())
@@ -504,8 +507,10 @@ function supersurvivortemp(keyNum)
 			local mySS = SSM:Get(0)
 			if (mySS:getGroupID() ~= nil) then
 				local myGroup = SSGM:Get(mySS:getGroupID())
+
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
+
 					if (member) then
 						mySS:Get():Say(member:Get():getForname() .. ", come here.")
 						member:getTaskManager():AddToTop(ListenTask:new(member, mySS:Get(), false))
@@ -518,23 +523,28 @@ function supersurvivortemp(keyNum)
 				end
 			end
 		elseif (keyNum == 1) then -- esc key
-			--getSpecificPlayer(0):save()
 			SSM:SaveAll()
 			SSGM:Save()
 			saveSurvivorMap() -- WIP - console.txt logged an error tracing to this line
-
-			-- The 'key' in markouts are the default keys befor a player changes them
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
-			local index = SuperSurvivorGetOption("SSHotkey1")
+			local index = SuperSurvivorOptions["SSHotkey1"];
+			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
+			getSpecificPlayer(0):Say(tostring(index));
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key
-			local index = SuperSurvivorGetOption("SSHotkey2")
+			local index = SuperSurvivorOptions["SSHotkey2"];
+			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
+			getSpecificPlayer(0):Say(tostring(index));
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key
-			local index = SuperSurvivorGetOption("SSHotkey3")
+			local index = SuperSurvivorOptions["SSHotkey3"];
+			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
+			getSpecificPlayer(0):Say(tostring(index));
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key
-			local index = SuperSurvivorGetOption("SSHotkey4")
+			local index = SuperSurvivorOptions["SSHotkey4"];
+			CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, tostring(index));
+			getSpecificPlayer(0):Say(tostring(index));
 			SuperSurvivorsHotKeyOrder(index)
 		elseif (keyNum == 0) then
 			local SS = SSM:Get(0);
@@ -552,8 +562,6 @@ function supersurvivortemp(keyNum)
 			if (storagecontainer) then
 				getSpecificPlayer(0):Say(tostring(storagecontainer));
 				GTask = CleanInvTask:new(SS, dest, false);
-			else
-
 			end
 		elseif (keyNum == 0) then
 			getSpecificPlayer(0):Say(tostring("updating"));
@@ -562,7 +570,7 @@ function supersurvivortemp(keyNum)
 	end
 end
 
-Events.OnKeyPressed.Add(supersurvivortemp);
+Events.OnKeyPressed.Add(SuperSurvivorHotKeyAction);
 
 function SuperSurvivorsOnEquipPrimary(player, weapon)
 	if (player:isLocalPlayer() == false) then
@@ -1116,34 +1124,13 @@ function SSCreatePlayerHandle(newplayerID)
 	end
 end
 
-local stringTest = "localStringTest";
-
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
 
 -- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
 function SuperSurvivorSays1()
 	getSpecificPlayer(0):Say(GFollowDistance);
 end
-
--- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
-function SuperSurvivorSays2()
-	getSpecificPlayer(0):Say(SpeakEnabled);
-end
-
--- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
-function SuperSurvivorSays3()
-	getSpecificPlayer(0):Say(GlobalTestVariable);
-end
-
--- DEBUG FUNCTIONS BELOW, COMMENT OUT AS NEEDED.
-function SuperSurvivorSays4()
-	getSpecificPlayer(0):Say(stringTest);
-end
-
 -- Events.OnKeyPressed.Add(SuperSurvivorSays1);
--- Events.OnKeyPressed.Add(SuperSurvivorSays2);
--- Events.OnKeyPressed.Add(SuperSurvivorSays3);
--- Events.OnKeyPressed.Add(SuperSurvivorSays4);
 
 function SuperSurvivorOnCreateLivingChar(character)
 	print("OnCreateLivingChar:" .. tostring(character))

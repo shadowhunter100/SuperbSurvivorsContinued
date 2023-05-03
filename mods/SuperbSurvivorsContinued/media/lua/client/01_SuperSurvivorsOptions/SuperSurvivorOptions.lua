@@ -4,6 +4,7 @@ local isLocalLoggingEnabled = true;
 
 local function getOptionText(text)
 	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: getOptionText() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, text);
 	return getText("UI_Option_SS_" .. text)
 end
 
@@ -56,7 +57,6 @@ end
 
 SuperSurvivorOptions = loadSurvivorOptions();
 
-local GameOption = ISBaseObject:derive("GameOption");
 
 -- WIP - Consider reducing the number of options... the "experimental" options don't even exist or they do not work at all.
 local function setDefaultSurivorOptions()
@@ -276,11 +276,14 @@ local function SuperSurvivorSetOption(option, ToValue)
 	saveSurvivorOptions();
 end
 
+local GameOption = ISBaseObject:derive("GameOption");
+
 function GameOption:new(name, control, arg1, arg2)
 	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: GameOption:new() called");
 	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
 		"name and control - " .. tostring(name) .. tostring(control));
-	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "arguments - " .. tostring(arg1) .. tostring(arg2));
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"arguments - " .. tostring(arg1) .. " | " .. tostring(arg2));
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -431,19 +434,23 @@ insertOrders();
 --TODO: separate UI into sections (spawn , raiders , hotkeys)
 function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, options, description)
 	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "function: MainOptions:addCustomCombo() called");
+	CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled,
+		"id: " .. tostring(id) ..
+		" | label: " .. tostring(label)
+	);
 	local spawnrateCombo = self:addCombo(splitpoint, y, comboWidth, 20, label, options, 1)
 	if description then
 		spawnrateCombo:setToolTipMap({ defaultTooltip = description });
 	end
 
-	local gameOption = GameOption:new(id, spawnrateCombo);
+	SuperbSurvivor_gameOption = GameOption:new(id, spawnrateCombo);
 
-	function gameOption.toUI(self)
+	function SuperbSurvivor_gameOption.toUI(self)
 		local box = self.control
-		box.selected = SuperSurvivorGetOption(id)
+		box.selected = tonumber(SuperSurvivorOptions[id])
 	end
 
-	function gameOption.apply(self)
+	function SuperbSurvivor_gameOption.apply(self)
 		local box = self.control
 
 		if box.options[box.selected] then
@@ -455,11 +462,11 @@ function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, option
 		end
 	end
 
-	function gameOption:onChange(box)
+	function SuperbSurvivor_gameOption:onChange(box)
 		CreateLogLine("SuperSurvivorOptions", isLocalLoggingEnabled, "option changed to " .. tostring(box.selected));
 	end
 
-	self.gameOptions:add(gameOption)
+	self.gameOptions:add(SuperbSurvivor_gameOption)
 end
 
 -- ---------------------------------------- --
