@@ -1652,7 +1652,6 @@ function SuperSurvivor:walkTo(square)
 		local door = self:inFrontOfDoor()
 		if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (not door:isDestroyed()) then
 			local building = door:getOppositeSquare():getBuilding()
-			self:DebugSay("little pig, little pig")
 			self:NPC_ManageLockedDoors() -- This function will be sure ^ doesn't make the npc stuck in these cases
 		end
 		if (self.StuckDoorTicks < 7) then
@@ -1708,6 +1707,7 @@ function SuperSurvivor:NPC_IsOutside()
 end
 
 function SuperSurvivor:inFrontOfDoor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfDoor() called");
 	local cs = self.player:getCurrentSquare()
 	local osquare = GetAdjSquare(cs, "N")
 	if cs and osquare and cs:getDoorTo(osquare) then return cs:getDoorTo(osquare) end
@@ -1721,6 +1721,7 @@ function SuperSurvivor:inFrontOfDoor()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and cs:getDoorTo(osquare) then return cs:getDoorTo(osquare) end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfDoor() End ---");
 	return nil
 end
 
@@ -1807,6 +1808,7 @@ end
 
 -- since inFrontOfWindow (not alt) doesn't have this function's code
 function SuperSurvivor:inFrontOfWindowAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfWindowAlt() called");
 	local cs = self.player:getCurrentSquare()
 	local osquare = GetAdjSquare(cs, "N")
 	if cs and osquare and cs:getWindowTo(osquare) then return cs:getWindowTo(osquare) end
@@ -1820,6 +1822,7 @@ function SuperSurvivor:inFrontOfWindowAlt()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and cs:getWindowTo(osquare) then return cs:getWindowTo(osquare) end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfWindowAlt() End ---");
 	return nil
 end
 
@@ -1970,7 +1973,6 @@ function SuperSurvivor:Companion_DoSixthSenseScan()
 
 						if (self:getGroupRole() == "Companion") and (tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
 							self.dangerSeenCount = self.dangerSeenCount + 1
-							self:DebugSay("self.dangerSeenCount = " .. tostring(self.dangerSeenCount))
 						end
 
 						if (not CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
@@ -2469,6 +2471,7 @@ function SuperSurvivor:Task_IsThreaten_Verify() -- You want this function to ret
 end
 
 function SuperSurvivor:inFrontOfStairs()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfStairs() called");
 	local cs = self.player:getCurrentSquare()
 
 	if cs:HasStairs() then return true end
@@ -2484,7 +2487,8 @@ function SuperSurvivor:inFrontOfStairs()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and osquare:HasStairs() then return true end
 
-	return false
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfStairs() End ---");
+	return false;
 end
 
 function SuperSurvivor:updateTime()
@@ -3723,15 +3727,10 @@ function SuperSurvivor:NPC_ShouldRunOrWalk()
 
 		if (not (self:Task_IsNotFleeOrFleeFromSpot() == true)) or (distanceAlt <= 1) or (distance and self:Task_IsAttack()) or (distance and self:Task_IsThreaten() or (distance and self:Task_IsPursue())) then
 			self:setRunning(false)
-			self:NPCDebugPrint(
-				"NPC_ShouldRunOrWalk set running to false due to distance and Task_IsNotFleeOrFleeFromSpot returned true SRW_0001")
 		else
 			self:setRunning(true)
-			self:NPCDebugPrint(
-				"NPC_ShouldRunOrWalk set running to true due to not distance and Task_IsNotFleeOrFleeFromSpot returned false SRW_0002")
 		end
 	else
-		self:NPCDebugPrint("LastEnemySeen returned Nil so, setting NPC to run Reference Number SRW_0003")
 		self:setRunning(false)
 	end
 end
@@ -4432,18 +4431,6 @@ function SuperSurvivor:NPC_ForceFindNearestBuilding()
 end
 
 -- ALL DEBUG FUNCTIONS GO BELOW HERE --
-
-function SuperSurvivor:NPCDebugPrint(text)
-	if (DebugOptions == true) then
-		-- This gives spacing for the console so you can find it
-		--print("")
-		--print("NPCDebugPrint")
-		--print("NPC Name: "..tostring(self:getName()))
-		--print(text)
-		--print("")
-		--print("")
-	end
-end
 
 function SuperSurvivor:DebugSay(text)
 	-- Now, the In game DebugOptions will now effect this.

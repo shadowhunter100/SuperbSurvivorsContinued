@@ -383,6 +383,7 @@ function GetSquaresNearWindow(cs)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetSquaresNearWindow() END ---");
 	return nil
 end
 
@@ -444,6 +445,7 @@ function GetNearestWindow(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetNearestWindow() END ---");
 	return WindowOut
 end
 
@@ -465,6 +467,7 @@ function GetDoorsInsideSquare(door, player)
 	local sq2 = door:getSquare()
 	local sq3 = door:getOtherSideOfDoor(player)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetDoorsInsideSquare() END ---");
 	if (not sq1:isOutside()) then
 		return sq1
 	elseif (not sq2:isOutside()) then
@@ -490,6 +493,7 @@ function GetDoorsOutsideSquare(door, player)
 	local sq2 = door:getSquare()
 	local sq3 = door:getOtherSideOfDoor(player)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetDoorsOutsideSquare() END ---");
 	if (sq1 and sq1:isOutside()) then
 		return sq1
 	elseif (sq2 and sq2:isOutside()) then
@@ -541,6 +545,7 @@ function GetUnlockedDoor(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetUnlockedDoor() END ---");
 	return DoorOut
 end
 
@@ -582,6 +587,7 @@ function GetNearestDoor(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: getNearestDoor() END ---");
 	return DoorOut
 end
 
@@ -620,6 +626,7 @@ function NumberOfZombiesInOrAroundBuilding(building)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: NumberOfZombiesInOrAroundBuilding() END ---");
 	return count
 end
 
@@ -637,6 +644,7 @@ function GetRandomBuildingSquare(building)
 		return sq
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomBuildingSquare() END ---");
 	return nil
 end
 
@@ -662,6 +670,7 @@ function GetRandomFreeBuildingSquare(building)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomFreeBuildingSquare() END ---");
 	return nil
 end
 
