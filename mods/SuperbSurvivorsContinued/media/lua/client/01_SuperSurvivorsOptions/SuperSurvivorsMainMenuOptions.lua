@@ -201,10 +201,6 @@ function MainOptions:create()
                 label:setTranslation(getOptionText("RaiseFollowDistance"))
                 label:setX(label.x)
                 label:setWidth(label.width)
-            elseif label.name == "Open Quest Info Window" then
-                label:setTranslation(getOptionText("Open_Quest_Info_Window"))
-                label:setX(label.x)
-                label:setWidth(label.width)
             elseif label.name == "SSHotkey_1" then
                 label:setTranslation(getOptionText("SShotkey1"))
                 label:setX(label.x)
