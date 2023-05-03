@@ -2256,7 +2256,12 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		-- Keep pursue from happening when 	
 		-- lots of enemies the npc sees --		
 		-- ------------------------------------  --		
-		if (not self:getGroupRole() == "Companion") and (((self:getSeenCount() > 4) and (self:isEnemyInRange()) and (Enemy_Is_a_Zombie)) or (self:isTooScaredToFight())) then
+		if (not self:getGroupRole() == "Companion")
+			and (((self:getSeenCount() > 4)
+					and (self:isEnemyInRange())
+					and (Enemy_Is_a_Zombie))
+				or (self:isTooScaredToFight()))
+		then
 			zRangeToPursue = 0
 			self:zDebugSayPTSC(zRangeToPursue, "Fear_0")
 			return zRangeToPursue
