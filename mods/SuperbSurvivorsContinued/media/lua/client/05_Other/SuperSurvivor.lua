@@ -1293,6 +1293,7 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, self.player:getZ())
 
@@ -1504,6 +1505,8 @@ function SuperSurvivor:RealCanSee(character)
 end
 
 function SuperSurvivor:DoVision()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoVision() called");
+
 	local atLeastThisClose = 19;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 25
@@ -1566,6 +1569,8 @@ function SuperSurvivor:DoVision()
 	else
 		self.UpdateDelayTicks = 20
 	end
+
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:DoVision() END ---");
 
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)
@@ -1867,6 +1872,7 @@ end
 -- And to attempt-fix a situation where the player can walk behind the NPC mid-attack and the npc suddenly forgetting about the player.
 -- Update: BE VERY CAREFUL using this. It will overwrite Dovision. This is using for bandits to keep up with the main player.
 function SuperSurvivor:DoHumanEntityScan()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoHumanEntityScan() called");
 	local atLeastThisClose = 5;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 6
@@ -1888,13 +1894,6 @@ function SuperSurvivor:DoHumanEntityScan()
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
 						local CanSee = self:RealCanSee(character)
 
-						--if(tempdistance < 1) and (character:getZ() == self.player:getZ()) then
-						--	self.EnemiesOnMe = self.EnemiesOnMe + 1
-						--end
-						-- Removed: The sixth sense and dovision does this well enough. this would just stack numbers infinitely
-						--if(tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
-						--	self.dangerSeenCount = self.dangerSeenCount + 1
-						--end
 						if (not CanSee) or (CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
 							self.seenCount = self.seenCount + 1
 						end
@@ -1912,6 +1911,7 @@ function SuperSurvivor:DoHumanEntityScan()
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:DoHumanEntityScan() END ---");
 	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)
@@ -1925,6 +1925,7 @@ end
 -- 'Oh I'm trying to fight a NPC I'm stuck on, oh no a zombie behind me and I could clearly hear it? Oh well...' THIS function prevents cases like THAT.
 -- Also I believe since the self.seencount and other variables that 'reset to 0' is marked off, maybe helping as to why this function's working so cleverly.
 function SuperSurvivor:Companion_DoSixthSenseScan()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Companion_DoSixthSenseScan() called");
 	local atLeastThisClose = 3;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 4
@@ -1990,6 +1991,7 @@ function SuperSurvivor:Companion_DoSixthSenseScan()
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Companion_DoSixthSenseScan() END ---");
 	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)

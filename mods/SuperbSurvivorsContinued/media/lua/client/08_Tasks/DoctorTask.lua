@@ -1,6 +1,8 @@
 DoctorTask = {}
 DoctorTask.__index = DoctorTask
 
+local isLocalLoggingEnabled = true;
+
 function DoctorTask:new(superSurvivor)
 	local o = {}
 	setmetatable(o, self)
@@ -31,6 +33,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function DoctorTask:FindPatient()
+	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "DoctorTask:FindPatient() Called");
 	local player = self.parent.player
 	local patient = nil
 	local range = 15;
@@ -62,6 +65,7 @@ function DoctorTask:FindPatient()
 		end
 	end
 
+	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "--- DoctorTask:FindPatient() END ---");
 	return patient
 end
 
@@ -71,7 +75,7 @@ function DoctorTask:update()
 
 	if (self.Patient ~= nil) then
 		if (self.Patient:isDead()) then
-			self.parent:Speak(getDialogue("RIPSurvivor"))
+			self.parent:Speak(GetDialogue("RIPSurvivor"))
 			self.Patient = nil
 			return false
 		end

@@ -1,6 +1,8 @@
 LootCategoryTask = {}
 LootCategoryTask.__index = LootCategoryTask
 
+local isLocalLoggingEnabled = true;
+
 function LootCategoryTask:new(superSurvivor, building, category, thisQuantity)
 	local o = {}
 	setmetatable(o, self)
@@ -78,6 +80,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function LootCategoryTask:update()
+	CreateLogLine("LootTask", isLocalLoggingEnabled, "function: LootCategoryTask:update() called");
 	-- added isTargetBuildingDangerousAlt so that it can check if the npc is in the player's base or not
 	if (not self:isValid()) or self.parent:isTooScaredToFight() then
 		self.Complete = true
@@ -135,12 +138,12 @@ function LootCategoryTask:update()
 							--sq:AddWorldInventoryItem("Base.Nails",0.5,0.5,0)
 							--self.parent:Explore(sq)								
 							local items = sq:getObjects()
+							local tempDistance = getDistanceBetween(sq, self.parent.player); -- WIP - literally spammed inside the nested for loops...
 
 							for j = 0, items:size() - 1 do
 
 								if (items:get(j):getContainer() ~= nil) then
 									local container = items:get(j):getContainer()
-									local tempDistance = getDistanceBetween(sq, self.parent.player); -- WIP - literally spammed inside the nested for loops...
 
 									if (sq:getZ() ~= self.parent.player:getZ()) then
 										tempDistance = tempDistance + 13;
@@ -274,4 +277,5 @@ function LootCategoryTask:update()
 		end
 	end
 	if self.FoundCount >= self.Quantity then self.Complete = true end
+	CreateLogLine("LootTask", isLocalLoggingEnabled, "--- function: LootCategoryTask:update() END ---");
 end

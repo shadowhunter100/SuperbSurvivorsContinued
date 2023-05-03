@@ -1,6 +1,8 @@
 GatherWoodTask = {}
 GatherWoodTask.__index = GatherWoodTask
 
+local isLocalLoggingEnabled = true;
+
 function GatherWoodTask:new(superSurvivor, BringHere)
 	local o = {}
 	setmetatable(o, self)
@@ -35,6 +37,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function GatherWoodTask:update()
+	CreateLogLine("GatherWoodTask", isLocalLoggingEnabled, "function: GatherWoodTask:update() called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) then
@@ -76,11 +79,14 @@ function GatherWoodTask:update()
 			local gamehours = getGameTime():getWorldAgeHours();
 
 			for x = minx, maxx do
-
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, 0);
 
-					if (Square ~= nil) and (self.BringHereSquare ~= Square) and (self.WoodStorageArea ~= nil) and (IsSquareInArea(Square, self.WoodStorageArea) == false) then
+					if (Square ~= nil)
+						and (self.BringHereSquare ~= Square)
+						and (self.WoodStorageArea ~= nil)
+						and (IsSquareInArea(Square, self.WoodStorageArea) == false)
+					then
 						local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 						local closeobjects = Square:getWorldObjects();
 						for i = 0, closeobjects:size() - 1 do
@@ -116,9 +122,10 @@ function GatherWoodTask:update()
 				if (self.Target:getWorldItem()) then
 					self.Target:getWorldItem():removeFromSquare()
 				end
+
 				self.Target:setWorldItem(nil)
 				self.parent:RoleplaySpeak(getActionText("TakesItemFromGround_Before") ..
-				self.Target:getDisplayName() .. getActionText("TakesItemFromGround_After"))
+					self.Target:getDisplayName() .. getActionText("TakesItemFromGround_After"))
 				self.CarryingToPoint = true
 			else
 				self.Target = nil
@@ -127,4 +134,5 @@ function GatherWoodTask:update()
 	else
 		--self.parent:Speak("waiting for non action");
 	end
+	CreateLogLine("GatherWoodTask", isLocalLoggingEnabled, "--- function: GatherWoodTask:update() END ---");
 end

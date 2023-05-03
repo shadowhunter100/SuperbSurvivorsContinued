@@ -1,6 +1,8 @@
 PileCorpsesTask = {}
 PileCorpsesTask.__index = PileCorpsesTask
 
+local isLocalLoggingEnabled = true;
+
 function PileCorpsesTask:new(superSurvivor, BringHere)
 	local o = {}
 	setmetatable(o, self)
@@ -39,6 +41,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function PileCorpsesTask:update()
+	CreateLogLine("PileCorpsesTask", isLocalLoggingEnabled, "PileCorpsesTask:update() Called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) then
@@ -89,15 +92,18 @@ function PileCorpsesTask:update()
 
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, z);
-					local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 
-					if (Square ~= nil) and (distance < closestsoFar)
+					if (Square ~= nil)
 						and (getDistanceBetween(self.BringHereSquare, Square) > 2)
 						and (Square:getDeadBody())
 					then
+						local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 						self.Target = Square:getDeadBody()
 						self.TargetSquare = Square
-						closestsoFar = distance;
+
+						if (distance < closestsoFar) then
+							closestsoFar = distance;
+						end
 					end
 				end
 			end
@@ -125,4 +131,5 @@ function PileCorpsesTask:update()
 	else
 		--self.parent:Speak("waiting for non action");
 	end
+	CreateLogLine("PileCorpsesTask", isLocalLoggingEnabled, "--- PileCorpsesTask:update() End ---");
 end

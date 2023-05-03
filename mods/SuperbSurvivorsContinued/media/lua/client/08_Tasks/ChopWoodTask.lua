@@ -1,6 +1,8 @@
 ChopWoodTask = {}
 ChopWoodTask.__index = ChopWoodTask
 
+local isLocalLoggingEnabled = true;
+
 function ChopWoodTask:new(superSurvivor)
 	local o = {}
 	setmetatable(o, self)
@@ -33,6 +35,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function ChopWoodTask:update()
+	CreateLogLine("ChopWoodTask", isLocalLoggingEnabled, "ChopWoodTask:update() Called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) then
@@ -120,7 +123,7 @@ function ChopWoodTask:update()
 				--local cell = getSpecificPlayer(0):getCell();
 				if (self.Tree == nil or self.Tree:getHealth() <= 0) then
 					local range = 25;
-					local Square, closestsoFarSquare;
+					local Square;
 					local minx = math.floor(player:getX() - range);
 					local maxx = math.floor(player:getX() + range);
 					local miny = math.floor(player:getY() - range);
@@ -143,14 +146,20 @@ function ChopWoodTask:update()
 					local gamehours = getGameTime():getWorldAgeHours();
 
 					for x = minx, maxx do
+
 						for y = miny, maxy do
 							Square = getCell():getGridSquare(x, y, 0);
 
 							if (Square ~= nil) then
 								local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 								local closeobjects = Square:getObjects();
+
 								for i = 0, closeobjects:size() - 1 do
-									if ((closeobjects:get(i):getModData().isClaimed == nil) or (gamehours > (closeobjects:get(i):getModData().isClaimed + 0.05))) and (string.find(tostring(closeobjects:get(i):getType()), "tree") and (distance < closestsoFar)) then
+									if ((closeobjects:get(i):getModData().isClaimed == nil)
+											or (gamehours > (closeobjects:get(i):getModData().isClaimed + 0.05)))
+										and (string.find(tostring(closeobjects:get(i):getType()), "tree")
+											and (distance < closestsoFar))
+									then
 										self.Tree = closeobjects:get(i);
 										closestsoFar = distance;
 									end
@@ -158,6 +167,7 @@ function ChopWoodTask:update()
 							end
 						end
 					end
+
 					if (self.Tree ~= nil) and (self.Tree:getSquare() ~= nil) then
 						player:StopAllActionQueue();
 						self.Tree:getModData().isClaimed = gamehours;
@@ -187,4 +197,5 @@ function ChopWoodTask:update()
 			end
 		end
 	end
+	CreateLogLine("ChopWoodTask", isLocalLoggingEnabled, "--- ChopWoodTask:update() End ---");
 end
