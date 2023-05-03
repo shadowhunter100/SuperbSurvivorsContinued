@@ -33,6 +33,7 @@ function FindBuildingTask:isValid()
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function FindBuildingTask:update()
 	if (not self:isValid()) then return false end
 	if (self.parent:getSeenCount() == 0) then self.parent:setSneaking(true) end
@@ -48,10 +49,13 @@ function FindBuildingTask:update()
 			local closestsoFar = range
 
 			for x = minx, maxx do
+
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, 0)
+
 					if (Square ~= nil) and (Square:isOutside() == false) and (Square:getRoom() ~= nil) and (self.parent:getExplore(Square) < 2) then
-						local distance = getDistanceBetween(Square, self.parent.player)
+						local distance = getDistanceBetween(Square, self.parent.player); -- WIP - literally spammed inside the nested for loops...
+
 						if (distance < closestsoFar) then
 							closestsoFar = distance
 							self.TargetSquare = Square

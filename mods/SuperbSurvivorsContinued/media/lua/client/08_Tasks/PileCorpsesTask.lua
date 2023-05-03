@@ -37,6 +37,7 @@ function PileCorpsesTask:isValid()
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function PileCorpsesTask:update()
 	if (not self:isValid()) then return false end
 
@@ -81,21 +82,25 @@ function PileCorpsesTask:update()
 					z = area[5]
 				end
 			end
-
 			local closestsoFar = range + 1;
 			local gamehours = getGameTime():getWorldAgeHours();
+
 			for x = minx, maxx do
+
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, z);
-					local distance = getDistanceBetween(Square, player);
-					if (Square ~= nil) and (distance < closestsoFar) and (getDistanceBetween(self.BringHereSquare, Square) > 2) and (Square:getDeadBody()) then
+					local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
+
+					if (Square ~= nil) and (distance < closestsoFar)
+						and (getDistanceBetween(self.BringHereSquare, Square) > 2)
+						and (Square:getDeadBody())
+					then
 						self.Target = Square:getDeadBody()
 						self.TargetSquare = Square
 						closestsoFar = distance;
 					end
 				end
 			end
-
 			if (self.Target ~= nil) then
 				player:StopAllActionQueue();
 				self.Target:getModData().isClaimed = gamehours;
@@ -105,11 +110,12 @@ function PileCorpsesTask:update()
 				self.Complete = true
 			end
 		elseif (self.Target ~= nil) then
-			if (self.TargetSquare:getDeadBody() and (getDistanceBetween(self.TargetSquare, player) > 2.0)) then
+			if (self.TargetSquare:getDeadBody()
+					and (getDistanceBetween(self.TargetSquare, player) > 2.0))
+			then
 				self.parent:walkTo(self.TargetSquare);
 			elseif self.TargetSquare:getDeadBody() then
 				ISTimedActionQueue.add(ISGrabCorpseAction:new(self.parent:Get(), self.TargetSquare:getDeadBody(), 30))
-
 
 				self.parent:RoleplaySpeak(getActionText("PickUpCorpse"))
 			else

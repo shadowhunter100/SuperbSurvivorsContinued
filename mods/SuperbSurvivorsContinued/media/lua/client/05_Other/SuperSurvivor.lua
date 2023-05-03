@@ -1282,8 +1282,9 @@ function SuperSurvivor:AttemptedLootBuilding(building)
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:getUnBarricadedWindow(building)
-	local pcs = self.player:getCurrentSquare()
+	-- local pcs = self.player:getCurrentSquare(); -- WIP - Commented out, unused variable
 	local WindowOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -1298,9 +1299,12 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
 					local objectSquare = Object:getSquare()
-					local distance = getDistanceBetween(objectSquare, self.player)
+					local distance = getDistanceBetween(objectSquare, self.player) -- WIP - literally spammed inside the nested for loops...
 
-					if (instanceof(Object, "IsoWindow")) and (self:getWalkToAttempt(objectSquare) < 8) and distance < closestSoFar then
+					if (instanceof(Object, "IsoWindow"))
+						and (self:getWalkToAttempt(objectSquare) < 8)
+						and distance < closestSoFar
+					then
 						local barricade = Object:getBarricadeForCharacter(self.player)
 
 						if barricade == nil or (barricade:canAddPlank()) then
@@ -1513,7 +1517,11 @@ function SuperSurvivor:DoVision()
 		--print("dovision " .. tostring(spottedList:size()))
 		for i = 0, spottedList:size() - 1 do
 			local character = spottedList:get(i);
-			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
+
+			if (character ~= nil) and (character ~= self.player)
+				and (instanceof(character, "IsoZombie")
+					or instanceof(character, "IsoPlayer"))
+			then
 				if (character:isDead() == false) then
 					tempdistance = tonumber(getDistanceBetween(character, self.player))
 
@@ -1985,10 +1993,10 @@ end
 -- This was built for getting away from zeds
 -- This needed 'not a companion' check to keep the NPC in question not to run away when they're following main player.
 function SuperSurvivor:NPC_FleeWhileReadyingGun()
-	local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
+	-- local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player) -- WIP - Commented out, unused variable
 	local Distance_MainPlayer = getDistanceBetween(getSpecificPlayer(0), self.player)
+	-- local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer")) -- WIP - Commented out, unused variable
 	local Enemy_Is_a_Zombie = (instanceof(self.LastEnemeySeen, "IsoZombie"))
-	local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer"))
 	local Weapon_HandGun = self.player:getPrimaryHandItem()
 	local NPCsDangerSeen = self:getDangerSeenCount()
 
@@ -3702,8 +3710,7 @@ function SuperSurvivor:NPC_ShouldRunOrWalk()
 	if (self.LastEnemeySeen ~= nil) then
 		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
 		local distanceAlt = getDistanceBetween(self.player, getSpecificPlayer(0)) -- To prevent running into the player
-		local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen)
-
+		-- local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen) -- WIP - Commented out, unused variable
 
 		if (not (self:Task_IsNotFleeOrFleeFromSpot() == true)) or (distanceAlt <= 1) or (distance and self:Task_IsAttack()) or (distance and self:Task_IsThreaten() or (distance and self:Task_IsPursue())) then
 			self:setRunning(false)
@@ -3842,7 +3849,7 @@ function SuperSurvivor:checkVictimCoverValue(victim)
 	local totalCover      = 0
 	local blockingObjects = 0
 
-	local squares = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
+	local squares         = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
 
 	for _, square in ipairs(squares) do
 		local objs = square:getObjects()
@@ -3945,7 +3952,7 @@ function SuperSurvivor:NPC_Attack(victim) -- New Function
 	self.SwipeStateTicks = 0; -- this value is tracked to see if player stuck in attack state/animation. so reset to 0 if we are TRYING/WANTING to attack
 
 	-- Why distance and real distance? distance uses a subtraction while 'real' doesn't
-	local distance = getDistanceBetween(self.player, victim) - 0.1
+	-- local distance = getDistanceBetween(self.player, victim) - 0.1  -- WIP - Commented out, unused variable
 	local RealDistance = getDistanceBetween(self.player, victim)
 	local minrange = self:getMinWeaponRange()
 	local weapon = self.player:getPrimaryHandItem();
@@ -4100,6 +4107,7 @@ function SuperSurvivor:DrinkFromObject(waterObject)
 	ISTimedActionQueue.add(ISTakeWaterAction:new(playerObj, nil, waterConsumed, waterObject, (waterConsumed * 10) + 15));
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:findNearestSheetRopeSquare(down)
 	local sq, CloseSquareSoFar;
 	local range = 20
@@ -4113,7 +4121,7 @@ function SuperSurvivor:findNearestSheetRopeSquare(down)
 		for y = miny, maxy do
 			sq = getCell():getGridSquare(x, y, self.player:getZ());
 			if (sq ~= nil) then
-				local distance = getDistanceBetween(sq, self.player)
+				local distance = getDistanceBetween(sq, self.player) -- WIP - literally spammed inside the nested for loops...
 
 				if down and (distance < closestSoFar) and self.player:canClimbDownSheetRope(sq) then
 					closestSoFar = distance

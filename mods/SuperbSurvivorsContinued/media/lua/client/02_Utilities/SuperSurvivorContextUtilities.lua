@@ -462,7 +462,7 @@ local function windowHasBarricade(window, character)
 	end
 end
 
--- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- WIP - "GetNearestWindow" HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
 -- renamed "getCloseWindow()" "to "GetNearestWindow()"
 -- get the nearest window of a building, based on character's position
 ---@param building any building to be searched
@@ -481,13 +481,18 @@ function GetNearestWindow(building, character)
 	local bdHeight = bdefY + bdef:getH() + 1
 
 	for x = bdefX - 1, bdWidth do
+
 		for y = bdefY - 1, bdHeight do
+
 			local sq = getCell():getGridSquare(x, y, character:getZ())
+
 			if (sq) then
 				local Objs = sq:getObjects(); -- TODO : use getSquaresWindow
+
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
-					local distance = getDistanceBetween(Object, character)
+					local distance = getDistanceBetween(Object, character) -- WIP - literally spammed inside the nested for loops...
+
 					if (instanceof(Object, "IsoWindow"))
 						and (not windowHasBarricade(Object, character))
 						and (not Object:isLocked())
@@ -558,6 +563,7 @@ function GetDoorsOutsideSquare(door, player)
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 --- gets the closest unlocked door
 ---@param building any
 ---@param character any
@@ -569,15 +575,19 @@ function GetUnlockedDoor(building, character)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, character:getZ())
 
 			if (sq) then
 				local Objs = sq:getObjects();
+
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
+
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character)
+						local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+
 						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
 							if (not Object:isLocked()) then
 								closestSoFar = distance
@@ -593,7 +603,7 @@ function GetUnlockedDoor(building, character)
 	return DoorOut
 end
 
--- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- WIP - "GetNearestDoor" HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
 -- renamed "getDoor()" to "GetNearestDoor()"
 --- gets the closest door inside of a 'building' based on a 'character' position
 ---@param building any
@@ -606,14 +616,18 @@ function GetNearestDoor(building, character)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
+
 			local sq = getCell():getGridSquare(x, y, character:getZ())
 			if (sq) then
 				local Objs = sq:getObjects();
+
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character)
+						local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+
 						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
 							closestSoFar = distance
 							DoorOut = Object

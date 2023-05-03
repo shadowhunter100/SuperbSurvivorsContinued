@@ -212,12 +212,15 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 	if not weapon then return false end
 
 	local range = weapon:getSoundRadius();
-
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
 			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
 
-			if (self.SuperSurvivors[i].player:getModData().surender) and (distance < maxdistance) and self.SuperSurvivors[i]:Get():CanSee(SSW:Get()) and self.SuperSurvivors[i].player:CanSee(getSpecificPlayer(0)) then
+			if (self.SuperSurvivors[i].player:getModData().surender)
+				and (distance < maxdistance)
+				and self.SuperSurvivors[i]:Get():CanSee(SSW:Get())
+				and self.SuperSurvivors[i].player:CanSee(getSpecificPlayer(0))
+			then
 				-- flee from the crazy murderer
 				print(self.SuperSurvivors[i]:getName() .. " fleeing from the crazy murderer")
 				--print("FLEEFROM2 " .. self.SuperSurvivors[i]:GetName())
@@ -226,7 +229,14 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 				self.SuperSurvivors[i]:SpokeTo(SSW:Get():getModData().ID)
 			end
 
-			if (self.SuperSurvivors[i].player:getModData().isHostile or self.SuperSurvivors[i]:getCurrentTask() == "Guard" or self.SuperSurvivors[i]:getCurrentTask() == "Patrol") and self.SuperSurvivors[i]:getTaskManager():getCurrentTask() ~= "Surender" and not self.SuperSurvivors[i].player:isDead() and not self.SuperSurvivors[i]:RealCanSee(getSpecificPlayer(0)) and (getDistanceBetween(getSpecificPlayer(0), self.SuperSurvivors[i].player) <= range) then
+			if (self.SuperSurvivors[i].player:getModData().isHostile
+					or self.SuperSurvivors[i]:getCurrentTask() == "Guard"
+					or self.SuperSurvivors[i]:getCurrentTask() == "Patrol")
+				and self.SuperSurvivors[i]:getTaskManager():getCurrentTask() ~= "Surender"
+				and not self.SuperSurvivors[i].player:isDead()
+				and not self.SuperSurvivors[i]:RealCanSee(getSpecificPlayer(0))
+				and (getDistanceBetween(getSpecificPlayer(0), self.SuperSurvivors[i].player) <= range)
+			then
 				print(self.SuperSurvivors[i]:getName() .. " adding go check it out task")
 				self.SuperSurvivors[i]:getTaskManager():AddToTop(GoCheckItOutTask:new(self.SuperSurvivors[i],
 					getSpecificPlayer(0):getCurrentSquare()))

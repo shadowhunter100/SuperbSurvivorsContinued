@@ -259,7 +259,6 @@ function SuperSurvivorGroup:hasLeader()
 	end
 	return false
 end
-
 function SuperSurvivorGroup:getID()
 	return self.ID
 end
@@ -270,9 +269,17 @@ function SuperSurvivorGroup:getClosestIdleMember(ofThisRole, referencePoint)
 	local distance = 0
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
+
 		if (workingID ~= nil) then
 			distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
-			if (SSM:Get(workingID):isInAction() == false) and (distance ~= 0) and (distance < closestSoFar) and ((SSM:Get(workingID):getGroupRole() == ofThisRole) or (ofThisRole == "Any") or (ofThisRole == nil)) then
+
+			if (SSM:Get(workingID):isInAction() == false)
+				and (distance ~= 0)
+				and (distance < closestSoFar)
+				and ((SSM:Get(workingID):getGroupRole() == ofThisRole)
+					or (ofThisRole == "Any")
+					or (ofThisRole == nil))
+			then
 				closestID = workingID
 				closestSoFar = distance
 			end
@@ -297,7 +304,11 @@ function SuperSurvivorGroup:getClosestMember(ofThisRole, referencePoint)
 			if (workingSS ~= nil) then
 				distance = getDistanceBetween(workingSS:Get(), referencePoint)
 				--print(tostring(self.Members[i])..","..tostring(distance))				
-				if (distance ~= 0) and (distance < closestSoFar) and ((ofThisRole == nil) or (SSM:Get(self.Members[i]):getGroupRole() == ofThisRole) or (ofThisRole == "Any")) then
+				if (distance ~= 0) and (distance < closestSoFar)
+					and ((ofThisRole == nil)
+						or (SSM:Get(self.Members[i]):getGroupRole() == ofThisRole)
+						or (ofThisRole == "Any"))
+				then
 					closestID = self.Members[i]
 					closestSoFar = distance
 				end
@@ -342,14 +353,16 @@ function SuperSurvivorGroup:getMembersInRange(referencePoint, range, isListening
 
 		if ((workingID ~= nil)) and (SSM:Get(workingID) ~= nil) then
 			local distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
-			if (distance <= range) and ((not isListening) or (SSM:Get(workingID):getCurrentTask() == "Listen")) then
+			if (distance <= range)
+				and ((not isListening)
+					or (SSM:Get(workingID):getCurrentTask() == "Listen"))
+			then
 				table.insert(TableOut, SSM:Get(workingID))
 			end
 		end
 	end
 	return TableOut
 end
-
 function SuperSurvivorGroup:AllSpokeTo()
 	local members = self:getMembers()
 	for x = 1, #members do
@@ -374,13 +387,17 @@ function SuperSurvivorGroup:getMembersThisCloseCount(range, referencePoint)
 	local count = 0
 
 	for i = 1, #self.Members do
-		local workingID = self.Members[i]
+		local workingID = self.Members[i];
+
 		if (workingID ~= nil) and (SSM:Get(workingID)) then
 			local distance = getDistanceBetween(referencePoint, SSM:Get(workingID):Get())
-			if (distance <= range) then count = count + 1 end
+
+			if (distance <= range) then
+				count = count + 1;
+			end
 		end
 	end
-	return count
+	return count;
 end
 
 function SuperSurvivorGroup:PVPAlert(attacker)

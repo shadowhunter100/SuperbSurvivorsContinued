@@ -10,7 +10,7 @@ function LootCategoryTask:new(superSurvivor, building, category, thisQuantity)
 
 	o.FoundCount = 0
 	if (thisQuantity > 0) then
-		o.Quantity = thisQuantity                    -- 0 for no limit basically
+		o.Quantity = thisQuantity -- 0 for no limit basically
 	else
 		o.Quantity = 9999
 	end
@@ -76,6 +76,7 @@ function LootCategoryTask:isValid()
 	return true
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function LootCategoryTask:update()
 	-- added isTargetBuildingDangerousAlt so that it can check if the npc is in the player's base or not
 	if (not self:isValid()) or self.parent:isTooScaredToFight() then
@@ -110,8 +111,10 @@ function LootCategoryTask:update()
 	else
 		loopcount = 0
 
-
-		if (self.Container == nil) or ((instanceof(self.Container, "ItemContainer")) and (self.parent:getContainerSquareLooted(self.Container:getSourceGrid(), self.Category) == 0)) then
+		if (self.Container == nil)
+			or ((instanceof(self.Container, "ItemContainer"))
+				and (self.parent:getContainerSquareLooted(self.Container:getSourceGrid(), self.Category) == 0))
+		then
 			self.Container = nil
 			local ID = self.parent:getID()
 			local stoploop = false
@@ -119,8 +122,11 @@ function LootCategoryTask:update()
 			local closestSoFar = 999
 
 			for z = 2, 0, -1 do
+
 				for x = bdef:getX() - 2, (bdef:getX() + bdef:getW()) + 2 do
+
 					if (stoploop) then break end
+
 					for y = bdef:getY() - 2, (bdef:getY() + bdef:getH()) + 2 do
 						if (stoploop) then break end
 						loopcount = loopcount + 1
@@ -129,12 +135,21 @@ function LootCategoryTask:update()
 							--sq:AddWorldInventoryItem("Base.Nails",0.5,0.5,0)
 							--self.parent:Explore(sq)								
 							local items = sq:getObjects()
+
 							for j = 0, items:size() - 1 do
+
 								if (items:get(j):getContainer() ~= nil) then
 									local container = items:get(j):getContainer()
-									local tempDistance = getDistanceBetween(sq, self.parent.player)
-									if (sq:getZ() ~= self.parent.player:getZ()) then tempDistance = tempDistance + 13 end
-									if (self.parent:getWalkToAttempt(sq) <= 8) and (tempDistance < closestSoFar) and (self.parent:getContainerSquareLooted(sq, self.Category) == 0) then
+									local tempDistance = getDistanceBetween(sq, self.parent.player); -- WIP - literally spammed inside the nested for loops...
+
+									if (sq:getZ() ~= self.parent.player:getZ()) then
+										tempDistance = tempDistance + 13;
+									end
+
+									if (self.parent:getWalkToAttempt(sq) <= 8)
+										and (tempDistance < closestSoFar)
+										and (self.parent:getContainerSquareLooted(sq, self.Category) == 0)
+									then
 										self.Container = container
 										closestSoFar = tempDistance
 										self.Floor = z
@@ -180,7 +195,7 @@ function LootCategoryTask:update()
 				self.parent:WalkToAttempt(trySquare)
 				if (self.Container:getSourceGrid()) and (self.parent:getWalkToAttempt(self.Container:getSourceGrid()) > 8) then
 					self.parent:DebugSay("blocked " ..
-					tostring(self.parent:getWalkToAttempt(self.Container:getSourceGrid())))
+						tostring(self.parent:getWalkToAttempt(self.Container:getSourceGrid())))
 					self.Container = nil
 					--if (self.parent ~= nil) then self.parent:Wait(10) end
 					self.Complete = true
@@ -191,7 +206,7 @@ function LootCategoryTask:update()
 				if (item ~= nil) then
 					self.FoundCount = self.FoundCount + 1
 					self.parent:RoleplaySpeak(getActionText("TakesFromCont_Before") ..
-					item:getDisplayName() .. getActionText("TakesFromCont_After"))
+						item:getDisplayName() .. getActionText("TakesFromCont_After"))
 					if (self.parent:hasRoomInBagFor(item)) then
 						self.parent:DebugSay("LootCategoryTask is about to trigger a StopWalk! Path B ")
 						self.parent:StopWalk()
@@ -231,7 +246,7 @@ function LootCategoryTask:update()
 				self.FoundCount = self.FoundCount + 1
 
 				self.parent:RoleplaySpeak(getActionText("TakesFromGround_Before") ..
-				item:getDisplayName() .. getActionText("TakesFromGround_After"))
+					item:getDisplayName() .. getActionText("TakesFromGround_After"))
 				local srcContainer = item:getContainer()
 				if instanceof(srcContainer, "ItemContainer") then
 					--ISTimedActionQueue.add(ISInventoryTransferAction:new (self.parent.player, item, srcContainer, self.PlayerBag, nil))

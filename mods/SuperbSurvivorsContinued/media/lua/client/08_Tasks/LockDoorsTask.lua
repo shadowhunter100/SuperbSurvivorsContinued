@@ -56,6 +56,7 @@ function LockDoorsTask:update()
 
 
 		local distance = getDistanceBetween(self.parent.player, GetDoorsInsideSquare(door));
+
 		if (distance > 2) or (self.parent.player:getZ() ~= door:getZ()) then
 			self.parent:DebugSay("walking to door")
 			self.parent:walkToDirect(GetDoorsInsideSquare(door))

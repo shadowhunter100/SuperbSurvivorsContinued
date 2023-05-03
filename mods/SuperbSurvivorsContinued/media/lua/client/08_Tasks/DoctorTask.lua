@@ -29,6 +29,7 @@ function DoctorTask:isValid()
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function DoctorTask:FindPatient()
 	local player = self.parent.player
 	local patient = nil
@@ -41,11 +42,14 @@ function DoctorTask:FindPatient()
 	local closestsoFar = range;
 
 	for x = minx, maxx do
+
 		for y = miny, maxy do
 			Square = getCell():getGridSquare(x, y, player:getZ())
+
 			if (Square ~= nil) then
-				local distance = getDistanceBetween(Square, player)
+				local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 				local closeobjects = Square:getMovingObjects()
+
 				for i = 0, closeobjects:size() - 1 do
 					local obj = closeobjects:get(i)
 					if (obj ~= nil) then

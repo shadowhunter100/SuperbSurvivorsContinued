@@ -33,6 +33,7 @@ function GatherWoodTask:isValid()
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function GatherWoodTask:update()
 	if (not self:isValid()) then return false end
 
@@ -73,11 +74,14 @@ function GatherWoodTask:update()
 
 			local closestsoFar = range;
 			local gamehours = getGameTime():getWorldAgeHours();
+
 			for x = minx, maxx do
+
 				for y = miny, maxy do
 					Square = getCell():getGridSquare(x, y, 0);
+
 					if (Square ~= nil) and (self.BringHereSquare ~= Square) and (self.WoodStorageArea ~= nil) and (IsSquareInArea(Square, self.WoodStorageArea) == false) then
-						local distance = getDistanceBetween(Square, player);
+						local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 						local closeobjects = Square:getWorldObjects();
 						for i = 0, closeobjects:size() - 1 do
 							if (closeobjects:get(i):getItem()) and ((closeobjects:get(i):getItem():getType() == "Log") or (closeobjects:get(i):getItem():getType() == "Plank")) and ((closeobjects:get(i):getModData().isClaimed == nil) or (gamehours > (closeobjects:get(i):getModData().isClaimed + 0.05))) and (distance < closestsoFar) then
