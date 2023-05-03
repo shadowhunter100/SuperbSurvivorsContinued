@@ -8,13 +8,10 @@ IsGlobalLoggingEnabled = true;
 SpeakEnabled = true;
 
 -- Global Integer
-DebugSayEnabled = DebugOptions;
 GFollowDistance = 5; -- Update: Don't try to turn gfollowdistance into a variable from what it equals to. I made followtask add what it needs to add on its own.
-PVPDefault = Option_ForcePVP;
 
 -- Global String
 StringTest = "This is a Global String Test";
-
 
 -- Global Hair Colors
 HairColors = {}
