@@ -408,7 +408,7 @@ function SuperSurvivorGroup:getMembersThisCloseCount(range, referencePoint)
 			local distance = getDistanceBetween(referencePoint, SSM:Get(workingID):Get())
 
 			if (distance <= range) then
-				count = count + 1;;
+				count = count + 1;
 			end
 		end
 	end
