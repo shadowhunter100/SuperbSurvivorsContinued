@@ -657,6 +657,9 @@ function SuperSurvivorsNewSurvivorManager()
 
 	for i = 1, 10 do
 		local spawnLocation = ZombRand(4)
+		local x = 0;
+		local y = 0;
+
 		if (spawnLocation == 0) then
 			--mySS:Speak("spawn from north")
 			x = center:getX() + (ZombRand(drange) - range);
@@ -998,6 +1001,9 @@ function SuperSurvivorsRaiderManager()
 
 		for i = 1, 10 do
 			local spawnLocation = ZombRand(4)
+			local x = 0;
+			local y = 0;
+
 			if (spawnLocation == 0) then
 				--mySS:Speak("spawn from north")
 				x = center:getX() + (ZombRand(drange) - range);
