@@ -349,28 +349,6 @@ function OfferAmmo(test, player, ammo)
 	SS:PlusRelationshipWP(1.0)
 end
 
-function offerORGMAmmo(test, player, ammoName)
-	local SS = SSM:Get(player:getModData().ID)
-	getSpecificPlayer(0):Say(getActionText("YouWantAmmo"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-
-	if (task ~= nil) and (task.Name == "Listen") then
-		task:Talked()
-	end
-
-	local container = SSM:Get(0):Get():getInventory()
-	ammoBox = SSM:Get(0):Get():getInventory():FindAndReturn(ammoName)
-	if (ammoBox ~= nil) then
-		local gift = SSM:Get(0):getFacingSquare():AddWorldInventoryItem(ammoBox, 0.5, 0.5, 0)
-		if (container ~= nil) then
-			container:DoRemoveItem(ammoBox)
-		end
-	end
-
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, ammoBox))
-	SS:PlusRelationshipWP(1.0)
-end
-
 function OfferWeapon(test, player)
 	local SS = SSM:Get(player:getModData().ID)
 	getSpecificPlayer(0):Say(getActionText("TakeMyWeapon"))
