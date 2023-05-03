@@ -5,6 +5,8 @@
 -- console.txt message below
 -- ERROR: General     , 1683136409143> ExceptionLogger.logException> Exception thrown java.lang.IllegalStateException at UIManager.update line:685.
 
+local isLocalLoggingEnabled = false;
+
 local function getOptionText(text)
 	return getText("UI_Option_SS_" .. text)
 end
