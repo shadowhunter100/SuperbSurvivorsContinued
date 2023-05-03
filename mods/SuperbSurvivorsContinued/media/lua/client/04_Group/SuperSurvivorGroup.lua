@@ -424,6 +424,7 @@ function SuperSurvivorGroup:isMember(survivor)
 	return has_value(self.Members, survivor:getID())
 end
 
+-- WHAT ARE THE VALID ROLES? THERE ARE NO DOCUMENTATIONS!
 function SuperSurvivorGroup:addMember(newSurvivor, Role)
 	if (newSurvivor == nil) or (newSurvivor:getID() == nil) then
 		print("cant add survivor to group because id is nil")
