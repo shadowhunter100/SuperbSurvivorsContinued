@@ -5,6 +5,8 @@ SuperSurvivor.__index = SuperSurvivor
 
 SurvivorVisionCone = 0.90
 
+local isLocalLoggingEnabled = true;
+
 function SetSurvivorDress(mapKey)
 	local dress = "RandomBasic"
 	local dressTable = {
@@ -1284,6 +1286,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:getUnBarricadedWindow(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getUnBarricadedWindow() called");
 	-- local pcs = self.player:getCurrentSquare(); -- WIP - Commented out, unused variable
 	local WindowOut = nil
 	local closestSoFar = 100
@@ -1295,6 +1298,7 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 
 			if (sq) then
 				local Objs = sq:getObjects();
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
 
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
@@ -1308,14 +1312,17 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 						local barricade = Object:getBarricadeForCharacter(self.player)
 
 						if barricade == nil or (barricade:canAddPlank()) then
-							closestSoFar = distance
-							WindowOut = Object
+							closestSoFar = distance;
+							WindowOut = Object;
+							CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "LOOP BREAK");
+							break; -- this should stop further runs of this call and improve performance...
 						end
 					end
 				end
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getUnBarricadedWindow() END ---");
 
 	return WindowOut
 end
@@ -3842,38 +3849,6 @@ function SuperSurvivor:CanAttackAlt()
 	end
 end
 
---- gets every square between the npc and the target and adds a cover value
----@param victim any
----@return number represents the final cover value of the victim
-function SuperSurvivor:checkVictimCoverValue(victim)
-	local totalCover      = 0
-	local blockingObjects = 0
-
-	local squares         = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
-
-	for _, square in ipairs(squares) do
-		local objs = square:getObjects()
-
-		for i = 0, objs:size() - 1, 1 do
-			local obj = objs:get(i)
-
-			if (obj ~= nil) then
-				local coverValue = getCoverValue(obj) -- the function is considering grass as a 10 cover value (fix it later)
-				totalCover = totalCover + coverValue
-				blockingObjects = blockingObjects + 1
-			end
-		end
-	end
-
-	if blockingObjects == 0 then -- prevent divide by zero exceptions
-		return totalCover
-	end
-
-	totalCover = totalCover / blockingObjects
-
-	return totalCover - 10 -- WIP - workaround for now
-end
-
 --- gets the weapon damager based on a rng and distance from the target
 ---@param weapon any
 ---@param distance number
@@ -3902,9 +3877,8 @@ function SuperSurvivor:getGunHitChange(weapon, victim)
 	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel)
 
 	local distance = getDistanceBetween(self.player, victim)
-	local coverValue = self:checkVictimCoverValue(victim)
 
-	return hitChance - distance - coverValue -- TODO: change formula when coverValue != 0
+	return hitChance - distance; -- TODO: change formula when coverValue != 0
 end
 
 function SuperSurvivor:UnStuckFrozenAnim()
@@ -4109,6 +4083,7 @@ end
 
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:findNearestSheetRopeSquare(down)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:findNearestSheetRopeSquare() called");
 	local sq, CloseSquareSoFar;
 	local range = 20
 	local minx = math.floor(self.player:getX() - range);
@@ -4133,6 +4108,7 @@ function SuperSurvivor:findNearestSheetRopeSquare(down)
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:findNearestSheetRopeSquare() END ---");
 
 	return CloseSquareSoFar
 end

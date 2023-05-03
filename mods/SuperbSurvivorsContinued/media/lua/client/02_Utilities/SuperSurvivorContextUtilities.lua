@@ -1,7 +1,7 @@
 -- this file has methods related to world context
 --- SQUARES ---
 
-local isLocalLoggingEnabled = false;
+local isLocalLoggingEnabled = true;
 
 ---@alias direction
 ---| '"N"' # North
@@ -28,69 +28,6 @@ function GetAdjSquare(square, dir)
 	else
 		return getCell():getGridSquare(square:getX() - 1, square:getY(), square:getZ());
 	end
-end
-
---- gets all squares between 2 positions (don't use it with large distances)
----@param from any start square
----@param to any target square
----@return table returns a table with the squares between the start and target squares (includes the target square)
-function GetSquaresBetween(from, to)
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetSquaresBetween() called");
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from: " .. tostring(from) ..
-		" | to: " .. tostring(to));
-
-	local fromX = math.ceil(from:getX());
-	local fromY = math.ceil(from:getY());
-
-	local toX = math.ceil(to:getX());
-	local toY = math.ceil(to:getY());
-
-	local squares = {};
-	local pos = 0;
-	local sqr = from;
-
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from x : " .. tostring(fromX) ..
-		" to x : " .. tostring(toX));
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from y : " .. tostring(fromY) ..
-		" to y : " .. tostring(toY));
-
-	repeat
-		if fromY < toY then
-			sqr = GetAdjSquare(sqr, "S")
-			fromY = fromY + 1
-		elseif fromY > toY then
-			sqr = GetAdjSquare(sqr, "N")
-			fromY = fromY - 1
-		end
-
-		if fromX < toX then
-			sqr = GetAdjSquare(sqr, "E")
-			fromX = fromX + 1
-		elseif fromX > toX then
-			sqr = GetAdjSquare(sqr, "W")
-			fromX = fromX - 1
-		end
-
-		CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-			"fromX updated: " .. tostring(fromX) ..
-			" | fromY updated: " .. tostring(fromY))
-
-		if sqr ~= nil then
-			CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-				"saving square x : " .. tostring(fromX) ..
-				" y : " .. tostring(fromY) ..
-				" into position : " .. tostring(pos))
-			squares[pos] = sqr
-			pos = pos + 1
-		end
-	until fromX == toX and fromY == toY
-
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "total squares : " .. tostring(pos))
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "----- END GetSquaresBetween -----")
-	return squares
 end
 
 function GetOutsideSquare(square, building)
@@ -327,6 +264,7 @@ function GetCenterSquareFromArea(x1, x2, y1, y2, z)
 
 	local result = getCell():getGridSquare(x1 + math.floor(xdiff / 2), y1 + math.floor(ydiff / 2), z)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetCenterSquareFromArea() End ---");
 	return result
 end
 
@@ -581,17 +519,20 @@ function GetUnlockedDoor(building, character)
 
 			if (sq) then
 				local Objs = sq:getObjects();
+				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
 
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
 
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+						if (instanceof(Object, "IsoDoor"))
+							and (Object:isExteriorDoor(character))
+							and (distance < closestSoFar) then
 
-						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
 							if (not Object:isLocked()) then
-								closestSoFar = distance
-								DoorOut = Object
+								closestSoFar = distance;
+								DoorOut = Object;
 							end
 						end
 					end
@@ -620,17 +561,20 @@ function GetNearestDoor(building, character)
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 
 			local sq = getCell():getGridSquare(x, y, character:getZ())
+
 			if (sq) then
 				local Objs = sq:getObjects();
+				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
 
 				for j = 0, Objs:size() - 1 do
-					local Object = Objs:get(j)
+					local Object = Objs:get(j);
+
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
 
 						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
-							closestSoFar = distance
-							DoorOut = Object
+							closestSoFar = distance;
+							DoorOut = Object;
 						end
 					end
 				end
