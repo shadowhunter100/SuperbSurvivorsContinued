@@ -77,9 +77,16 @@ function FindUnlootedBuildingTask:update()
 					--if SquaresBuilding ~= nil then
 					--	if self.parent.DebugMode then print("sq " .. tostring(Square:isOutside()) .. " " .. tostring(SquaresBuilding) .. " " .. tostring(self.parent:getBuildingExplored(SquaresBuilding)) .. " " .. tostring(self.parent:AttemptedLootBuilding(SquaresBuilding)) .. " " .. tostring(self.parent:getWalkToAttempt(Square))) end
 					--end
-					if (Square:isOutside() == false) and (SquaresBuilding ~= nil) and not self.parent:getBuildingExplored(SquaresBuilding) and not self.parent:AttemptedLootBuilding(SquaresBuilding) and (self.parent:getWalkToAttempt(Square) < 6) then
+					if (Square:isOutside() == false) and (SquaresBuilding ~= nil)
+						and not self.parent:getBuildingExplored(SquaresBuilding)
+						and not self.parent:AttemptedLootBuilding(SquaresBuilding)
+						and (self.parent:getWalkToAttempt(Square) < 6)
+					then
 						local distance = getDistanceBetween(Square, self.parent.player)
-						if (distance < closestsoFar) and (not self.parent.player:getCurrentSquare():isBlockedTo(Square)) and (Square:isFree(false)) then
+						if (distance < closestsoFar)
+							and (not self.parent.player:getCurrentSquare():isBlockedTo(Square))
+							and (Square:isFree(false))
+						then
 							closestsoFar = distance
 
 							--if(getDistanceBetween(Square,self.parent.player) > 10) then

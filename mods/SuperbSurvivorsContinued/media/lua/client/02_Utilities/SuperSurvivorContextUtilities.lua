@@ -30,69 +30,6 @@ function GetAdjSquare(square, dir)
 	end
 end
 
---- gets all squares between 2 positions (don't use it with large distances)
----@param from any start square
----@param to any target square
----@return table returns a table with the squares between the start and target squares (includes the target square)
-function GetSquaresBetween(from, to)
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetSquaresBetween() called");
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from: " .. tostring(from) ..
-		" | to: " .. tostring(to));
-
-	local fromX = math.ceil(from:getX());
-	local fromY = math.ceil(from:getY());
-
-	local toX = math.ceil(to:getX());
-	local toY = math.ceil(to:getY());
-
-	local squares = {};
-	local pos = 0;
-	local sqr = from;
-
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from x : " .. tostring(fromX) ..
-		" to x : " .. tostring(toX));
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-		"from y : " .. tostring(fromY) ..
-		" to y : " .. tostring(toY));
-
-	repeat
-		if fromY < toY then
-			sqr = GetAdjSquare(sqr, "S")
-			fromY = fromY + 1
-		elseif fromY > toY then
-			sqr = GetAdjSquare(sqr, "N")
-			fromY = fromY - 1
-		end
-
-		if fromX < toX then
-			sqr = GetAdjSquare(sqr, "E")
-			fromX = fromX + 1
-		elseif fromX > toX then
-			sqr = GetAdjSquare(sqr, "W")
-			fromX = fromX - 1
-		end
-
-		CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-			"fromX updated: " .. tostring(fromX) ..
-			" | fromY updated: " .. tostring(fromY))
-
-		if sqr ~= nil then
-			CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
-				"saving square x : " .. tostring(fromX) ..
-				" y : " .. tostring(fromY) ..
-				" into position : " .. tostring(pos))
-			squares[pos] = sqr
-			pos = pos + 1
-		end
-	until fromX == toX and fromY == toY
-
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "total squares : " .. tostring(pos))
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "----- END GetSquaresBetween -----")
-	return squares
-end
-
 function GetOutsideSquare(square, building)
 	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetOutsideSquare() called");
 	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
@@ -327,6 +264,7 @@ function GetCenterSquareFromArea(x1, x2, y1, y2, z)
 
 	local result = getCell():getGridSquare(x1 + math.floor(xdiff / 2), y1 + math.floor(ydiff / 2), z)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetCenterSquareFromArea() End ---");
 	return result
 end
 
@@ -429,6 +367,7 @@ local function getSquaresWindow(cs)
 	return nil
 end
 
+-- WIP - GetSquaresNearWindow() is the second most frequently called function after getDistanceBetween().
 --- gets the nearest adjacent window square of 'cs'
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
@@ -445,6 +384,7 @@ function GetSquaresNearWindow(cs)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetSquaresNearWindow() END ---");
 	return nil
 end
 
@@ -462,7 +402,7 @@ local function windowHasBarricade(window, character)
 	end
 end
 
--- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- WIP - "GetNearestWindow" HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
 -- renamed "getCloseWindow()" "to "GetNearestWindow()"
 -- get the nearest window of a building, based on character's position
 ---@param building any building to be searched
@@ -481,13 +421,18 @@ function GetNearestWindow(building, character)
 	local bdHeight = bdefY + bdef:getH() + 1
 
 	for x = bdefX - 1, bdWidth do
+
 		for y = bdefY - 1, bdHeight do
+
 			local sq = getCell():getGridSquare(x, y, character:getZ())
+
 			if (sq) then
 				local Objs = sq:getObjects(); -- TODO : use getSquaresWindow
+
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
-					local distance = getDistanceBetween(Object, character)
+					local distance = getDistanceBetween(Object, character) -- WIP - literally spammed inside the nested for loops...
+
 					if (instanceof(Object, "IsoWindow"))
 						and (not windowHasBarricade(Object, character))
 						and (not Object:isLocked())
@@ -501,6 +446,7 @@ function GetNearestWindow(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetNearestWindow() END ---");
 	return WindowOut
 end
 
@@ -522,6 +468,7 @@ function GetDoorsInsideSquare(door, player)
 	local sq2 = door:getSquare()
 	local sq3 = door:getOtherSideOfDoor(player)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetDoorsInsideSquare() END ---");
 	if (not sq1:isOutside()) then
 		return sq1
 	elseif (not sq2:isOutside()) then
@@ -547,6 +494,7 @@ function GetDoorsOutsideSquare(door, player)
 	local sq2 = door:getSquare()
 	local sq3 = door:getOtherSideOfDoor(player)
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetDoorsOutsideSquare() END ---");
 	if (sq1 and sq1:isOutside()) then
 		return sq1
 	elseif (sq2 and sq2:isOutside()) then
@@ -558,6 +506,7 @@ function GetDoorsOutsideSquare(door, player)
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 --- gets the closest unlocked door
 ---@param building any
 ---@param character any
@@ -569,19 +518,26 @@ function GetUnlockedDoor(building, character)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, character:getZ())
 
 			if (sq) then
 				local Objs = sq:getObjects();
+				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
+
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
+
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character)
-						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
+						if (instanceof(Object, "IsoDoor"))
+							and (Object:isExteriorDoor(character))
+							and (distance < closestSoFar) then
+
 							if (not Object:isLocked()) then
-								closestSoFar = distance
-								DoorOut = Object
+								closestSoFar = distance;
+								DoorOut = Object;
 							end
 						end
 					end
@@ -590,10 +546,11 @@ function GetUnlockedDoor(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetUnlockedDoor() END ---");
 	return DoorOut
 end
 
--- WIP - THIS FUNCTION HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
+-- WIP - "GetNearestDoor" HAS NO ACTIVE REFERENCES IN THE MOD, IS IT DEPRECATED?
 -- renamed "getDoor()" to "GetNearestDoor()"
 --- gets the closest door inside of a 'building' based on a 'character' position
 ---@param building any
@@ -606,17 +563,24 @@ function GetNearestDoor(building, character)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
+
 			local sq = getCell():getGridSquare(x, y, character:getZ())
+
 			if (sq) then
 				local Objs = sq:getObjects();
+				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
+
 				for j = 0, Objs:size() - 1 do
-					local Object = Objs:get(j)
+					local Object = Objs:get(j);
+
 					if (Object ~= nil) then
-						local distance = getDistanceBetween(sq, character)
+
 						if (instanceof(Object, "IsoDoor")) and (Object:isExteriorDoor(character)) and (distance < closestSoFar) then
-							closestSoFar = distance
-							DoorOut = Object
+							closestSoFar = distance;
+							DoorOut = Object;
 						end
 					end
 				end
@@ -624,6 +588,7 @@ function GetNearestDoor(building, character)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: getNearestDoor() END ---");
 	return DoorOut
 end
 
@@ -662,6 +627,7 @@ function NumberOfZombiesInOrAroundBuilding(building)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: NumberOfZombiesInOrAroundBuilding() END ---");
 	return count
 end
 
@@ -679,6 +645,7 @@ function GetRandomBuildingSquare(building)
 		return sq
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomBuildingSquare() END ---");
 	return nil
 end
 
@@ -704,6 +671,7 @@ function GetRandomFreeBuildingSquare(building)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomFreeBuildingSquare() END ---");
 	return nil
 end
 

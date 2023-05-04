@@ -1,6 +1,8 @@
 DoctorTask = {}
 DoctorTask.__index = DoctorTask
 
+local isLocalLoggingEnabled = false;
+
 function DoctorTask:new(superSurvivor)
 	local o = {}
 	setmetatable(o, self)
@@ -29,7 +31,9 @@ function DoctorTask:isValid()
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function DoctorTask:FindPatient()
+	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "DoctorTask:FindPatient() Called");
 	local player = self.parent.player
 	local patient = nil
 	local range = 15;
@@ -41,11 +45,14 @@ function DoctorTask:FindPatient()
 	local closestsoFar = range;
 
 	for x = minx, maxx do
+
 		for y = miny, maxy do
 			Square = getCell():getGridSquare(x, y, player:getZ())
+
 			if (Square ~= nil) then
-				local distance = getDistanceBetween(Square, player)
+				local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
 				local closeobjects = Square:getMovingObjects()
+
 				for i = 0, closeobjects:size() - 1 do
 					local obj = closeobjects:get(i)
 					if (obj ~= nil) then
@@ -58,6 +65,7 @@ function DoctorTask:FindPatient()
 		end
 	end
 
+	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "--- DoctorTask:FindPatient() END ---");
 	return patient
 end
 
@@ -67,7 +75,7 @@ function DoctorTask:update()
 
 	if (self.Patient ~= nil) then
 		if (self.Patient:isDead()) then
-			self.parent:Speak(getDialogue("RIPSurvivor"))
+			self.parent:Speak(GetDialogue("RIPSurvivor"))
 			self.Patient = nil
 			return false
 		end

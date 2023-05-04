@@ -99,7 +99,7 @@ function get_member_info(member_index)
             SSM:LoadSurvivor(member:getID(), getSpecificPlayer(0):getCurrentSquare())
             coords = "0"
         end
-        role = coords
+        -- role = coords -- why is role assigned coords?
     elseif not checkSaveFileExists("Survivor" .. tostring(member)) then
         name = getContextMenuText("MIASurvivor") .. "[" .. tostring(member) .. "]"
         role = getText("IGUI_health_Deceased")

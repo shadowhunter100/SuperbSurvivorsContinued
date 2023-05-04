@@ -26,3 +26,9 @@ HairColors["pink"] = ImmutableColor.new(0.59, 0.39, 0.55)
 HairColors["purple"] = ImmutableColor.new(0.47, 0.43, 0.59)
 HairColors["blue"] = ImmutableColor.new(0.39, 0.47, 0.59)
 HairColors["black"] = ImmutableColor.new(0.10, 0.08, 0.09)
+
+-- Global Superb Survivor Roles, Default
+SurvivorRoles = {
+    ["Companion"] = "Companion",
+    ["Worker"] = "Worker",
+}

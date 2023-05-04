@@ -76,15 +76,12 @@ end
 function ThreatenTask:update()
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
-
-
 	if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
 		if (self.parent:needToReadyGun(weapon)) then
 			self.parent:ReadyGun(weapon)
 			return false
 		end
 	end
-
 
 	self.theDistance = getDistanceBetween(self.Aite, self.parent.player)
 	self.parent:NPC_ShouldRunOrWalk()

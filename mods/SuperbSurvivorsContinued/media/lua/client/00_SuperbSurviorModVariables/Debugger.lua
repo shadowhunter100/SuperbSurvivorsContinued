@@ -1,4 +1,4 @@
-require "00_SuperbSurviorModVariables.SuperSurviorGlobalVariables";
+require "00_SuperbSurviorModVariables.SuperSurviorsGlobalVariables";
 
 local modId = "SuperbSurvivorsContinued";
 local isLocalLoggingEnabled = false;
@@ -8,6 +8,7 @@ local isLocalLoggingEnabled = false;
     Credit to "albion#0123" in PZ Discord for explaining the difference between "getFileWriter" and "getModFileWriter"
     CreateLogLine will create a log file under the "<user>/Zomboid/Lua/<modId>/logs".
 --]]
+-- Use this function to write a line to a text file, this is useful to identify when and how many times a function is called.
 function CreateLogLine(fileName, isEnabled, newLine)
     if (isEnabled) then
         local timestamp = os.time();

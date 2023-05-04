@@ -1,6 +1,8 @@
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup
 
+local isLocalLoggingEnabled = true;
+
 function SuperSurvivorGroup:new(GID)
 	local o = {}
 	setmetatable(o, self)
@@ -259,25 +261,35 @@ function SuperSurvivorGroup:hasLeader()
 	end
 	return false
 end
-
 function SuperSurvivorGroup:getID()
 	return self.ID
 end
 
 function SuperSurvivorGroup:getClosestIdleMember(ofThisRole, referencePoint)
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "function: SuperSurvivorGroup:getClosestIdleMember() called");
 	local closestSoFar = 999
 	local closestID = -1
 	local distance = 0
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
+
 		if (workingID ~= nil) then
 			distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
-			if (SSM:Get(workingID):isInAction() == false) and (distance ~= 0) and (distance < closestSoFar) and ((SSM:Get(workingID):getGroupRole() == ofThisRole) or (ofThisRole == "Any") or (ofThisRole == nil)) then
+
+			if (SSM:Get(workingID):isInAction() == false)
+				and (distance ~= 0)
+				and (distance < closestSoFar)
+				and ((SSM:Get(workingID):getGroupRole() == ofThisRole)
+					or (ofThisRole == "Any")
+					or (ofThisRole == nil))
+			then
 				closestID = workingID
 				closestSoFar = distance
 			end
 		end
 	end
+
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "--- function: SuperSurvivorGroup:getClosestIdleMember() END --- ");
 	if (closestID ~= -1) then
 		return SSM:Get(closestID)
 	else
@@ -286,9 +298,11 @@ function SuperSurvivorGroup:getClosestIdleMember(ofThisRole, referencePoint)
 end
 
 function SuperSurvivorGroup:getClosestMember(ofThisRole, referencePoint)
-	local closestSoFar = 999
-	local closestID = -1
-	local distance = 0
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "function: SuperSurvivorGroup:getClosestMember() called");
+	local closestSoFar = 999;
+	local closestID = -1;
+	local distance = 0;
+
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
 
@@ -297,13 +311,19 @@ function SuperSurvivorGroup:getClosestMember(ofThisRole, referencePoint)
 			if (workingSS ~= nil) then
 				distance = getDistanceBetween(workingSS:Get(), referencePoint)
 				--print(tostring(self.Members[i])..","..tostring(distance))				
-				if (distance ~= 0) and (distance < closestSoFar) and ((ofThisRole == nil) or (SSM:Get(self.Members[i]):getGroupRole() == ofThisRole) or (ofThisRole == "Any")) then
+				if (distance ~= 0) and (distance < closestSoFar)
+					and ((ofThisRole == nil)
+						or (SSM:Get(self.Members[i]):getGroupRole() == ofThisRole)
+						or (ofThisRole == "Any"))
+				then
 					closestID = self.Members[i]
 					closestSoFar = distance
 				end
 			end
 		end
 	end
+
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "--- function: SuperSurvivorGroup:getClosestMember() END ---");
 	if (closestID ~= -1) then
 		return SSM:Get(closestID)
 	else
@@ -336,20 +356,27 @@ function SuperSurvivorGroup:getMembers()
 end
 
 function SuperSurvivorGroup:getMembersInRange(referencePoint, range, isListening)
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "function: SuperSurvivorGroup:getMembersInRange() called");
 	local TableOut = {}
 	for i = 1, #self.Members do
 		local workingID = self.Members[i]
 
 		if ((workingID ~= nil)) and (SSM:Get(workingID) ~= nil) then
-			local distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
-			if (distance <= range) and ((not isListening) or (SSM:Get(workingID):getCurrentTask() == "Listen")) then
+			local distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint);
+			
+			if (distance <= range)
+				and ((not isListening)
+					or (SSM:Get(workingID):getCurrentTask() == "Listen"))
+			then
 				table.insert(TableOut, SSM:Get(workingID))
 			end
 		end
 	end
-	return TableOut
-end
 
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "--- function: SuperSurvivorGroup:getMembersInRange() END ---");
+
+	return TableOut;
+end
 function SuperSurvivorGroup:AllSpokeTo()
 	local members = self:getMembers()
 	for x = 1, #members do
@@ -371,16 +398,22 @@ function SuperSurvivorGroup:getIdleMember(ofThisRole, closest)
 end
 
 function SuperSurvivorGroup:getMembersThisCloseCount(range, referencePoint)
-	local count = 0
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "function: SuperSurvivorGroup:getMembersThisCloseCount() called");
+	local count = 0;
 
 	for i = 1, #self.Members do
-		local workingID = self.Members[i]
+		local workingID = self.Members[i];
+
 		if (workingID ~= nil) and (SSM:Get(workingID)) then
 			local distance = getDistanceBetween(referencePoint, SSM:Get(workingID):Get())
-			if (distance <= range) then count = count + 1 end
+
+			if (distance <= range) then
+				count = count + 1;
+			end
 		end
 	end
-	return count
+	CreateLogLine("SuperSurvivorGroup", isLocalLoggingEnabled, "--- function: SuperSurvivorGroup:getMembersThisCloseCount() end ---");
+	return count;
 end
 
 function SuperSurvivorGroup:PVPAlert(attacker)
@@ -407,6 +440,7 @@ function SuperSurvivorGroup:isMember(survivor)
 	return has_value(self.Members, survivor:getID())
 end
 
+-- WHAT ARE THE VALID ROLES? THERE ARE NO DOCUMENTATIONS!
 function SuperSurvivorGroup:addMember(newSurvivor, Role)
 	if (newSurvivor == nil) or (newSurvivor:getID() == nil) then
 		print("cant add survivor to group because id is nil")

@@ -5,7 +5,10 @@ SuperSurvivor.__index = SuperSurvivor
 
 SurvivorVisionCone = 0.90
 
+local isLocalLoggingEnabled = false;
+
 function SetSurvivorDress(mapKey)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorDress() called");
 	local dress = "RandomBasic"
 	local dressTable = {
 		[1] = "Preset_MarinesCamo",
@@ -22,6 +25,7 @@ function SetSurvivorDress(mapKey)
 end
 
 function SetSurvivorWeapon(mapKey)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorWeapon() called");
 	local weapon = "Base.Pistol3";
 	local weaponTableDefault = {
 		[1] = "Base.AssaultRifle",
@@ -37,6 +41,7 @@ function SetSurvivorWeapon(mapKey)
 end
 
 function SuperSurvivor:new(isFemale, square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:new() called");
 	local survivorObject = {}
 	setmetatable(survivorObject, self)
 	self.__index = self
@@ -147,6 +152,7 @@ function SuperSurvivor:new(isFemale, square)
 end
 
 function SuperSurvivor:newLoad(ID, square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newLoad() called");
 	local survivorObject = {}
 	setmetatable(survivorObject, self)
 	self.__index = self
@@ -237,6 +243,7 @@ function SuperSurvivor:newLoad(ID, square)
 end
 
 function SuperSurvivor:newSet(player)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newSet() called");
 	local survivorObject = {}
 	setmetatable(survivorObject, self)
 	self.__index = self
@@ -301,10 +308,12 @@ function SuperSurvivor:newSet(player)
 end
 
 function SuperSurvivor:Wait(ticks)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Wait() called");
 	self.WaitTicks = ticks
 end
 
 function SuperSurvivor:isInBase()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInBase() called");
 	if (self:getGroupID() == nil) then
 		return false
 	else
@@ -317,6 +326,7 @@ function SuperSurvivor:isInBase()
 end
 
 function SuperSurvivor:getBaseCenter()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBaseCenter() called");
 	if (self:getGroupID() == nil) then
 		return false
 	else
@@ -329,6 +339,7 @@ function SuperSurvivor:getBaseCenter()
 end
 
 function SuperSurvivor:getGroupBraveryBonus()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroupBraveryBonus() called");
 	if (self.GroupBraveryUpdatedTicks % 5 == 0) then
 		if (self:getGroupID() == nil) then return 0 end
 		local group = SSGM:Get(self:getGroupID())
@@ -340,10 +351,13 @@ function SuperSurvivor:getGroupBraveryBonus()
 	else
 		self.GroupBraveryUpdatedTicks = self.GroupBraveryUpdatedTicks + 1
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "GroupBraveryBonus: " .. tostring(self.GroupBraveryBonus));
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGroupBraveryBonus() end ---");
 	return self.GroupBraveryBonus
 end
 
 function SuperSurvivor:isInGroup(thisGuy)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInGroup() called");
 	if (self:getGroupID() == nil) then
 		return false
 	elseif (thisGuy:getModData().Group == nil) then
@@ -356,6 +370,7 @@ function SuperSurvivor:isInGroup(thisGuy)
 end
 
 function SuperSurvivor:isGroupless(thisGuy)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isGroupless() called");
 	if (thisGuy:getModData().Group == nil) then
 		return false
 	else
@@ -364,47 +379,64 @@ function SuperSurvivor:isGroupless(thisGuy)
 end
 
 function SuperSurvivor:getX()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getX() called");
 	return self.player:getX()
 end
 
 function SuperSurvivor:getY()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getY() called");
 	return self.player:getY()
 end
 
 function SuperSurvivor:getZ()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getZ() called");
 	return self.player:getZ()
 end
 
 function SuperSurvivor:getCurrentSquare()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getCurrentSquare() called");
 	return self.player:getCurrentSquare()
 end
 
 function SuperSurvivor:getModData()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getModData() called");
 	return self.player:getModData()
 end
 
 function SuperSurvivor:getName()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getName() called");
 	return self.player:getModData().Name
 end
 
 function SuperSurvivor:refreshName()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:refreshName() called");
 	if (self.player:getModData().Name ~= nil) then self:setName(self.player:getModData().Name) end
 end
 
 function SuperSurvivor:setName(nameToSet)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setName() called");
 	local desc = self.player:getDescriptor()
 	desc:setForename(nameToSet)
 	desc:setSurname("")
 	self.player:setForname(nameToSet);
 	self.player:setDisplayName(nameToSet);
 	if (self.userName) then self.userName:ReadString(nameToSet) end
-
 	self.player:getModData().Name = nameToSet
 	self.player:getModData().NameRaw = nameToSet
 end
 
 function SuperSurvivor:renderName() -- To do: Make an in game option to hide rendered names. It was requested.
-	if (not self.userName) or ((not self.JustSpoke) and ((not self:isInCell()) or (self:Get():getAlpha() ~= 1.0) or getSpecificPlayer(0) == nil or (not getSpecificPlayer(0):CanSee(self.player)))) then return false end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:renderName() called");
+	if (not self.userName)
+		or ((not self.JustSpoke)
+			and ((not self:isInCell())
+				or (self:Get():getAlpha() ~= 1.0)
+				or getSpecificPlayer(0) == nil
+				or (not getSpecificPlayer(0):CanSee(self.player))))
+	then
+		return
+			false
+	end
 
 	if (self.JustSpoke == true) and (self.TicksSinceSpoke == 0) then
 		self.TicksSinceSpoke = 250
@@ -449,6 +481,7 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 end
 
 function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setHostile() called");
 	if (Option_Display_Hostile_Color) then -- SuperSurvivorsMod.lua
 		if (toValue) then
 			self.userName:setDefaultColors(128, 128, 128, 255);
@@ -467,10 +500,12 @@ function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
 end
 
 function SuperSurvivor:SpokeTo(playerID)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:SpokeTo() called");
 	self.SpokeToRecently[playerID] = true
 end
 
 function SuperSurvivor:getSpokeTo(playerID)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getSpokeTo() called");
 	if (self.SpokeToRecently[playerID] ~= nil) then
 		return true
 	else
@@ -479,6 +514,7 @@ function SuperSurvivor:getSpokeTo(playerID)
 end
 
 function SuperSurvivor:reload()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reload() called");
 	local cs = self.player:getCurrentSquare()
 	local id = self:getID()
 	self:delete()
@@ -487,6 +523,7 @@ function SuperSurvivor:reload()
 end
 
 function SuperSurvivor:loadPlayer(square, ID)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:loadPlayer() called");
 	-- load from file if save file exists
 	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
 		local BuddyDesc = SurvivorFactory.CreateSurvivor();
@@ -508,6 +545,7 @@ function SuperSurvivor:loadPlayer(square, ID)
 end
 
 function SuperSurvivor:WearThis(ClothingItemName) -- should already be in inventory
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WearThis() called");
 	local ClothingItem
 	if (instanceof(ClothingItemName, "InventoryItem")) then
 		ClothingItem = ClothingItemName
@@ -538,9 +576,11 @@ function SuperSurvivor:WearThis(ClothingItemName) -- should already be in invent
 end
 
 function SuperSurvivor:spawnPlayer(square, isFemale)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
 	local BuddyDesc
+	-- defaults to creating a female survivor if isFemale is nil.
 	if (isFemale == nil) then
-		BuddyDesc = SurvivorFactory.CreateSurvivor()
+		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true)
 	else
 		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale)
 	end
@@ -650,10 +690,13 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 end
 
 function SuperSurvivor:setBravePoints(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setBravePoints() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "BravePoints set to: " .. tostring(toValue));
 	self.player:getModData().BravePoints = toValue
 end
 
 function SuperSurvivor:getBravePoints()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBravePoints() called");
 	if (self.player:getModData().BravePoints ~= nil) then
 		return self.player:getModData().BravePoints
 	else
@@ -662,18 +705,22 @@ function SuperSurvivor:getBravePoints()
 end
 
 function SuperSurvivor:setGroupRole(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setGroupRole() called");
 	self.player:getModData().GroupRole = toValue
 end
 
 function SuperSurvivor:getGroupRole()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroupRole() called");
 	return self.player:getModData().GroupRole
 end
 
 function SuperSurvivor:setNeedAmmo(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setNeedAmmo() called");
 	self.player:getModData().NeedAmmo = toValue
 end
 
 function SuperSurvivor:getNeedAmmo()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getNeedAmmo() called");
 	if (self.player:getModData().NeedAmmo ~= nil) then
 		return self.player:getModData().NeedAmmo
 	end
@@ -682,28 +729,28 @@ function SuperSurvivor:getNeedAmmo()
 end
 
 function SuperSurvivor:setAIMode(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setAIMode() called");
 	self.player:getModData().AIMode = toValue
 end
 
 function SuperSurvivor:getAIMode()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getAIMode() called");
 	return self.player:getModData().AIMode
 end
 
 function SuperSurvivor:setGroupID(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setGroupID() called");
 	self.player:getModData().Group = toValue
 end
 
 function SuperSurvivor:getGroupID()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroupID() called");
 	return self.player:getModData().Group
 end
 
-function SuperSurvivor:setSneaking(toValue)
-	if self.player ~= nil then
-		self.player:setSneaking(toValue)
-	end
-end
 
 function SuperSurvivor:setRunning(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setRunning() called");
 	if (not self.player or not self.player.NPCGetRunning) then return false end
 
 	if (self.player:NPCGetRunning() ~= toValue) then
@@ -713,14 +760,24 @@ function SuperSurvivor:setRunning(toValue)
 end
 
 function SuperSurvivor:getRunning()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getRunning() called");
 	return self.player:getModData().Running
 end
 
+function SuperSurvivor:setSneaking(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setSneaking() called");
+	if self.player ~= nil then
+		self.player:setSneaking(toValue)
+	end
+end
+
 function SuperSurvivor:getSneaking()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getSneaking() called");
 	return self.player:getModData().Sneaking
 end
 
 function SuperSurvivor:getGroup()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroup() called");
 	local gid = self:getGroupID()
 
 	if (gid ~= nil) then
@@ -729,11 +786,14 @@ function SuperSurvivor:getGroup()
 	return nil
 end
 
+-- WIP - GET() - is also spammed frequently, need to investigate why it is being called so often.
 function SuperSurvivor:Get()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Get() called");
 	return self.player
 end
 
 function SuperSurvivor:getCurrentTask()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getCurrentTask() called");
 	return self:getTaskManager():getCurrentTask()
 end
 
@@ -743,6 +803,7 @@ function SuperSurvivor:isTooScaredToFight()
 end
 
 function SuperSurvivor:usingWeapon()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:usingWeapon() called");
 	local handItem = self.player:getPrimaryHandItem()
 
 	if (handItem ~= nil) and (instanceof(handItem, "HandWeapon")) then
@@ -753,6 +814,7 @@ function SuperSurvivor:usingWeapon()
 end
 
 function SuperSurvivor:usingGun()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:usingGun() called");
 	local handItem = self.player:getPrimaryHandItem()
 
 	if (handItem ~= nil) and (instanceof(handItem, "HandWeapon")) then
@@ -763,14 +825,17 @@ function SuperSurvivor:usingGun()
 end
 
 function SuperSurvivor:isWalkingPermitted()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isWalkingPermitted() called");
 	return self.WalkingPermitted
 end
 
 function SuperSurvivor:setWalkingPermitted(toValue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setWalkingPermitted() called");
 	self.WalkingPermitted = toValue
 end
 
 function SuperSurvivor:resetAllTables()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:resetAllTables() called");
 	self.SpokeToRecently = {}
 	self.SquareWalkToAttempts = {}
 	self.SquaresExplored = {}
@@ -782,38 +847,46 @@ function SuperSurvivor:resetAllTables()
 end
 
 function SuperSurvivor:resetContainerSquaresLooted()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:resetContainerSquaresLooted() called");
 	for i = 1, #LootTypes do
 		self.SquareContainerSquareLooteds[LootTypes[i]] = {}
 	end
 end
 
 function SuperSurvivor:resetWalkToAttempts()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:resetWalkToAttempts() called");
 	self.SquareWalkToAttempts = {}
 end
 
 function SuperSurvivor:BuildingLooted()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:BuildingLooted() called");
 	self.NumberOfBuildingsLooted = self.NumberOfBuildingsLooted + 1
 end
 
 function SuperSurvivor:getBuildingsLooted()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBuildingsLooted() called");
 	return self.NumberOfBuildingsLooted
 end
 
 function SuperSurvivor:setBaseBuilding(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setBaseBuilding() called");
 	self.BaseBuilding = building
 end
 
 function SuperSurvivor:getBaseBuilding()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBaseBuilding() called");
 	return self.BaseBuilding
 end
 
 --get the super survivor object of the character Im following (if any)
 function SuperSurvivor:getFollowChar()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getFollowChar() called");
 	return SSM:Get(self.player:getModData().FollowCharID)
 end
 
 --this means (Does this survivor need to stop whatever they doing and follow?!)
 function SuperSurvivor:needToFollow()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:needToFollow() called");
 	local Task = self:getTaskManager():getTaskFromName("Follow")
 
 	if (Task == nil) then return false end
@@ -828,6 +901,7 @@ function SuperSurvivor:needToFollow()
 end
 
 function SuperSurvivor:getNoFoodNearBy()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getNoFoodNearBy() called");
 	if (self.NoFoodNear == true) then
 		if (self.TicksAtLastDetectNoFood ~= nil) and ((self.Reducer - self.TicksAtLastDetectNoFood) > 12000) then
 			self.NoFoodNear = false
@@ -838,6 +912,7 @@ function SuperSurvivor:getNoFoodNearBy()
 end
 
 function SuperSurvivor:setNoFoodNearBy(toThis)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setNoFoodNearBy() called");
 	if (toThis == true) then
 		self.TicksAtLastDetectNoFood = self.Reducer
 	end
@@ -845,6 +920,7 @@ function SuperSurvivor:setNoFoodNearBy(toThis)
 end
 
 function SuperSurvivor:getNoWaterNearBy()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getNoWaterNearBy() called");
 	if (self.NoWaterNear == true) then
 		if (self.TicksAtLastDetectNoWater ~= nil) and ((self.Reducer < self.TicksAtLastDetectNoWater) or ((self.Reducer - self.TicksAtLastDetectNoWater) > 12900)) then
 			self.NoWaterNear = false
@@ -855,6 +931,7 @@ function SuperSurvivor:getNoWaterNearBy()
 end
 
 function SuperSurvivor:setNoWaterNearBy(toThis)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setNoWaterNearBy() called");
 	if (toThis == true) then
 		self.TicksAtLastDetectNoWater = self.Reducer
 	end
@@ -863,38 +940,47 @@ function SuperSurvivor:setNoWaterNearBy(toThis)
 end
 
 function SuperSurvivor:isHungry()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isHungry() called");
 	return (self.player:getStats():getHunger() > 0.15)
 end
 
 function SuperSurvivor:isVHungry()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isVHungry() called");
 	return (self.player:getStats():getHunger() > 0.40)
 end
 
 function SuperSurvivor:isStarving()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isStarving() called");
 	return (self.player:getStats():getHunger() > 0.75)
 end
 
 function SuperSurvivor:isThirsty()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isThirsty() called");
 	return (self.player:getStats():getThirst() > 0.15)
 end
 
 function SuperSurvivor:isVThirsty()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isVThirsty() called");
 	return (self.player:getStats():getThirst() > 0.40)
 end
 
 function SuperSurvivor:isDyingOfThirst()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isDyingOfThirst() called");
 	return (self.player:getStats():getThirst() > 0.75)
 end
 
 function SuperSurvivor:isDead()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isDead() called");
 	return (self.player:isDead())
 end
 
 function SuperSurvivor:saveFileExists()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:saveFileExists() called");
 	return (checkSaveFileExists("Survivor" .. tostring(self:getID())))
 end
 
 function SuperSurvivor:getRelationshipWP()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getRelationshipWP() called");
 	if (self.player:getModData().RWP == nil) then
 		return 0
 	else
@@ -903,6 +989,7 @@ function SuperSurvivor:getRelationshipWP()
 end
 
 function SuperSurvivor:PlusRelationshipWP(thisAmount)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:PlusRelationshipWP() called");
 	if (self.player:getModData().RWP == nil) then
 		self.player:getModData().RWP = 0
 	end
@@ -912,6 +999,7 @@ function SuperSurvivor:PlusRelationshipWP(thisAmount)
 end
 
 function SuperSurvivor:hasFood()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasFood() called");
 	local inv = self.player:getInventory()
 	local bag = self:getBag()
 
@@ -925,6 +1013,7 @@ function SuperSurvivor:hasFood()
 end
 
 function SuperSurvivor:getFood()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getFood() called");
 	local inv = self.player:getInventory()
 	local bag = self:getBag()
 
@@ -938,6 +1027,7 @@ function SuperSurvivor:getFood()
 end
 
 function SuperSurvivor:hasWater()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasWater() called");
 	local inv = self.player:getInventory()
 	local bag = self:getBag()
 
@@ -951,6 +1041,7 @@ function SuperSurvivor:hasWater()
 end
 
 function SuperSurvivor:getWater()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getWater() called");
 	local inv = self.player:getInventory()
 	local bag = self:getBag()
 
@@ -964,6 +1055,7 @@ function SuperSurvivor:getWater()
 end
 
 function SuperSurvivor:getFacingSquare()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getFacingSquare() called");
 	local square = self.player:getCurrentSquare()
 	local fsquare = square:getTileInDirection(self.player:getDir())
 	if (fsquare) then
@@ -974,11 +1066,14 @@ function SuperSurvivor:getFacingSquare()
 end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingClaimed() called");
 	if (SafeBase) then -- if safe base mode on survivors consider other claimed buildings already explored
 		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
 			local tempgroup = SSGM:GetGroupIdFromSquare(tempsquare)
+
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "groupId: " .. tostring(tempgroup));
 			if (tempgroup ~= -1 and tempgroup ~= self:getGroupID()) then return true end
 		end
 	end
@@ -987,6 +1082,7 @@ function SuperSurvivor:isTargetBuildingClaimed(building)
 end
 
 function SuperSurvivor:isTargetBuildingDangerous()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingDangerous() called");
 	if self:isTargetBuildingClaimed(self.TargetBuilding) then return true end
 
 	local result = NumberOfZombiesInOrAroundBuilding(self.TargetBuilding)
@@ -998,6 +1094,8 @@ function SuperSurvivor:isTargetBuildingDangerous()
 	return false
 end
 
+
+-- WIP - MarkCurrentSquareExplored_IFOD() IS CURRENTLY NOT USED
 -- New function: To allow the exact position of the NPC to mark spot. This could be useful for preventing NPCs from walking to blocked off doors they witnessed
 -- It needs work though, because right now it will more than likely mark off the whole building.
 -- IFOD stands for 'In front of door' but it will also check for barricaded windows too.
@@ -1021,6 +1119,7 @@ function SuperSurvivor:MarkCurrentSquareExplored_IFOD(building)
 end
 
 function SuperSurvivor:MarkBuildingExplored(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:MarkBuildingExplored() called");
 	if (not building) then
 		return false
 	end
@@ -1040,6 +1139,7 @@ function SuperSurvivor:MarkBuildingExplored(building)
 end
 
 function SuperSurvivor:getBuildingExplored(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBuildingExplored() called");
 	if self:isTargetBuildingClaimed(building) then return true end
 
 	local sq = GetRandomBuildingSquare(building)
@@ -1053,7 +1153,13 @@ function SuperSurvivor:getBuildingExplored(building)
 	return false
 end
 
+--[[ 
+	WIP - isSpeaking() is spammed very frequently... about 19000 times in less than a minute
+	Cows suspect the function is being called even then the speaker is not visible and perhaps in a tick-based frequency.
+	Perhaps it is best to limit the calls to within visible range (no off-screen calls) and set a call frequency limit.
+--]]
 function SuperSurvivor:isSpeaking()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isSpeaking() called");
 	if (self.JustSpoke) or (self.player:isSpeaking()) then
 		return true
 	else
@@ -1062,6 +1168,7 @@ function SuperSurvivor:isSpeaking()
 end
 
 function SuperSurvivor:Speak(text)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Speak() called");
 	if (SpeakEnabled) then
 		self.SayLine1 = text
 		self.JustSpoke = true
@@ -1070,6 +1177,7 @@ function SuperSurvivor:Speak(text)
 end
 
 function SuperSurvivor:RoleplaySpeak(text)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:RoleplaySpeak() called");
 	if (SuperSurvivorGetOptionValue("RoleplayMessage") == 1) then
 		if (text:match('^\\*(.*)\\*$')) then -- checks if the string already have '*' (some localizations have it)
 			self.SayLine1 = text
@@ -1083,6 +1191,7 @@ function SuperSurvivor:RoleplaySpeak(text)
 end
 
 function SuperSurvivor:MarkAttemptedBuildingExplored(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:MarkAttemptedBuildingExplored() called");
 	if (building == nil) then return false end
 	local bdef = building:getDef()
 	for x = bdef:getX(), (bdef:getX() + bdef:getW()) do
@@ -1096,6 +1205,7 @@ function SuperSurvivor:MarkAttemptedBuildingExplored(building)
 end
 
 function SuperSurvivor:resetBuildingWalkToAttempts(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:resetBuildingWalkToAttempts() called");
 	if (building == nil) then return false end
 	local bdef = building:getDef()
 	for x = bdef:getX(), (bdef:getX() + bdef:getW()) do
@@ -1109,6 +1219,7 @@ function SuperSurvivor:resetBuildingWalkToAttempts(building)
 end
 
 function SuperSurvivor:Explore(sq)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Explore() called");
 	if (sq) then
 		local key = tostring(sq:getX()) .. "/" .. tostring(sq:getY())
 		if (self.SquaresExplored[key] == nil) then
@@ -1120,6 +1231,7 @@ function SuperSurvivor:Explore(sq)
 end
 
 function SuperSurvivor:getExplore(sq)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getExplore() called");
 	if (sq) then
 		local key = tostring(sq:getX()) .. "/" .. tostring(sq:getY())
 		if (self.SquaresExplored[key] == nil) then
@@ -1132,6 +1244,7 @@ function SuperSurvivor:getExplore(sq)
 end
 
 function SuperSurvivor:ContainerSquareLooted(sq, Category)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ContainerSquareLooted() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		if (self.SquareContainerSquareLooteds[Category][key] == nil) then
@@ -1142,7 +1255,9 @@ function SuperSurvivor:ContainerSquareLooted(sq, Category)
 	end
 end
 
+-- WIP - setContainerSquareLooted() IS CURRENTLY NOT USED
 function SuperSurvivor:setContainerSquareLooted(sq, toThis, Category)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setContainerSquareLooted() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		self.SquareContainerSquareLooteds[Category][key] = toThis
@@ -1150,6 +1265,7 @@ function SuperSurvivor:setContainerSquareLooted(sq, toThis, Category)
 end
 
 function SuperSurvivor:getContainerSquareLooted(sq, Category)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getContainerSquareLooted() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		if (self.SquareContainerSquareLooteds[Category][key] == nil) then
@@ -1162,6 +1278,7 @@ function SuperSurvivor:getContainerSquareLooted(sq, Category)
 end
 
 function SuperSurvivor:WalkToAttempt(sq)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WalkToAttempt() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		if (self.SquareWalkToAttempts[key] == nil) then
@@ -1173,6 +1290,7 @@ function SuperSurvivor:WalkToAttempt(sq)
 end
 
 function SuperSurvivor:setWalkToAttempt(sq, toThis)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setWalkToAttempt() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		self.SquareWalkToAttempts[key] = toThis
@@ -1180,10 +1298,12 @@ function SuperSurvivor:setWalkToAttempt(sq, toThis)
 end
 
 function SuperSurvivor:setRouteID(routeid)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setRouteID() called");
 	self.player:getModData().RouteID = routeid
 end
 
 function SuperSurvivor:getRouteID()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getRouteID() called");
 	if (self.player:getModData().RouteID == nil) then
 		return 0
 	else
@@ -1192,6 +1312,7 @@ function SuperSurvivor:getRouteID()
 end
 
 function SuperSurvivor:getWalkToAttempt(sq)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getWalkToAttempt() called");
 	if (sq) then
 		local key = sq:getX() .. sq:getY()
 		if (self.SquareWalkToAttempts[key] == nil) then
@@ -1205,6 +1326,7 @@ function SuperSurvivor:getWalkToAttempt(sq)
 end
 
 function SuperSurvivor:inUnLootedBuilding()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inUnLootedBuilding() called");
 	if (self.player:isOutside()) then
 		return false
 	end
@@ -1227,6 +1349,7 @@ function SuperSurvivor:inUnLootedBuilding()
 end
 
 function SuperSurvivor:getBuilding()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBuilding() called");
 	if (self.player == nil) then
 		return nil
 	end
@@ -1249,6 +1372,7 @@ function SuperSurvivor:getBuilding()
 end
 
 function SuperSurvivor:isInBuilding(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInBuilding() called");
 	if (building == self:getBuilding()) then
 		return true
 	else
@@ -1257,6 +1381,7 @@ function SuperSurvivor:isInBuilding(building)
 end
 
 function SuperSurvivor:AttemptedLootBuilding(building)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:AttemptedLootBuilding() called");
 	if (not building) then
 		return false
 	end
@@ -1282,41 +1407,53 @@ function SuperSurvivor:AttemptedLootBuilding(building)
 	end
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:getUnBarricadedWindow(building)
-	local pcs = self.player:getCurrentSquare()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getUnBarricadedWindow() called");
+	-- local pcs = self.player:getCurrentSquare(); -- WIP - Commented out, unused variable
 	local WindowOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
+
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, self.player:getZ())
 
 			if (sq) then
 				local Objs = sq:getObjects();
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
 
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
 					local objectSquare = Object:getSquare()
-					local distance = getDistanceBetween(objectSquare, self.player)
+					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+					local distance = getDistanceBetween(objectSquare, self.player) -- WIP - literally spammed inside the nested for loops...
 
-					if (instanceof(Object, "IsoWindow")) and (self:getWalkToAttempt(objectSquare) < 8) and distance < closestSoFar then
+					if (instanceof(Object, "IsoWindow"))
+						and (self:getWalkToAttempt(objectSquare) < 8)
+						and distance < closestSoFar
+					then
 						local barricade = Object:getBarricadeForCharacter(self.player)
 
 						if barricade == nil or (barricade:canAddPlank()) then
-							closestSoFar = distance
-							WindowOut = Object
+							closestSoFar = distance;
+							WindowOut = Object;
+							CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "LOOP BREAK");
+							break; -- this should stop further runs of this call and improve performance...
 						end
 					end
 				end
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getUnBarricadedWindow() END ---");
 
 	return WindowOut
 end
 
 function SuperSurvivor:isEnemy(character)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isEnemy() called");
 	local group = self:getGroup()
 
 	if (group) then
@@ -1340,6 +1477,7 @@ function SuperSurvivor:isEnemy(character)
 end
 
 function SuperSurvivor:hasWeapon()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasWeapon() called");
 	if (self.player:getPrimaryHandItem() ~= nil) and (instanceof(self.player:getPrimaryHandItem(), "HandWeapon")) then
 		return self.player:getPrimaryHandItem()
 	else
@@ -1348,6 +1486,7 @@ function SuperSurvivor:hasWeapon()
 end
 
 function SuperSurvivor:hasGun()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasGun() called");
 	if (self.player:getPrimaryHandItem() ~= nil) and (instanceof(self.player:getPrimaryHandItem(), "HandWeapon")) and (self.player:getPrimaryHandItem():isAimedFirearm()) then
 		return true
 	else
@@ -1356,6 +1495,7 @@ function SuperSurvivor:hasGun()
 end
 
 function SuperSurvivor:getBag()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getBag() called");
 	if (self.player:getClothingItem_Back() ~= nil) and (instanceof(self.player:getClothingItem_Back(), "InventoryContainer")) then
 		return self.player:getClothingItem_Back():getItemContainer()
 	end
@@ -1372,6 +1512,7 @@ function SuperSurvivor:getBag()
 end
 
 function SuperSurvivor:getWeapon()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getWeapon() called");
 	if (self.player:getInventory() ~= nil) and (self.player:getInventory():FindAndReturnCategory("Weapon")) then
 		return self.player:getInventory():FindAndReturnCategory("Weapon")
 	end
@@ -1388,6 +1529,7 @@ function SuperSurvivor:getWeapon()
 end
 
 function SuperSurvivor:hasRoomInBag()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasRoomInBag() called");
 	local playerBag = self:getBag()
 
 	if (playerBag:getCapacityWeight() >= (playerBag:getMaxWeight() * 0.9)) then
@@ -1398,6 +1540,7 @@ function SuperSurvivor:hasRoomInBag()
 end
 
 function SuperSurvivor:hasRoomInBagFor(item)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasRoomInBagFor() called");
 	local playerBag = self:getBag()
 
 	if (playerBag:getCapacityWeight() + item:getWeight() >= (playerBag:getMaxWeight() * 0.9)) then
@@ -1408,14 +1551,19 @@ function SuperSurvivor:hasRoomInBagFor(item)
 end
 
 function SuperSurvivor:getSeenCount()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getSeenCount() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "seen: " .. tostring(self.seenCount));
 	return self.seenCount
 end
 
 function SuperSurvivor:getDangerSeenCount()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDangerSeenCount() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "seen: " .. tostring(self.dangerSeenCount));
 	return self.dangerSeenCount
 end
 
 function SuperSurvivor:isInSameRoom(movingObj)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameRoom() called");
 	if not movingObj then return false end
 	local objSquare = movingObj:getCurrentSquare()
 
@@ -1431,7 +1579,9 @@ function SuperSurvivor:isInSameRoom(movingObj)
 	end
 end
 
+-- WIP - isInSameRoomWithEnemyAlt() CURRENTLY IS NOT USED
 function SuperSurvivor:isInSameRoomWithEnemyAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameRoomWithEnemyAlt() called");
 	if (self.LastEnemeySeen ~= nil) then
 		if (self:isInSameRoom(self.LastEnemeySeen)) then
 			return true
@@ -1442,6 +1592,7 @@ function SuperSurvivor:isInSameRoomWithEnemyAlt()
 end
 
 function SuperSurvivor:isInSameBuilding(movingObj)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameBuilding() called");
 	if not movingObj then return false end
 	local objSquare = movingObj:getCurrentSquare()
 
@@ -1461,6 +1612,7 @@ end
 
 -- An easiser function to make InBuildingWithEntity returns
 function SuperSurvivor:isInSameBuildingWithEnemyAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameBuildingWithEnemyAlt() called");
 	if (self.LastEnemeySeen ~= nil) then
 		if (self:isInSameBuilding(self.LastEnemeySeen)) then
 			return true
@@ -1471,10 +1623,13 @@ function SuperSurvivor:isInSameBuildingWithEnemyAlt()
 end
 
 function SuperSurvivor:getAttackRange()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getAttackRange() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "attack range: " .. tostring(self.AttackRange));
 	return self.AttackRange
 end
 
 function SuperSurvivor:RealCanSee(character)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:RealCanSee() called");
 	if (self.player:isGodMod()) then
 		character:setAlpha(1.0)
 		character:setTarAlphaAlpha(1.0)
@@ -1493,6 +1648,8 @@ function SuperSurvivor:RealCanSee(character)
 end
 
 function SuperSurvivor:DoVision()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoVision() called");
+
 	local atLeastThisClose = 19;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 25
@@ -1510,11 +1667,16 @@ function SuperSurvivor:DoVision()
 	local tempdistance = 1
 
 	if (spottedList ~= nil) then
-		--print("dovision " .. tostring(spottedList:size()))
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "spottedList.size " .. tostring(spottedList:size()))
 		for i = 0, spottedList:size() - 1 do
 			local character = spottedList:get(i);
-			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
+
+			if (character ~= nil) and (character ~= self.player)
+				and (instanceof(character, "IsoZombie")
+					or instanceof(character, "IsoPlayer"))
+			then
 				if (character:isDead() == false) then
+					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 					tempdistance = tonumber(getDistanceBetween(character, self.player))
 
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
@@ -1552,6 +1714,8 @@ function SuperSurvivor:DoVision()
 		self.UpdateDelayTicks = 20
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:DoVision() END ---");
+
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)
 
@@ -1560,6 +1724,7 @@ function SuperSurvivor:DoVision()
 end
 
 function SuperSurvivor:isInCell()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInCell() called");
 	if (self.player == nil) or (self.player:getCurrentSquare() == nil) or (self:isDead()) then
 		return false
 	else
@@ -1568,6 +1733,7 @@ function SuperSurvivor:isInCell()
 end
 
 function SuperSurvivor:isOnScreen()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isOnScreen() called");
 	if (self.player:getCurrentSquare() ~= nil) and (self.player:getCurrentSquare():IsOnScreen()) then
 		return true
 	else
@@ -1576,6 +1742,7 @@ function SuperSurvivor:isOnScreen()
 end
 
 function SuperSurvivor:isInAction()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInAction() called");
 	if ((self.player:getModData().bWalking == true) and (self.TicksSinceSquareChanged <= 10)) then
 		--print(self:getName().." returing true1")
 		return true
@@ -1596,6 +1763,7 @@ function SuperSurvivor:isInAction()
 end
 
 function SuperSurvivor:isWalking()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isWalking() called");
 	local queue = ISTimedActionQueue.queues[self.player]
 	if queue == nil then return false end
 	--for k,v in ipairs(queue.queue) do
@@ -1608,6 +1776,7 @@ end
 
 -- WalkToDirect, try that instead
 function SuperSurvivor:walkTo(square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:walkTo() called");
 	if (square == nil) then return false end
 
 	local parent
@@ -1632,7 +1801,6 @@ function SuperSurvivor:walkTo(square)
 		local door = self:inFrontOfDoor()
 		if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (not door:isDestroyed()) then
 			local building = door:getOppositeSquare():getBuilding()
-			self:DebugSay("little pig, little pig")
 			self:NPC_ManageLockedDoors() -- This function will be sure ^ doesn't make the npc stuck in these cases
 		end
 		if (self.StuckDoorTicks < 7) then
@@ -1644,6 +1812,7 @@ function SuperSurvivor:walkTo(square)
 end
 
 function SuperSurvivor:walkTowards(x, y, z)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:walkTowards() called");
 	local towardsSquare = GetTowardsSquare(self:Get(), x, y, z)
 	if (towardsSquare == nil) then return false end
 
@@ -1651,6 +1820,7 @@ function SuperSurvivor:walkTowards(x, y, z)
 end
 
 function SuperSurvivor:walkToDirect(square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:walkToDirect() called");
 	if (square == nil) then return false end
 
 	self:NPC_ManageLockedDoors() -- If things get too weird with npc pathing at doors, remove this line
@@ -1660,6 +1830,7 @@ function SuperSurvivor:walkToDirect(square)
 end
 
 function SuperSurvivor:WalkToPoint(tx, ty, tz)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WalkToPoint() called");
 	if (not self.player:getPathFindBehavior2():isTargetLocation(tx, ty, tz)) then
 		self.player:getModData().bWalking = true
 
@@ -1670,6 +1841,7 @@ function SuperSurvivor:WalkToPoint(tx, ty, tz)
 end
 
 function SuperSurvivor:NPC_TargetIsOutside() -- The LastEnemySeen kind of target the npc is witnessing
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_TargetIsOutside() called");
 	if (self.LastEnemeySeen ~= nil) then
 		if self.LastEnemeySeen:isOutside() == true then
 			return true
@@ -1680,6 +1852,7 @@ function SuperSurvivor:NPC_TargetIsOutside() -- The LastEnemySeen kind of target
 end
 
 function SuperSurvivor:NPC_IsOutside()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IsOutside() called");
 	if self.player:isOutside() then
 		return true
 	else
@@ -1688,6 +1861,7 @@ function SuperSurvivor:NPC_IsOutside()
 end
 
 function SuperSurvivor:inFrontOfDoor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfDoor() called");
 	local cs = self.player:getCurrentSquare()
 	local osquare = GetAdjSquare(cs, "N")
 	if cs and osquare and cs:getDoorTo(osquare) then return cs:getDoorTo(osquare) end
@@ -1701,10 +1875,12 @@ function SuperSurvivor:inFrontOfDoor()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and cs:getDoorTo(osquare) then return cs:getDoorTo(osquare) end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfDoor() End ---");
 	return nil
 end
 
 function SuperSurvivor:inFrontOfLockedDoor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfLockedDoor() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (not door:isDestroyed()) then
@@ -1715,6 +1891,7 @@ function SuperSurvivor:inFrontOfLockedDoor()
 end
 
 function SuperSurvivor:inFrontOfLockedDoorAndIsOutside()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfLockedDoorAndIsOutside() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (self.player:isOutside()) then
@@ -1725,6 +1902,7 @@ function SuperSurvivor:inFrontOfLockedDoorAndIsOutside()
 end
 
 function SuperSurvivor:inFrontOfLockedDoorAndIsInside()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfLockedDoorAndIsInside() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (not self.player:isOutside()) then
@@ -1735,6 +1913,7 @@ function SuperSurvivor:inFrontOfLockedDoorAndIsInside()
 end
 
 function SuperSurvivor:inFrontOfBarricadedDoor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfBarricadedDoor() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isBarricaded()) then
@@ -1745,6 +1924,7 @@ function SuperSurvivor:inFrontOfBarricadedDoor()
 end
 
 function SuperSurvivor:NPC_IFOD_BarricadedInside() -- IFOD stands for In front of door
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IFOD_BarricadedInside() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and ((door:isBarricaded()) and (not self.player:isOutside())) then
@@ -1755,6 +1935,7 @@ function SuperSurvivor:NPC_IFOD_BarricadedInside() -- IFOD stands for In front o
 end
 
 function SuperSurvivor:NPC_IFOD_BarricadedOutside() -- IFOD stands for In front of door
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IFOD_BarricadedOutside() called");
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isBarricaded()) and (self.player:isOutside()) then
@@ -1764,8 +1945,10 @@ function SuperSurvivor:NPC_IFOD_BarricadedOutside() -- IFOD stands for In front 
 	end
 end
 
+-- WIP - NPC_IFOD_Xor_BlockedDoor() CURRENTLY IS NOT USED
 -- I'm tired of writing long precise 'ifs' so, Xor it is (IDK and IDC if that's what 'Xor' means.)
 function SuperSurvivor:NPC_IFOD_Xor_BlockedDoor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IFOD_Xor_BlockedDoor() called");
 	if (self:inFrontOfLockedDoorAndIsOutside() == true) then
 		return true
 	elseif (self:NPC_IFOD_BarricadedInside() == true) then
@@ -1776,6 +1959,7 @@ function SuperSurvivor:NPC_IFOD_Xor_BlockedDoor()
 end
 
 function SuperSurvivor:inFrontOfWindow()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfWindow() called");
 	local cs = self.player:getCurrentSquare()
 	local fsquare = cs:getTileInDirection(self.player:getDir());
 	if cs and fsquare then
@@ -1787,6 +1971,7 @@ end
 
 -- since inFrontOfWindow (not alt) doesn't have this function's code
 function SuperSurvivor:inFrontOfWindowAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfWindowAlt() called");
 	local cs = self.player:getCurrentSquare()
 	local osquare = GetAdjSquare(cs, "N")
 	if cs and osquare and cs:getWindowTo(osquare) then return cs:getWindowTo(osquare) end
@@ -1800,11 +1985,13 @@ function SuperSurvivor:inFrontOfWindowAlt()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and cs:getWindowTo(osquare) then return cs:getWindowTo(osquare) end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfWindowAlt() End ---");
 	return nil
 end
 
 function SuperSurvivor:inFrontOfBarricadedWindowAlt()
 	-- Used door locked code for this, added 'alt' to function name just to be safe for naming
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfBarricadedWindowAlt() called");
 	local window = self:inFrontOfWindowAlt()
 
 	if (window ~= nil) and (window:isBarricaded()) then
@@ -1815,6 +2002,7 @@ function SuperSurvivor:inFrontOfBarricadedWindowAlt()
 end
 
 function SuperSurvivor:inFrontOfWindowAndIsOutsideAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfWindowAndIsOutsideAlt() called");
 	-- Used door locked code for this, added 'alt' to function name just to be safe for naming
 	local window = self:inFrontOfWindowAlt()
 
@@ -1826,6 +2014,7 @@ function SuperSurvivor:inFrontOfWindowAndIsOutsideAlt()
 end
 
 function SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt() called");
 	-- Used door locked code for this, added 'alt' to function name just to be safe for naming
 	local window = self:inFrontOfWindowAlt()
 
@@ -1837,6 +2026,7 @@ function SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt()
 end
 
 function SuperSurvivor:NPC_inFrontOfUnBarricadedWindowOutside()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_inFrontOfUnBarricadedWindowOutside() called");
 	-- Is the NPC front of an UNbarricaded window AND is the NPC outside?
 	local window = self:inFrontOfWindowAlt()
 
@@ -1852,6 +2042,7 @@ end
 -- And to attempt-fix a situation where the player can walk behind the NPC mid-attack and the npc suddenly forgetting about the player.
 -- Update: BE VERY CAREFUL using this. It will overwrite Dovision. This is using for bandits to keep up with the main player.
 function SuperSurvivor:DoHumanEntityScan()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoHumanEntityScan() called");
 	local atLeastThisClose = 5;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 6
@@ -1868,18 +2059,12 @@ function SuperSurvivor:DoHumanEntityScan()
 			local character = spottedList:get(i);
 			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoPlayer")) and not (instanceof(character, "IsoZombie")) then
 				if (character:isDead() == false) then
+					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 					tempdistance = tonumber(getDistanceBetween(character, self.player))
 
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
 						local CanSee = self:RealCanSee(character)
 
-						--if(tempdistance < 1) and (character:getZ() == self.player:getZ()) then
-						--	self.EnemiesOnMe = self.EnemiesOnMe + 1
-						--end
-						-- Removed: The sixth sense and dovision does this well enough. this would just stack numbers infinitely
-						--if(tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
-						--	self.dangerSeenCount = self.dangerSeenCount + 1
-						--end
 						if (not CanSee) or (CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
 							self.seenCount = self.seenCount + 1
 						end
@@ -1897,6 +2082,7 @@ function SuperSurvivor:DoHumanEntityScan()
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:DoHumanEntityScan() END ---");
 	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)
@@ -1910,6 +2096,7 @@ end
 -- 'Oh I'm trying to fight a NPC I'm stuck on, oh no a zombie behind me and I could clearly hear it? Oh well...' THIS function prevents cases like THAT.
 -- Also I believe since the self.seencount and other variables that 'reset to 0' is marked off, maybe helping as to why this function's working so cleverly.
 function SuperSurvivor:Companion_DoSixthSenseScan()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Companion_DoSixthSenseScan() called");
 	local atLeastThisClose = 3;
 	local spottedList = self.player:getCell():getObjectList()
 	local closestSoFar = 4
@@ -1937,6 +2124,7 @@ function SuperSurvivor:Companion_DoSixthSenseScan()
 			local character = spottedList:get(i);
 			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoPlayer")) or (instanceof(character, "IsoZombie")) then
 				if (character:isDead() == false) then
+					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 					tempdistance = tonumber(getDistanceBetween(character, self.player))
 
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
@@ -1954,7 +2142,6 @@ function SuperSurvivor:Companion_DoSixthSenseScan()
 
 						if (self:getGroupRole() == "Companion") and (tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
 							self.dangerSeenCount = self.dangerSeenCount + 1
-							self:DebugSay("self.dangerSeenCount = " .. tostring(self.dangerSeenCount))
 						end
 
 						if (not CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
@@ -1975,6 +2162,7 @@ function SuperSurvivor:Companion_DoSixthSenseScan()
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Companion_DoSixthSenseScan() END ---");
 	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
 	if (closestNumber ~= nil) then
 		self.LastEnemeySeen = spottedList:get(closestNumber)
@@ -1985,10 +2173,12 @@ end
 -- This was built for getting away from zeds
 -- This needed 'not a companion' check to keep the NPC in question not to run away when they're following main player.
 function SuperSurvivor:NPC_FleeWhileReadyingGun()
-	local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_FleeWhileReadyingGun() called");
+	-- local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player) -- WIP - Commented out, unused variable
 	local Distance_MainPlayer = getDistanceBetween(getSpecificPlayer(0), self.player)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+	-- local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer")) -- WIP - Commented out, unused variable
 	local Enemy_Is_a_Zombie = (instanceof(self.LastEnemeySeen, "IsoZombie"))
-	local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer"))
 	local Weapon_HandGun = self.player:getPrimaryHandItem()
 	local NPCsDangerSeen = self:getDangerSeenCount()
 
@@ -2001,16 +2191,14 @@ function SuperSurvivor:NPC_FleeWhileReadyingGun()
 				self:NPCTask_DoFlee()
 				--	self:NPCTask_DoFleeFromHere()
 				self:NPC_EnforceWalkNearMainPlayer()
-				self:DebugSay("NPC_FleeWhileReadyingGun Triggered! Reference number NFWRG_0001")
 			end
 		end
 	end
 	if (self:getGroupRole() == "Companion") and (Distance_MainPlayer > 9) then
 		--	self:NPCTask_Clear()
 		self:getTaskManager():AddToTop(FollowTask:new(self, getSpecificPlayer(0)))
-		self:DebugSay(
-			"NPC_FleeWhileReadyingGun - Companion - Too far away, enforcing follow! Reference number NFWRG_0002")
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_FleeWhileReadyingGun() END ---");
 	return true
 end
 
@@ -2230,6 +2418,7 @@ end
 -- Pursue, as far as I've seen, is used any time the NPC needs to reach their target, either it be zombie or human.
 -- Todo: add self:RealCanSee(self.LastEnemeySeen) senses
 function SuperSurvivor:NPC_CheckPursueScore()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_CheckPursueScore() called");
 	if (self.LastEnemeySeen ~= nil) then
 		local zRangeToPursue = 2
 
@@ -2237,7 +2426,12 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		-- Keep pursue from happening when 	
 		-- lots of enemies the npc sees --		
 		-- ------------------------------------  --		
-		if (not self:getGroupRole() == "Companion") and (((self:getSeenCount() > 4) and (self:isEnemyInRange()) and (Enemy_Is_a_Zombie)) or (self:isTooScaredToFight())) then
+		if (not self:getGroupRole() == "Companion")
+			and (((self:getSeenCount() > 4)
+					and (self:isEnemyInRange())
+					and (Enemy_Is_a_Zombie))
+				or (self:isTooScaredToFight()))
+		then
 			zRangeToPursue = 0
 			self:zDebugSayPTSC(zRangeToPursue, "Fear_0")
 			return zRangeToPursue
@@ -2255,6 +2449,7 @@ function SuperSurvivor:NPC_CheckPursueScore()
 			return zRangeToPursue
 		end
 
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
 
 		-- To make enemies stop chasing after their target cause too far away.
@@ -2268,10 +2463,13 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		--  Companion: They should always be cautious of their surroundings
 		-- -------------------------------------- --
 		if ((self:getGroupRole() == "Companion") and (self:isEnemyInRange(self.LastEnemeySeen))) then
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 			if getDistanceBetween(getSpecificPlayer(0), self.player) < 10 then
 				zRangeToPursue = 5
 				return zRangeToPursue
 			end
+			
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 			if getDistanceBetween(getSpecificPlayer(0), self.player) >= 10 then
 				zRangeToPursue = 0
 				return zRangeToPursue
@@ -2341,13 +2539,17 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		self.LastEnemeySeen = nil -- To force npc to stop pursuing the first target to re-scan
 		return zRangeToPursue
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_CheckPursueScore() END --- ");
 end
 
 -- ----------------------------- --
 -- 	The Pursue Task itself 		 --
 -- ----------------------------- --
 function SuperSurvivor:Task_IsPursue_SC()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 	if (self.LastEnemeySeen ~= nil) and (self.player ~= nil) then
+		
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
 		local zNPC_AttackRange  = self:isEnemyInRange(self.LastEnemeySeen)
 
@@ -2367,13 +2569,16 @@ function SuperSurvivor:Task_IsPursue_SC()
 				return true
 			else
 				self:zDebugSayPTSC(self:NPC_CheckPursueScore(), "false_13")
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
 				return false
 			end
 		else
 			self:zDebugSayPTSC(self:NPC_CheckPursueScore(), "false_14")
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
 			return false
 		end
 	else
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
 		return false
 	end
 
@@ -2432,7 +2637,9 @@ function SuperSurvivor:NPCTask_DoAttemptEntryIntoBuilding()
 end
 
 function SuperSurvivor:Task_IsThreaten_Verify() -- You want this function to return 'true'
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 	if (self.LastEnemeySeen ~= nil) then
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
 
 		if (self:Task_IsThreaten() == true) and (distance > 1)
@@ -2440,18 +2647,22 @@ function SuperSurvivor:Task_IsThreaten_Verify() -- You want this function to ret
 			or ((not self:NPC_TargetIsOutside()) and (not self:NPC_IsOutside()))
 		then
 			self:DebugSay("Task_IsThreaten_Verify Returned TRUE")
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 			return true
 		else
 			self:DebugSay("Task_IsThreaten_Verify Returned FALSE")
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 			return false
 		end
 	else
 		self:DebugSay("Task_IsThreaten_Verify Returned NIL")
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 		return false -- If LastEnemySeen is nil
 	end
 end
 
 function SuperSurvivor:inFrontOfStairs()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfStairs() called");
 	local cs = self.player:getCurrentSquare()
 
 	if cs:HasStairs() then return true end
@@ -2467,12 +2678,15 @@ function SuperSurvivor:inFrontOfStairs()
 	osquare = GetAdjSquare(cs, "W")
 	if cs and osquare and osquare:HasStairs() then return true end
 
-	return false
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfStairs() End ---");
+	return false;
 end
 
 function SuperSurvivor:updateTime()
-	self:renderName()
-	self.Reducer = self.Reducer + 1
+	self:renderName();
+	self.Reducer = self.Reducer + 1;
+
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:updateTime() called");
 
 	if (self.Reducer % self.UpdateDelayTicks == 0) then -- the lower the value the more frequent survivor:update() gets called, means faster reactions but worse performance
 		if (self.WaitTicks == 0) then
@@ -2487,6 +2701,7 @@ function SuperSurvivor:updateTime()
 end
 
 function SuperSurvivor:NPCcalcFractureInjurySpeed(bodypart)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCcalcFractureInjurySpeed() called");
 	local b = 0.4;
 
 	if (bodypart:getFractureTime() > 10.0) then
@@ -2504,6 +2719,7 @@ function SuperSurvivor:NPCcalcFractureInjurySpeed(bodypart)
 end
 
 function SuperSurvivor:NPCcalculateInjurySpeed(bodypart, b)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCcalculateInjurySpeed() called");
 	local scratchSpeedModifier = bodypart:getScratchSpeedModifier();
 	local cutSpeedModifier = bodypart:getCutSpeedModifier();
 	local burnSpeedModifier = bodypart:getBurnSpeedModifier();
@@ -2545,6 +2761,7 @@ function SuperSurvivor:NPCcalculateInjurySpeed(bodypart, b)
 end
 
 function SuperSurvivor:NPCgetFootInjurySpeedModifier()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCgetFootInjurySpeedModifier() called");
 	local b = true;
 	local n = 0.0;
 	local n2 = 0.0;
@@ -2571,6 +2788,7 @@ function SuperSurvivor:NPCgetFootInjurySpeedModifier()
 end
 
 function SuperSurvivor:NPCgetrunSpeedModifier()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCgetrunSpeedModifier() called");
 	local NPCrunSpeedModifier = 1.0;
 	local items = self.player:getWornItems()
 
@@ -2591,6 +2809,7 @@ function SuperSurvivor:NPCgetrunSpeedModifier()
 end
 
 function SuperSurvivor:NPCgetwalkSpeedModifier()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCgetwalkSpeedModifier() called");
 	local NPCwalkSpeedModifier = 1.0;
 	local items = self.player:getWornItems()
 	local shoeitem = items:getItem("Shoes");
@@ -2603,11 +2822,13 @@ function SuperSurvivor:NPCgetwalkSpeedModifier()
 end
 
 function SuperSurvivor:NPCcalcRunSpeedModByBag(bag)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCcalcRunSpeedModByBag() called");
 	return (bag:getScriptItem().runSpeedModifier - 1.0) *
 		(1.0 + bag:getContentsWeight() / bag:getEffectiveCapacity(self.player) / 2.0);
 end
 
 function SuperSurvivor:NPCgetfullSpeedMod()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCgetfullSpeedMod() called");
 	local NPCfullSpeedMod
 	local NPCbagRunSpeedModifier = 0
 
@@ -2630,6 +2851,7 @@ function SuperSurvivor:NPCgetfullSpeedMod()
 end
 
 function SuperSurvivor:NPCcalculateWalkSpeed()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPCcalculateWalkSpeed() called");
 	local NPCfootInjurySpeedModifier = self:NPCgetFootInjurySpeedModifier();
 	self.player:setVariable("WalkInjury", NPCfootInjurySpeedModifier);
 	local NPCcalculateBaseSpeed = self.player:calculateBaseSpeed();
@@ -2678,6 +2900,7 @@ function SuperSurvivor:NPCcalculateWalkSpeed()
 end
 
 function SuperSurvivor:CheckForIfStuck() -- This code was taken out of update() and put into a function, to reduce how big the code looked
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:CheckForIfStuck() called");
 	local cs = self.player:getCurrentSquare()
 	if (cs ~= nil) then
 		if (self.LastSquare == nil) or (self.LastSquare ~= cs) then
@@ -2733,9 +2956,11 @@ function SuperSurvivor:CheckForIfStuck() -- This code was taken out of update() 
 			self:Wait(1)
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:CheckForIfStuck() END ---");
 end
 
 function SuperSurvivor:update()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:update() called");
 	if (self:isDead()) then
 		return false
 	end
@@ -2785,6 +3010,7 @@ function SuperSurvivor:update()
 		self.player:getBodyDamage():setWetness(self.player:getBodyDamage():getWetness() - 0.1);
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	if (getDistanceBetween(getSpecificPlayer(0), self.player) > 15) and (ZombRand(20) == 0) and (self:isOnScreen() == false) then -- don't wanna be seen healing
 		self.player:getBodyDamage():RestoreToFullHealth()                                                                      -- to prevent a 'bleed' stutter bug
 	end
@@ -2841,6 +3067,7 @@ function SuperSurvivor:update()
 	end
 
 	if (self.GoFindThisCounter > 0) then self.GoFindThisCounter = self.GoFindThisCounter - 1 end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:update() end ---");
 end
 
 -- A bit on how this function works
@@ -2849,9 +3076,9 @@ end
 -- Don't add more tasks to this function, Wander task is the only one that turns the NPC around and walks away.
 -- If you see 'ManageOutdoorStuck' and 'ManageIndoorStuck', that was my older version attempts at the final result of this function.
 function SuperSurvivor:NPC_ManageLockedDoors()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ManageLockedDoors() called");
 	-- Prevent your follers from listening to this rule. Temp solution for now.
 	if (self:getGroupRole() == "Companion") then self.StuckDoorTicks = 0 end
-
 
 	if ((self:inFrontOfLockedDoorAndIsOutside() == true) or (self:NPC_IFOD_BarricadedInside() == true) or (self:inFrontOfBarricadedWindowAlt())) then
 		self.StuckDoorTicks = self.StuckDoorTicks + 1
@@ -2897,10 +3124,12 @@ function SuperSurvivor:NPC_ManageLockedDoors()
 	else
 		self.StuckDoorTicks = 0 -- This will set to 0 if not near the door in general
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_ManageLockedDoors() end ---");
 end
 
 -- Older attempts at ^. the one above does better
 function SuperSurvivor:ManageOutdoorStuck()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ManageOutdoorStuck() called");
 	-- Todo : remove these lines to test
 	if (self:NPC_TaskCheck_EnterLeaveBuilding()) and (self:inFrontOfLockedDoor()) and (self:NPC_IsOutside() == true) and (self:getTaskManager():getCurrentTask() ~= "Wander") then
 		self.TicksSinceSquareChanged = self.TicksSinceSquareChanged + 1
@@ -2913,9 +3142,11 @@ function SuperSurvivor:ManageOutdoorStuck()
 	else
 		self.TicksSinceSquareChanged = 0
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:ManageOutdoorStuck() end ---");
 end
 
 function SuperSurvivor:ManageIndoorStuck()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ManageIndoorStuck() called");
 	if (self:inFrontOfLockedDoor()) and (self:NPC_IsOutside() == false) and (self:getTaskManager():getCurrentTask() ~= "Wander") then
 		self.TicksSinceSquareChanged = self.TicksSinceSquareChanged + 1
 
@@ -2930,9 +3161,11 @@ function SuperSurvivor:ManageIndoorStuck()
 	else
 		self.TicksSinceSquareChanged = 0
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:ManageIndoorStuck() end ---");
 end
 
 function SuperSurvivor:OnDeath()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:OnDeath() called");
 	print(self:getName() .. " has died")
 
 	local ID = self:getID()
@@ -2948,9 +3181,11 @@ function SuperSurvivor:OnDeath()
 			table.remove(SurvivorMap[lastkey], ID)
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:OnDeath() end ---");
 end
 
 function SuperSurvivor:PlayerUpdate()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:PlayerUpdate() called");
 	if (not self.player:isLocalPlayer()) then
 		if (self.TriggerHeldDown) and (self:CanAttackAlt() == true) and (not (self:hasGun())) then -- simulate automatic weapon fire
 			self:NPC_Attack(self.LastEnemeySeen)
@@ -2972,9 +3207,11 @@ function SuperSurvivor:PlayerUpdate()
 
 		self:WalkToUpdate(self.player)
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:PlayerUpdate() end ---");
 end
 
 function SuperSurvivor:WalkToUpdate()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WalkToUpdate() called");
 	if (self.player:getModData().bWalking) then
 		local myBehaviorResult = self.player:getPathFindBehavior2():update()
 
@@ -2982,11 +3219,13 @@ function SuperSurvivor:WalkToUpdate()
 			self:StopWalk()
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:WalkToUpdate() end ---");
 end
 
 -- New Function: This is the attempt to make the NPCs less likely to freeze in place.
 -- Because it won't be using certain commands that StopWalk is using.
 function SuperSurvivor:iStopMovement()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:iStopMovement() called");
 	self.player:setPath2(nil)
 	self.player:getModData().bWalking = false
 	self.player:getModData().Running = false
@@ -2997,9 +3236,11 @@ function SuperSurvivor:iStopMovement()
 	self.player:NPCSetMelee(false)
 	self.player:NPCSetAiming(false)
 	self:DebugSay("iStopMovement is about to trigger a StopWalk!")
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:iStopMovement() end ---");
 end
 
 function SuperSurvivor:StopWalk()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:StopWalk() called");
 	ISTimedActionQueue.clear(self.player)
 	self.player:StopAllActionQueue()
 	self.player:setPath2(nil)
@@ -3011,9 +3252,11 @@ function SuperSurvivor:StopWalk()
 	self.player:NPCSetAttack(false)
 	self.player:NPCSetMelee(false)
 	self.player:NPCSetAiming(false)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:StopWalk() end ---");
 end
 
 function SuperSurvivor:ManageXP()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ManageXP() called");
 	local currentLevel
 	local currentXP, XPforNextLevel
 	local ThePerk
@@ -3041,13 +3284,16 @@ function SuperSurvivor:ManageXP()
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:ManageXP() end ---");
 end
 
 function SuperSurvivor:getTaskManager()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getTaskManager() called");
 	return self.MyTaskManager
 end
 
 function SuperSurvivor:HasMultipleInjury()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:HasMultipleInjury() called");
 	local bodyparts = self.player:getBodyDamage():getBodyParts()
 	local total = 0
 	for i = 0, bodyparts:size() - 1 do
@@ -3058,10 +3304,12 @@ function SuperSurvivor:HasMultipleInjury()
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:HasMultipleInjury() end ---");
 	return (total > 1)
 end
 
 function SuperSurvivor:HasInjury()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:HasInjury() called");
 	local bodyparts = self.player:getBodyDamage():getBodyParts()
 
 	for i = 0, bodyparts:size() - 1 do
@@ -3075,6 +3323,7 @@ function SuperSurvivor:HasInjury()
 end
 
 function SuperSurvivor:getID()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getID() called");
 	if (instanceof(self.player, "IsoPlayer")) then
 		return self.player:getModData().ID
 	else
@@ -3083,10 +3332,12 @@ function SuperSurvivor:getID()
 end
 
 function SuperSurvivor:setID(id)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setID() called");
 	self.player:getModData().ID = id;
 end
 
 function SuperSurvivor:delete()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getID() delete");
 	self.player:getInventory():emptyIt();
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);
@@ -3099,6 +3350,7 @@ function SuperSurvivor:delete()
 end
 
 function SuperSurvivor:SaveSurvivorOnMap()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:SaveSurvivorOnMap() called");
 	if self.player:getModData().RealPlayer == true then return false end
 	local ID = self.player:getModData().ID;
 
@@ -3134,9 +3386,11 @@ function SuperSurvivor:SaveSurvivorOnMap()
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:SaveSurvivorOnMap() end ---");
 end
 
 function SuperSurvivor:SaveSurvivor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:SaveSurvivor() called");
 	if self.player:getModData().RealPlayer == true then return false end
 
 	local ID = self.player:getModData().ID;
@@ -3155,9 +3409,11 @@ function SuperSurvivor:SaveSurvivor()
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:SaveSurvivor() end ---");
 end
 
 function SuperSurvivor:FindClosestOutsideSquare(thisBuildingSquare)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:FindClosestOutsideSquare() called");
 	if (thisBuildingSquare == nil) then return nil end
 
 	local bx = thisBuildingSquare:getX()
@@ -3193,14 +3449,12 @@ function SuperSurvivor:FindClosestOutsideSquare(thisBuildingSquare)
 		end
 	end
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:FindClosestOutsideSquare() end ---");
 	return thisBuildingSquare
 end
 
-function SuperSurvivor:startReload()
-
-end
-
 function SuperSurvivor:ReadyGun(weapon)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ReadyGun() called");
 	local readyGun_AntiStuck_Ticks = 0
 
 	if (not weapon) or (not weapon:isAimedFirearm()) or readyGun_AntiStuck_Ticks >= 5 then return true end
@@ -3374,6 +3628,7 @@ function SuperSurvivor:ReadyGun(weapon)
 end
 
 function SuperSurvivor:needToReadyGun(weapon)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:needToReadyGun() called");
 	if (weapon and self:usingGun() and not ISReloadWeaponAction.canShoot(weapon)) then
 		return true
 	else
@@ -3382,6 +3637,7 @@ function SuperSurvivor:needToReadyGun(weapon)
 end
 
 function SuperSurvivor:gunAmmoInInvCount(gun)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:gunAmmoInInvCount() called");
 	local ammoType = gun:getAmmoType()
 	if ammoType then
 		local ammoCount = self.player:getInventory():getItemCountRecurse(ammoType)
@@ -3391,6 +3647,7 @@ function SuperSurvivor:gunAmmoInInvCount(gun)
 end
 
 function SuperSurvivor:needToReload()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:needToReload() called");
 	local weapon = self.player:getPrimaryHandItem()
 
 	if (not weapon) then return false end
@@ -3403,10 +3660,12 @@ function SuperSurvivor:needToReload()
 end
 
 function SuperSurvivor:isReloading()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isReloading() called");
 	return self.player:getVariableBoolean("isLoading")
 end
 
 function SuperSurvivor:giveWeapon(weaponType, equipIt)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:giveWeapon() called");
 	if ((weaponType == "AssaultRifle") or (weaponType == "AssaultRifle2")) then weaponType = "VarmintRifle" end -- temporarily disable assult rifles
 
 	local weapon = self.player:getInventory():AddItem(weaponType);
@@ -3457,6 +3716,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 end
 
 function SuperSurvivor:FindAndReturn(thisType)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:FindAndReturn() called");
 	local item
 	item = self.player:getInventory():FindAndReturn(thisType);
 
@@ -3472,6 +3732,7 @@ function SuperSurvivor:FindAndReturn(thisType)
 end
 
 function SuperSurvivor:FindAndReturnCount(thisType)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:FindAndReturnCount() called");
 	if (thisType == nil) then return 0 end
 
 	local count = 0
@@ -3491,6 +3752,7 @@ function SuperSurvivor:FindAndReturnCount(thisType)
 end
 
 function SuperSurvivor:WeaponReady()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WeaponReady() called");
 	local primary = self.player:getPrimaryHandItem()
 
 	if (primary ~= nil) and (self.player ~= nil) and (instanceof(primary, "HandWeapon")) and (primary:isAimedFirearm()) then
@@ -3531,6 +3793,7 @@ function SuperSurvivor:WeaponReady()
 end
 
 function SuperSurvivor:openBoxForGun()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:openBoxForGun() called");
 	local index = 0
 	local ammoBox = nil
 
@@ -3563,6 +3826,7 @@ function SuperSurvivor:openBoxForGun()
 end
 
 function SuperSurvivor:hasAmmoForPrevGun()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:hasAmmoForPrevGun() called");
 	if (self.AmmoTypes ~= nil) and (#self.AmmoTypes > 0) then
 		local ammoRound
 		for i = 1, #self.AmmoTypes do
@@ -3589,6 +3853,7 @@ function SuperSurvivor:hasAmmoForPrevGun()
 end
 
 function SuperSurvivor:reEquipGun()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reEquipGun() called");
 	if (self.LastGunUsed == nil) then return false end
 
 	if (self.LastGunUsed ~= nil) then
@@ -3606,6 +3871,7 @@ function SuperSurvivor:reEquipGun()
 end
 
 function SuperSurvivor:reEquipMele()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reEquipMele() called");
 	if (self.LastMeleUsed == nil) then
 		return false
 	end
@@ -3624,6 +3890,7 @@ function SuperSurvivor:reEquipMele()
 end
 
 function SuperSurvivor:setLastWeapon()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setLastWeapon() called");
 	if (self:usingGun()) then
 		self.player:getModData().lastWepWasGun = true
 	else
@@ -3634,6 +3901,7 @@ function SuperSurvivor:setLastWeapon()
 end
 
 function SuperSurvivor:reEquipLastWeapon()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reEquipLastWeapon() called");
 	if (self.player:getModData().lastWepWasGun) then
 		self:reEquipGun()
 	else
@@ -3644,16 +3912,19 @@ function SuperSurvivor:reEquipLastWeapon()
 end
 
 function SuperSurvivor:setMeleWep(handWeapon)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setMeleWep() called");
 	self:Get():getModData().meleWeapon = handWeapon:getType()
 	self.LastMeleUsed = handWeapon
 end
 
 function SuperSurvivor:setGunWep(handWeapon)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setGunWep() called");
 	self:Get():getModData().gunWeapon = handWeapon:getType()
 	self.LastGunUsed = handWeapon
 end
 
 function SuperSurvivor:getMinWeaponRange()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getMinWeaponRange() called");
 	local out = 0.5
 
 	if (self.player:getPrimaryHandItem() ~= nil) then
@@ -3665,11 +3936,14 @@ function SuperSurvivor:getMinWeaponRange()
 	return out
 end
 
+-- WIP - Cows commented out the only reference to this function in AttackTask.lua
 function SuperSurvivor:Set_AtkTicks(newvalue)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getMinWeaponRange() called");
 	self.AtkTicks = newvalue
 end
 
 function SuperSurvivor:Is_AtkTicksZero()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Is_AtkTicksZero() called");
 	if (self.AtkTicks <= 0) then
 		return true
 	else
@@ -3678,6 +3952,7 @@ function SuperSurvivor:Is_AtkTicksZero()
 end
 
 function SuperSurvivor:IsNOT_AtkTicksZero()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:IsNOT_AtkTicksZero() called");
 	if (self.AtkTicks > 0) then
 		return true
 	else
@@ -3686,6 +3961,7 @@ function SuperSurvivor:IsNOT_AtkTicksZero()
 end
 
 function SuperSurvivor:AtkTicks_Countdown()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:AtkTicks_Countdown() called");
 	if (self.AtkTicks > 0) then
 		self.AtkTicks = self.AtkTicks - 1
 	end
@@ -3699,37 +3975,40 @@ end
 -- 		This literally implies it will check top to bottom priority. I'm writing this to remind myself for the future.
 --	instanceof(self.player:getCell():getObjectList(),"IsoPlayer") < - hold this for now
 function SuperSurvivor:NPC_ShouldRunOrWalk()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ShouldRunOrWalk() called");
 	if (self.LastEnemeySeen ~= nil) then
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local distanceAlt = getDistanceBetween(self.player, getSpecificPlayer(0)) -- To prevent running into the player
-		local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen)
-
+		-- local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen) -- WIP - Commented out, unused variable
 
 		if (not (self:Task_IsNotFleeOrFleeFromSpot() == true)) or (distanceAlt <= 1) or (distance and self:Task_IsAttack()) or (distance and self:Task_IsThreaten() or (distance and self:Task_IsPursue())) then
 			self:setRunning(false)
-			self:NPCDebugPrint(
-				"NPC_ShouldRunOrWalk set running to false due to distance and Task_IsNotFleeOrFleeFromSpot returned true SRW_0001")
 		else
 			self:setRunning(true)
-			self:NPCDebugPrint(
-				"NPC_ShouldRunOrWalk set running to true due to not distance and Task_IsNotFleeOrFleeFromSpot returned false SRW_0002")
 		end
 	else
-		self:NPCDebugPrint("LastEnemySeen returned Nil so, setting NPC to run Reference Number SRW_0003")
 		self:setRunning(false)
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_ShouldRunOrWalk() end ---");
 end
 
 function SuperSurvivor:NPC_EnforceWalkNearMainPlayer()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_EnforceWalkNearMainPlayer() called");
 	-- Emergency failsafe to prevent NPCs from running into player
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	if (getDistanceBetween(self.player, getSpecificPlayer(0)) < 1) then
 		self:setRunning(false)
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_EnforceWalkNearMainPlayer() end ---");
 end
 
 -- ERW stands for 'EnforceRunWalk'
 function SuperSurvivor:NPC_ERW_AroundMainPlayer(VarDist)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ERW_AroundMainPlayer() called");
 	-- Emergency failsafe to prevent NPCs from running into player
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	if (getDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
 		if (self:isInAction() == true) then
 			self:setRunning(true)
@@ -3739,11 +4018,14 @@ function SuperSurvivor:NPC_ERW_AroundMainPlayer(VarDist)
 			self:setRunning(false)
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_ERW_AroundMainPlayer() end ---");
 end
 
 -- ERW stands for 'EnforceRunWalk' walk priority
 function SuperSurvivor:NPC_ERW_AroundMainPlayerReverse(VarDist)
-	-- Emergency failsafe to prevent NPCs from running into player
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ERW_AroundMainPlayerReverse() called");
+	-- Emergency failsafe to prevent NPCs from running into player	
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	if (getDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
 		if (self:isInAction() == true) then
 			self:setRunning(false)
@@ -3753,10 +4035,12 @@ function SuperSurvivor:NPC_ERW_AroundMainPlayerReverse(VarDist)
 			self:setRunning(true)
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_ERW_AroundMainPlayerReverse() end ---");
 end
 
 -- Manages movement and movement speed
 function SuperSurvivor:NPC_MovementManagement_Guns()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_MovementManagement_Guns() called");
 	if (self:isWalkingPermitted()) and (self:hasGun()) then
 		local cs = self.LastEnemeySeen:getCurrentSquare()
 		local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen)
@@ -3777,12 +4061,15 @@ function SuperSurvivor:NPC_MovementManagement_Guns()
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_MovementManagement_Guns() end ---");
 end
 
 -- Manages movement and movement for AttackTask.
 function SuperSurvivor:NPC_MovementManagement()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_MovementManagement() called");
 	if (self:isWalkingPermitted()) and (not self:hasGun()) then
-		local cs = self.LastEnemeySeen:getCurrentSquare()
+		local cs = self.LastEnemeySeen:getCurrentSquare()		
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
 		local minrange = self:getMinWeaponRange()
 
@@ -3805,10 +4092,12 @@ function SuperSurvivor:NPC_MovementManagement()
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_MovementManagement() end ---");
 end
 
 -- Used in 'if the npc has swiped their weapon'.
 function SuperSurvivor:HasSwipedState()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:HasSwipedState() called");
 	if (self.player:getCurrentState() == SwipeStatePlayer.instance()) then
 		return true
 	else
@@ -3817,6 +4106,7 @@ function SuperSurvivor:HasSwipedState()
 end
 
 function SuperSurvivor:HasFellDown()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:HasFellDown() called");
 	if (self.player:getModData().felldown) then
 		return true
 	else
@@ -3825,6 +4115,7 @@ function SuperSurvivor:HasFellDown()
 end
 
 function SuperSurvivor:CanAttackAlt()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:CanAttackAlt() called");
 	if
 		(self.player:getCurrentState() == SwipeStatePlayer.instance()) or -- Is in the middle of an attack | WAS AN 'or' statement
 		(self.player:getModData().felldown)                         -- Has fallen on the ground
@@ -3835,43 +4126,12 @@ function SuperSurvivor:CanAttackAlt()
 	end
 end
 
---- gets every square between the npc and the target and adds a cover value
----@param victim any
----@return number represents the final cover value of the victim
-function SuperSurvivor:checkVictimCoverValue(victim)
-	local totalCover      = 0
-	local blockingObjects = 0
-
-	local squares = GetSquaresBetween(self:getCurrentSquare(), victim:getCurrentSquare())
-
-	for _, square in ipairs(squares) do
-		local objs = square:getObjects()
-
-		for i = 0, objs:size() - 1, 1 do
-			local obj = objs:get(i)
-
-			if (obj ~= nil) then
-				local coverValue = getCoverValue(obj) -- the function is considering grass as a 10 cover value (fix it later)
-				totalCover = totalCover + coverValue
-				blockingObjects = blockingObjects + 1
-			end
-		end
-	end
-
-	if blockingObjects == 0 then -- prevent divide by zero exceptions
-		return totalCover
-	end
-
-	totalCover = totalCover / blockingObjects
-
-	return totalCover - 10 -- WIP - workaround for now
-end
-
 --- gets the weapon damager based on a rng and distance from the target
 ---@param weapon any
 ---@param distance number
 ---@return number represents the damage that the weapon will give if hits
 function SuperSurvivor:getWeaponDamage(weapon, distance)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getWeaponDamage() called");
 	if (weapon == nil) then
 		--	print("weapon returned a nil value, no weapon found")
 		return 0
@@ -3889,18 +4149,21 @@ end
 ---@param victim any
 ---@return number represents the chance of a hit
 function SuperSurvivor:getGunHitChange(weapon, victim)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGunHitChange() called");
 	local aimingLevel = self.player:getPerkLevel(Perks.FromString("Aiming"))
 	local aimingPerkModifier = weapon:getAimingPerkHitChanceModifier()
 	local weaponHitChance = weapon:getHitChance()
 	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel)
 
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	local distance = getDistanceBetween(self.player, victim)
-	local coverValue = self:checkVictimCoverValue(victim)
 
-	return hitChance - distance - coverValue -- TODO: change formula when coverValue != 0
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGunHitChange() end ---");
+	return hitChance - distance; -- TODO: change formula when coverValue != 0
 end
 
 function SuperSurvivor:UnStuckFrozenAnim()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:UnStuckFrozenAnim() called");
 	self.player:setNPC(false)
 	self.player:setBlockMovement(false)
 	self.player:update()
@@ -3928,6 +4191,7 @@ end
 
 -- The new function that will now control NPC attacking. Not perfect, but. Cleaner code, and works better-ish.
 function SuperSurvivor:NPC_Attack(victim) -- New Function
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_Attack() called");
 	-- 6/21/2022 - Come to think of it, I could use  "if (self:IsNOT_AtkTicksZero()) or (self:CanAttackAlt() == false) then" but may need to check how the timer works.
 	-- Create the attack cooldown. (once 0, the npc will do the 'attack' then set the time back up by 1, so anti-attack spam method)
 	-- note: don't use self:CanAttackAlt() in this if statement. it's already being done in this function.
@@ -3945,7 +4209,8 @@ function SuperSurvivor:NPC_Attack(victim) -- New Function
 	self.SwipeStateTicks = 0; -- this value is tracked to see if player stuck in attack state/animation. so reset to 0 if we are TRYING/WANTING to attack
 
 	-- Why distance and real distance? distance uses a subtraction while 'real' doesn't
-	local distance = getDistanceBetween(self.player, victim) - 0.1
+	-- local distance = getDistanceBetween(self.player, victim) - 0.1  -- WIP - Commented out, unused variable
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	local RealDistance = getDistanceBetween(self.player, victim)
 	local minrange = self:getMinWeaponRange()
 	local weapon = self.player:getPrimaryHandItem();
@@ -3978,10 +4243,12 @@ function SuperSurvivor:NPC_Attack(victim) -- New Function
 		if (instanceof(victim, "IsoZombie")) then self.AtkTicks = 1 end
 		if (not self:usingGun()) then self.AtkTicks = 0 end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_Attack() end ---");
 end
 
 -- This is the old variant of the attack function. It should not be used for melee attacks. It works well with guns though, so...
 function SuperSurvivor:Attack(victim)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Attack() called");
 	-- Create the attack cooldown. (once 0, the npc will do the 'attack' then set the time back up by 1, so anti-attack spam method)
 	-- note: don't use self:CanAttackAlt() in this if statement. it's already being done in this function. (Update: It works long as it's set to true)
 	if (self:IsNOT_AtkTicksZero()) and (self:CanAttackAlt() == true) then
@@ -4006,6 +4273,7 @@ function SuperSurvivor:Attack(victim)
 
 		if (self.UsingFullAuto) then self.TriggerHeldDown = true end
 		if (self.player ~= nil) then
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 			local distance = getDistanceBetween(self.player, victim)
 			local minrange = self:getMinWeaponRange() + 0.1
 			local GunHitChance = 11 -- ZombRand(0,5)	If you want random chance, remove the number and put the ZombRand in.
@@ -4030,16 +4298,15 @@ function SuperSurvivor:Attack(victim)
 						-- Added RealCanSee to see if it works | and (damage > 0)
 						if (hitChance >= dice) and (damage > 0) and (self:RealCanSee(victim)) then
 							victim:Hit(weapon, self.player, damage, false, 1.0, false)
-							self:DebugSay("I HIT THE GUNSHOT!")
+							-- self:DebugSay("I HIT THE GUNSHOT!")
 							self.AtkTicks = 1
 						else
-							self:DebugSay("I MISSED THE GUNSHOT!")
+							-- self:DebugSay("I MISSED THE GUNSHOT!")
 							self.AtkTicks = 1
 						end
 					else
 						victim:Hit(weapon, self.player, damage, false, 1.0, false)
-						self:DebugSay(
-							"MELEE STRIKE! For some reason... I shouldn't be using this Attack function! Modder, fix this!")
+						CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "MELEE STRIKE! For some reason... I shouldn't be using this Attack function! Modder, fix this!")
 						self.AtkTicks = 1
 					end
 				end
@@ -4086,6 +4353,7 @@ function SuperSurvivor:Attack(victim)
 
 		if (pwepContainer) and (not pwepContainer:contains(pwep)) then pwepContainer:AddItem(pwep) end -- re add the former wepon that we temp removed
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Attack() end ---");
 end
 
 function SuperSurvivor:DrinkFromObject(waterObject)
@@ -4100,7 +4368,9 @@ function SuperSurvivor:DrinkFromObject(waterObject)
 	ISTimedActionQueue.add(ISTakeWaterAction:new(playerObj, nil, waterConsumed, waterObject, (waterConsumed * 10) + 15));
 end
 
+-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:findNearestSheetRopeSquare(down)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:findNearestSheetRopeSquare() called");
 	local sq, CloseSquareSoFar;
 	local range = 20
 	local minx = math.floor(self.player:getX() - range);
@@ -4113,7 +4383,8 @@ function SuperSurvivor:findNearestSheetRopeSquare(down)
 		for y = miny, maxy do
 			sq = getCell():getGridSquare(x, y, self.player:getZ());
 			if (sq ~= nil) then
-				local distance = getDistanceBetween(sq, self.player)
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+				local distance = getDistanceBetween(sq, self.player) -- WIP - literally spammed inside the nested for loops...
 
 				if down and (distance < closestSoFar) and self.player:canClimbDownSheetRope(sq) then
 					closestSoFar = distance
@@ -4125,6 +4396,7 @@ function SuperSurvivor:findNearestSheetRopeSquare(down)
 			end
 		end
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:findNearestSheetRopeSquare() END ---");
 
 	return CloseSquareSoFar
 end
@@ -4145,6 +4417,7 @@ function SuperSurvivor:isAmmoForMe(itemType)
 end
 
 function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:FindThisNearBy() called");
 	if (self.GoFindThisCounter > 0) then return nil end
 
 	self.GoFindThisCounter = 10;
@@ -4255,6 +4528,7 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 	if (self.TargetSquare ~= nil and itemtoReturn ~= nil) and (self.TargetSquare:getRoom()) and (self.TargetSquare:getRoom():getBuilding()) then
 		self.TargetBuilding = self.TargetSquare:getRoom():getBuilding()
 	end
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:FindThisNearBy() end ---");
 	return itemtoReturn
 end
 
@@ -4446,18 +4720,6 @@ function SuperSurvivor:NPC_ForceFindNearestBuilding()
 end
 
 -- ALL DEBUG FUNCTIONS GO BELOW HERE --
-
-function SuperSurvivor:NPCDebugPrint(text)
-	if (DebugOptions == true) then
-		-- This gives spacing for the console so you can find it
-		--print("")
-		--print("NPCDebugPrint")
-		--print("NPC Name: "..tostring(self:getName()))
-		--print(text)
-		--print("")
-		--print("")
-	end
-end
 
 function SuperSurvivor:DebugSay(text)
 	-- Now, the In game DebugOptions will now effect this.

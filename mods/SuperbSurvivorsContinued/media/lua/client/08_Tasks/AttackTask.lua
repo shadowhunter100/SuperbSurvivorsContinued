@@ -61,7 +61,7 @@ function AttackTask:update()
 
 
 	local theDistance = getDistanceBetween(self.parent.LastEnemeySeen, self.parent.player)
-	local minrange = self.parent:getMinWeaponRange()
+	-- local minrange = self.parent:getMinWeaponRange() -- WIP - Commented out, unused variable
 	local NPC_AttackRange = self.parent:isEnemyInRange(self.parent.LastEnemeySeen)
 
 	-- Controls if the NPC is litreally running or walking state.
