@@ -1,4 +1,4 @@
-require "00_SuperbSurviorModVariables.SuperSurviorGlobalVariables";
+require "00_SuperbSurviorModVariables.SuperSurviorsGlobalVariables";
 
 local modId = "SuperbSurvivorsContinued";
 local isLocalLoggingEnabled = false;
