@@ -4572,7 +4572,7 @@ function SuperSurvivor:SuitUp(SuitName)
 	local tempTable = SurvivorRandomSuits["Preset"]
 
 	if SuitName:contains("Preset_") then
-		setRandomSurvivorSuit(self, "Preset", SuitName)
+		SetRandomSurvivorSuit(self, "Preset", SuitName)
 		-- Do the normal outfit selection otherwise
 	else
 		GetRandomSurvivorSuit(self)

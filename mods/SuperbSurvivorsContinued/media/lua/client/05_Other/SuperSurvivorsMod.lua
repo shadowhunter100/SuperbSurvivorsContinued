@@ -866,7 +866,7 @@ function SuperSurvivorsRaiderManager()
 				end
 
 				local number = ZombRand(1, 3)
-				setRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
+				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
 			end
 
 			RaiderGroup:AllSpokeTo()
