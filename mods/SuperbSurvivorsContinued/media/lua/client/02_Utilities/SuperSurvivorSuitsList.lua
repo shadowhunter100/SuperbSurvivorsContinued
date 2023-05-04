@@ -1,6 +1,13 @@
-require "02_Utilities/SuperSurvivorSuitsRegistry"
-
--- this file has the survivor's suits
+if not SurvivorRandomSuits then
+	SurvivorRandomSuits = {}
+	SurvivorRandomSuits["Common"] = {}
+	SurvivorRandomSuits["Uncommon"] = {}
+	SurvivorRandomSuits["Normal"] = {}
+	SurvivorRandomSuits["Rare"] = {}
+	SurvivorRandomSuits["VeryRare"] = {} -- No outfit is actually assigned to "VeryRare"... this causes an error when random suits rolls it...
+	SurvivorRandomSuits["Legendary"] = {}
+	SurvivorRandomSuits["Preset"] = {}
+end
 
 SurvivorRandomSuits["Legendary"]["Bathrobe1"] = {
   "Base.Hat_ShowerCap",
