@@ -3689,7 +3689,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 		end
 	end
 
-	local ammotypes = getAmmoBullets(weapon, true);
+	local ammotypes = GetAmmoBullets(weapon);
 	if (ammotypes) then
 		local bwep = self.player:getInventory():AddItem(MeleWeapons[ZombRand(1, #MeleWeapons)]) -- give a beackup mele wepaon if using ammo gun
 		if (bwep) then
@@ -3699,7 +3699,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 
 		local ammo = ammotypes[1]
 		if (ammo) then
-			local ammobox = getAmmoBox(ammo)
+			local ammobox = GetAmmoBox(ammo)
 			if (ammobox ~= nil) then
 				local randomammo = ZombRand(4, 10);
 
@@ -3708,7 +3708,9 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 				end
 			end
 		end
-		ammotypes = getAmmoBullets(weapon, false);
+		ammotypes = GetAmmoBullets(weapon);
+		-- WIP - possible nil return...
+		---@diagnostic disable-next-line: need-check-nil
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
 		--print("no ammo types for weapon:"..weapon:getType())
@@ -3813,7 +3815,7 @@ function SuperSurvivor:openBoxForGun()
 		local groupcount = tempBullet:getCount()
 		local count = 0
 
-		count = (getBoxCount(ammoBox:getType()) / groupcount)
+		count = (GetBoxCount(ammoBox:getType()) / groupcount)
 
 		for i = 1, count do
 			inv:AddItem(modl .. ammotype)

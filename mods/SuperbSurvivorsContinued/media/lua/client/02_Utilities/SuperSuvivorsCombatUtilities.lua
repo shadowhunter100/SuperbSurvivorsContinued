@@ -1,4 +1,5 @@
 -- this file has methods related to npc combat
+local isLocalLoggingEnabled = false;
 
 SuperSurvivorsAmmoBoxes = { -- for the loot stores that are spawned with preset spawns.
 	"Base.223Box",
@@ -14,7 +15,8 @@ SuperSurvivorsAmmoBoxes = { -- for the loot stores that are spawned with preset 
 --- Gets a ammo box of an ammo typ
 ---@param bullets string any ammo type
 ---@return string returns the ammo box name
-function getAmmoBox(bullets)
+function GetAmmoBox(bullets)
+	CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "GetAmmoBox() called");
 	if (bullets == "BB177") then
 		return "BB177Box"
 	elseif (bullets == "Bullets22") then
@@ -73,7 +75,8 @@ end
 --- func desc
 ---@param box string ammo box name
 ---@return integer returns the amount of bullets inside of the ammo box
-function getBoxCount(box)
+function GetBoxCount(box)
+	CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "GetBoxCount() called");
 	if (box == "BB177Box") then
 		return 500
 	elseif (box == "Bullets22Box") then
@@ -130,6 +133,7 @@ function getBoxCount(box)
 end
 
 function SurvivorTogglePVP()
+	CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "SurvivorTogglePVP() called");
 	if (IsoPlayer.getCoopPVP() == true) then
 		getSpecificPlayer(0):Say("PVP Disabled");
 		IsoPlayer.setCoopPVP(false);
@@ -152,21 +156,20 @@ end
 
 ---	gets in the database the ammo type for the weapon 'weapon'
 ---@param weapon any weapon to have the ammo searched
----@param incModule any (not being used)
 ---@return any returns the ammo type of the gun or nil if not found
-function getAmmoType(weapon, incModule)
+local function getAmmoType(weapon)
+	CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "getAmmoType() called");
 	if (weapon == nil) or (weapon:getAmmoType() == nil) then
 		return nil
 	end
 
-	local modulename = 'Base';
 	local wepType = weapon:getType();
 	local out = weapon:getAmmoType()
 
 	-- search for a magazine
 	if (out == nil) then
 		local s = weapon:getMagazineType();
-		i, j = string.find(s, "Clip")
+		local i = string.find(s, "Clip")
 		out = s:sub(i)
 	end
 
@@ -182,8 +185,8 @@ end
 
 --- gets in the database bullets for the weapon 'weapon'
 ---@param weapon any a HandWeapon
----@param incModule any
-function getAmmoBullets(weapon, incModule)
+function GetAmmoBullets(weapon)
+	CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "GetAmmoBullets() called");
 	if (weapon == nil) then
 		return nil
 	end
@@ -191,11 +194,7 @@ function getAmmoBullets(weapon, incModule)
 	if (instanceof(weapon, "HandWeapon")) and (weapon:isAimedFirearm()) then
 		local bullets = {}
 
-		if (incModule) then
-			table.insert(bullets, getAmmoType(weapon, incModule))
-		else
-			table.insert(bullets, getAmmoType(weapon, incModule))
-		end
+		table.insert(bullets, getAmmoType(weapon))
 
 		return bullets;
 	end

@@ -527,14 +527,14 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 			SS.AttackRange = ((player:getPrimaryHandItem():getMaxRange() + player:getPrimaryHandItem():getMinRange()) * 0.60)
 
 			if (weapon:isAimedFirearm()) then
-				local ammotypes = getAmmoBullets(weapon, false);
+				local ammotypes = GetAmmoBullets(weapon);
 
 				if (ammotypes ~= nil) and (ID ~= nil) then
 					SS.AmmoTypes = ammotypes
 					player:getModData().ammotype = ""
 					player:getModData().ammoBoxtype = ""
 					for i = 1, #SS.AmmoTypes do
-						SS.AmmoBoxTypes[i] = getAmmoBox(SS.AmmoTypes[i])
+						SS.AmmoBoxTypes[i] = GetAmmoBox(SS.AmmoTypes[i])
 						player:getModData().ammotype = player:getModData().ammotype .. " " .. SS.AmmoTypes[i]
 						player:getModData().ammoBoxtype = player:getModData().ammoBoxtype .. " " .. SS.AmmoBoxTypes[i]
 					end
