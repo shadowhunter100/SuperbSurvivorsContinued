@@ -1,7 +1,7 @@
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function SuperSurvivorGroup:new(GID)
 	local o = {}
