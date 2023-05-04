@@ -163,9 +163,9 @@ function SurvivorOrder(test, player, order, orderParam)
 			ASuperSurvivor:getTaskManager():clear()
 			if (ZombRand(3) == 0) then
 				ASuperSurvivor:setHostile(true)
-				ASuperSurvivor:Speak(getSpeech("HowDareYou"))
+				ASuperSurvivor:Speak(GetDialogueSpeech("HowDareYou"))
 			else
-				ASuperSurvivor:Speak(getSpeech("IfYouThinkSo"))
+				ASuperSurvivor:Speak(GetDialogueSpeech("IfYouThinkSo"))
 			end
 		elseif (order == "Unlock Doors") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(getJobText("Worker")) end
@@ -196,10 +196,10 @@ function SurvivorOrder(test, player, order, orderParam)
 			TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
 			ASuperSurvivor:setGroupRole(getJobText("Doctor"))
 		elseif (order == "Doctor") then
-			ASuperSurvivor:Speak(getSpeech("IDontKnowHowDoctor"))
+			ASuperSurvivor:Speak(GetDialogueSpeech("IDontKnowHowDoctor"))
 		end
 
-		ASuperSurvivor:Speak(getSpeech("Roger"))
+		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
 		getSpecificPlayer(0):Say(OrderDisplayName[order]);
 	end
 end
@@ -226,13 +226,13 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 		print("join group " .. SS:getGroupID())
 
 		if (group) then
-			SS:Speak(getSpeech("Roger"));
+			SS:Speak(GetDialogueSpeech("Roger"));
 
 			if (MySS:getGroup() ~= nil) then
 				local members = MySS:getGroup():getMembers()
 				for x = 1, #members do
 					if (members[x] and members[x].player ~= nil) then
-						members[x]:Speak(getSpeech("Roger"));
+						members[x]:Speak(GetDialogueSpeech("Roger"));
 						group:addMember(members[x], getJobText("Partner"))
 					end
 				end
@@ -242,7 +242,7 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 			end
 		end
 	else
-		SS:Speak(getSpeech("No"))
+		SS:Speak(GetDialogueSpeech("No"))
 	end
 end
 
@@ -266,7 +266,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 			end
 		end
 
-		SS:Speak(getSpeech("Roger"))
+		SS:Speak(GetDialogueSpeech("Roger"))
 		local GID, Group
 		if (SSM:Get(0):getGroupID() == nil) then
 			Group = SSGM:newGroup()
@@ -295,7 +295,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 
 		SS:setGroupRole("Companion") -- Newly added
 	else
-		SS:Speak(getSpeech("No"))
+		SS:Speak(GetDialogueSpeech("No"))
 		SS:PlusRelationshipWP(-2.0) -- changed to -2 from -1
 	end
 end
@@ -669,13 +669,13 @@ function ViewSurvivorInfo(test, ss)
 end
 
 function TalkToSurvivor(test, SS)
-	getSpecificPlayer(0):Say(getSpeech("HelloThere"))
+	getSpecificPlayer(0):Say(GetDialogueSpeech("HelloThere"))
 
 	if SS:Get():CanSee(getSpecificPlayer(0)) then
 		if (SS:Get():getModData().Greeting ~= nil) then
 			SS:Speak(SS:Get():getModData().Greeting)
 		else
-			SS:Speak(getSpeech("IdleChatter"))
+			SS:Speak(GetDialogueSpeech("IdleChatter"))
 		end
 	else
 		SS:Speak(GetDialogue("WhoSaidThat"));

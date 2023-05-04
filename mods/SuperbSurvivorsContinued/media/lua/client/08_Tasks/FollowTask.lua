@@ -102,7 +102,7 @@ function FollowTask:update()
 
 	-- they keep talking
 	if (ZombRand(70) == 0) and (not NoIdleChatter) then
-		self.parent:Speak(getSpeech("IdleChatter"))
+		self.parent:Speak(GetDialogueSpeech("IdleChatter"))
 	end
 
 	if (true) then -- self.parent:isInAction() == false) then -- for some reason this is true when they doing nothing sometimes...

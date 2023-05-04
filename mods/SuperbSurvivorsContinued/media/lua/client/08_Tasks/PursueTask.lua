@@ -91,7 +91,7 @@ function PursueTask:update()
 
 		if (distancetoLastSpotSeen > 2.5) then
 			if (ZombRand(4) == 0) and (self.parent:isSpeaking() == false) then
-				self.parent:Speak(getSpeech("SawHimThere"))
+				self.parent:Speak(GetDialogueSpeech("SawHimThere"))
 			end
 		else
 			self.parent:setRunning(false)

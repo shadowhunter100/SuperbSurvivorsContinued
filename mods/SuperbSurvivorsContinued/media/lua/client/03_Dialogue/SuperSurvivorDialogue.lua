@@ -1,72 +1,74 @@
---[[ 
-  WIP - Where are those "speeches" coming from? Are those from Conditional-Speech? mod on the workshop?
+local isLocalLoggingEnabled = false;
+
+--[[
+  WIP - Where are those "speeches" coming from? Are those from Conditional-Speech mod on the workshop?
   https://steamcommunity.com/sharedfiles/filedetails/?id=2398253681
   If yes, why was the mod not credited?
 --]]
-
 function GetDialogue(text)
+  CreateLogLine("SuperSurvivorDialogue", isLocalLoggingEnabled, "GetDialogue() called");
   return getText("GameSound_Dialogues_SS_" .. text)
 end
 
 --- gets a random speech text of a dialogue list
 ---@param key string key of the speech
 ---@return string a survivor speech
-function getSpeech(key)
-	if(not SurvivorSpeechTable[key]) then 
-		return "?" 
-	end
-	
-	local result = ZombRand(1,#SurvivorSpeechTable[key]);
-	return tostring(SurvivorSpeechTable[key][result]);
+function GetDialogueSpeech(key)
+  CreateLogLine("SuperSurvivorDialogue", isLocalLoggingEnabled, "GetDialogueSpeech() called");
+  if (not SurvivorSpeechTable[key]) then
+    return "?"
+  end
+
+  local result = ZombRand(1, #SurvivorSpeechTable[key]);
+  return tostring(SurvivorSpeechTable[key][result]);
 end
 
-SuperDialogue = {  -- not being used yet
-	WifeSpeech = {
-		GetDialogue("WifeSpeech1"),
-		GetDialogue("WifeSpeech2"),
-		GetDialogue("WifeSpeech3"),
-		GetDialogue("WifeSpeech4"),
-		GetDialogue("WifeSpeech5"),
-	}
+-- WIP - WifeSpeech is CURRENTLY NOT USED
+WifeSpeech = {
+  GetDialogue("WifeSpeech1"),
+  GetDialogue("WifeSpeech2"),
+  GetDialogue("WifeSpeech3"),
+  GetDialogue("WifeSpeech4"),
+  GetDialogue("WifeSpeech5"),
 }
 
-if not SurvivorSpeechTable then 
-  SurvivorSpeechTable = {} 
+if not SurvivorSpeechTable then
+  SurvivorSpeechTable = {}
 end
 
 SurvivorSpeechTable["HelloThere"] = {
   GetDialogue("HiThere"),
   GetDialogue("HelloThere"),
   GetDialogue("HelloWord1"),
-	GetDialogue("HelloWord2"),
-	GetDialogue("HelloWord3"),
-	GetDialogue("HelloWord4"),
-	GetDialogue("HelloWord5"),
-	GetDialogue("HelloWord6"),
-	GetDialogue("HelloWord7"),
-	GetDialogue("HelloWord8"),
-	GetDialogue("HelloWord9"),
-	GetDialogue("HelloWord10"),
-	GetDialogue("HelloWord11"),
-	GetDialogue("HelloWord12"),
-	GetDialogue("HelloWord13"),
-	GetDialogue("HelloWord14"),
+  GetDialogue("HelloWord2"),
+  GetDialogue("HelloWord3"),
+  GetDialogue("HelloWord4"),
+  GetDialogue("HelloWord5"),
+  GetDialogue("HelloWord6"),
+  GetDialogue("HelloWord7"),
+  GetDialogue("HelloWord8"),
+  GetDialogue("HelloWord9"),
+  GetDialogue("HelloWord10"),
+  GetDialogue("HelloWord11"),
+  GetDialogue("HelloWord12"),
+  GetDialogue("HelloWord13"),
+  GetDialogue("HelloWord14"),
 };
-	
+
 SurvivorSpeechTable["OutOfAmmo"] = {
   GetDialogue("OutOfAmmo1"),
   GetDialogue("OutOfAmmo2"),
   GetDialogue("OutOfAmmo3"),
-	GetDialogue("OutOfAmmo4"),
+  GetDialogue("OutOfAmmo4"),
 };
-	
+
 SurvivorSpeechTable["HowDareYou"] = {
   GetDialogue("HowDareYou1"),
-};		
+};
 SurvivorSpeechTable["WifeIntro"] = {
   GetDialogue("WifeIntro1"),
-};	
-	
+};
+
 SurvivorSpeechTable["IDontKnowHowDoctor"] = {
   GetDialogue("IDontKnowHowDoctor1"),
 };
@@ -75,14 +77,14 @@ SurvivorSpeechTable["IfYouThinkSo"] = {
   GetDialogue("IfYouThinkSo1"),
   GetDialogue("IfYouThinkSo2"),
 };
-     
+
 SurvivorSpeechTable["SawHimThere"] = {
   GetDialogue("SawHimThere1"),
   GetDialogue("SawHimThere2"),
   GetDialogue("SawHimThere3"),
-	GetDialogue("SawHimThere4"),
+  GetDialogue("SawHimThere4"),
 };
-	
+
 SurvivorSpeechTable["GonnaGetYou"] = {
   GetDialogue("GonnaGetYou1"),
   GetDialogue("GonnaGetYou2"),
@@ -90,8 +92,8 @@ SurvivorSpeechTable["GonnaGetYou"] = {
   GetDialogue("GonnaGetYou4"),
   GetDialogue("GonnaGetYou5"),
 };
-     
-  
+
+
 SurvivorSpeechTable["SeenPlayerIll"] = {
   GetDialogue("SeenPlayerIll1"),
   GetDialogue("SeenPlayerIll2"),
@@ -102,7 +104,7 @@ SurvivorSpeechTable["SeenPlayerIll"] = {
   GetDialogue("SeenPlayerIll7"),
   GetDialogue("SeenPlayerIll8"),
 };
-     
+
 SurvivorSpeechTable["SeenPlayerBit"] = {
   GetDialogue("SeenPlayerBit1"),
   GetDialogue("SeenPlayerBit2"),
@@ -118,7 +120,7 @@ SurvivorSpeechTable["SeenPlayerBit"] = {
   GetDialogue("SeenPlayerBit12"),
   GetDialogue("SeenPlayerBit13"),
 };
-    
+
 SurvivorSpeechTable["Crying"] = {
   GetDialogue("Crying1"),
   GetDialogue("Crying2"),
@@ -137,9 +139,9 @@ SurvivorSpeechTable["Crying"] = {
   GetDialogue("Crying15"),
   GetDialogue("Crying16"),
 };
-      
+
 SurvivorSpeechTable["Tired"] = {
-	GetDialogue("Tired1"),
+  GetDialogue("Tired1"),
   GetDialogue("Tired2"),
   GetDialogue("Tired3"),
   GetDialogue("Tired4"),
@@ -151,7 +153,7 @@ SurvivorSpeechTable["Tired"] = {
   GetDialogue("Tired10"),
   GetDialogue("Tired11"),
 };
- 
+
 
 SurvivorSpeechTable["VTired"] = {
   GetDialogue("VTired1"),
@@ -161,9 +163,9 @@ SurvivorSpeechTable["VTired"] = {
   GetDialogue("VTired5"),
   GetDialogue("VTired6"),
 };
- 
 
- 
+
+
 SurvivorSpeechTable["STired"] = {
   GetDialogue("STired1"),
   GetDialogue("STired2"),
@@ -174,7 +176,7 @@ SurvivorSpeechTable["STired"] = {
   GetDialogue("STired7"),
 };
 
-   
+
 SurvivorSpeechTable["Thirsty"] = {
   GetDialogue("Thirsty1"),
   GetDialogue("Thirsty2"),
@@ -187,7 +189,7 @@ SurvivorSpeechTable["Thirsty"] = {
   GetDialogue("Thirsty9"),
   GetDialogue("Thirsty10"),
 };
- 
+
 
 SurvivorSpeechTable["VThirsty"] = {
   GetDialogue("VThirsty1"),
@@ -201,7 +203,7 @@ SurvivorSpeechTable["VThirsty"] = {
   GetDialogue("VThirsty9"),
   GetDialogue("VThirsty10"),
 };
- 
+
 
 SurvivorSpeechTable["SThirsty"] = {
   GetDialogue("SThirsty1"),
@@ -216,7 +218,7 @@ SurvivorSpeechTable["SThirsty"] = {
   GetDialogue("SThirsty10"),
 };
 
- 
+
 SurvivorSpeechTable["Respond"] = {
   GetDialogue("Respond1"),
   GetDialogue("Respond2"),
@@ -239,22 +241,22 @@ SurvivorSpeechTable["Respond"] = {
   GetDialogue("Respond19"),
   GetDialogue("Respond20"),
 };
- 
+
 SurvivorSpeechTable["Sick"] = {
   GetDialogue("Sick1"),
   GetDialogue("Sick2"),
 };
- 
+
 SurvivorSpeechTable["VSick"] = {
   GetDialogue("VSick1"),
   GetDialogue("VSick2"),
 };
- 
+
 SurvivorSpeechTable["SSick"] = {
   GetDialogue("SSick1"),
   GetDialogue("SSick2"),
 };
- 
+
 SurvivorSpeechTable["Hungry"] = {
   GetDialogue("Hungry1"),
   GetDialogue("Hungry2"),
@@ -267,7 +269,7 @@ SurvivorSpeechTable["Hungry"] = {
   GetDialogue("Hungry9"),
   GetDialogue("Hungry10"),
 };
- 
+
 SurvivorSpeechTable["VHungry"] = {
   GetDialogue("VHungry1"),
   GetDialogue("VHungry2"),
@@ -280,7 +282,7 @@ SurvivorSpeechTable["VHungry"] = {
   GetDialogue("VHungry9"),
   GetDialogue("VHungry10"),
 };
- 
+
 
 SurvivorSpeechTable["Starving"] = {
   GetDialogue("Starving1"),
@@ -327,9 +329,9 @@ SurvivorSpeechTable["Roger"] = {
   GetDialogue("Roger29"),
   GetDialogue("Roger30"),
 };
- 
+
 SurvivorSpeechTable["No"] = {
-	GetDialogue("No1"),
+  GetDialogue("No1"),
   GetDialogue("No2"),
   GetDialogue("No3"),
   GetDialogue("No4"),
@@ -341,17 +343,17 @@ SurvivorSpeechTable["No"] = {
   GetDialogue("No10"),
   GetDialogue("No11"),
   GetDialogue("No12"),
- };
- 
+};
+
 SurvivorSpeechTable["Thanks"] = {
- GetDialogue("Thanks1"),
- GetDialogue("Thanks2"),
- GetDialogue("Thanks3"),
- GetDialogue("Thanks4"),
- GetDialogue("Thanks5"),
- GetDialogue("Thanks6"),
- GetDialogue("Thanks7"),
- GetDialogue("Thanks8"),
+  GetDialogue("Thanks1"),
+  GetDialogue("Thanks2"),
+  GetDialogue("Thanks3"),
+  GetDialogue("Thanks4"),
+  GetDialogue("Thanks5"),
+  GetDialogue("Thanks6"),
+  GetDialogue("Thanks7"),
+  GetDialogue("Thanks8"),
 };
 
 SurvivorSpeechTable["HitByPlayer"] = {
@@ -386,7 +388,7 @@ SurvivorSpeechTable["HitByPlayer"] = {
   GetDialogue("HitByPlayer29"),
 };
 
- 
+
 SurvivorSpeechTable["SeenFirstZombie"] = {
   GetDialogue("SeenFirstZombie1"),
   GetDialogue("SeenFirstZombie2"),
@@ -407,7 +409,7 @@ SurvivorSpeechTable["SeenFirstZombie"] = {
   GetDialogue("SeenFirstZombie17"),
   GetDialogue("SeenFirstZombie18"),
 };
- 
+
 
 SurvivorSpeechTable["IdleChatter"] = {
   GetDialogue("IdleChatter1"),
@@ -551,7 +553,7 @@ SurvivorSpeechTable["IdleChatter"] = {
   GetDialogue("IdleChatter139"),
   GetDialogue("IdleChatter140"),
 };
- 
+
 
 SurvivorSpeechTable["PreZombieChatter"] = {
   GetDialogue("PreZombieChatter1"),
@@ -569,7 +571,7 @@ SurvivorSpeechTable["PreZombieChatter"] = {
   GetDialogue("PreZombieChatter13"),
   GetDialogue("PreZombieChatter14"),
 };
- 
+
 
 SurvivorSpeechTable["Hurt"] = {
   GetDialogue("Hurt1"),
@@ -591,7 +593,7 @@ SurvivorSpeechTable["Hurt"] = {
   GetDialogue("Hurt17"),
   GetDialogue("Hurt18"),
 };
- 
+
 
 SurvivorSpeechTable["Injured"] = {
   GetDialogue("Injured1"),
@@ -615,9 +617,9 @@ SurvivorSpeechTable["Injured"] = {
   GetDialogue("Injured19"),
   GetDialogue("Injured20"),
 };
- 
 
- 
+
+
 SurvivorSpeechTable["BadInjured"] = {
   GetDialogue("BadInjured1"),
   GetDialogue("BadInjured2"),
@@ -637,7 +639,7 @@ SurvivorSpeechTable["BadInjured"] = {
   GetDialogue("BadInjured16"),
   GetDialogue("BadInjured17"),
 };
- 
+
 
 SurvivorSpeechTable["SeriousInjured"] = {
   GetDialogue("SeriousInjured1"),
@@ -664,7 +666,7 @@ SurvivorSpeechTable["SeriousInjured"] = {
   GetDialogue("SeriousInjured22"),
   GetDialogue("SeriousInjured23"),
 };
- 
+
 
 SurvivorSpeechTable["FatalInjured"] = {
   GetDialogue("FatalInjured1"),
@@ -685,7 +687,7 @@ SurvivorSpeechTable["FatalInjured"] = {
   GetDialogue("FatalInjured16"),
   GetDialogue("FatalInjured17"),
 };
- 
+
 
 SurvivorSpeechTable["FinalWords"] = {
   GetDialogue("FinalWords1"),
@@ -720,9 +722,9 @@ SurvivorSpeechTable["FinalWords"] = {
   GetDialogue("FinalWords30"),
   GetDialogue("FinalWords31"),
 };
- 
 
- 
+
+
 SurvivorSpeechTable["NameText"] = {
   GetDialogue("NameText1"),
   GetDialogue("NameText2"),
@@ -734,7 +736,7 @@ SurvivorSpeechTable["NameText"] = {
   GetDialogue("NameText8"),
   GetDialogue("NameText9"),
 };
- 
+
 
 SurvivorSpeechTable["Greetings"] = {
   GetDialogue("Greetings1"),
@@ -784,7 +786,7 @@ SurvivorSpeechTable["Greetings"] = {
   GetDialogue("Greetings45"),
   GetDialogue("Greetings46"),
 };
- 
+
 
 SurvivorSpeechTable["WantToHide"] = {
   GetDialogue("WantToHide1"),
@@ -811,9 +813,9 @@ SurvivorSpeechTable["WantToHide"] = {
   GetDialogue("WantToHide22"),
   GetDialogue("WantToHide23"),
 };
- 
 
- 
+
+
 SurvivorSpeechTable["FoundHidingPlace"] = {
   GetDialogue("FoundHidingPlace1"),
   GetDialogue("FoundHidingPlace2"),
@@ -857,7 +859,7 @@ SurvivorSpeechTable["FoundHidingPlace"] = {
   GetDialogue("FoundHidingPlace40"),
   GetDialogue("FoundHidingPlace41"),
 };
- 
+
 
 SurvivorSpeechTable["NoWhereToHide"] = {
   GetDialogue("NoWhereToHide1"),
@@ -884,7 +886,7 @@ SurvivorSpeechTable["NoWhereToHide"] = {
   GetDialogue("NoWhereToHide22"),
   GetDialogue("NoWhereToHide23"),
 };
- 
+
 
 SurvivorSpeechTable["Panic"] = {
   GetDialogue("Panic1"),
@@ -911,7 +913,7 @@ SurvivorSpeechTable["Panic"] = {
   GetDialogue("Panic22"),
   GetDialogue("Panic23"),
 };
- 
+
 
 SurvivorSpeechTable["Scared"] = {
   GetDialogue("Scared1"),
@@ -935,36 +937,36 @@ SurvivorSpeechTable["Scared"] = {
   GetDialogue("Scared19"),
   GetDialogue("Scared20"),
 };
- 
+
 
 SurvivorSpeechTable["Screem"] = {
-GetDialogue("Screem1"),
-GetDialogue("Screem2"),
-GetDialogue("Screem3"),
-GetDialogue("Screem4"),
-GetDialogue("Screem5"),
-GetDialogue("Screem6"),
-GetDialogue("Screem7"),
-GetDialogue("Screem8"),
-GetDialogue("Screem9"),
-GetDialogue("Screem10"),
-GetDialogue("Screem11"),
-GetDialogue("Screem12"),
-GetDialogue("Screem13"),
-GetDialogue("Screem14"),
-GetDialogue("Screem15"),
-GetDialogue("Screem16"),
-GetDialogue("Screem17"),
-GetDialogue("Screem18"),
-GetDialogue("Screem19"),
-GetDialogue("Screem20"),
-GetDialogue("Screem21"),
-GetDialogue("Screem22"),
-GetDialogue("Screem23"),
+  GetDialogue("Screem1"),
+  GetDialogue("Screem2"),
+  GetDialogue("Screem3"),
+  GetDialogue("Screem4"),
+  GetDialogue("Screem5"),
+  GetDialogue("Screem6"),
+  GetDialogue("Screem7"),
+  GetDialogue("Screem8"),
+  GetDialogue("Screem9"),
+  GetDialogue("Screem10"),
+  GetDialogue("Screem11"),
+  GetDialogue("Screem12"),
+  GetDialogue("Screem13"),
+  GetDialogue("Screem14"),
+  GetDialogue("Screem15"),
+  GetDialogue("Screem16"),
+  GetDialogue("Screem17"),
+  GetDialogue("Screem18"),
+  GetDialogue("Screem19"),
+  GetDialogue("Screem20"),
+  GetDialogue("Screem21"),
+  GetDialogue("Screem22"),
+  GetDialogue("Screem23"),
 };
- 
 
- 
+
+
 SurvivorSpeechTable["Attack"] = {
   GetDialogue("Attack1"),
   GetDialogue("Attack2"),
@@ -1006,7 +1008,7 @@ SurvivorSpeechTable["Attack"] = {
   GetDialogue("Attack38"),
 };
 
- 
+
 SurvivorSpeechTable["AttackS"] = {
   GetDialogue("AttackS1"),
   GetDialogue("AttackS2"),
@@ -1038,7 +1040,7 @@ SurvivorSpeechTable["AttackS"] = {
   GetDialogue("AttackS28"),
   GetDialogue("AttackS29"),
 };
- 
+
 
 SurvivorSpeechTable["Traitor"] = {
   GetDialogue("Traitor1"),
@@ -1064,7 +1066,7 @@ SurvivorSpeechTable["Traitor"] = {
   GetDialogue("Traitor21"),
   GetDialogue("Traitor22"),
 };
- 
+
 
 SurvivorSpeechTable["LookingForZombie"] = {
   GetDialogue("LookingForZombie1"),
@@ -1083,7 +1085,7 @@ SurvivorSpeechTable["LookingForZombie"] = {
   GetDialogue("LookingForZombie14"),
   GetDialogue("LookingForZombie15"),
 };
- 
+
 
 SurvivorSpeechTable["FoundSurvivor"] = {
   GetDialogue("FoundSurvivor1"),
@@ -1121,7 +1123,7 @@ SurvivorSpeechTable["FoundSurvivor"] = {
   GetDialogue("FoundSurvivor33"),
   GetDialogue("FoundSurvivor34"),
 };
- 
+
 
 SurvivorSpeechTable["FoundZombie"] = {
   GetDialogue("FoundZombie1"),
@@ -1144,4 +1146,3 @@ SurvivorSpeechTable["FoundZombie"] = {
   GetDialogue("FoundZombie18"),
   GetDialogue("FoundZombie19"),
 };
- 

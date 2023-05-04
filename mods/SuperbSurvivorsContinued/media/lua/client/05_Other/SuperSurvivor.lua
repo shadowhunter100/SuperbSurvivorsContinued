@@ -4319,7 +4319,7 @@ function SuperSurvivor:Attack(victim)
 		local pwepContainer = pwep:getContainer()
 		if (pwepContainer) then pwepContainer:Remove(pwep) end -- remove temporarily so FindAndReturn("weapon") does not find this ammoless gun
 
-		self:Speak(getSpeech("OutOfAmmo"));
+		self:Speak(GetDialogueSpeech("OutOfAmmo"));
 
 		for i = 1, #self.AmmoBoxTypes do
 			self:getTaskManager():AddToTop(FindThisTask:new(self, self.AmmoBoxTypes[i], "Type", 1))
