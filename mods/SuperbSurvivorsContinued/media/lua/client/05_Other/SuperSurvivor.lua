@@ -1094,30 +1094,6 @@ function SuperSurvivor:isTargetBuildingDangerous()
 	return false
 end
 
-
--- WIP - MarkCurrentSquareExplored_IFOD() IS CURRENTLY NOT USED
--- New function: To allow the exact position of the NPC to mark spot. This could be useful for preventing NPCs from walking to blocked off doors they witnessed
--- It needs work though, because right now it will more than likely mark off the whole building.
--- IFOD stands for 'In front of door' but it will also check for barricaded windows too.
-function SuperSurvivor:MarkCurrentSquareExplored_IFOD(building)
-	if (not self:inFrontOfLockedDoor()) or (not self:inFrontOfBarricadedWindowAlt()) then
-		return false
-	end
-
-	self:resetBuildingWalkToAttempts(building)
-	local bdef = building:getDef()
-
-	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
-		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
-			local sq = getCell():getGridSquare(x, y, self.player:getZ())
-
-			if (sq) then
-				self:Explore(sq)
-			end
-		end
-	end
-end
-
 function SuperSurvivor:MarkBuildingExplored(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:MarkBuildingExplored() called");
 	if (not building) then
@@ -1252,15 +1228,6 @@ function SuperSurvivor:ContainerSquareLooted(sq, Category)
 		else
 			self.SquareContainerSquareLooteds[Category][key] = self.SquareContainerSquareLooteds[Category][key] + 1
 		end
-	end
-end
-
--- WIP - setContainerSquareLooted() IS CURRENTLY NOT USED
-function SuperSurvivor:setContainerSquareLooted(sq, toThis, Category)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setContainerSquareLooted() called");
-	if (sq) then
-		local key = sq:getX() .. sq:getY()
-		self.SquareContainerSquareLooteds[Category][key] = toThis
 	end
 end
 
@@ -1576,18 +1543,6 @@ function SuperSurvivor:isInSameRoom(movingObj)
 		return true
 	else
 		return false
-	end
-end
-
--- WIP - isInSameRoomWithEnemyAlt() CURRENTLY IS NOT USED
-function SuperSurvivor:isInSameRoomWithEnemyAlt()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameRoomWithEnemyAlt() called");
-	if (self.LastEnemeySeen ~= nil) then
-		if (self:isInSameRoom(self.LastEnemeySeen)) then
-			return true
-		else
-			return false
-		end
 	end
 end
 
@@ -1939,19 +1894,6 @@ function SuperSurvivor:NPC_IFOD_BarricadedOutside() -- IFOD stands for In front 
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isBarricaded()) and (self.player:isOutside()) then
-		return true
-	else
-		return false
-	end
-end
-
--- WIP - NPC_IFOD_Xor_BlockedDoor() CURRENTLY IS NOT USED
--- I'm tired of writing long precise 'ifs' so, Xor it is (IDK and IDC if that's what 'Xor' means.)
-function SuperSurvivor:NPC_IFOD_Xor_BlockedDoor()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IFOD_Xor_BlockedDoor() called");
-	if (self:inFrontOfLockedDoorAndIsOutside() == true) then
-		return true
-	elseif (self:NPC_IFOD_BarricadedInside() == true) then
 		return true
 	else
 		return false
