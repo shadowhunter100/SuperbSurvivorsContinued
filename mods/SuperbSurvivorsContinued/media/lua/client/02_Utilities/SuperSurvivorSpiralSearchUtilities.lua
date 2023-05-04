@@ -2,7 +2,6 @@
 
 -- Creates a spiral around a point to get squares in order of proximity for searching nearby
 SpiralSearch = {}
---SpiralSearch.__index = SpiralSearch
 
 function SpiralSearch:new(x, y, range)
 	local o = {}
