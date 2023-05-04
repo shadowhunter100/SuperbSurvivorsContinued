@@ -528,7 +528,7 @@ function SuperSurvivor:loadPlayer(square, ID)
 	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
 		local BuddyDesc = SurvivorFactory.CreateSurvivor();
 		local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), square:getZ());
-		local filename = getSaveDir() .. "Survivor" .. tostring(ID);
+		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
 
 		Buddy:getInventory():emptyIt();
 		Buddy:load(filename);
@@ -3342,7 +3342,7 @@ function SuperSurvivor:delete()
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);
 	self.player:getModData().ID = 0;
-	local filename = getSaveDir() .. "SurvivorTemp";
+	local filename = GetModSaveDir() .. "SurvivorTemp";
 	self.player:save(filename);
 	self.player:removeFromWorld()
 	self.player:removeFromSquare()
@@ -3396,7 +3396,7 @@ function SuperSurvivor:SaveSurvivor()
 	local ID = self.player:getModData().ID;
 
 	if (ID ~= nil) then
-		local filename = getSaveDir() .. "Survivor" .. tostring(ID);
+		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
 		self.player:save(filename);
 
 		if (self.player ~= nil and self.player:isDead() == false) then

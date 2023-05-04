@@ -1,38 +1,12 @@
--- this file only has methods related to deal with files
+-- this file only has methods related to deal with saving and loading Superb Survivors data.
 
-local modName = "SuperbSurvivorsContinued"
-
---- DEBUG ---
-
-local enableDebugTable = false
-
-local function debugMethodName(text)
-	if enableDebugTable then
-		print(" -----" .. text .. "----- ")
-	end
-end
-
---- this method is for only concat strings when debug is enabled
----@param action string any action that the method is doing
----@param value string the target of the action
-local function debugMethodAction(action, value)
-	if enableDebugTable then
-		print(action .. " : " .. value)
-	end
-end
-
-local function debugTable(text)
-	if enableDebugTable then
-		print(text)
-	end
-end
-
---- DEBUG ---
+local isLocalLoggingEnabled = false;
 
 --- gets the full path of a .lua of a save file
 ---@param fileName string any Name
 ---@return string
 local function getFileFullPath(fileName)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "getFileFullPath() called");
 	return getWorld():getWorld() .. getFileSeparator() .. fileName
 end
 
@@ -40,7 +14,8 @@ end
 ---@param fileName string file to be searched
 ---@return boolean returns true if the current file exists
 function DoesFileExist(fileName)
-	local readFile = getModFileReader(modName, getFileFullPath(fileName), false)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "DoesFileExist() called");
+	local readFile = getModFileReader(ModId, getFileFullPath(fileName), false)
 
 	if (readFile) then
 		return true;
@@ -53,6 +28,7 @@ end
 ---@param t table a table
 ---@return any an random item of t table
 function table.randFrom(t)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "table.randFrom() called");
 	local keys = {}
 
 	for key, value in pairs(t) do
@@ -67,32 +43,29 @@ end
 ---@param fileName string the filename that the table will be loaded
 ---@return table a table with all data from filename or nil if not found
 function table.load(fileName)
-	debugMethodName("table.load")
-	debugMethodAction("loading file", fileName)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "table.load() called");
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "Loading file: " .. tostring(fileName));
 
 	local fileTable = {}
-	local readFile = getModFileReader(modName, getFileFullPath(fileName .. ".lua"), true)
+	local readFile = getModFileReader(ModId, getFileFullPath(fileName .. ".lua"), true)
 
 	if (readFile) then
 		local scanLine = readFile:readLine()
 
 		while scanLine do
-			debugMethodAction("reading line", tostring(#fileTable + 1))
 
 			fileTable[#fileTable + 1] = scanLine
 			scanLine = readFile:readLine()
 
 			if not scanLine then
-				debugTable("end of the file")
 				break
 			end
 		end
 
-		debugMethodAction("closing file", fileName)
 		readFile:close()
 	end
 
-	debugMethodName("table.load")
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "--- table.load() end --- ");
 	return fileTable
 end
 
@@ -100,31 +73,29 @@ end
 ---@param tbl table a table with data
 ---@param fileName string the name of the file to be created
 function table.save(tbl, fileName)
-	debugMethodName("table.save")
-	debugMethodAction("saving file", fileName)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "table.save() called");
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "Saving file: " .. tostring(fileName));
 	local thepath = getFileFullPath(fileName .. ".lua")
-	local writeFile = getModFileWriter(modName, thepath, true, false)
+	local writeFile = getModFileWriter(ModId, thepath, true, false)
 
 	for i = 1, #tbl do
-		debugMethodAction("writing line", tostring(i))
 		writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
 	end
 
-	debugMethodAction("closing file", fileName)
 	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
 
-	debugMethodName("table.save")
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "--- table.save() END ---");
 end
 
 --- loads a table from a file
 ---@param fileName string the filename that the table will be loaded
 ---@return table a table with all data from filename or nil if not found
-function kvtableload(fileName)
-	debugMethodName("kvtableload")
-	debugMethodAction("loading file", fileName)
+function KVTableLoad(fileName)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "KVTableLoad() called");
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "loading file: " .. tostring(fileName));
 
 	local fileTable = {}
-	local readFile = getModFileReader(modName, getFileFullPath(fileName), true)
+	local readFile = getModFileReader(ModId, getFileFullPath(fileName), true)
 
 	if (not readFile) then
 		return {}
@@ -132,8 +103,6 @@ function kvtableload(fileName)
 
 	local scanLine = readFile:readLine()
 	while scanLine do
-		debugMethodAction("reading line", tostring(#fileTable + 1))
-
 		local values = {}
 
 		for input in scanLine:gmatch("%S+") do
@@ -145,44 +114,40 @@ function kvtableload(fileName)
 		scanLine = readFile:readLine()
 
 		if not scanLine then
-			debugTable("end of the file")
-			break
+			break;
 		end
 	end
+	readFile:close();
 
-	debugMethodAction("closing file", fileName)
-	readFile:close()
-
-	debugMethodName("kvtableload")
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "--- KVTableLoad() end ---");
 	return fileTable
 end
 
 --- saves a table into a file
----@param tbl table a table with data
+---@param fileTable table a table with data
 ---@param fileName string the name of the file to be created
-function kvtablesave(fileTable, fileName)
-	debugMethodName("kvtablesave")
-	debugMethodAction("saving file", fileName)
+function KVTablesave(fileTable, fileName)
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "KVTablesave() called");
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "saving file: " .. tostring(fileName));
 
 	if (not fileTable) then
-		debugTable("table is empty")
+		CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "fileTable is empty");
 		return false
 	end
 
-	local writeFile = getModFileWriter(modName, getFileFullPath(fileName), true, false) -- WIP - console.txt logged an error tracing to this line
+	local writeFile = getModFileWriter(ModId, getFileFullPath(fileName), true, false);
 
 	for index, value in pairs(fileTable) do
-		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
-		debugMethodAction("writing line", tostring(index))
+		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n");
 	end
 
-	debugMethodAction("closing file", fileName)
-	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
+	writeFile:close();
 
-	debugMethodName("kvtablesave")
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "--- KVTablesave() end ---");
 end
 
-function getSaveDir()
+function GetModSaveDir()
+	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "GetModSaveDir() called");
 	return Core.getMyDocumentFolder() ..
 		getFileSeparator() ..
 		"Saves" ..
