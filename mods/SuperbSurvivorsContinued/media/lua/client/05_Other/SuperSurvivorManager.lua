@@ -1,7 +1,10 @@
 SuperSurvivorManager = {}
 SuperSurvivorManager.__index = SuperSurvivorManager
 
+local isLocalLoggingEnabled = false;
+
 function SuperSurvivorManager:new()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -14,15 +17,18 @@ function SuperSurvivorManager:new()
 end
 
 function SuperSurvivorManager:getRealPlayerID()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:getRealPlayerID() called");
 	return self.MainPlayer
 end
 
 function SuperSurvivorManager:init()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:init() called");
 	self.SuperSurvivors[0] = SuperSurvivor:newSet(getSpecificPlayer(0))
 	self.SuperSurvivors[0]:setID(0)
 end
 
 function SuperSurvivorManager:setPlayer(player, ID)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:setPlayer() called");
 	self.SuperSurvivors[ID] = SuperSurvivor:newSet(player)
 	self.SuperSurvivors[0]:setID(ID)
 	self.SuperSurvivors[0]:setName("Player " .. tostring(ID))
@@ -31,6 +37,7 @@ function SuperSurvivorManager:setPlayer(player, ID)
 end
 
 function SuperSurvivorManager:switchPlayer(newID)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:switchPlayer() called");
 	self.SuperSurvivors[newID].player:setBlockMovement(false)
 	self.SuperSurvivors[newID].player:setNPC(false)
 
@@ -47,6 +54,7 @@ function SuperSurvivorManager:switchPlayer(newID)
 end
 
 function SuperSurvivorManager:LoadSurvivor(ID, square)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:LoadSurvivor() called");
 	if (not checkSaveFileExists("Survivor" .. tostring(ID))) then return false end
 
 	if (ID ~= nil) and (square ~= nil) then --
@@ -127,6 +135,7 @@ function SuperSurvivorManager:LoadSurvivor(ID, square)
 end
 
 function SuperSurvivorManager:spawnSurvivor(isFemale, square)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:spawnSurvivor() called");
 	if (square ~= nil) then
 		local newSurvivor = SuperSurvivor:new(isFemale, square)
 
@@ -142,6 +151,7 @@ function SuperSurvivorManager:spawnSurvivor(isFemale, square)
 end
 
 function SuperSurvivorManager:Get(thisID)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:Get() called");
 	if (not self.SuperSurvivors[thisID]) then
 		return nil
 	else
@@ -150,10 +160,12 @@ function SuperSurvivorManager:Get(thisID)
 end
 
 function SuperSurvivorManager:OnDeath(ID)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:OnDeath() called");
 	self.SuperSurvivors[ID] = nil
 end
 
 function SuperSurvivorManager:update()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:update() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
 			if (self.SuperSurvivors[i].TargetSquare ~= nil and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ() and getGameSpeed() > 1) then
@@ -174,6 +186,7 @@ function SuperSurvivorManager:update()
 end
 
 function SuperSurvivorManager:AsleepHealAll()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:AsleepHealAll() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.MainPlayer ~= i) and (self.SuperSurvivors[i].player) then
 			self.SuperSurvivors[i].player:getBodyDamage():AddGeneralHealth(10)
@@ -182,6 +195,7 @@ function SuperSurvivorManager:AsleepHealAll()
 end
 
 function SuperSurvivorManager:PublicExecution(SSW, SSV)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:PublicExecution() called");
 	local maxdistance = 20
 
 	for i = 1, self.SurvivorCount + 1 do
@@ -206,6 +220,7 @@ function SuperSurvivorManager:PublicExecution(SSW, SSV)
 end
 
 function SuperSurvivorManager:GunShotHandle(SSW)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GunShotHandle() called");
 	local maxdistance = 20
 	local weapon = getSpecificPlayer(0):getPrimaryHandItem()
 
@@ -245,7 +260,9 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 	end
 end
 
+-- WIP - GetSurvivorByName() IS CURRENTLY NOT USED
 function SuperSurvivorManager:GetSurvivorByName(thisname)
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetSurvivorByName() called");
 	local closestSoFar = 999
 	local closestID = 0
 	for i = 1, self.SurvivorCount + 1 do
@@ -267,6 +284,7 @@ function SuperSurvivorManager:GetSurvivorByName(thisname)
 end
 
 function SuperSurvivorManager:GetClosest()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetClosest() called");
 	local closestSoFar = 20
 	local closestID = 0
 
@@ -288,6 +306,7 @@ function SuperSurvivorManager:GetClosest()
 end
 
 function SuperSurvivorManager:GetClosestNonParty()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetClosestNonParty() called");
 	local closestSoFar = 20
 	local closestID = 0
 	for i = 1, self.SurvivorCount + 1 do
@@ -308,6 +327,7 @@ function SuperSurvivorManager:GetClosestNonParty()
 end
 
 function SuperSurvivorManager:SaveAll()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:SaveAll() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
 			self.SuperSurvivors[i]:SaveSurvivor()
@@ -318,6 +338,7 @@ end
 SSM = SuperSurvivorManager:new()
 
 function loadSurvivorMap()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:loadSurvivorMap() called");
 	local tempTable = {}
 	tempTable = table.load("SurvivorManagerInfo")
 	if (tempTable) and (tempTable[1]) then
@@ -347,6 +368,7 @@ function loadSurvivorMap()
 end
 
 function saveSurvivorMap()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:saveSurvivorMap() called");
 	local tempTable = {}
 	tempTable[1] = SSM.SurvivorCount
 	table.save(tempTable, "SurvivorManagerInfo") -- WIP - console.txt logged an error tracing to this line
