@@ -135,7 +135,7 @@ function FindAndReturnFood(thisItemContainer)
 
 			if (item ~= nil) and (item:getCategory() == "Food") then
 
-				if not (item:getPoisonPower() > 1) and not (has_value(FoodsToExlude, item:getType())) then
+				if not (item:getPoisonPower() > 1) and not (CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 					return item
 				end
 			end
@@ -244,7 +244,7 @@ function FindAndReturnBestFoodOnFloor(sq, survivor)
 
 		for j = 0, count - 1 do
 			local item = items:get(j):getItem()
-			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not has_value(FoodsToExlude, item:getType())) then
+			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 				local Score = GetFoodScore(item)
 
 				if Score > bestScore then
@@ -289,7 +289,7 @@ function FindAndReturnBestFood(thisItemContainer, survivor)
 		for i = 1, count - 1 do
 			local item = items:get(i)
 
-			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not has_value(FoodsToExlude, item:getType())) then
+			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 				local Score = GetFoodScore(item)
 
 				--ContainerItemsScore[i] = Score

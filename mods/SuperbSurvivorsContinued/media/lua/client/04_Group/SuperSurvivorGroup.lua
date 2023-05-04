@@ -106,15 +106,15 @@ function SuperSurvivorGroup:getBestGroupAreaContainerForItem(item) -- returns mo
 
 	--using only "if" not "elseif" because this is a top down priority checking system, multiple if statements can be true for certain items so if certain areas are set those will be prioritized
 
-	if (has_value(overrideWood, itemtype) and self:isGroupAreaSet("WoodStorageArea")) then
+	if (CheckIfTableHasValue(overrideWood, itemtype) and self:isGroupAreaSet("WoodStorageArea")) then
 		return self
 			:getGroupAreaContainer("WoodStorageArea")
 	end
-	if (has_value(overrideMedical, itemtype) and self:isGroupAreaSet("MedicalStorageArea")) then
+	if (CheckIfTableHasValue(overrideMedical, itemtype) and self:isGroupAreaSet("MedicalStorageArea")) then
 		return self
 			:getGroupAreaContainer("MedicalStorageArea")
 	end
-	if (has_value(overrideTool, itemtype) and self:isGroupAreaSet("ToolStorageArea")) then
+	if (CheckIfTableHasValue(overrideTool, itemtype) and self:isGroupAreaSet("ToolStorageArea")) then
 		return self
 			:getGroupAreaContainer("ToolStorageArea")
 	end
@@ -437,7 +437,7 @@ function SuperSurvivorGroup:getMemberCount()
 end
 
 function SuperSurvivorGroup:isMember(survivor)
-	return has_value(self.Members, survivor:getID())
+	return CheckIfTableHasValue(self.Members, survivor:getID())
 end
 
 -- WHAT ARE THE VALID ROLES? THERE ARE NO DOCUMENTATIONS!
@@ -458,7 +458,7 @@ function SuperSurvivorGroup:addMember(newSurvivor, Role)
 		Role = "Worker"
 	end
 
-	if (newSurvivor ~= nil) and (not has_value(self.Members, newSurvivor:getID())) then
+	if (newSurvivor ~= nil) and (not CheckIfTableHasValue(self.Members, newSurvivor:getID())) then
 		table.insert(self.Members, newSurvivor:getID())
 
 		newSurvivor:setGroupRole(Role)
@@ -475,7 +475,7 @@ function SuperSurvivorGroup:addMember(newSurvivor, Role)
 end
 
 function SuperSurvivorGroup:checkMember(newSurvivorID)
-	if (newSurvivorID ~= nil) and (not has_value(self.Members, newSurvivorID)) then
+	if (newSurvivorID ~= nil) and (not CheckIfTableHasValue(self.Members, newSurvivorID)) then
 		table.insert(self.Members, newSurvivorID)
 	end
 end
@@ -484,7 +484,7 @@ function SuperSurvivorGroup:removeMember(ID)
 	local member = SSM:Get(ID)
 	if (member) then member:setGroupID(nil) end
 
-	if (has_value(self.Members, ID)) then
+	if (CheckIfTableHasValue(self.Members, ID)) then
 		local index
 		for i = 1, #self.Members do
 			if (ID == self.Members[i]) then

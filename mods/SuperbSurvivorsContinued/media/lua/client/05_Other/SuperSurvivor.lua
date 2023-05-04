@@ -615,7 +615,7 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	local count = 0;
 
 	while (count < level) do
-		local aperk = Perks.FromString(getAPerk())
+		local aperk = Perks.FromString(GetAPerk())
 		if (aperk ~= nil) and (tostring(aperk) ~= "MAX") then
 			--print("trying to level: ".. tostring(aperk))
 			Buddy:LevelPerk(aperk)
@@ -3366,7 +3366,7 @@ function SuperSurvivor:SaveSurvivorOnMap()
 		SurvivorLocY[ID] = y
 		SurvivorLocZ[ID] = z
 
-		if (has_value(SurvivorMap[key], ID) == false) then
+		if (CheckIfTableHasValue(SurvivorMap[key], ID) == false) then
 			local removeFailed = false;
 			if (self.player:getModData().LastSquareSaveX ~= nil) then
 				local lastkey = self.player:getModData().LastSquareSaveX ..

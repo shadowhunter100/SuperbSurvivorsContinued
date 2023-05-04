@@ -19,19 +19,19 @@ function SuperSurvivorsOnTick()
 
 		if (SuperSurvivorMouseDownTicks > 15) then -- 10 acts instant, so a left click would reset the select area finalization.
 			if (Highlightcenter == nil) or (not SuperSurvivorSelectingArea) then
-				Highlightcenter = getMouseSquare()
-				HighlightX1 = getMouseSquareX()
-				HighlightX2 = getMouseSquareX()
-				HighlightY1 = getMouseSquareY()
-				HighlightY2 = getMouseSquareY()
+				Highlightcenter = GetMouseSquare()
+				HighlightX1 = GetMouseSquareX()
+				HighlightX2 = GetMouseSquareX()
+				HighlightY1 = GetMouseSquareY()
+				HighlightY2 = GetMouseSquareY()
 			end
 
 			SuperSurvivorSelectingArea = true
 
-			if (HighlightX1 == nil) or (HighlightX1 > getMouseSquareX()) then HighlightX1 = getMouseSquareX() end
-			if (HighlightX2 == nil) or (HighlightX2 <= getMouseSquareX()) then HighlightX2 = getMouseSquareX() end
-			if (HighlightY1 == nil) or (HighlightY1 > getMouseSquareY()) then HighlightY1 = getMouseSquareY() end
-			if (HighlightY2 == nil) or (HighlightY2 <= getMouseSquareY()) then HighlightY2 = getMouseSquareY() end
+			if (HighlightX1 == nil) or (HighlightX1 > GetMouseSquareX()) then HighlightX1 = GetMouseSquareX() end
+			if (HighlightX2 == nil) or (HighlightX2 <= GetMouseSquareX()) then HighlightX2 = GetMouseSquareX() end
+			if (HighlightY1 == nil) or (HighlightY1 > GetMouseSquareY()) then HighlightY1 = GetMouseSquareY() end
+			if (HighlightY2 == nil) or (HighlightY2 <= GetMouseSquareY()) then HighlightY2 = GetMouseSquareY() end
 		elseif (SuperSurvivorSelectingArea) then
 			SuperSurvivorSelectingArea = false
 		end

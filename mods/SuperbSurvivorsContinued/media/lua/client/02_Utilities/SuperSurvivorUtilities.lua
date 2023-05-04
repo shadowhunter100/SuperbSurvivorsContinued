@@ -1,3 +1,5 @@
+local isLocalLoggingEnabled = false;
+
 ---@alias color
 ---| "White"
 ---| "Grey"
@@ -57,7 +59,6 @@ SurvivorPerks = {
 	"Reloading",
 	"Fitness",
 	"Lightfoot",
-	--"Melee",
 	"Nimble",
 	"PlantScavenging",
 	"Reloading",
@@ -66,17 +67,10 @@ SurvivorPerks = {
 	"Survivalist"
 }
 
---- Gets a random perk
----@return string a random perk name
-function getAPerk()
-	local result = ZombRand(size(SurvivorPerks) - 1) + 1;
-	return SurvivorPerks[result];
-end
-
 --- gets the size of a table
 ---@param a table
 ---@return integer returns the size of the table
-function size(a)
+function GetTableSize(a)
 	local i = 1
 	while a[i] do
 		i = i + 1
@@ -84,11 +78,18 @@ function size(a)
 	return i;
 end
 
+--- Gets a random perk
+---@return string a random perk name
+function GetAPerk()
+	local result = ZombRand(GetTableSize(SurvivorPerks) - 1) + 1;
+	return SurvivorPerks[result];
+end
+
 --- checks if the table contains a value
 ---@param tab table table to be searched
 ---@param val any value to be searched
 ---@return boolean returns true if the value exists in the table
-function has_value(tab, val)
+function CheckIfTableHasValue(tab, val)
 	if (tab ~= nil) and (val ~= nil) then
 		for k = 1, #tab do
 			local value = tab[k]
@@ -109,7 +110,7 @@ function AbsoluteValue(value)
 	end
 end
 
-function makeToolTip(option, name, desc)
+function MakeToolTip(option, name, desc)
 	local toolTip = ISToolTip:new();
 	toolTip:initialise();
 	toolTip:setVisible(false);
@@ -126,7 +127,7 @@ end
 
 --- gets the square where the mouse is empty
 ---@return any returns the a square
-function getMouseSquare()
+function GetMouseSquare()
 	local sw = (128 / getCore():getZoom(0));
 	local sh = (64 / getCore():getZoom(0));
 
@@ -144,7 +145,7 @@ end
 
 --- gets the world Y position of the mouse
 ---@return number returns the Y position
-function getMouseSquareY()
+function GetMouseSquareY()
 	local sw = (128 / getCore():getZoom(0));
 	local sh = (64 / getCore():getZoom(0));
 
@@ -160,7 +161,7 @@ end
 
 --- gets the world X position of the mouse
 ---@return number returns the X position
-function getMouseSquareX()
+function GetMouseSquareX()
 	local sw = (128 / getCore():getZoom(0));
 	local sh = (64 / getCore():getZoom(0));
 
@@ -174,7 +175,7 @@ function getMouseSquareX()
 	return sx
 end
 
-function is_array(t)
+function IsItemArray(t)
 	if (not t) then return false end
 	if (t[0] or t[1]) then
 		return true

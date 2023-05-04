@@ -118,7 +118,7 @@ function teste(player, context, worldobjects, test)
         return
     end
 
-    local square = getMouseSquare(player)
+    local square = GetMouseSquare(player)
 
     clickHandler(square, context)
 
