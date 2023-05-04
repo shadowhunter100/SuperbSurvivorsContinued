@@ -367,6 +367,7 @@ local function getSquaresWindow(cs)
 	return nil
 end
 
+-- WIP - GetSquaresNearWindow() is the second most frequently called function after getDistanceBetween().
 --- gets the nearest adjacent window square of 'cs'
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
