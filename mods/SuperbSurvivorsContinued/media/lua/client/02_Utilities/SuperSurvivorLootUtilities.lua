@@ -32,7 +32,7 @@ end
 ---@return boolean returns true if the item belongs to the category
 function HasCategory(item, category)
 	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: HasCategory() called");
-	if (category == "Water") and (isItemWater(item)) then
+	if (category == "Water") and (IsItemWater(item)) then
 		return true
 	elseif (category == "Weapon") and (item:getCategory() == category) and (item:getMaxDamage() > 0.1) then
 		return true
@@ -329,7 +329,7 @@ function FindAndReturnWater(container)
 
 		for i = 1, count - 1 do
 			local item = items:get(i)
-			if (item ~= nil) and isItemWater(item) then
+			if (item ~= nil) and IsItemWater(item) then
 				CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Water found");
 				return item
 			end
@@ -343,8 +343,8 @@ end
 --- checks if 'item' is a water source
 ---@param item any
 ---@return boolean return true if the current it is a water source (and is not Bleach)
-function isItemWater(item)
-	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: isItemWater() called");
+function IsItemWater(item)
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: IsItemWater() called");
 	return ((item:isWaterSource()) and (item:getType() ~= "Bleach"))
 end
 

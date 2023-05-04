@@ -10,7 +10,9 @@ function TakeGiftTask:new(superSurvivor, gift)
 	o.Name = "Take Gift"
 	o.TheGift = gift
 	o.DestContainer = superSurvivor:getBag()
-	if (isItemWater(gift)) then o.DestContainer = superSurvivor:Get():getInventory() end
+	if (IsItemWater(gift)) then
+		o.DestContainer = superSurvivor:Get():getInventory();
+	end
 	o.SrcContainer = nil
 	o.OnGoing = false
 	o.Ticks = 0

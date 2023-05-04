@@ -102,8 +102,8 @@ function SortLootTask:update()
 										and (self.parent:isAmmoForMe(item:getType()) == false)
 										and (item ~= pweapon)
 										and (item ~= sweapon)))
-							) then --and (isItemWater(item) == false) and (item:getCategory() ~= "Food")
-							--self.parent.player:Say("Here i am 1")
+							) then
+
 							local container
 							if (self.TheDropContainer ~= nil) then
 								if (self.TheDropContainer:getContainer() ~= nil) then
@@ -200,7 +200,7 @@ function SortLootTask:update()
 									and (item ~= self.parent.LastGunUsed)
 									and (item ~= self.parent.LastMeleUsed)
 									and (self.parent:isAmmoForMe(item:getType()) == false)
-									and (item ~= sweapon) --[[and (isItemWater(item) == false) and (item:getCategory() ~= "Food")]]
+									and (item ~= sweapon)
 								) then
 								print("drop bag " ..
 									tostring(item:getDisplayName()) ..
