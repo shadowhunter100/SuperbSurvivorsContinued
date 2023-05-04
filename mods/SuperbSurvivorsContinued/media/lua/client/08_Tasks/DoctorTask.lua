@@ -1,7 +1,7 @@
 DoctorTask = {}
 DoctorTask.__index = DoctorTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function DoctorTask:new(superSurvivor)
 	local o = {}

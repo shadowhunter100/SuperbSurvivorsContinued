@@ -1,7 +1,7 @@
 FindBuildingTask = {}
 FindBuildingTask.__index = FindBuildingTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function FindBuildingTask:new(superSurvivor)
 	local o = {}

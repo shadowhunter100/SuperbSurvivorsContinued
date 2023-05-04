@@ -1,7 +1,7 @@
 GatherWoodTask = {}
 GatherWoodTask.__index = GatherWoodTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function GatherWoodTask:new(superSurvivor, BringHere)
 	local o = {}

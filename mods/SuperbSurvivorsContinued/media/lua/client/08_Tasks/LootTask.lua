@@ -1,7 +1,7 @@
 LootCategoryTask = {}
 LootCategoryTask.__index = LootCategoryTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function LootCategoryTask:new(superSurvivor, building, category, thisQuantity)
 	local o = {}

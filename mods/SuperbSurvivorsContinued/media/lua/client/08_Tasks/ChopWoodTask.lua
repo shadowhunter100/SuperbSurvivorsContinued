@@ -1,7 +1,7 @@
 ChopWoodTask = {}
 ChopWoodTask.__index = ChopWoodTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function ChopWoodTask:new(superSurvivor)
 	local o = {}

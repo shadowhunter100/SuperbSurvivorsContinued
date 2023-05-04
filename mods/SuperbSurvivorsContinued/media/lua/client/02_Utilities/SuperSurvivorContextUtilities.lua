@@ -1,7 +1,7 @@
 -- this file has methods related to world context
 --- SQUARES ---
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 ---@alias direction
 ---| '"N"' # North

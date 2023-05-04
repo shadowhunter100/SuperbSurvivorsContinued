@@ -1,7 +1,7 @@
 PileCorpsesTask = {}
 PileCorpsesTask.__index = PileCorpsesTask
 
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 function PileCorpsesTask:new(superSurvivor, BringHere)
 	local o = {}
