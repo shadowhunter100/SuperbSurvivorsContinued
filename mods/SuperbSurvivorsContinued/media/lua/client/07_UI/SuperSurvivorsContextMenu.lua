@@ -200,7 +200,7 @@ function SurvivorOrder(test, player, order, orderParam)
 		end
 
 		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
-		getSpecificPlayer(0):Say(OrderDisplayName[order]);
+		getSpecificPlayer(0):Say(tostring(ASuperSurvivor:getName()) .. ", " .. OrderDisplayName[order]);
 	end
 end
 

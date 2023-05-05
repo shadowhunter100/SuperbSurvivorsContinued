@@ -1,3 +1,4 @@
+require "07_UI/UIUtils";
 require "ISUI/ISLayoutManager"
 
 SurvivorInfoWindow = ISCollapsableWindow:derive("SurvivorInfoWindow");

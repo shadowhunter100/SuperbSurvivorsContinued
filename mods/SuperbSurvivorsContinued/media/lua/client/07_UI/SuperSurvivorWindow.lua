@@ -1,3 +1,5 @@
+require "07_UI/UIUtils";
+
 local window_height = (30*10)+20+44+2
 local window_width = 850
 local panel_height = 30*10
@@ -31,10 +33,10 @@ function PanelGroup:dupdate()
     self:clearChildren()
     local dy = 0
     local switch = 0
-    local group = get_group()
+    local group = UIUtil_GetGroup()
     local group_members = group:getMembers()
     for i=1, #group_members do
-        local name, role = get_member_info(i)
+        local name, role = UIUtil_GetMemberInfo(i)
         if role == "IGUI_SS_Job_Leader" then role = getContextMenuText("Job_Leader") end
         local panel_entry = ISPanel:new(0, dy, 850, 30)
         panel_entry.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
@@ -113,7 +115,7 @@ function PanelBaseEntry:initialize()
 end
 
 function is_area_set(area_name)
-    local group = get_group()
+    local group = UIUtil_GetGroup()
     local sum = 0
     if area_name == "Bounds" then
         for _, j in ipairs(group.Bounds) do
@@ -182,7 +184,7 @@ function PanelBase:dupdate()
     local dy = 0
     local switch = 0
     local group_id = SSM:Get(0):getGroupID()
-    local group = get_group()
+    local group = UIUtil_GetGroup()
     -- bounds area
     local base_set = (is_area_set("Bounds")) and "set" or "not set"
     local panel_entry_base = PanelBaseEntry:new(0, dy, window_width, 30, "Bounds", base_set, base_area_visibility["Bounds"].button_title, switch, group_id)
@@ -238,11 +240,11 @@ function PanelCompanions:dupdate()
     self:clearChildren()
     local dy = 0
     local switch = 0
-    local group = get_group()
+    local group = UIUtil_GetGroup()
     local group_members = group:getMembers()
     local companion_count = 0
     for i=1, #group_members do
-        local name, role, _, ai_mode = get_member_info(i)
+        local name, role, _, ai_mode = UIUtil_GetMemberInfo(i)
         local panel_entry = ISPanel:new(0, dy, 850, 30)
         panel_entry.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
         panel_entry.backgroundColor = { r = 0, g = 0, b = 0, a = 0 }
@@ -501,31 +503,31 @@ end
 context_options.show_context_menu_order = function(member_index)
     if member_index == 1 then return end
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
-    context_menu:addOption("Barricade", nil, function() give_order(1, member_index) end)
-    context_menu:addOption("Chop Wood", nil, function() give_order(2, member_index) end)
-    context_menu:addOption("Clean Up Inventory", nil, function() give_order(3, member_index) end)
-    context_menu:addOption("Doctor", nil, function() give_order(4, member_index) end)
-    context_menu:addOption("Explore", nil, function() give_order(5, member_index) end)
-    context_menu:addOption("Follow", nil, function() give_order(6, member_index) end)
-    context_menu:addOption("Farming", nil, function() give_order(7, member_index) end)
-    context_menu:addOption("Forage", nil, function() give_order(8, member_index) end)
-    context_menu:addOption("Gather Wood", nil, function() give_order(9, member_index) end)
-    context_menu:addOption("Go Find Food", nil, function() give_order(10, member_index) end)
-    context_menu:addOption("Go Find Water", nil, function() give_order(11, member_index) end)
-    context_menu:addOption("Go Find Weapon", nil, function() give_order(12, member_index) end)
-    context_menu:addOption("Guard", nil, function() give_order(13, member_index) end)
-    context_menu:addOption("Hold Still", nil, function() give_order(14, member_index) end)
-    context_menu:addOption("Lock Doors", nil, function() give_order(15, member_index) end)
-    context_menu:addOption("Unlock Doors", nil, function() give_order(16, member_index) end)
-    context_menu:addOption("Loot Room", nil, function() give_order(17, member_index) end)
-    context_menu:addOption("Patrol", nil, function() give_order(18, member_index) end)
-    context_menu:addOption("Sort Loot Into Base", nil, function() give_order(19, member_index) end)
-    context_menu:addOption("Stand Ground", nil, function() give_order(20, member_index) end)
-    context_menu:addOption("Stop", nil, function() give_order(21, member_index) end)
-    context_menu:addOption("Dismiss", nil, function() give_order(22, member_index) end)
-    context_menu:addOption("Relax", nil, function() give_order(23, member_index) end)
-    context_menu:addOption("Return To Base", nil, function() give_order(24, member_index) end)
-    context_menu:addOption("Pile Corpses", nil, function() give_order(25, member_index) end)
+    context_menu:addOption("Barricade", nil, function() UIUtil_GiveOrder(1, member_index) end)
+    context_menu:addOption("Chop Wood", nil, function() UIUtil_GiveOrder(2, member_index) end)
+    context_menu:addOption("Clean Up Inventory", nil, function() UIUtil_GiveOrder(3, member_index) end)
+    context_menu:addOption("Doctor", nil, function() UIUtil_GiveOrder(4, member_index) end)
+    context_menu:addOption("Explore", nil, function() UIUtil_GiveOrder(5, member_index) end)
+    context_menu:addOption("Follow", nil, function() UIUtil_GiveOrder(6, member_index) end)
+    context_menu:addOption("Farming", nil, function() UIUtil_GiveOrder(7, member_index) end)
+    context_menu:addOption("Forage", nil, function() UIUtil_GiveOrder(8, member_index) end)
+    context_menu:addOption("Gather Wood", nil, function() UIUtil_GiveOrder(9, member_index) end)
+    context_menu:addOption("Go Find Food", nil, function() UIUtil_GiveOrder(10, member_index) end)
+    context_menu:addOption("Go Find Water", nil, function() UIUtil_GiveOrder(11, member_index) end)
+    context_menu:addOption("Go Find Weapon", nil, function() UIUtil_GiveOrder(12, member_index) end)
+    context_menu:addOption("Guard", nil, function() UIUtil_GiveOrder(13, member_index) end)
+    context_menu:addOption("Hold Still", nil, function() UIUtil_GiveOrder(14, member_index) end)
+    context_menu:addOption("Lock Doors", nil, function() UIUtil_GiveOrder(15, member_index) end)
+    context_menu:addOption("Unlock Doors", nil, function() UIUtil_GiveOrder(16, member_index) end)
+    context_menu:addOption("Loot Room", nil, function() UIUtil_GiveOrder(17, member_index) end)
+    context_menu:addOption("Patrol", nil, function() UIUtil_GiveOrder(18, member_index) end)
+    context_menu:addOption("Sort Loot Into Base", nil, function() UIUtil_GiveOrder(19, member_index) end)
+    context_menu:addOption("Stand Ground", nil, function() UIUtil_GiveOrder(20, member_index) end)
+    context_menu:addOption("Stop", nil, function() UIUtil_GiveOrder(21, member_index) end)
+    context_menu:addOption("Dismiss", nil, function() UIUtil_GiveOrder(22, member_index) end)
+    context_menu:addOption("Relax", nil, function() UIUtil_GiveOrder(23, member_index) end)
+    context_menu:addOption("Return To Base", nil, function() UIUtil_GiveOrder(24, member_index) end)
+    context_menu:addOption("Pile Corpses", nil, function() UIUtil_GiveOrder(25, member_index) end)
 end
 
 context_options.show_context_menu_role = function(member_index)
@@ -538,31 +540,31 @@ context_options.show_context_menu_role = function(member_index)
     context_menu:addOption("Call", nil, function() on_click_companion_call(member_index)  end)
     local order = context_menu:addOption("Order", nil, nil)
     local sub_order = context_menu:getNew(context_menu)
-    sub_order:addOption("Barricade", nil, function() give_order(1, member_index) end)
-    sub_order:addOption("Chop Wood", nil, function() give_order(2, member_index) end)
-    sub_order:addOption("Clean Up Inventory", nil, function() give_order(3, member_index) end)
-    sub_order:addOption("Doctor", nil, function() give_order(4, member_index) end)
-    sub_order:addOption("Explore", nil, function() give_order(5, member_index) end)
-    sub_order:addOption("Follow", nil, function() give_order(6, member_index) end)
-    sub_order:addOption("Farming", nil, function() give_order(7, member_index) end)
-    sub_order:addOption("Forage", nil, function() give_order(8, member_index) end)
-    sub_order:addOption("Gather Wood", nil, function() give_order(9, member_index) end)
-    sub_order:addOption("Go Find Food", nil, function() give_order(10, member_index) end)
-    sub_order:addOption("Go Find Water", nil, function() give_order(11, member_index) end)
-    sub_order:addOption("Go Find Weapon", nil, function() give_order(12, member_index) end)
-    sub_order:addOption("Guard", nil, function() give_order(13, member_index) end)
-    sub_order:addOption("Hold Still", nil, function() give_order(14, member_index) end)
-    sub_order:addOption("Lock Doors", nil, function() give_order(15, member_index) end)
-    sub_order:addOption("Unlock Doors", nil, function() give_order(16, member_index) end)
-    sub_order:addOption("Loot Room", nil, function() give_order(17, member_index) end)
-    sub_order:addOption("Patrol", nil, function() give_order(18, member_index) end)
-    sub_order:addOption("Sort Loot Into Base", nil, function() give_order(19, member_index) end)
-    sub_order:addOption("Stand Ground", nil, function() give_order(20, member_index) end)
-    sub_order:addOption("Stop", nil, function() give_order(21, member_index) end)
-    sub_order:addOption("Dismiss", nil, function() give_order(22, member_index) end)
-    sub_order:addOption("Relax", nil, function() give_order(23, member_index) end)
-    sub_order:addOption("Return To Base", nil, function() give_order(24, member_index) end)
-    sub_order:addOption("Pile Corpses", nil, function() give_order(25, member_index) end)
+    sub_order:addOption("Barricade", nil, function() UIUtil_GiveOrder(1, member_index) end)
+    sub_order:addOption("Chop Wood", nil, function() UIUtil_GiveOrder(2, member_index) end)
+    sub_order:addOption("Clean Up Inventory", nil, function() UIUtil_GiveOrder(3, member_index) end)
+    sub_order:addOption("Doctor", nil, function() UIUtil_GiveOrder(4, member_index) end)
+    sub_order:addOption("Explore", nil, function() UIUtil_GiveOrder(5, member_index) end)
+    sub_order:addOption("Follow", nil, function() UIUtil_GiveOrder(6, member_index) end)
+    sub_order:addOption("Farming", nil, function() UIUtil_GiveOrder(7, member_index) end)
+    sub_order:addOption("Forage", nil, function() UIUtil_GiveOrder(8, member_index) end)
+    sub_order:addOption("Gather Wood", nil, function() UIUtil_GiveOrder(9, member_index) end)
+    sub_order:addOption("Go Find Food", nil, function() UIUtil_GiveOrder(10, member_index) end)
+    sub_order:addOption("Go Find Water", nil, function() UIUtil_GiveOrder(11, member_index) end)
+    sub_order:addOption("Go Find Weapon", nil, function() UIUtil_GiveOrder(12, member_index) end)
+    sub_order:addOption("Guard", nil, function() UIUtil_GiveOrder(13, member_index) end)
+    sub_order:addOption("Hold Still", nil, function() UIUtil_GiveOrder(14, member_index) end)
+    sub_order:addOption("Lock Doors", nil, function() UIUtil_GiveOrder(15, member_index) end)
+    sub_order:addOption("Unlock Doors", nil, function() UIUtil_GiveOrder(16, member_index) end)
+    sub_order:addOption("Loot Room", nil, function() UIUtil_GiveOrder(17, member_index) end)
+    sub_order:addOption("Patrol", nil, function() UIUtil_GiveOrder(18, member_index) end)
+    sub_order:addOption("Sort Loot Into Base", nil, function() UIUtil_GiveOrder(19, member_index) end)
+    sub_order:addOption("Stand Ground", nil, function() UIUtil_GiveOrder(20, member_index) end)
+    sub_order:addOption("Stop", nil, function() UIUtil_GiveOrder(21, member_index) end)
+    sub_order:addOption("Dismiss", nil, function() UIUtil_GiveOrder(22, member_index) end)
+    sub_order:addOption("Relax", nil, function() UIUtil_GiveOrder(23, member_index) end)
+    sub_order:addOption("Return To Base", nil, function() UIUtil_GiveOrder(24, member_index) end)
+    sub_order:addOption("Pile Corpses", nil, function() UIUtil_GiveOrder(25, member_index) end)
     context_menu:addSubMenu(order, sub_order)
     local remove = context_menu:addOption("Remove", nil, nil)
     local sub_remove = context_menu:getNew(context_menu)
@@ -603,7 +605,7 @@ function base_area_visibility.event_update_area_highlight()
                     for j=y1, y2 do
                         local cell = getCell():getGridSquare(i, j, getSpecificPlayer(0):getZ())
                         if cell and cell:getFloor() then
-                            cell:getFloor():setHighlightColor(area_colors[area_name].r, area_colors[area_name].g, area_colors[area_name].b, area_colors[area_name].a)
+                            cell:getFloor():setHighlightColor(AreaColors[area_name].r, AreaColors[area_name].g, AreaColors[area_name].b, AreaColors[area_name].a)
                             cell:getFloor():setHighlighted(true)
                         end
                     end

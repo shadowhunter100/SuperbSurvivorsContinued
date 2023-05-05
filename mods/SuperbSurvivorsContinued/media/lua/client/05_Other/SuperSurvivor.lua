@@ -1377,7 +1377,6 @@ end
 -- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:getUnBarricadedWindow(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getUnBarricadedWindow() called");
-	-- local pcs = self.player:getCurrentSquare(); -- WIP - Commented out, unused variable
 	local WindowOut = nil
 	local closestSoFar = 100
 	local bdef = building:getDef()
@@ -3279,7 +3278,7 @@ function SuperSurvivor:setID(id)
 end
 
 function SuperSurvivor:delete()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getID() delete");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:delete() called");
 	self.player:getInventory():emptyIt();
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);

@@ -1,3 +1,5 @@
+require "07_UI/UIUtils";
+
 local ButtonShowLocators = ISButton:derive("ButtonShowLocators")
 local flag_show = false
 
@@ -55,7 +57,7 @@ local worldmap_render = ISWorldMap.render
 ISWorldMap.render = function(self)
     worldmap_render(self)
     if flag_show then
-        local group_members = get_group():getMembers()
+        local group_members = UIUtil_GetGroup():getMembers()
         for i = 2, #group_members do
             local member = group_members[i]
             local x = self.mapAPI:worldToUIX(member.player:getX(), member.player:getY()) - 3

@@ -47,7 +47,9 @@ function PileCorpsesTask:update()
 	if (self.parent:isInAction() == false) then
 		local player = self.parent.player
 
-		if ((player:getInventory():FindAndReturn("CorpseMale") ~= nil) or (player:getInventory():FindAndReturn("CorpseFemale") ~= nil)) then
+		if ((player:getInventory():FindAndReturn("CorpseMale") ~= nil)
+				or (player:getInventory():FindAndReturn("CorpseFemale") ~= nil))
+		then
 			local distanceToPoint = getDistanceBetween(self.BringHereSquare, player)
 
 			if (distanceToPoint > 2.0) then
@@ -55,7 +57,6 @@ function PileCorpsesTask:update()
 			else
 				local Corpse = player:getInventory():FindAndReturn("CorpseMale")
 				if not Corpse then Corpse = player:getInventory():FindAndReturn("CorpseFemale") end
-
 				--self.BringHereSquare:AddWorldInventoryItem(Corpse,(ZombRand(10)/100),(ZombRand(10)/100),0)
 				--self.parent.player:getInventory():DoRemoveItem(Corpse)
 				self.parent:DebugSay("PileCorpsesTask is about to trigger a StopWalk! ")
@@ -67,8 +68,11 @@ function PileCorpsesTask:update()
 				self.Target = nil
 			end
 		elseif (self.Target == nil) then
-			local range = 45;
-			local Square, closestsoFarSquare;
+			-- WIP - "range" determines the number of scans for corpses.
+			-- 45 * 45 = 2045 -- original value
+			-- 30 * 30 = 900, - which reduces the scan range
+			local range = 30;
+			local Square;
 			local minx = math.floor(player:getX() - range);
 			local maxx = math.floor(player:getX() + range);
 			local miny = math.floor(player:getY() - range);
