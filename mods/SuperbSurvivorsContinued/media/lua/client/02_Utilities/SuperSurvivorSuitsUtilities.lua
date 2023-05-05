@@ -36,7 +36,10 @@ function GetRandomSurvivorSuit(SS)
 
 	local result = table.randFrom(tempTable)
 
-	while (string.sub(result, -1) == "F" and not SS.player:isFemale()) or (string.sub(result, -1) == "M" and SS.player:isFemale()) do
+	while (string.sub(result, -1) == "F"
+			and not SS.player:isFemale())
+		or (string.sub(result, -1) == "M"
+			and SS.player:isFemale()) do
 		result = table.randFrom(tempTable)
 	end
 

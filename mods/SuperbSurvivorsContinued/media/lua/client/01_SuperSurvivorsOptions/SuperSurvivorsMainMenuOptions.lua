@@ -25,7 +25,7 @@ local function superSurvivorSetOption(option, ToValue)
 	saveSurvivorOptions()
 end
 
-local GameOption = ISBaseObject:derive("GameOption")
+local GameOption = ISBaseObject:derive("GameOption");
 
 function GameOption:new(name, control, arg1, arg2)
 	local o = {}

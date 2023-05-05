@@ -1,3 +1,5 @@
+require "07_UI/UIUtils";
+
 local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
 
 --****************************************************
@@ -151,7 +153,7 @@ function PanelSurvivorInfo:new(x, y, width, height)
 end
 
 function show_survivor_info(member_index)
-    local group = get_group()
+    local group = UIUtil_GetGroup()
     local group_members = group:getMembers()
     local group_member = group_members[member_index]
     local text_info = getText("ContextMenu_SS_SurvivorInfoName_Before")..group_member:getName()..getText("ContextMenu_SS_SurvivorInfoName_After").."\n"

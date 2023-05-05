@@ -1,21 +1,21 @@
 --****************************************************
 -- RGB functions
 --****************************************************
-function rgb_to_dec(color)
+local function rgb_to_dec(color)
     return { r = color.r / 255, g = color.g / 255, b = color.b / 255, a = color.a }
 end
 
-function hex_to_rgb(hex, opacity)
+local function hex_to_rgb(hex, opacity)
     hex = hex:gsub("#", "")
     return { r = tonumber(hex:sub(1, 2), 16), g = tonumber(hex:sub(3, 4), 16), b = tonumber(hex:sub(5, 6), 16),
         a = opacity }
 end
 
-function hex_to_dec(hex, opacity)
+local function hex_to_dec(hex, opacity)
     return rgb_to_dec(hex_to_rgb(hex, opacity))
 end
 
-hex_colors = {
+HexColors = {
     ["red"] = hex_to_dec("#CB4C4D", 0.8),
     ["orange"] = hex_to_dec("#CBA74C", 0.8),
     ["yellow"] = hex_to_dec("#C8E744", 0.8),
@@ -26,26 +26,26 @@ hex_colors = {
     ["brown"] = hex_to_dec("#A57E4C", 0.8)
 }
 
-area_colors = {
-    ["Bounds"] = hex_colors.blue,
-    ["ChopTreeArea"] = hex_colors.yellow,
-    ["TakeCorpseArea"] = hex_colors.brown,
-    ["TakeWoodArea"] = hex_colors.brown,
-    ["FarmingArea"] = hex_colors.green,
-    ["ForageArea"] = hex_colors.yellow,
-    ["CorpseStorageArea"] = hex_colors.red,
-    ["FoodStorageArea"] = hex_colors.green,
-    ["WoodStorageArea"] = hex_colors.brown,
-    ["ToolStorageArea"] = hex_colors.orange,
-    ["WeaponStorageArea"] = hex_colors.yellow,
-    ["MedicalStorageArea"] = hex_colors.purple,
-    ["GuardArea"] = hex_colors.blue
+AreaColors = {
+    ["Bounds"] = HexColors.blue,
+    ["ChopTreeArea"] = HexColors.yellow,
+    ["TakeCorpseArea"] = HexColors.brown,
+    ["TakeWoodArea"] = HexColors.brown,
+    ["FarmingArea"] = HexColors.green,
+    ["ForageArea"] = HexColors.yellow,
+    ["CorpseStorageArea"] = HexColors.red,
+    ["FoodStorageArea"] = HexColors.green,
+    ["WoodStorageArea"] = HexColors.brown,
+    ["ToolStorageArea"] = HexColors.orange,
+    ["WeaponStorageArea"] = HexColors.yellow,
+    ["MedicalStorageArea"] = HexColors.purple,
+    ["GuardArea"] = HexColors.blue
 }
 
 --****************************************************
 -- Utility
 --****************************************************
-function get_group()
+function UIUtil_GetGroup()
     local group_id = SSM:Get(0):getGroupID()
     local group = SSGM:Get(group_id)
     if group == nil then
@@ -62,7 +62,7 @@ function get_group()
     return group
 end
 
-function get_member_info(member_index)
+function UIUtil_GetMemberInfo(member_index)
     local group_id = SSM:Get(0):getGroupID()
     local group = SSGM:Get(group_id)
     if group == nil then
@@ -116,7 +116,7 @@ function get_member_info(member_index)
     return name, role, task, ai_mode
 end
 
-function give_order(order_index, member_index)
+function UIUtil_GiveOrder(order_index, member_index)
     local group_id = SSM:Get(0):getGroupID()
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
@@ -124,17 +124,5 @@ function give_order(order_index, member_index)
         getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
         SurvivorOrder(nil, member.player, Orders[order_index], nil)
-    end
-end
-
---****************************************************
--- Debugging
---****************************************************
-dui = { file = "UIUtils.lua" }
-
-function dui.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
     end
 end
