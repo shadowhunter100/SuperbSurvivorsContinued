@@ -1,22 +1,6 @@
 require "ISUI/ISLayoutManager"
 local ThePVPButton = ISButton:derive("ThePVPButton");
 
-
-function makeToolTip(option, name, desc)
-	local toolTip = ISToolTip:new();
-	toolTip:initialise();
-	toolTip:setVisible(false);
-	-- add it to our current option
-	option.toolTip = toolTip;
-	toolTip:setName(name);
-	toolTip.description = desc .. " <LINE> ";
-	--toolTip:setTexture("crafted_01_16");
-
-	--toolTip.description = toolTip.description .. " <LINE> <RGB:1,0,0> More Desc" ;
-	--option.notAvailable = true;
-	return toolTip;
-end
-
 function SurvivorTogglePVP()
 	if (IsoPlayer.getCoopPVP() == true) then
 		getSpecificPlayer(0):Say(getContextMenuText("PVPDisabled"));

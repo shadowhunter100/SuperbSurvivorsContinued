@@ -17,7 +17,7 @@ function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
 	o.IsNPConNPC = ((o.parent.player:isLocalPlayer() == false) and (TalkToMe:isLocalPlayer() == false))
 	o.parent:DebugSay("ListenTask is about to trigger a StopWalk! ")
 	o.parent:StopWalk()
-	superSurvivor:Speak(getSpeech("Respond"))
+	superSurvivor:Speak(GetDialogueSpeech("Respond"))
 
 	return o
 end
@@ -72,7 +72,7 @@ function ListenTask:update()
 				if (ZombRand(2) == 0) and
 					(self.parent:isSpeaking() == false) and
 					(self.SSAite:isSpeaking() == false) and (not NoIdleChatter) then
-					self.parent:Speak(getSpeech("IdleChatter"))
+					self.parent:Speak(GetDialogueSpeech("IdleChatter"))
 				end
 			end
 		end

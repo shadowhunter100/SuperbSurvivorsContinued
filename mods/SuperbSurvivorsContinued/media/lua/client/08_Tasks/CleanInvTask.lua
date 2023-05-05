@@ -79,7 +79,7 @@ function CleanInvTask:update()
 				for i = 1, items:size() - 1 do
 					local item = items:get(i)
 					if (item ~= nil) then
-						--print("drop " .. tostring(item:getDisplayName()) .. " " .. tostring(item:isEquipped()) .. " " .. tostring(self.parent.player:isEquipped(item)) .. tostring(item:getBodyLocation()))
+
 						if (item:isBroken()) or (
 								(not self.parent.player:isEquipped(item))
 								and (not item:isEquipped())
@@ -91,8 +91,8 @@ function CleanInvTask:update()
 										and (self.parent:isAmmoForMe(item:getType()) == false)
 										and (item ~= pweapon)
 										and (item ~= sweapon)))
-							) then --and (isItemWater(item) == false) and (item:getCategory() ~= "Food")
-							--self.parent.player:Say("Here i am 1")
+							) then
+
 							local container
 							if (self.TheDropContainer ~= nil) then
 								if (self.TheDropContainer:getContainer() ~= nil) then
@@ -175,7 +175,7 @@ function CleanInvTask:update()
 									and (item ~= self.parent.LastGunUsed)
 									and (item ~= self.parent.LastMeleUsed)
 									and (self.parent:isAmmoForMe(item:getType()) == false)
-									and (item ~= sweapon) --[[and (isItemWater(item) == false) and (item:getCategory() ~= "Food")]]
+									and (item ~= sweapon)
 								) then
 								--print("drop bag " .. tostring(item:getDisplayName()) .. " " .. tostring(item:isEquipped()) .. " " .. tostring(self.parent.player:isEquipped(item)))
 								if (self.TheDropContainer ~= nil) and (self.TheDropContainer.getContainer ~= nil) and (self.TheDropContainer:getContainer():hasRoomFor(self.parent.player, item)) then

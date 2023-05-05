@@ -10,7 +10,9 @@ function TakeGiftTask:new(superSurvivor, gift)
 	o.Name = "Take Gift"
 	o.TheGift = gift
 	o.DestContainer = superSurvivor:getBag()
-	if (isItemWater(gift)) then o.DestContainer = superSurvivor:Get():getInventory() end
+	if (IsItemWater(gift)) then
+		o.DestContainer = superSurvivor:Get():getInventory();
+	end
 	o.SrcContainer = nil
 	o.OnGoing = false
 	o.Ticks = 0
@@ -77,7 +79,7 @@ function TakeGiftTask:update()
 				if (self.TheGift:getWorldItem() ~= nil) then self.TheGift:getWorldItem():removeFromSquare() end
 				self.TheGift:setWorldItem(nil)
 
-				self.parent:Speak(getSpeech("Thanks"))
+				self.parent:Speak(GetDialogueSpeech("Thanks"))
 				self.Complete = true
 
 				local itemType = self.TheGift:getType()
@@ -104,7 +106,7 @@ function TakeGiftTask:update()
 					self.TheGift:getContainer(), self.parent:getBag(), 20))
 			end
 		elseif (self.DestContainer:contains(self.TheGift)) then
-			self.parent:Speak(getSpeech("Thanks"))
+			self.parent:Speak(GetDialogueSpeech("Thanks"))
 			self.Complete = true
 
 			local itemType = self.TheGift:getType()

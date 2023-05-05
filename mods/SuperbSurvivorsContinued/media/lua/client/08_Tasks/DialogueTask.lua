@@ -7,7 +7,7 @@ function DialogueTask:new(superSurvivor, TalkToMe, Dialogue, isYesOrNoQuestion, 
 	setmetatable(o, self)
 	self.__index = self
 
-	if (not is_array(Dialogue)) then
+	if (not IsItemArray(Dialogue)) then
 		Dialogue = { Dialogue }
 	end
 

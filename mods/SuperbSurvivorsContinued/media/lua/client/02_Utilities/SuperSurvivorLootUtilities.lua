@@ -32,7 +32,7 @@ end
 ---@return boolean returns true if the item belongs to the category
 function HasCategory(item, category)
 	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: HasCategory() called");
-	if (category == "Water") and (isItemWater(item)) then
+	if (category == "Water") and (IsItemWater(item)) then
 		return true
 	elseif (category == "Weapon") and (item:getCategory() == category) and (item:getMaxDamage() > 0.1) then
 		return true
@@ -135,7 +135,7 @@ function FindAndReturnFood(thisItemContainer)
 
 			if (item ~= nil) and (item:getCategory() == "Food") then
 
-				if not (item:getPoisonPower() > 1) and not (has_value(FoodsToExlude, item:getType())) then
+				if not (item:getPoisonPower() > 1) and not (CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 					return item
 				end
 			end
@@ -244,7 +244,7 @@ function FindAndReturnBestFoodOnFloor(sq, survivor)
 
 		for j = 0, count - 1 do
 			local item = items:get(j):getItem()
-			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not has_value(FoodsToExlude, item:getType())) then
+			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 				local Score = GetFoodScore(item)
 
 				if Score > bestScore then
@@ -289,7 +289,7 @@ function FindAndReturnBestFood(thisItemContainer, survivor)
 		for i = 1, count - 1 do
 			local item = items:get(i)
 
-			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not has_value(FoodsToExlude, item:getType())) then
+			if (item ~= nil) and (item:getCategory() == "Food") and not (item:getPoisonPower() > 1) and (not CheckIfTableHasValue(FoodsToExlude, item:getType())) then
 				local Score = GetFoodScore(item)
 
 				--ContainerItemsScore[i] = Score
@@ -329,7 +329,7 @@ function FindAndReturnWater(container)
 
 		for i = 1, count - 1 do
 			local item = items:get(i)
-			if (item ~= nil) and isItemWater(item) then
+			if (item ~= nil) and IsItemWater(item) then
 				CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "Water found");
 				return item
 			end
@@ -343,8 +343,8 @@ end
 --- checks if 'item' is a water source
 ---@param item any
 ---@return boolean return true if the current it is a water source (and is not Bleach)
-function isItemWater(item)
-	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: isItemWater() called");
+function IsItemWater(item)
+	CreateLogLine("SuperSurvivorLootUtilities", isLocalLoggingEnabled, "function: IsItemWater() called");
 	return ((item:isWaterSource()) and (item:getType() ~= "Bleach"))
 end
 

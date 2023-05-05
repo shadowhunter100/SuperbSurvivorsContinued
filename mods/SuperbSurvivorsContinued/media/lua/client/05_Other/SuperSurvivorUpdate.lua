@@ -30,7 +30,7 @@ function SuperSurvivorPlayerInit(player)
 
 			local MData = wife:Get():getModData();
 
-			wife:Get():getModData().InitGreeting = getSpeech("WifeIntro");
+			wife:Get():getModData().InitGreeting = GetDialogueSpeech("WifeIntro");
 			wife:Get():getModData().seenZombie = true;
 			MData.MetPlayer = true;
 			MData.isHostile = false;

@@ -1,4 +1,9 @@
-require "02_Utilities/SuperSurvivorWeaponsRegistry"
+-- Literally just a buffer file.
+-- Not much else to it.
+
+EnabledTranslations = {}
+EnabledTranslations["EN"] = true;
+EnabledTranslations["JP"] = true;
 
 --weapon tables:
 MeleWeapons = {
@@ -10,18 +15,11 @@ MeleWeapons = {
     "Base.Golfclub", "Base.TennisRacket", "Base.BadmintonRacket", "Base.Poolcue", "Base.HockeyStick",
     "Base.LaCrosseStick", "Base.IcePick",
     "Base.Pan", "Base.Saucepan", "Base.GridlePan", "Base.RollingPin",
-    -- "Base.GuitarAcoustic","Base.GuitarElectricBlack","Base.GuitarElectricBassBlue","Base.Flute",		-- Far too slow animations
-
-    -- "Base.GardenFork","Base.WoodenLance",
     "Base.SpearCrafted", "Base.SpearCrafted", "Base.SpearKnife", "Base.SpearScissors", "Base.SpearScrewdriver",
-    "Base.SpearHuntingKnife",                                                                                                    -- Spears freeze animation
-
+    "Base.SpearHuntingKnife",
     "Base.Axe", "Base.HandAxe", "Base.WoodAxe", "Base.Pickaxe", "Base.AxeStone", "Base.HandScythe",
-    -- "Base.Stake",
-    "Base.KitchenKnife", "Base.HuntingKnife", "Base.Machete" --, "Base.Katana"
-};                                                     -- RollingPin acts as a torch, setting target on fire
--- Removed from list
--- "Base.Sledgehammer","Base.SnowShovel","Base.LeafRake","Base.Plunger","Base.Crowbar","Base.Crowbar","Base.Crowbar","Base.Crowbar","Base.Crowbar","Base.FishingRod","Base.Spoon","Base.Fork","Base.Screwdriver","Base.Scalpel"
+    "Base.KitchenKnife", "Base.HuntingKnife", "Base.Machete"
+};
 
 RangeWeapons = { "Base.Pistol2", "Base.Revolver_Short", "Base.Revolver", "Base.Pistol", "Base.Revolver_Long",
     "Base.VarmintRifle", "Base.HuntingRifle", "Base.Pistol", "Base.Shotgun", "Base.ShotgunSawnoff", "Base.Pistol",

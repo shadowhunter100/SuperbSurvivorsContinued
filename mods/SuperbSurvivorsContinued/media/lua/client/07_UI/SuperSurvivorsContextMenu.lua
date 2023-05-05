@@ -163,9 +163,9 @@ function SurvivorOrder(test, player, order, orderParam)
 			ASuperSurvivor:getTaskManager():clear()
 			if (ZombRand(3) == 0) then
 				ASuperSurvivor:setHostile(true)
-				ASuperSurvivor:Speak(getSpeech("HowDareYou"))
+				ASuperSurvivor:Speak(GetDialogueSpeech("HowDareYou"))
 			else
-				ASuperSurvivor:Speak(getSpeech("IfYouThinkSo"))
+				ASuperSurvivor:Speak(GetDialogueSpeech("IfYouThinkSo"))
 			end
 		elseif (order == "Unlock Doors") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(getJobText("Worker")) end
@@ -196,10 +196,10 @@ function SurvivorOrder(test, player, order, orderParam)
 			TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
 			ASuperSurvivor:setGroupRole(getJobText("Doctor"))
 		elseif (order == "Doctor") then
-			ASuperSurvivor:Speak(getSpeech("IDontKnowHowDoctor"))
+			ASuperSurvivor:Speak(GetDialogueSpeech("IDontKnowHowDoctor"))
 		end
 
-		ASuperSurvivor:Speak(getSpeech("Roger"))
+		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
 		getSpecificPlayer(0):Say(OrderDisplayName[order]);
 	end
 end
@@ -226,13 +226,13 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 		print("join group " .. SS:getGroupID())
 
 		if (group) then
-			SS:Speak(getSpeech("Roger"));
+			SS:Speak(GetDialogueSpeech("Roger"));
 
 			if (MySS:getGroup() ~= nil) then
 				local members = MySS:getGroup():getMembers()
 				for x = 1, #members do
 					if (members[x] and members[x].player ~= nil) then
-						members[x]:Speak(getSpeech("Roger"));
+						members[x]:Speak(GetDialogueSpeech("Roger"));
 						group:addMember(members[x], getJobText("Partner"))
 					end
 				end
@@ -242,7 +242,7 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 			end
 		end
 	else
-		SS:Speak(getSpeech("No"))
+		SS:Speak(GetDialogueSpeech("No"))
 	end
 end
 
@@ -266,7 +266,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 			end
 		end
 
-		SS:Speak(getSpeech("Roger"))
+		SS:Speak(GetDialogueSpeech("Roger"))
 		local GID, Group
 		if (SSM:Get(0):getGroupID() == nil) then
 			Group = SSGM:newGroup()
@@ -295,7 +295,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 
 		SS:setGroupRole("Companion") -- Newly added
 	else
-		SS:Speak(getSpeech("No"))
+		SS:Speak(GetDialogueSpeech("No"))
 		SS:PlusRelationshipWP(-2.0) -- changed to -2 from -1
 	end
 end
@@ -669,13 +669,13 @@ function ViewSurvivorInfo(test, ss)
 end
 
 function TalkToSurvivor(test, SS)
-	getSpecificPlayer(0):Say(getSpeech("HelloThere"))
+	getSpecificPlayer(0):Say(GetDialogueSpeech("HelloThere"))
 
 	if SS:Get():CanSee(getSpecificPlayer(0)) then
 		if (SS:Get():getModData().Greeting ~= nil) then
 			SS:Speak(SS:Get():getModData().Greeting)
 		else
-			SS:Speak(getSpeech("IdleChatter"))
+			SS:Speak(GetDialogueSpeech("IdleChatter"))
 		end
 	else
 		SS:Speak(GetDialogue("WhoSaidThat"));
@@ -706,15 +706,15 @@ function survivorMenu(context, o)
 		if (o:getModData().isHostile ~= true) then
 			local medicalOption = submenu:addOption(getText("ContextMenu_Medical_Check"), nil, MedicalCheckSurvivor, o,
 				nil);
-			local toolTip = makeToolTip(medicalOption, getContextMenuText("AidCheck"), getContextMenuText("AidCheckDesc"));
+			local toolTip = MakeToolTip(medicalOption, getContextMenuText("AidCheck"), getContextMenuText("AidCheckDesc"));
 
 			if (SS.HasQuestion) then
-				makeToolTip(
+				MakeToolTip(
 					submenu:addOption("Answer 'YES'", nil, AnswerTriggerQuestionYes, SS, nil),
 					"Answer YES to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
 			end
 			if (SS.HasQuestion) then
-				makeToolTip(submenu:addOption("Answer 'NO'", nil, AnswerTriggerQuestionNo, SS, nil),
+				MakeToolTip(submenu:addOption("Answer 'NO'", nil, AnswerTriggerQuestionNo, SS, nil),
 					"Answer NO to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
 			end
 			if (DebugOptions) then
@@ -742,7 +742,7 @@ function survivorMenu(context, o)
 				or (getDistanceBetween(SS:Get(), getSpecificPlayer(0)) < 2))
 		then
 			local selectOption = submenu:addOption(getContextMenuText("TalkOption"), nil, TalkToSurvivor, SS, nil);
-			local toolTip = makeToolTip(selectOption, getContextMenuText("TalkOption"),
+			local toolTip = MakeToolTip(selectOption, getContextMenuText("TalkOption"),
 				getContextMenuText("TalkOption_Desc"));
 			if ((SS:getGroupID() ~= SSM:Get(0):getGroupID()) or SS:getGroupID() == nil) then -- not in group
 				if (o:getModData().NoParty ~= true) then
@@ -772,7 +772,7 @@ function survivorMenu(context, o)
 						end
 						subsubmenu:addSubMenu(lootTypeOption, subsubsubmenu);
 					else
-						makeToolTip(subsubmenu:addOption(OrderDisplayName[Orders[i]], nil, SurvivorOrder, o, Orders[i]),
+						MakeToolTip(subsubmenu:addOption(OrderDisplayName[Orders[i]], nil, SurvivorOrder, o, Orders[i]),
 							getContextMenuText("OrderDescription"), OrderDesc[Orders[i]]);
 					end
 					i = i + 1;
@@ -806,7 +806,7 @@ function survivorMenu(context, o)
 						end
 						swapweaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Mele");
 					end
-					--local tooltip = makeToolTip(swapweaponsOption,Label,tooltipText);
+					--local tooltip = MakeToolTip(swapweaponsOption,Label,tooltipText);
 				end
 
 
@@ -814,14 +814,14 @@ function survivorMenu(context, o)
 					local ForceMeleOption = submenu:addOption(getContextMenuText("UseMele"), nil, ForceWeaponType, SS,
 						false)
 
-					local tooltip = makeToolTip(ForceMeleOption, getContextMenuText("UseMele"),
+					local tooltip = MakeToolTip(ForceMeleOption, getContextMenuText("UseMele"),
 						getContextMenuText("UseMeleDesc"))
 				end
 				if (o:getPrimaryHandItem() ~= SS.LastGunUsed) and (SS.LastGunUsed ~= nil) then
 					local ForceMeleOption = submenu:addOption(getContextMenuText("UseGun"), nil, ForceWeaponType, SS,
 						true)
 
-					local tooltip = makeToolTip(ForceMeleOption, getContextMenuText("UseGun"),
+					local tooltip = MakeToolTip(ForceMeleOption, getContextMenuText("UseGun"),
 						getContextMenuText("UseGunDesc"))
 				end
 
@@ -830,7 +830,7 @@ function survivorMenu(context, o)
 
 			local viewinfoOption = submenu:addOption(getContextMenuText("ViewSurvivorInfo"), nil, ViewSurvivorInfo, SS,
 				nil)
-			local tooltip = makeToolTip(viewinfoOption, getContextMenuText("ViewSurvivorInfo"),
+			local tooltip = MakeToolTip(viewinfoOption, getContextMenuText("ViewSurvivorInfo"),
 				getContextMenuText("ViewSurvivorInfoDesc"))
 
 			if (SSM:Get(0):hasFood()) then
@@ -878,7 +878,7 @@ function survivorMenu(context, o)
 		end
 		if (o:getModData().isHostile ~= true) and (SS:getDangerSeenCount() == 0) and (SS:getTaskManager():getCurrentTask() ~= "Listen") then
 			local selectOption = submenu:addOption(getContextMenuText("CallOver"), nil, CallSurvivor, o, nil);
-			local toolTip = makeToolTip(selectOption, getContextMenuText("CallOver"), getContextMenuText("CallOverDesc"));
+			local toolTip = MakeToolTip(selectOption, getContextMenuText("CallOver"), getContextMenuText("CallOverDesc"));
 		end
 
 
@@ -977,7 +977,7 @@ function SuperSurvivorsAreaSelect(context, area, Display)
 		submenu:addOption(getContextMenuText("SetAreaCancel"), nil, SelectingArea, area, 0)
 		submenu:addOption(getContextMenuText("SetAreaClear"), nil, SelectingArea, area, -1)
 	else
-		makeToolTip(submenu:addOption(getContextMenuText("SetAreaSelect"), nil, StartSelectingArea, area),
+		MakeToolTip(submenu:addOption(getContextMenuText("SetAreaSelect"), nil, StartSelectingArea, area),
 			getContextMenuText("SetAreaSelect"), getContextMenuText("SetAreaSelectDesc"))
 	end
 
@@ -1010,7 +1010,7 @@ function SurvivorsFillWorldObjectContextMenu(player, context, worldobjects, test
 	context:addSubMenu(selectOption, submenu);
 
 
-	local square = getMouseSquare(player);
+	local square = GetMouseSquare();
 
 	SurvivorsSquareContextHandle(square, context);
 	if (square ~= nil) then
@@ -1042,23 +1042,23 @@ function SurvivorsFillWorldObjectContextMenu(player, context, worldobjects, test
 	local RulesOfEngagementOption = submenu:addOption(getContextMenuText("RulesOfEngagement"), worldobjects, nil);
 	local subsubmenu = submenu:getNew(submenu);
 
-	makeToolTip(subsubmenu:addOption(getContextMenuText("AttackAnyoneOnSight"), nil, SetRulesOfEngagement, 4),
+	MakeToolTip(subsubmenu:addOption(getContextMenuText("AttackAnyoneOnSight"), nil, SetRulesOfEngagement, 4),
 		"Rules of Engagement",
 		"Shoot or Attack on sight Anything that may come along. Zombies, hostile survivors, friendly survivors neutral. Only party members are the exception");
-	makeToolTip(subsubmenu:addOption(getContextMenuText("AttackHostilesOnSight"), nil, SetRulesOfEngagement, 3),
+	MakeToolTip(subsubmenu:addOption(getContextMenuText("AttackHostilesOnSight"), nil, SetRulesOfEngagement, 3),
 		"Rules of Engagement",
 		"Shoot or Attack on sight Anything hostile that may come along. Zombies or obviously hostile survivors");
-	--makeToolTip(subsubmenu:addOption("Attack Zombies", nil, SetRulesOfEngagement, 2),"Rules of Engagement","Shoot or Attack on sight Any zombies that may come along.");
-	--makeToolTip(subsubmenu:addOption("No Attacking", nil, SetRulesOfEngagement, 1),"Rules of Engagement","Do not shoot or attack anything or anyone. Just avoid when possible.");
+	--MakeToolTip(subsubmenu:addOption("Attack Zombies", nil, SetRulesOfEngagement, 2),"Rules of Engagement","Shoot or Attack on sight Any zombies that may come along.");
+	--MakeToolTip(subsubmenu:addOption("No Attacking", nil, SetRulesOfEngagement, 1),"Rules of Engagement","Do not shoot or attack anything or anyone. Just avoid when possible.");
 
 	submenu:addSubMenu(RulesOfEngagementOption, subsubmenu);
 
 	local MeleOrGunOption = submenu:addOption(getContextMenuText("CallToArms"), worldobjects, nil);
 	subsubmenu = submenu:getNew(submenu);
 
-	makeToolTip(subsubmenu:addOption(getContextMenuText("UseMele"), nil, SetMeleOrGun, 'mele'),
+	MakeToolTip(subsubmenu:addOption(getContextMenuText("UseMele"), nil, SetMeleOrGun, 'mele'),
 		getContextMenuText("UseMele"), getContextMenuText("UseMeleDesc"));
-	makeToolTip(subsubmenu:addOption(getContextMenuText("UseGun"), nil, SetMeleOrGun, 'gun'),
+	MakeToolTip(subsubmenu:addOption(getContextMenuText("UseGun"), nil, SetMeleOrGun, 'gun'),
 		getContextMenuText("UseGun"), getContextMenuText("UseGunDesc"));
 
 	if (DebugOptions) then

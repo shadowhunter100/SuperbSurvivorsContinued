@@ -70,7 +70,7 @@ function ForageTask:update()
 
 		player:getModData().Toggle = not player:getModData().Toggle;
 		if (self.ForagedCount > 25) then
-			self.parent:Speak(getSpeech("Tired"))
+			self.parent:Speak(GetDialogueSpeech("Tired"))
 			self.Complete = true
 		end
 	end

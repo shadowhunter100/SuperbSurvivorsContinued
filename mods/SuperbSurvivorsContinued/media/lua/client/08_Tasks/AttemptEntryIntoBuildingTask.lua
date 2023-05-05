@@ -143,8 +143,6 @@ function AttemptEntryIntoBuildingTask:update()
 				end
 			elseif self.TryWindow then
 				if (self.Window == nil) then
-					-- If the line below this marked out line doesn't work? change them.
-					--	self.Window = GetNearestWindow(self.parent.TargetBuilding,self.parent.player)
 					--	Update: So far it works. If you want to make NPCs not break the window barricades, use the Alt line
 					--	self.Window = self.parent:getUnBarricadedWindowAlt(self.parent.TargetBuilding)
 					self.Window = self.parent:getUnBarricadedWindow(self.parent.TargetBuilding)

@@ -19,19 +19,19 @@ function SuperSurvivorsOnTick()
 
 		if (SuperSurvivorMouseDownTicks > 15) then -- 10 acts instant, so a left click would reset the select area finalization.
 			if (Highlightcenter == nil) or (not SuperSurvivorSelectingArea) then
-				Highlightcenter = getMouseSquare()
-				HighlightX1 = getMouseSquareX()
-				HighlightX2 = getMouseSquareX()
-				HighlightY1 = getMouseSquareY()
-				HighlightY2 = getMouseSquareY()
+				Highlightcenter = GetMouseSquare()
+				HighlightX1 = GetMouseSquareX()
+				HighlightX2 = GetMouseSquareX()
+				HighlightY1 = GetMouseSquareY()
+				HighlightY2 = GetMouseSquareY()
 			end
 
 			SuperSurvivorSelectingArea = true
 
-			if (HighlightX1 == nil) or (HighlightX1 > getMouseSquareX()) then HighlightX1 = getMouseSquareX() end
-			if (HighlightX2 == nil) or (HighlightX2 <= getMouseSquareX()) then HighlightX2 = getMouseSquareX() end
-			if (HighlightY1 == nil) or (HighlightY1 > getMouseSquareY()) then HighlightY1 = getMouseSquareY() end
-			if (HighlightY2 == nil) or (HighlightY2 <= getMouseSquareY()) then HighlightY2 = getMouseSquareY() end
+			if (HighlightX1 == nil) or (HighlightX1 > GetMouseSquareX()) then HighlightX1 = GetMouseSquareX() end
+			if (HighlightX2 == nil) or (HighlightX2 <= GetMouseSquareX()) then HighlightX2 = GetMouseSquareX() end
+			if (HighlightY1 == nil) or (HighlightY1 > GetMouseSquareY()) then HighlightY1 = GetMouseSquareY() end
+			if (HighlightY2 == nil) or (HighlightY2 <= GetMouseSquareY()) then HighlightY2 = GetMouseSquareY() end
 		elseif (SuperSurvivorSelectingArea) then
 			SuperSurvivorSelectingArea = false
 		end
@@ -527,14 +527,14 @@ function SuperSurvivorsOnEquipPrimary(player, weapon)
 			SS.AttackRange = ((player:getPrimaryHandItem():getMaxRange() + player:getPrimaryHandItem():getMinRange()) * 0.60)
 
 			if (weapon:isAimedFirearm()) then
-				local ammotypes = getAmmoBullets(weapon, false);
+				local ammotypes = GetAmmoBullets(weapon);
 
 				if (ammotypes ~= nil) and (ID ~= nil) then
 					SS.AmmoTypes = ammotypes
 					player:getModData().ammotype = ""
 					player:getModData().ammoBoxtype = ""
 					for i = 1, #SS.AmmoTypes do
-						SS.AmmoBoxTypes[i] = getAmmoBox(SS.AmmoTypes[i])
+						SS.AmmoBoxTypes[i] = GetAmmoBox(SS.AmmoTypes[i])
 						player:getModData().ammotype = player:getModData().ammotype .. " " .. SS.AmmoTypes[i]
 						player:getModData().ammoBoxtype = player:getModData().ammoBoxtype .. " " .. SS.AmmoBoxTypes[i]
 					end
@@ -866,7 +866,7 @@ function SuperSurvivorsRaiderManager()
 				end
 
 				local number = ZombRand(1, 3)
-				setRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
+				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
 			end
 
 			RaiderGroup:AllSpokeTo()

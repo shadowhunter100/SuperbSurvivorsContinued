@@ -528,7 +528,7 @@ function SuperSurvivor:loadPlayer(square, ID)
 	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
 		local BuddyDesc = SurvivorFactory.CreateSurvivor();
 		local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), square:getZ());
-		local filename = getSaveDir() .. "Survivor" .. tostring(ID);
+		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
 
 		Buddy:getInventory():emptyIt();
 		Buddy:load(filename);
@@ -615,7 +615,7 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	local count = 0;
 
 	while (count < level) do
-		local aperk = Perks.FromString(getAPerk())
+		local aperk = Perks.FromString(GetAPerk())
 		if (aperk ~= nil) and (tostring(aperk) ~= "MAX") then
 			--print("trying to level: ".. tostring(aperk))
 			Buddy:LevelPerk(aperk)
@@ -1094,30 +1094,6 @@ function SuperSurvivor:isTargetBuildingDangerous()
 	return false
 end
 
-
--- WIP - MarkCurrentSquareExplored_IFOD() IS CURRENTLY NOT USED
--- New function: To allow the exact position of the NPC to mark spot. This could be useful for preventing NPCs from walking to blocked off doors they witnessed
--- It needs work though, because right now it will more than likely mark off the whole building.
--- IFOD stands for 'In front of door' but it will also check for barricaded windows too.
-function SuperSurvivor:MarkCurrentSquareExplored_IFOD(building)
-	if (not self:inFrontOfLockedDoor()) or (not self:inFrontOfBarricadedWindowAlt()) then
-		return false
-	end
-
-	self:resetBuildingWalkToAttempts(building)
-	local bdef = building:getDef()
-
-	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
-		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
-			local sq = getCell():getGridSquare(x, y, self.player:getZ())
-
-			if (sq) then
-				self:Explore(sq)
-			end
-		end
-	end
-end
-
 function SuperSurvivor:MarkBuildingExplored(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:MarkBuildingExplored() called");
 	if (not building) then
@@ -1252,15 +1228,6 @@ function SuperSurvivor:ContainerSquareLooted(sq, Category)
 		else
 			self.SquareContainerSquareLooteds[Category][key] = self.SquareContainerSquareLooteds[Category][key] + 1
 		end
-	end
-end
-
--- WIP - setContainerSquareLooted() IS CURRENTLY NOT USED
-function SuperSurvivor:setContainerSquareLooted(sq, toThis, Category)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setContainerSquareLooted() called");
-	if (sq) then
-		local key = sq:getX() .. sq:getY()
-		self.SquareContainerSquareLooteds[Category][key] = toThis
 	end
 end
 
@@ -1576,18 +1543,6 @@ function SuperSurvivor:isInSameRoom(movingObj)
 		return true
 	else
 		return false
-	end
-end
-
--- WIP - isInSameRoomWithEnemyAlt() CURRENTLY IS NOT USED
-function SuperSurvivor:isInSameRoomWithEnemyAlt()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInSameRoomWithEnemyAlt() called");
-	if (self.LastEnemeySeen ~= nil) then
-		if (self:isInSameRoom(self.LastEnemeySeen)) then
-			return true
-		else
-			return false
-		end
 	end
 end
 
@@ -1939,19 +1894,6 @@ function SuperSurvivor:NPC_IFOD_BarricadedOutside() -- IFOD stands for In front 
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isBarricaded()) and (self.player:isOutside()) then
-		return true
-	else
-		return false
-	end
-end
-
--- WIP - NPC_IFOD_Xor_BlockedDoor() CURRENTLY IS NOT USED
--- I'm tired of writing long precise 'ifs' so, Xor it is (IDK and IDC if that's what 'Xor' means.)
-function SuperSurvivor:NPC_IFOD_Xor_BlockedDoor()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_IFOD_Xor_BlockedDoor() called");
-	if (self:inFrontOfLockedDoorAndIsOutside() == true) then
-		return true
-	elseif (self:NPC_IFOD_BarricadedInside() == true) then
 		return true
 	else
 		return false
@@ -3342,7 +3284,7 @@ function SuperSurvivor:delete()
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);
 	self.player:getModData().ID = 0;
-	local filename = getSaveDir() .. "SurvivorTemp";
+	local filename = GetModSaveDir() .. "SurvivorTemp";
 	self.player:save(filename);
 	self.player:removeFromWorld()
 	self.player:removeFromSquare()
@@ -3366,7 +3308,7 @@ function SuperSurvivor:SaveSurvivorOnMap()
 		SurvivorLocY[ID] = y
 		SurvivorLocZ[ID] = z
 
-		if (has_value(SurvivorMap[key], ID) == false) then
+		if (CheckIfTableHasValue(SurvivorMap[key], ID) == false) then
 			local removeFailed = false;
 			if (self.player:getModData().LastSquareSaveX ~= nil) then
 				local lastkey = self.player:getModData().LastSquareSaveX ..
@@ -3396,7 +3338,7 @@ function SuperSurvivor:SaveSurvivor()
 	local ID = self.player:getModData().ID;
 
 	if (ID ~= nil) then
-		local filename = getSaveDir() .. "Survivor" .. tostring(ID);
+		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
 		self.player:save(filename);
 
 		if (self.player ~= nil and self.player:isDead() == false) then
@@ -3689,7 +3631,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 		end
 	end
 
-	local ammotypes = getAmmoBullets(weapon, true);
+	local ammotypes = GetAmmoBullets(weapon);
 	if (ammotypes) then
 		local bwep = self.player:getInventory():AddItem(MeleWeapons[ZombRand(1, #MeleWeapons)]) -- give a beackup mele wepaon if using ammo gun
 		if (bwep) then
@@ -3699,7 +3641,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 
 		local ammo = ammotypes[1]
 		if (ammo) then
-			local ammobox = getAmmoBox(ammo)
+			local ammobox = GetAmmoBox(ammo)
 			if (ammobox ~= nil) then
 				local randomammo = ZombRand(4, 10);
 
@@ -3708,7 +3650,9 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 				end
 			end
 		end
-		ammotypes = getAmmoBullets(weapon, false);
+		ammotypes = GetAmmoBullets(weapon);
+		-- WIP - possible nil return...
+		---@diagnostic disable-next-line: need-check-nil
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
 		--print("no ammo types for weapon:"..weapon:getType())
@@ -3813,7 +3757,7 @@ function SuperSurvivor:openBoxForGun()
 		local groupcount = tempBullet:getCount()
 		local count = 0
 
-		count = (getBoxCount(ammoBox:getType()) / groupcount)
+		count = (GetBoxCount(ammoBox:getType()) / groupcount)
 
 		for i = 1, count do
 			inv:AddItem(modl .. ammotype)
@@ -4317,7 +4261,7 @@ function SuperSurvivor:Attack(victim)
 		local pwepContainer = pwep:getContainer()
 		if (pwepContainer) then pwepContainer:Remove(pwep) end -- remove temporarily so FindAndReturn("weapon") does not find this ammoless gun
 
-		self:Speak(getSpeech("OutOfAmmo"));
+		self:Speak(GetDialogueSpeech("OutOfAmmo"));
 
 		for i = 1, #self.AmmoBoxTypes do
 			self:getTaskManager():AddToTop(FindThisTask:new(self, self.AmmoBoxTypes[i], "Type", 1))
@@ -4572,7 +4516,7 @@ function SuperSurvivor:SuitUp(SuitName)
 	local tempTable = SurvivorRandomSuits["Preset"]
 
 	if SuitName:contains("Preset_") then
-		setRandomSurvivorSuit(self, "Preset", SuitName)
+		SetRandomSurvivorSuit(self, "Preset", SuitName)
 		-- Do the normal outfit selection otherwise
 	else
 		GetRandomSurvivorSuit(self)
