@@ -356,14 +356,6 @@ function SuperSurvivorsHotKeyOrder(index)
 	end
 end
 
-function SuperSurvivorTest(ob1)
-	local o = ob1
-	local stop
-	stop:now()
-end
-
-Events.OnAIStateChange:Add(SuperSurvivorTest)
-
 -- WIP - Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
 	if (getSpecificPlayer(0)) then
