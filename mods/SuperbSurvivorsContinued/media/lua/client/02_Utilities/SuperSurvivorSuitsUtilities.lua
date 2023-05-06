@@ -35,6 +35,7 @@ function GetRandomSurvivorSuit(SS)
 	end
 
 	local result = table.randFrom(tempTable)
+	CreateLogLine("SuperSurvivorSuitsUtilities", isLocalLoggingEnabled, "result: " .. tostring(result));
 
 	while (string.sub(result, -1) == "F"
 			and not SS.player:isFemale())
