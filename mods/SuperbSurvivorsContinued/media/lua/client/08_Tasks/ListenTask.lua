@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 ListenTask = {}
 ListenTask.__index = ListenTask
 

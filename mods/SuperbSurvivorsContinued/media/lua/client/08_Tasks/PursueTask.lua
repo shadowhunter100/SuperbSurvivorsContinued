@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 PursueTask = {}
 PursueTask.__index = PursueTask
 

@@ -1,3 +1,6 @@
+require "05_Other/SuperSurvivorManager";
+
+-- WIP - Not fully ready yet used in the game... Need to figure out what is and isn't working.
 -- This isn't fully ready yet.
 -- And it's not being called anywhere, yet.
 -- But I do however want to get it ready for conversion, when it's time.

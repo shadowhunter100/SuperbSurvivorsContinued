@@ -1,3 +1,4 @@
+require "05_Other/SuperSurvivorManager";
 require "07_UI/SuperSurvivorWindow";
 
 --****************************************************

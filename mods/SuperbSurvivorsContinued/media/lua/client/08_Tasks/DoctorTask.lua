@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 DoctorTask = {}
 DoctorTask.__index = DoctorTask
 

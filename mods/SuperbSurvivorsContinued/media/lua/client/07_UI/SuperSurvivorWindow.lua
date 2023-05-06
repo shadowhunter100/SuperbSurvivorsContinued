@@ -1,3 +1,4 @@
+require "05_Other/SuperSurvivorManager";
 require "07_UI/UIUtils";
 
 local window_height = (30*10)+20+44+2

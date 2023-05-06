@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 -- the job 'companion' has alot of embedding put into it to keep it from breaking away from main player
 -- So if you add new commands for the npcs through here, make sure you keep in mind about companions
 -- if you don't change the job along with the task, the npc will just return to the player

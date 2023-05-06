@@ -253,29 +253,6 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 	end
 end
 
--- WIP - GetSurvivorByName() IS CURRENTLY NOT USED
-function SuperSurvivorManager:GetSurvivorByName(thisname)
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetSurvivorByName() called");
-	local closestSoFar = 999
-	local closestID = 0
-	for i = 1, self.SurvivorCount + 1 do
-		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
-
-			if (distance < closestSoFar) and (thisname == self.SuperSurvivors[i]:getName()) then
-				closestID = i
-				closestSoFar = distance
-			end
-		end
-	end
-
-	if (closestID ~= 0) then
-		return self.SuperSurvivors[closestID]
-	else
-		return nil
-	end
-end
-
 function SuperSurvivorManager:GetClosest()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetClosest() called");
 	local closestSoFar = 20
@@ -330,8 +307,8 @@ end
 
 SSM = SuperSurvivorManager:new()
 
-function loadSurvivorMap()
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:loadSurvivorMap() called");
+function LoadSurvivorMap()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:LoadSurvivorMap() called");
 	local tempTable = {}
 	tempTable = table.load("SurvivorManagerInfo")
 	if (tempTable) and (tempTable[1]) then
@@ -359,26 +336,13 @@ function loadSurvivorMap()
 	return fileTable
 end
 
-function saveSurvivorMap()
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:saveSurvivorMap() called");
+function SaveSurvivorMap()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:SaveSurvivorMap() called");
 	local tempTable = {}
 	tempTable[1] = SSM.SurvivorCount
 	table.save(tempTable, "SurvivorManagerInfo") -- WIP - console.txt logged an error tracing to this line
 
 	if (not SurvivorMap) then return false end
-
-	local destFile = getWorld():getWorld() .. getFileSeparator() .. "SurvivorMap.lua"
-
-	-- WIP - Why is it writing a file here? Why is this block referencing subparSurvivors?
-	-- local writeFile = getModFileWriter("SubparSurvivors", destFile, true, false)
-
-	-- for index, value in pairs(SurvivorMap) do
-	-- 	for i = 1, #value do
-	-- 		writeFile:write(tostring(index) .. " " .. tostring(value[i]) .. "\r\n");
-	-- 	end
-	-- end
-
-	-- writeFile:close();
 
 	KVTablesave(SurvivorLocX, "SurvivorLocX") -- WIP - console.txt logged an error tracing to this line
 	KVTablesave(SurvivorLocY, "SurvivorLocY") -- WIP - console.txt logged an error tracing to this line

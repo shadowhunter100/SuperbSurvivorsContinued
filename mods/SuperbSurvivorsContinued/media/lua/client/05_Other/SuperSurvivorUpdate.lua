@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 local isLocalLoggingEnabled = false;
 
 function SuperSurvivorPlayerInit(player)

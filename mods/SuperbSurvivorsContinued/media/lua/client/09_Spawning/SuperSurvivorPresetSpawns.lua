@@ -1,3 +1,4 @@
+require "05_Other/SuperSurvivorManager";
 require "04_Group/SuperSurvivorGroupManager"
 
 if (not PresetSpawns) then

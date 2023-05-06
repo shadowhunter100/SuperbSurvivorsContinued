@@ -1,4 +1,5 @@
-require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList"
+require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList";
+require "05_Other/SuperSurvivorManager";
 
 -- WIP - ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
@@ -62,67 +63,14 @@ function SuperSurvivorsOnTick()
 
 		if (OnTickTicks % 1000 == 0) then
 			SSGM:Save()
-			saveSurvivorMap()
+			SaveSurvivorMap()
 		end
 	end
 end
 
 Events.OnRenderTick.Add(SuperSurvivorsOnTick)
 
-function SuperSurvivorSoldierSpawn(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
-
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-
-	return ASuperSurvivor
-end
-
-function SuperSurvivorSoldierSpawnMelee(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
-
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-
-	return ASuperSurvivor
-end
-
-function SuperSurvivorSoldierSpawnHostile(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
-
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor:setHostile(true)
-
-	return ASuperSurvivor
-end
-
-function SuperSurvivorSoldierSpawnMeleeHostile(square)
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
-	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
-
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-	ASuperSurvivor:setHostile(true)
-
-	return ASuperSurvivor
-end
-
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurvivorRandomSpawn(square)
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
@@ -158,6 +106,7 @@ function SuperSurvivorRandomSpawn(square)
 	return ASuperSurvivor
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurvivorsLoadGridsquare(square)
 	if (square ~= nil) then
 		local x = square:getX()
@@ -193,7 +142,7 @@ function SuperSurvivorsLoadGridsquare(square)
 			end
 
 			if (DoesFileExist("SurvivorLocX")) then
-				SurvivorMap = loadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
+				SurvivorMap = LoadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
 			else
 				SurvivorMap = {}
 				SurvivorLocX = {}
@@ -210,16 +159,23 @@ function SuperSurvivorsLoadGridsquare(square)
 				i = i + 1;
 			end
 			i = 1;
-
 			SurvivorMap[key] = {} -- i think this is faster			
 		end
 
-		if (square:getModData().SurvivorSquareLoaded == nil) and (square:getZ() == 0 or square:isOutside() == false) and (not SuperSurvivorPresetSpawn(square)) then
+		-- WIP - Need to rework the spawning functions and logic...
+		if (square:getModData().SurvivorSquareLoaded == nil)
+			and (square:getZ() == 0 or square:isOutside() == false)
+			and (not SuperSurvivorPresetSpawn(square))
+		then
 			SurvivorMap[key] = {}
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 
-			if (SuperSurvivorSpawnRate ~= 0) and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0) and (square:getZoneType() == "TownZone") and (not square:isSolid()) then
+			if (SuperSurvivorSpawnRate ~= 0)
+				and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0)
+				and (square:getZoneType() == "TownZone")
+				and (not square:isSolid())
+			then
 				-- NON ALT SPAWNING GROUPS
 				if (ZombRand(15) == 0) then -- spawn group
 					local hours = getGameTime():getWorldAgeHours()
@@ -255,7 +211,6 @@ function SuperSurvivorsLoadGridsquare(square)
 		end
 	end
 end
-
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
 
 function SuperSurvivorsInit()
@@ -387,6 +342,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 			local victimSquare2 = victimSquare1:getTileInDirection(dir)
 			local coveredFire = false
 
+			-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
 			for q = 1, 2 do
 				local objs
 				if q == 1 then
@@ -461,10 +417,9 @@ function SuperSurvivorKeyBindAction(keyNum)
 				end
 			end
 		elseif (keyNum == 1) then -- esc key
-			--getSpecificPlayer(0):save()
 			SSM:SaveAll()
 			SSGM:Save()
-			saveSurvivorMap()
+			SaveSurvivorMap()
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")
 			SuperSurvivorsHotKeyOrder(index)
@@ -535,6 +490,7 @@ end
 Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
 
 -- ALT SPAWNING
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurvivorsNewSurvivorManager()
 	-- To make sure if the player has chosen not to use Alt spawning
 	if (AlternativeSpawning == 1) or (getSpecificPlayer(0):isAsleep()) then
@@ -606,6 +562,7 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 
+	-- WIP - Need to rework the spawning functions and logic...
 	if (success) and (spawnSquare) then
 		-- ALT SPAWNING SECTION --
 		-- SURVIVOR, NON RAIDER SPAWNING
@@ -662,6 +619,7 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFivePercent()
 	if (AlternativeSpawning == 2) then
 		SuperSurvivorsNewSurvivorManager()
@@ -670,6 +628,7 @@ function SuperSurSurvivorSpawnGenFivePercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenTenPercent()
 	if (AlternativeSpawning == 3) then
 		SuperSurvivorsNewSurvivorManager()
@@ -678,6 +637,7 @@ function SuperSurSurvivorSpawnGenTenPercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenTwentyPercent()
 	if (AlternativeSpawning == 4) then
 		SuperSurvivorsNewSurvivorManager()
@@ -686,6 +646,7 @@ function SuperSurSurvivorSpawnGenTwentyPercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenThirtyPercent()
 	if (AlternativeSpawning == 5) then
 		SuperSurvivorsNewSurvivorManager()
@@ -694,6 +655,7 @@ function SuperSurSurvivorSpawnGenThirtyPercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFourtyPercent()
 	if (AlternativeSpawning == 6) then
 		SuperSurvivorsNewSurvivorManager()
@@ -702,6 +664,7 @@ function SuperSurSurvivorSpawnGenFourtyPercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFiftyPercent()
 	if (AlternativeSpawning == 7) then
 		SuperSurvivorsNewSurvivorManager()
@@ -710,6 +673,7 @@ function SuperSurSurvivorSpawnGenFiftyPercent()
 	end
 end
 
+-- WIP - Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
 	local RealAlternativeSpawning = AlternativeSpawning - 1
 	for i = RealAlternativeSpawning, 1, -1 do
@@ -806,6 +770,7 @@ function SuperSurvivorsRaiderManager()
 		end
 
 
+		-- WIP - Need to rework the spawning functions and logic...
 		if (success) and (spawnSquare) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
 			if (getSpecificPlayer(0):isAsleep()) then

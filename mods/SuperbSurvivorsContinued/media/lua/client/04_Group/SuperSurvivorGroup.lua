@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager"
+
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup
 
