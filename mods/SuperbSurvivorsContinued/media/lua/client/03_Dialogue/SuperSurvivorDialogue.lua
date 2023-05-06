@@ -1,7 +1,7 @@
 local isLocalLoggingEnabled = false;
 
 --[[
-  WIP - Where are those "speeches" coming from? Are those from Conditional-Speech mod on the workshop?
+  WIP - Cows: Where are those "speeches" coming from? Are those from Conditional-Speech mod on the workshop?
   https://steamcommunity.com/sharedfiles/filedetails/?id=2398253681
   If yes, why was the mod not credited?
 --]]
@@ -23,7 +23,7 @@ function GetDialogueSpeech(key)
   return tostring(SurvivorSpeechTable[key][result]);
 end
 
--- WIP - WifeSpeech is CURRENTLY NOT USED
+-- WIP - Cows: WifeSpeech is CURRENTLY NOT USED
 WifeSpeech = {
   GetDialogue("WifeSpeech1"),
   GetDialogue("WifeSpeech2"),

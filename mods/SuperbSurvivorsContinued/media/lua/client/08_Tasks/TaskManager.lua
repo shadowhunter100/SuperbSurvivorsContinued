@@ -31,7 +31,7 @@ function TaskManager:AddToTop(newTask)
 	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:AddToTop() called");
 	if (newTask == nil) then return false end
 
-	self.LastLastTask = LastTask -- WIP - undefined global...
+	self.LastLastTask = LastTask -- WIP - Cows: "LastTask" is undefined...
 	self.LastTask = self:getCurrentTask()
 	self.CurrentTask = newTask.Name
 
@@ -139,7 +139,7 @@ end
 
 function TaskManager:update()
 	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:update() called");
-	self = AIManager(self) -- WIP - THIS IS THE REFERENCE TO THE AI FOLDER FILES
+	self = AIManager(self) -- WIP - Cows: THIS IS THE REFERENCE TO THE AI FOLDER FILES
 
 	if (self == nil) then
 		return

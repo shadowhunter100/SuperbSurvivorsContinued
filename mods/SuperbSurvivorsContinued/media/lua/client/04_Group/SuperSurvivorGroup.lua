@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager"
+
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup
 
@@ -520,7 +522,7 @@ function SuperSurvivorGroup:Save()
 	local tabletoSave = {}
 	tabletoSave[1] = #self.Members
 	tabletoSave[2] = self.Leader
-	table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData") -- WIP - console.txt logged an error tracing to this line
+	table.save(tabletoSave, "SurvivorGroup" .. tostring(self.ID) .. "metaData")
 	table.save(self.Members, "SurvivorGroup" .. tostring(self.ID))
 	table.save(self.Bounds, "SurvivorGroup" .. tostring(self.ID) .. "Bounds")
 

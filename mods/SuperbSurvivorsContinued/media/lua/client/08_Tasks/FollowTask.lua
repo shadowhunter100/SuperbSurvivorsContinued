@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 FollowTask = {}
 FollowTask.__index = FollowTask
 

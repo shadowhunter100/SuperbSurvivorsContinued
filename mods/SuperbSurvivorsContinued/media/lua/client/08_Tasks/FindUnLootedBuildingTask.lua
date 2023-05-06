@@ -145,7 +145,7 @@ function FindUnlootedBuildingTask:update()
 		else
 			local attempts = self.parent:getWalkToAttempt(self.TargetSquare)
 			if (attempts < 6) then
-				-- WIP - What is "Square"?
+				-- WIP - Cows: What is "Square" HERE?
 				self.parent:walkTo(self.parent:FindClosestOutsideSquare(Square));
 
 				if (self.TargetSquare:getRoom() ~= nil) then

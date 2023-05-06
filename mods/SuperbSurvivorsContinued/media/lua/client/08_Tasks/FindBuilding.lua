@@ -35,7 +35,7 @@ function FindBuildingTask:isValid()
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function FindBuildingTask:update()
 	CreateLogLine("FindBuilding", isLocalLoggingEnabled, "function: FindBuildingTask:update() called");
 	if (not self:isValid()) then return false end

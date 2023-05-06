@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 GroupWindow = ISCollapsableWindow:derive("GroupWindow");
 
 local isLocalLoggingEnabled = false;

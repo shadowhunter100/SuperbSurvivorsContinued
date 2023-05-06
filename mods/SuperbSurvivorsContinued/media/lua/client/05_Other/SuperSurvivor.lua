@@ -1,4 +1,5 @@
-require "04_Group/SuperSurvivorGroupManager"
+require "05_Other/SuperSurvivorManager";
+require "04_Group/SuperSurvivorGroupManager";
 
 SuperSurvivor = {}
 SuperSurvivor.__index = SuperSurvivor

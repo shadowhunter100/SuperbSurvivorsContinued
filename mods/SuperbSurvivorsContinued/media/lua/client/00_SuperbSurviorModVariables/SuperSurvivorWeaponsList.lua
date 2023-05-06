@@ -1,5 +1,4 @@
--- Literally just a buffer file.
--- Not much else to it.
+-- Cows: Consolidated 2 files into 1, didn't make sense to have a "buffer file"...
 
 EnabledTranslations = {}
 EnabledTranslations["EN"] = true;

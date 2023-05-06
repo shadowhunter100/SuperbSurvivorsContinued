@@ -39,7 +39,7 @@ function PileCorpsesTask:isValid()
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function PileCorpsesTask:update()
 	CreateLogLine("PileCorpsesTask", isLocalLoggingEnabled, "PileCorpsesTask:update() Called");
 	if (not self:isValid()) then return false end
@@ -66,7 +66,7 @@ function PileCorpsesTask:update()
 				self.Target = nil
 			end
 		elseif (self.Target == nil) then
-			-- WIP - "range" determines the number of scans for corpses.
+			-- WIP - Cows: "range" determines the number of scans for corpses.
 			-- 45 * 45 = 2045 -- original value
 			-- 30 * 30 = 900, - which reduces the scan range
 			local range = 30;

@@ -15,7 +15,7 @@ function SpeakDialogueTask:new(superSurvivor, TalkToMe, DialogueID)
 	o.Name = "Speak Dialogue"
 
 	o.Current = 1
-	-- WIP - "SurvivorDialogue" does not exist... unless it is referencing another mod.
+	-- WIP - Cows: "SurvivorDialogue" does not exist... unless it is referencing another mod.
 	-- o.Dialogue = SurvivorDialogue[DialogueID]; 
 
 	if (not o.Dialogue) then return nil end

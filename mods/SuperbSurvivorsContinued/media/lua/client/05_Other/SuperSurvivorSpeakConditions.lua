@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 LMSConditions = {}
 LMSConditions.MoodleTable = {}
 LMSConditions.LowerMoodleTable = {}

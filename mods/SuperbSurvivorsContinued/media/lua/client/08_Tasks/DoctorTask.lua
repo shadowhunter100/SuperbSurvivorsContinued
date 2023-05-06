@@ -1,3 +1,5 @@
+require "05_Other/SuperSurvivorManager";
+
 DoctorTask = {}
 DoctorTask.__index = DoctorTask
 
@@ -31,7 +33,7 @@ function DoctorTask:isValid()
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function DoctorTask:FindPatient()
 	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "DoctorTask:FindPatient() Called");
 	local player = self.parent.player

@@ -1,9 +1,10 @@
 --[[
 	thanks and some credit to Fenris_Wolf from ORGM mod for creating this hotkeys file!
 	I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
+	Cows: I've added the Fenris_Wolf in the github credits.
 --]]
 
--- WIP - Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
+-- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
 local isLocalLoggingEnabled = false;
 
 local function doesOptionsFileExist()
@@ -235,7 +236,7 @@ function SuperSurvivorGetOptionValue(option)
 end
 
 -- -- -- -- --
--- WIP - getContextMenuText() is a globl function... should consider updating the casing to reflect that.
+-- WIP - Cows: getContextMenuText() is a globl function... should consider updating the casing to reflect that.
 function getContextMenuText(text)
 	return getText("ContextMenu_SS_" .. text)
 end

@@ -61,7 +61,7 @@ end
 
 function ThreatenTask:dealComplete()
 	if self.StartedThreatening then
-		if Demands == "Scram" then -- WIP - "Demands" is undefined...
+		if Demands == "Scram" then -- WIP - Cows: "Demands" is undefined...
 			if self.theDistance >= 20 and not self.parent.player:CanSee(self.Aite.player) then
 				return true
 			end
@@ -75,7 +75,7 @@ function ThreatenTask:update()
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
 	if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
-		if (self.parent:needToReadyGun(weapon)) then -- WIP - "weapon" is undefined...
+		if (self.parent:needToReadyGun(weapon)) then -- WIP - Cows: "weapon" is undefined...
 			self.parent:ReadyGun(weapon)
 			return false
 		end

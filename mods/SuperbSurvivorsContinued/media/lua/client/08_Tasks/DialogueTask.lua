@@ -17,7 +17,7 @@ function DialogueTask:new(superSurvivor, TalkToMe, Dialogue, isYesOrNoQuestion, 
 
 	superSurvivor:StopWalk()
 
-	-- WIP - When and where was "selfInitiated" assigned a value? This is still unassigned...
+	-- WIP - Cows: When and where was "selfInitiated" assigned a value? This is still unassigned...
 	o.WasSelfInit = selfInitiated
 	o.Aite = TalkToMe
 	o.parent = superSurvivor
@@ -86,7 +86,7 @@ function DialogueTask:update()
 				self.Current = 99999
 				self.parent:Wait(1)
 
-				-- WIP - When and where was "myDialogueWindow" initiated? if this is a quest related item, it should be removed.
+				-- WIP - Cows: When and where was "myDialogueWindow" initiated? if this is a quest related item, it should be removed.
 				myDialogueWindow:start(self.parent, self.Dialogue, self.isYesOrNoQuestion)
 			end
 
