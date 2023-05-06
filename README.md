@@ -24,8 +24,8 @@ PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-pol
   * I have attempted to remove all references to Brita's. If you spot it in the code, please notify me so it can be removed.  
 * CharacterSave - https://steamcommunity.com/sharedfiles/filedetails/?id=2673317083&searchtext=charactersave by Tchernobill
 * ORGM - https://steamcommunity.com/sharedfiles/filedetails/?id=514618604 by Fenris Wolf  
-* Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan
-*The above referenced mods have been removed in this "Continuation".
+* Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan  
+* *__The above referenced mods have been removed in this "Continuation".__*
 
 ## What will be done in this mod?
 In this "Continuation", I will attempt to fix the known (and unknown) issues while updating the core functionalities.  
