@@ -64,7 +64,6 @@ end
 
 function AttemptEntryIntoBuildingTask:update()
 	CreateLogLine("AttemptEntryIntoBuildingTask", isLocalLoggingEnabled, "function: AttemptEntryIntoBuildingTask:update() called");
-	local debugOutput = self.parent.DebugMode
 
 	if (not self:isValid()) then return false end
 
@@ -95,7 +94,6 @@ function AttemptEntryIntoBuildingTask:update()
 			end
 			if not self.TryWindow and not self.TryBreakDoor then
 				if (self.parent:getWalkToAttempt(self.TargetSquare) < 6) then -- was 10
-					if (debugOutput) then self.parent:Speak(tostring(self.parent:getWalkToAttempt(self.TargetSquare))) end
 					self.parent:walkToDirect(self.TargetSquare)   -- If this doesn't work, use the other
 					self.parent:walkTo(self.TargetSquare)
 					CreateLogLine("AttemptEntryIntoBuildingTask", isLocalLoggingEnabled, "Trying a door");

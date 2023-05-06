@@ -136,6 +136,9 @@ function SuperSurvivorOnDeath(player)
 end
 
 function SuperSurvivorGlobalUpdate(player)
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "function: SuperSurvivorGlobalUpdate() called");
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "DebugOptions: " .. tostring(DebugOptions));
+
 	if (DebugOptions) and player:isLocalPlayer() then
 		--DoVision for debug - main player
 
@@ -153,6 +156,7 @@ function SuperSurvivorGlobalUpdate(player)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "updating player id...");
 	if (player and player:getModData().ID ~= nil) then
 		local SS = SSM:Get(player:getModData().ID)
 		if (SS ~= nil) then SS:PlayerUpdate() end

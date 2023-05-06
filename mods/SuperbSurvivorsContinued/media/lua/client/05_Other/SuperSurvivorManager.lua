@@ -340,11 +340,11 @@ function SaveSurvivorMap()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:SaveSurvivorMap() called");
 	local tempTable = {}
 	tempTable[1] = SSM.SurvivorCount
-	table.save(tempTable, "SurvivorManagerInfo") -- WIP - console.txt logged an error tracing to this line
+	table.save(tempTable, "SurvivorManagerInfo");
 
 	if (not SurvivorMap) then return false end
 
-	KVTablesave(SurvivorLocX, "SurvivorLocX") -- WIP - console.txt logged an error tracing to this line
-	KVTablesave(SurvivorLocY, "SurvivorLocY") -- WIP - console.txt logged an error tracing to this line
-	KVTablesave(SurvivorLocZ, "SurvivorLocZ") -- WIP - console.txt logged an error tracing to this line
+	KVTablesave(SurvivorLocX, "SurvivorLocX");
+	KVTablesave(SurvivorLocY, "SurvivorLocY");
+	KVTablesave(SurvivorLocZ, "SurvivorLocZ");
 end
