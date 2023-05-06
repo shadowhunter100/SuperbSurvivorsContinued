@@ -1,53 +1,13 @@
-require "TimedActions/ISBaseTimedAction"
-
-ISUnStuckAction = ISBaseTimedAction:derive("ISUnStuckAction");
-local isLocalLoggingEnabled = false;
-
-function ISUnStuckAction:isValid()
-	return true
-end
-
-function ISUnStuckAction:update()
-	if self.character then
-		self.character:getModData().felldown = true
-		self.character:setMetabolicTarget(Metabolics.LightDomestic);
-	end
-end
-
-function ISUnStuckAction:start()
-	self:setActionAnim("Loot")
-	self:setOverrideHandModels(nil, nil)
-end
-
-function ISUnStuckAction:stop()
-	self.character:getModData().felldown = nil
-	ISBaseTimedAction.stop(self);
-end
-
-function ISUnStuckAction:perform()
-	self.character:getModData().felldown = nil
-	ISBaseTimedAction.perform(self);
-end
-
-function ISUnStuckAction:new(character)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.character = character;
-	o.stopOnWalk = false;
-	o.stopOnRun = false;
-	o.forceProgressBar = false;
-	o.mul = 2;
-	o.maxTime = 1;
-
-	return o;
-end
-
 -- the job 'companion' has alot of embedding put into it to keep it from breaking away from main player
 -- So if you add new commands for the npcs through here, make sure you keep in mind about companions
 -- if you don't change the job along with the task, the npc will just return to the player
+
+--[[
+	WIP - WHAT IS THIS? WHY IS 'CharacterSave_SaveLoad' REQUIRED? IT WASN'T EVEN LISTED AS A REQUIREMENT ON THE STEAM WORKSHOP PAGE.
+]] 
 require('CharacterSave_SaveLoad')
 
+local isLocalLoggingEnabled = false;
 local function getJobText(text)
 	return getContextMenuText("Job_" .. text)
 end
