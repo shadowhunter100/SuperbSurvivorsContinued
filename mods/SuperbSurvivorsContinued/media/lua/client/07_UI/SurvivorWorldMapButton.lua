@@ -30,15 +30,15 @@ function ButtonShowLocators:new(x, y, width, height, title, clicktarget, onclick
     return o
 end
 
-function create_button_show_locators()
-    button_show_locators = ButtonShowLocators:new(
-        50,
-        getCore():getScreenHeight() - 50,
-        150,
-        25,
-        "Show Survivors",
-        nil,
-        function()
+local function createButtonShowGroupMembers()
+    local btnShowGroupMembersLocation = ButtonShowLocators:new(
+        (getCore():getScreenWidth() / 2) - 75, -- x, from the left
+        25,                                    -- y, from the top
+        150,                                   -- button width
+        25,                                    -- button height
+        "Show Survivors",                      -- button text
+        nil,                                   -- click target... safe as nil
+        function()                             -- onClick behavior
             if flag_show then
                 flag_show = false
             else
@@ -46,12 +46,12 @@ function create_button_show_locators()
             end
         end
     )
-    button_show_locators:addToUIManager()
-    button_show_locators:setVisible(false)
-    button_show_locators:setAlwaysOnTop(true)
+    btnShowGroupMembersLocation:addToUIManager()
+    btnShowGroupMembersLocation:setVisible(false)
+    btnShowGroupMembersLocation:setAlwaysOnTop(true)
 end
 
-Events.OnGameStart.Add(create_button_show_locators)
+Events.OnGameStart.Add(createButtonShowGroupMembers)
 
 local worldmap_render = ISWorldMap.render
 ISWorldMap.render = function(self)
