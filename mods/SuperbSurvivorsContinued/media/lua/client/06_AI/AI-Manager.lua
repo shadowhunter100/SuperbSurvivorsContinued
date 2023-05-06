@@ -123,7 +123,6 @@ function AIManager(TaskMangerIn)
 		-- ------------------------- --
 
 		-- ----- Perception Buff --- --
-		--NPC:Companion_DoSixthSenseScan()
 
 		-- ------------ --
 		-- Pursue
@@ -137,7 +136,6 @@ function AIManager(TaskMangerIn)
 		-- Attack
 		-- ----------- --
 		-- ----- Perception Buff --- --
-		--	NPC:Companion_DoSixthSenseScan()
 		-- ------------------------- --
 		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
 		if (

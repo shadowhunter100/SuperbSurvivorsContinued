@@ -80,7 +80,6 @@ function AIManager_Companion(TMI)
 		-- ------------ --
 		if NPC_TaskIsNot("First Aide") and NPC_TaskIsNot("Pursue") and NPC_TaskIsNot("Attack") then
 			-- ----- Perception Buff --- --
-			--NPC:Companion_DoSixthSenseScan()
 
 			if (EnemyIsSurvivor or EnemyIsZombie) then
 				TMI:AddToTop(PursueTask:new(NPC, NPC.LastEnemeySeen))
@@ -91,7 +90,6 @@ function AIManager_Companion(TMI)
 		-- ----------- --
 		if (NPC_TaskIsNot("First Aide")) then
 			-- ----- Perception Buff --- --
-			--	NPC:Companion_DoSixthSenseScan()
 			-- ------------------------- --
 
 			if (

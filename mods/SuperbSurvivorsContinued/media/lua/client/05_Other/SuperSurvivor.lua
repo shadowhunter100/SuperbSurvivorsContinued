@@ -48,7 +48,6 @@ function SuperSurvivor:new(isFemale, square)
 	self.__index = self
 	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
 	survivorObject.UpdateDelayTicks = 20
-	survivorObject.DebugMode = false
 	survivorObject.NumberOfBuildingsLooted = 0
 	survivorObject.AttackRange = 0.5
 	survivorObject.UsingFullAuto = false
@@ -164,7 +163,6 @@ function SuperSurvivor:newLoad(ID, square)
 	survivorObject.UpdateDelayTicks = 20
 	survivorObject.GroupBraveryBonus = 0
 	survivorObject.GroupBraveryUpdatedTicks = 0
-	survivorObject.DebugMode = false
 	survivorObject.NumberOfBuildingsLooted = 0
 	survivorObject.WaitTicks = 0
 	survivorObject.AtkTicks = 2
@@ -253,7 +251,6 @@ function SuperSurvivor:newSet(player)
 	survivorObject.AttackRange = 0.5
 	survivorObject.UsingFullAuto = false
 	survivorObject.UpdateDelayTicks = 20
-	survivorObject.DebugMode = false
 	survivorObject.NumberOfBuildingsLooted = 0
 	survivorObject.GroupBraveryBonus = 0
 	survivorObject.GroupBraveryUpdatedTicks = 0
@@ -1601,7 +1598,8 @@ function SuperSurvivor:RealCanSee(character)
 end
 
 function SuperSurvivor:DoVision()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoVision() called");
+	local isFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:DoVision() called");
 
 	local atLeastThisClose = 19;
 	local spottedList = self.player:getCell():getObjectList()
@@ -1619,17 +1617,20 @@ function SuperSurvivor:DoVision()
 	local closestNumber = nil
 	local tempdistance = 1
 
+	CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "Character: " .. tostring(self:getName()));
+
 	if (spottedList ~= nil) then
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "spottedList.size " .. tostring(spottedList:size()))
+		CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "Character - " .. tostring(self:getName()) .. " spotted: " .. tostring(spottedList:size()) .. " objects...");
 		for i = 0, spottedList:size() - 1 do
 			local character = spottedList:get(i);
+			CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "DoVision: " .. tostring(character));
 
 			if (character ~= nil) and (character ~= self.player)
 				and (instanceof(character, "IsoZombie")
 					or instanceof(character, "IsoPlayer"))
 			then
 				if (character:isDead() == false) then
-					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+					CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 					tempdistance = tonumber(getDistanceBetween(character, self.player))
 
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
@@ -1658,6 +1659,8 @@ function SuperSurvivor:DoVision()
 				end
 			end
 		end
+			
+		CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "spottedList end...");
 	end
 
 	-- if enememies near, increase the player update function refresh time for better fighting
@@ -1971,139 +1974,6 @@ function SuperSurvivor:NPC_inFrontOfUnBarricadedWindowOutside()
 		return true
 	else
 		return false
-	end
-end
-
--- This function is still in testing. It's basically 'dovision' but re-functioned to find the closest hostile the npc can find, that is a human only.
--- DO *NOT* put this in update() function or anything similar. This is supposed to be exclusively to make dopursuealt work.
--- And to attempt-fix a situation where the player can walk behind the NPC mid-attack and the npc suddenly forgetting about the player.
--- Update: BE VERY CAREFUL using this. It will overwrite Dovision. This is using for bandits to keep up with the main player.
-function SuperSurvivor:DoHumanEntityScan()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:DoHumanEntityScan() called");
-	local atLeastThisClose = 5;
-	local spottedList = self.player:getCell():getObjectList()
-	local closestSoFar = 6
-	local closestSurvivorSoFar = 6
-	local dangerRange = 6
-
-	if self.AttackRange > dangerRange then dangerRange = self.AttackRange end
-
-	local closestNumber = nil
-	local tempdistance = 1
-
-	if (spottedList ~= nil) then
-		for i = 0, spottedList:size() - 1 do
-			local character = spottedList:get(i);
-			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoPlayer")) and not (instanceof(character, "IsoZombie")) then
-				if (character:isDead() == false) then
-					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-					tempdistance = tonumber(getDistanceBetween(character, self.player))
-
-					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
-						local CanSee = self:RealCanSee(character)
-
-						if (not CanSee) or (CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
-							self.seenCount = self.seenCount + 1
-						end
-						if ((((not CanSee) or (CanSee)) or (tempdistance < 3.5)) and (tempdistance < closestSoFar)) then
-							closestSoFar = tempdistance;
-							self.player:getModData().seenZombie = true;
-							closestNumber = i;
-						end
-					elseif (tempdistance < closestSurvivorSoFar) and false then
-						closestSurvivorSoFar = tempdistance
-						self.LastSurvivorSeen = character
-					end
-				end
-			end
-		end
-	end
-
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:DoHumanEntityScan() END ---");
-	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
-	if (closestNumber ~= nil) then
-		self.LastEnemeySeen = spottedList:get(closestNumber)
-
-		return self.LastEnemeySeen
-	end
-end
-
--- Come to think of it, this function could be cloned to find windows/doors if done right......
--- This function is to keep companions from being snuck upon. It's a little OP, but it's also preventing situations like
--- 'Oh I'm trying to fight a NPC I'm stuck on, oh no a zombie behind me and I could clearly hear it? Oh well...' THIS function prevents cases like THAT.
--- Also I believe since the self.seencount and other variables that 'reset to 0' is marked off, maybe helping as to why this function's working so cleverly.
-function SuperSurvivor:Companion_DoSixthSenseScan()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Companion_DoSixthSenseScan() called");
-	local atLeastThisClose = 3;
-	local spottedList = self.player:getCell():getObjectList()
-	local closestSoFar = 4
-	local closestSurvivorSoFar = 4
-	self.seenCount = 0
-	self.dangerSeenCount = 0
-	self.EnemiesOnMe = 0
-
-	local dangerRange = 2
-
-	if (self:getGroupRole() == "Companion") then
-		atLeastThisClose = 5
-		closestSoFar = 10
-		closestSurvivorSoFar = 10
-		dangerRange = 3
-		self.dangerSeenCount = 0
-		self.EnemiesOnMe = 0
-	end
-
-	local closestNumber = nil
-	local tempdistance = 1
-
-	if (spottedList ~= nil) then
-		for i = 0, spottedList:size() - 1 do
-			local character = spottedList:get(i);
-			if (character ~= nil) and (character ~= self.player) and (instanceof(character, "IsoPlayer")) or (instanceof(character, "IsoZombie")) then
-				if (character:isDead() == false) then
-					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-					tempdistance = tonumber(getDistanceBetween(character, self.player))
-
-					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
-						local CanSee = self:RealCanSee(character)
-
-						-- Melee scan
-						if (tempdistance < 1) and (not (self:usingGun())) and (character:getZ() == self.player:getZ()) then
-							self.EnemiesOnMe = self.EnemiesOnMe + 1
-						end
-
-						-- Gun Scan
-						if (tempdistance < 2) and (self:usingGun()) and (character:getZ() == self.player:getZ()) then
-							self.EnemiesOnMe = self.EnemiesOnMe + 1
-						end
-
-						if (self:getGroupRole() == "Companion") and (tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
-							self.dangerSeenCount = self.dangerSeenCount + 1
-						end
-
-						if (not CanSee) then -- added 'not' to it so enemy can sense behind them for a moment
-							self.seenCount = self.seenCount + 1
-						end
-
-						if ((not CanSee) and (tempdistance < closestSoFar)) then
-							closestSoFar = tempdistance;
-							self.player:getModData().seenZombie = true;
-							closestNumber = i;
-						end
-					elseif (tempdistance < closestSurvivorSoFar) and false then
-						closestSurvivorSoFar = tempdistance
-						self.LastSurvivorSeen = character
-					end
-				end
-			end
-		end
-	end
-
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Companion_DoSixthSenseScan() END ---");
-	-- This only tells the other function there's a enemy nearby as long as the npc isn't stuck in front of a blocked off door
-	if (closestNumber ~= nil) then
-		self.LastEnemeySeen = spottedList:get(closestNumber)
-		return self.LastEnemeySeen
 	end
 end
 

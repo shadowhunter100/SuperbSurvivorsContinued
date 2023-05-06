@@ -64,7 +64,6 @@ end
 
 function AttemptEntryIntoBuildingTask:update()
 	CreateLogLine("AttemptEntryIntoBuildingTask", isLocalLoggingEnabled, "function: AttemptEntryIntoBuildingTask:update() called");
-	local debugOutput = self.parent.DebugMode
 
 	if (not self:isValid()) then return false end
 
