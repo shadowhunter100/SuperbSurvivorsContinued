@@ -2,12 +2,8 @@
 -- So if you add new commands for the npcs through here, make sure you keep in mind about companions
 -- if you don't change the job along with the task, the npc will just return to the player
 
---[[
-	WIP - WHAT IS THIS? WHY IS 'CharacterSave_SaveLoad' REQUIRED? IT WASN'T EVEN LISTED AS A REQUIREMENT ON THE STEAM WORKSHOP PAGE.
-]] 
-require('CharacterSave_SaveLoad')
-
 local isLocalLoggingEnabled = false;
+
 local function getJobText(text)
 	return getContextMenuText("Job_" .. text)
 end
