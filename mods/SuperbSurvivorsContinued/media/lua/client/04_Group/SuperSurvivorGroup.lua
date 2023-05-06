@@ -42,7 +42,6 @@ function SuperSurvivorGroup:getFollowCount()
 	local members = self:getMembers()
 	for i = 1, #members do
 		if (members[i] ~= nil) and (members[i].getCurrentTask ~= nil) then
-			--print("SS current task: " .. members[i]:getCurrentTask())
 			if (members[i]:getCurrentTask() == "Follow") then count = count + 1 end
 		end
 	end
@@ -60,7 +59,6 @@ function SuperSurvivorGroup:isEnemy(SS, character)
 	elseif (SS.player:getModData().hitByCharacter == true) and (character:getModData().semiHostile == true) then
 		return true
 	elseif (character:getModData().isHostile ~= SS.player:getModData().isHostile) then
-		--print(tostring(character:getForname()).."("..tostring(character:getModData().Group)..") is enemy to "..SS:getName().."("..tostring(self:getGroupID()))
 		return true
 	elseif (self.ROE == 4) then
 		return true
@@ -151,7 +149,6 @@ function SuperSurvivorGroup:getGroupAreaContainer(thisArea) -- returns any conta
 					local objs = sq:getObjects()
 					for j = 0, objs:size() - 1 do
 						if (objs:get(j):getContainer() ~= nil) then
-							print("found container object in area " .. tostring(thisArea))
 							return objs:get(j)
 						end
 					end
@@ -310,7 +307,7 @@ function SuperSurvivorGroup:getClosestMember(ofThisRole, referencePoint)
 			local workingSS = SSM:Get(workingID)
 			if (workingSS ~= nil) then
 				distance = getDistanceBetween(workingSS:Get(), referencePoint)
-				--print(tostring(self.Members[i])..","..tostring(distance))				
+				
 				if (distance ~= 0) and (distance < closestSoFar)
 					and ((ofThisRole == nil)
 						or (SSM:Get(self.Members[i]):getGroupRole() == ofThisRole)
@@ -443,14 +440,12 @@ end
 -- WHAT ARE THE VALID ROLES? THERE ARE NO DOCUMENTATIONS!
 function SuperSurvivorGroup:addMember(newSurvivor, Role)
 	if (newSurvivor == nil) or (newSurvivor:getID() == nil) then
-		print("cant add survivor to group because id is nil")
 		return false
 	end
 
 	local currentGroup = newSurvivor:getGroup()
 	if (currentGroup) then
 		currentGroup:removeMember(newSurvivor:getID())
-		print("removed " .. newSurvivor:getName() .. " from current group")
 	end
 
 	--if(newSurvivor:getGroupID() == self.ID) then return false end
@@ -485,13 +480,12 @@ function SuperSurvivorGroup:removeMember(ID)
 	if (member) then member:setGroupID(nil) end
 
 	if (CheckIfTableHasValue(self.Members, ID)) then
-		local index
+
 		for i = 1, #self.Members do
 			if (ID == self.Members[i]) then
 				table.remove(self.Members, i)
 			end
 		end
-		self:Print()
 	end
 end
 
@@ -580,23 +574,12 @@ function SuperSurvivorGroup:Load()
 		table.sort(self.GroupAreas)
 		local gcount = 1
 		for k, v in pairs(self.GroupAreas) do
-			--print("key "..tostring(k))
+			
 			if not AreasTable[gcount] then break end
 			for i = 1, 5 do
 				self.GroupAreas[k][i] = tonumber(AreasTable[gcount])
 				gcount = gcount + 1
 			end
 		end
-	end
-end
-
--- DEBUG FUNCTIONS BELOW
-function SuperSurvivorGroup:Print()
-	print("GroupID: " .. tostring(self.ID))
-	print("MemberCount: " .. tostring(#self.Members))
-	print("Members: ")
-
-	for i = 1, #self.Members do
-		print("Member " .. tostring(self.Members[i]))
 	end
 end

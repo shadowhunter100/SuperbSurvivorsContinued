@@ -1,7 +1,10 @@
 FarmingTask = {}
 FarmingTask.__index = FarmingTask
 
+local isLocalLoggingEnabled = false;
+
 function FarmingTask:new(superSurvivor, BringHere)
+	CreateLogLine("FarmingTask", isLocalLoggingEnabled, "function: FarmingTask:new() Called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -20,8 +23,6 @@ function FarmingTask:new(superSurvivor, BringHere)
 
 	o.Seeds = { "farming.BroccoliSeed", "farming.CabbageSeed", "farming.CarrotSeed", "farming.PotatoSeed",
 		"farming.TomatoSeed", "farming.RedRadishSeed" }
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -73,15 +74,9 @@ end
 
 function FarmingTask:getPlant(sq)
 	local plant
-	-- WIP - What is "CFarmingSystem"?
-	if (CFarmingSystem ~= nil) then
-		plant = CFarmingSystem.instance:getLuaObjectOnSquare(sq)
-		--print("CFarmingSystem used")
-	else
-		-- WIP - What is "basicFarming"?
-		plant = basicFarming.getCurrentPlanting(sq)
-		--print("basic farming used")		
-	end
+	-- WIP - What is "basicFarming"? "basicFarming" is undefined...
+	plant = basicFarming.getCurrentPlanting(sq)
+
 	if plant then
 		return plant
 	else
@@ -137,7 +132,6 @@ function FarmingTask:getASquareToPlow()
 			local sq = getCell():getGridSquare(x, y, area[5])
 			if (sq) and (sq:isFree(false)) and (x % 2 == 0) and (y % 2 ~= 0) then
 				local plant = self:getPlant(sq)
-				print(tostring(plant))
 				if (plant == nil) then return sq end
 			end
 		end
@@ -184,8 +178,6 @@ function FarmingTask:getAPlantThatNeeds(needs)
 				if (sq) then
 					local plant = self:getPlant(sq)
 					if (not plant) or (plant and (not plant:isAlive())) then
-						print("returning " .. tostring(plant))
-						--plant.lol();
 						return sq
 					end
 				end
@@ -225,6 +217,7 @@ function FarmingTask:ClearVars()
 end
 
 function FarmingTask:update()
+	CreateLogLine("FarmingTask", isLocalLoggingEnabled, "function: FarmingTask:update() Called");
 	if (not self:isValid()) then return false end
 	if (not self.group) then self.group = self.parent:getGroup() end
 
@@ -239,21 +232,20 @@ function FarmingTask:update()
 
 	if (self.parent:isInAction() == false) then
 		if (self.JustHarvested) then -- go store crops
-			--self.parent:Speak("going to harvested goods")
+			self.parent:Speak("going to harvested goods")
 			local storagecontainer = self.group:getGroupAreaContainer("FoodStorageArea")
 			local dest
 			if (storagecontainer) then
-				print("Harvest - Found food storage container")
 				dest = storagecontainer
 			else
 				dest = self.group:getGroupAreaCenterSquare("FoodStorageArea")
 				if dest ~= nil then
-					print("Harvest - Found center square")
+					CreateLogLine("FarmingTask", isLocalLoggingEnabled, "Harvest - Found center square");
 				end
 			end
 			if (not dest) then
 				dest = self.parent.player:getCurrentSquare()
-				print("Harvest - Drop at current")
+				CreateLogLine("FarmingTask", isLocalLoggingEnabled, "Harvest - Drop at current");
 			end
 			self.JustHarvested = false
 			--self.parent:Speak("is a container?"..tostring(dest.getContainer ~= nil))
@@ -271,7 +263,7 @@ function FarmingTask:update()
 				local item = self:getWater()
 				if (item and item:isWaterSource()) then
 					local plantType = self.Plant.typeOfSeed
-					print("water " .. plantType)
+					CreateLogLine("FarmingTask", isLocalLoggingEnabled, "watering: " .. plantType);
 					if (self.parent:isSpeaking() == false) then
 						self.parent:RoleplaySpeak(getActionText("FarmingActionWatering"))
 					end
@@ -294,16 +286,12 @@ function FarmingTask:update()
 				local plantType = self.Plant.typeOfSeed
 				self.parent:RoleplaySpeak(getActionText("FarmingActionHarvesting"))
 				self.JustHarvested = true
-				self.parent:DebugSay("FarmingTask is about to trigger a StopWalk! ")
 				self.parent:StopWalk()
-				print("harvest " .. plantType)
 				ISTimedActionQueue.add(ISHarvestPlantAction:new(self.parent:Get(), self.Plant, 50))
 				-- then replow
-				print("plow")
 				self.TargetSquare = self.Plant:getSquare()
 				ISTimedActionQueue.add(ISPlowAction:new(self.parent:Get(), self.TargetSquare, self:getShovel(), 50))
 				-- TODO: then replant same plant
-				print("plant")
 				local typeOfSeed = "PotatoSeed"
 				if plantType == "Broccoli" then
 					typeOfSeed = "BroccoliSeed"
@@ -316,7 +304,9 @@ function FarmingTask:update()
 				else
 					typeOfSeed = plantType:gsub('s', 'Seed')
 				end
-				print("planting " .. typeOfSeed)
+
+				CreateLogLine("FarmingTask", isLocalLoggingEnabled, "planting: " .. typeOfSeed);
+
 				local seeds = {}
 				for i = 1, 12 do
 					seeds[i] = self.parent:Get():getInventory():AddItem("farming." .. typeOfSeed)
@@ -335,7 +325,6 @@ function FarmingTask:update()
 			self.TargetSquare = self.Plant
 			if (self:AreWeThereYet(self.Plant)) then
 				--self.parent:Speak("plowing square")
-				self.parent:DebugSay("FarmingTask is about to trigger a StopWalk! (Path B) ")
 				self.parent:StopWalk()
 				ISTimedActionQueue.add(ISPlowAction:new(self.parent:Get(), self.TargetSquare, self:getShovel(), 150))
 				self:ClearVars()
@@ -351,7 +340,7 @@ function FarmingTask:update()
 			if (self:AreWeThereYet(self.Plant:getSquare())) then
 				self.parent:RoleplaySpeak(getActionText("FarmingActionPlanting"))
 				local seeds = self:getSomeSeeds()
-				--print(""..nil)
+				
 				if (seeds) and (#seeds > 0) then
 					local plantType = tostring(seeds[1]:getType())
 					if (plantType == "TomatoSeed") then
@@ -365,7 +354,6 @@ function FarmingTask:update()
 					else
 						plantType = plantType:gsub('Seed', 's')
 					end
-					self.parent:DebugSay("FarmingTask is about to trigger a StopWalk! (Path C) ")
 					self.parent:StopWalk()
 					ISTimedActionQueue.add(ISSeedAction:new(self.parent:Get(), seeds, #seeds, plantType, self.Plant, 200))
 					self:ClearVars()
@@ -373,24 +361,6 @@ function FarmingTask:update()
 			end
 			return true
 		end
-
-		-- if (not self.TargetSquare) then
-		-- 	self.TargetSquare = self:getASquareToPlow()
-		-- 	self.FarmingTaskType = "Plowing"
-		-- end
-		-- if(self.TargetSquare) and (self.FarmingTaskType == "Plowing") then
-
-		-- 	--self.parent:Speak("should plowing new square")
-		-- 	if(self:AreWeThereYet(self.TargetSquare)) then
-		-- 		--self.parent:Speak("plowing new square")
-		-- 		self.parent:StopWalk()
-		-- 		ISTimedActionQueue.add(ISPlowAction:new (self.parent:Get(), self.TargetSquare, self:getShovel(), 150))
-		-- 		self:ClearVars()				
-		-- 	end
-		-- 	return true
-		-- end
-
-		--self.parent:Speak("there was nothing to do: "..tostring(self.FarmingTaskType)..","..tostring(self.TargetSquare == nil)..","..tostring(self.Plant == nil))
 
 		self.Plant = nil
 		self.TargetSquare = nil
@@ -400,9 +370,6 @@ function FarmingTask:update()
 		if (self.NothingToDoCount > 5) then
 			self:ClearVars()
 			self.parent:Speak("nothing to do for now...")
-			--local TaskMangerIn = self.parent:getTaskManager()
-			--TaskMangerIn:setTaskUpdateLimit(300)
-			--TaskMangerIn:AddToTop(WanderInBaseTask:new(self.parent))			
 			self.Complete = true
 			return nil
 		end

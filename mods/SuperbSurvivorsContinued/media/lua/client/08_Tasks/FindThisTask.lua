@@ -1,7 +1,10 @@
 FindThisTask = {}
 FindThisTask.__index = FindThisTask
 
+local isLocalLoggingEnabled = false;
+
 function FindThisTask:new(superSurvivor, itemType, CategoryOrType, thisQuantity)
+	CreateLogLine("FindThisTask", isLocalLoggingEnabled, "function: FindThisTask:new() Called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -46,9 +49,6 @@ function FindThisTask:isComplete()
 				self.parent:Get():setPrimaryHandItem(weapon)
 			end
 		end
-		--if(self.parent:isHungry()) and (self.parent:hasFood()) then
-		--	self.parent:getTaskManager():AddToTop(EatFoodTask:new(self.parent,self.parent:getFood()))
-		--end
 	end
 	return self.Complete
 end
@@ -62,40 +62,34 @@ function FindThisTask:getWasSuccessful()
 end
 
 function FindThisTask:update()
+	CreateLogLine("FindThisTask", isLocalLoggingEnabled, "FindThisTask:update() Called");
 	if (getSpecificPlayer(0):isAsleep()) then return false end
 	if (not self:isValid()) or self.parent:getDangerSeenCount() > 0 then
-		--self.parent:Speak("completing")
 		self.Complete = true
 		return false
 	end
 
 	if (self.parent:isInAction()) then
-		--self.parent:Speak("waiting for non action")
 		return false
 	end
 
 
 	if (self.TargetItem == nil) then
-		--print("going to FindThisNearBy:"..self.itemtype)
 		self.TargetItem = self.parent:FindThisNearBy(self.itemtype, self.COT)
 
 		-- handle different axe types
 		if (self.TargetItem == nil) and (self.itemtype == "Axe") then
-			--print("look for WoodAxe")
 			self.parent.GoFindThisCounter = 0
 			self.TargetItem = self.parent:FindThisNearBy("WoodAxe", self.COT)
 		end
 		if (self.TargetItem == nil) and (self.itemtype == "Axe") then
-			--print("look for AxeStone")
 			self.parent.GoFindThisCounter = 0
 			self.TargetItem = self.parent:FindThisNearBy("AxeStone", self.COT)
 		end
 		if (self.TargetItem == nil) and (self.itemtype == "Axe") then
-			--print("look for HandAxe")
 			self.parent.GoFindThisCounter = 0
 			self.TargetItem = self.parent:FindThisNearBy("HandAxe", self.COT)
 		end
-		--print("done FindThisNearBy:"..tostring(self.TargetItem))
 	end
 
 	if (self.TargetItem == nil) then
@@ -126,12 +120,9 @@ function FindThisTask:update()
 	end
 
 	if (not targetSquare) then
-		print("error cannot locate location of returned item")
-		--self.Complete = true
 		self.TargetItem = nil
 		return false
 	else
-		--self.parent:Speak("here i am")
 		distance = getDistanceBetween(targetSquare, self.parent:Get())
 
 		if (distance > 2.0) or (targetSquare:getZ() ~= self.parent:Get():getZ()) then
@@ -196,7 +187,6 @@ function FindThisTask:update()
 							end
 						end
 					else
-						self.parent:DebugSay("FindThisTask is about to trigger a StopWalk! ")
 						self.parent:StopWalk()
 						ISTimedActionQueue.add(ISInventoryTransferAction:new(self.parent.player, self.TargetItem,
 							self.TargetItem:getContainer(), self.BagToPutIn, 20))

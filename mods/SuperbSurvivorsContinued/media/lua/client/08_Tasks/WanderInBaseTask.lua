@@ -1,7 +1,10 @@
 WanderInBaseTask = {}
 WanderInBaseTask.__index = WanderInBaseTask
 
+local isLocalLoggingEnabled = false;
+
 function WanderInBaseTask:new(superSurvivor)
+	CreateLogLine("WanderInBaseTask", isLocalLoggingEnabled, "function: WanderInBaseTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -12,8 +15,6 @@ function WanderInBaseTask:new(superSurvivor)
 	o.OnGoing = true
 	o.Group = nil
 	o.UpdateCount = 0
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -32,6 +33,7 @@ function WanderInBaseTask:isValid()
 end
 
 function WanderInBaseTask:update()
+	CreateLogLine("WanderInBaseTask", isLocalLoggingEnabled, "function: WanderInBaseTask:update() called");
 	if self.parent:getGroupID() ~= nil then
 		self.Group = SSGM:Get(self.parent:getGroupID())
 	end
@@ -43,7 +45,7 @@ function WanderInBaseTask:update()
 		if (sq ~= nil) then
 			self.parent:walkTo(sq);
 		else
-			print("error getting walk sq")
+			CreateLogLine("WanderInBaseTask", isLocalLoggingEnabled, "error getting walk sq");
 		end
 	end
 

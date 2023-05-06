@@ -4,6 +4,7 @@ DoctorTask.__index = DoctorTask
 local isLocalLoggingEnabled = false;
 
 function DoctorTask:new(superSurvivor)
+	CreateLogLine("DoctorTask", isLocalLoggingEnabled, "DoctorTask:new() Called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -14,7 +15,6 @@ function DoctorTask:new(superSurvivor)
 	o.OnGoing = false
 	o.Complete = false
 	o.ReturnSquare = superSurvivor:Get():getCurrentSquare()
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -100,8 +100,7 @@ function DoctorTask:update()
 					local rippedsheets = doctor:getInventory():FindAndReturn("RippedSheets")
 					if (rippedsheets == nil) then rippedsheets = doctor:getInventory():AddItem("Base.RippedSheets") end
 
-					foundbodypartneedingtreatment = true
-					self.parent:DebugSay("DoctorTask is about to trigger a StopWalk! ")
+					foundbodypartneedingtreatment = true;
 					self.parent:StopWalk()
 					if treatment == "Splint" then
 						self.parent:RoleplaySpeak(getActionText("DoctorSplint"))

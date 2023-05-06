@@ -1,7 +1,10 @@
 LockDoorsTask = {}
 LockDoorsTask.__index = LockDoorsTask
 
+local isLocalLoggingEnabled = false;
+
 function LockDoorsTask:new(superSurvivor, lock)
+	CreateLogLine("LockDoorsTask", isLocalLoggingEnabled, "function: LockDoorsTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -14,8 +17,6 @@ function LockDoorsTask:new(superSurvivor, lock)
 	o.TargetSquare = nil
 	o.PreviousSquare = nil
 	o.Complete = false
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -33,7 +34,7 @@ function LockDoorsTask:isValid()
 end
 
 function LockDoorsTask:update()
-	--	if(self.parent.DebugMode) then print(self:getName().."LockDoorsTask update") end
+	CreateLogLine("LockDoorsTask", isLocalLoggingEnabled, "function: LockDoorsTask:update() called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) then
@@ -42,14 +43,11 @@ function LockDoorsTask:update()
 		if (building ~= nil) then
 			door = GetUnlockedDoor(building, self.parent.player)
 			if (not door) then
-				self.parent:DebugSay("door NOT found")
+				CreateLogLine("LockDoorsTask", isLocalLoggingEnabled, "No door found...");
 				self.Complete = true
 				return false
-			else
-				self.parent:DebugSay("door found")
 			end
 		else
-			self.parent:DebugSay("building nil")
 			self.Complete = true
 			return false
 		end
@@ -58,13 +56,11 @@ function LockDoorsTask:update()
 		local distance = getDistanceBetween(self.parent.player, GetDoorsInsideSquare(door));
 
 		if (distance > 2) or (self.parent.player:getZ() ~= door:getZ()) then
-			self.parent:DebugSay("walking to door")
 			self.parent:walkToDirect(GetDoorsInsideSquare(door))
 		else
 			if (door:IsOpen()) then
 				door:ToggleDoor(self.parent.player)
 			else
-				self.parent:DebugSay("locking door")
 				self.parent.player:getEmitter():playSound("LockDoor", false);
 				door:setIsLocked(true)
 			end

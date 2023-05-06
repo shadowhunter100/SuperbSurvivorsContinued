@@ -1,3 +1,5 @@
+require "07_UI/SuperSurvivorWindow";
+
 --****************************************************
 -- PanelHeader
 --****************************************************
@@ -117,14 +119,14 @@ end
 function PanelBaseInfo:on_click_set()
     local area_to_edit = (self.area_name == "Bounds") and "BaseArea" or self.area_name
     SelectingArea(0, area_to_edit, 1)
-    survivor_panels[2]:dupdate()
+    SurvivorPanels[2]:dupdate()
     self:dupdate()
 end
 
 function PanelBaseInfo:on_click_cancel()
     local area_to_edit = (self.area_name == "Bounds") and "BaseArea" or self.area_name
     SelectingArea(0, area_to_edit, 0)
-    survivor_panels[2]:dupdate()
+    SurvivorPanels[2]:dupdate()
     self:dupdate()
 end
 
@@ -143,7 +145,7 @@ function PanelBaseInfo:on_click_save()
         self.group.GroupAreas[self.area_name][4] = tonumber(self.textbox_y2:getText())
         self.group.GroupAreas[self.area_name][5] = tonumber(self.textbox_z:getText())
     end
-    survivor_panels[2]:dupdate()
+    SurvivorPanels[2]:dupdate()
     self:dupdate()
 end
 
@@ -164,7 +166,7 @@ function PanelBaseInfo:on_click_clear()
         self.group.GroupAreas[self.area_name][5] = 0
         base_area_visibility[self.area_name].button_title = "show"
     end
-    survivor_panels[2]:dupdate()
+    SurvivorPanels[2]:dupdate()
     self:dupdate()
 end
 

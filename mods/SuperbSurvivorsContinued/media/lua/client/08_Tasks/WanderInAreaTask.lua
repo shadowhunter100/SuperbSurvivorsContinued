@@ -1,7 +1,10 @@
 WanderInAreaTask = {}
 WanderInAreaTask.__index = WanderInAreaTask
 
+local isLocalLoggingEnabled = false;
+
 function WanderInAreaTask:new(superSurvivor, thisArea)
+	CreateLogLine("WanderInAreaTask", isLocalLoggingEnabled, "function: WanderInAreaTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -11,8 +14,6 @@ function WanderInAreaTask:new(superSurvivor, thisArea)
 	o.parent = superSurvivor
 	o.Name = "Wander In Area"
 	o.OnGoing = true
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -31,6 +32,7 @@ function WanderInAreaTask:isValid()
 end
 
 function WanderInAreaTask:update()
+	CreateLogLine("WanderInAreaTask", isLocalLoggingEnabled, "function: WanderInAreaTask:update() called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) and (ZombRand(4) == 0) then
@@ -38,7 +40,7 @@ function WanderInAreaTask:update()
 		if (sq ~= nil) then
 			self.parent:walkTo(sq);
 		else
-			print("error getting walk sq")
+			CreateLogLine("WanderInAreaTask", isLocalLoggingEnabled, "error getting walk sq");
 		end
 	end
 end

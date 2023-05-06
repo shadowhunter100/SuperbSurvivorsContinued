@@ -30,8 +30,6 @@ function SuperSurvivorGroupManager:getCount()
 end
 
 function SuperSurvivorGroupManager:newGroup()
-	self:Print()
-
 	local groupID = self.GroupCount
 	for i = 0, self.GroupCount do
 		if (self.Groups[i]) and (self.Groups[i]:getID() >= groupID) then
@@ -52,20 +50,12 @@ function SuperSurvivorGroupManager:Save()
 	end
 end
 
-function SuperSurvivorGroupManager:Print()
-	print("printing groups, groupcount:" .. tostring(self.GroupCount))
-
-	for i = 0, self.GroupCount do
-		if (self.Groups[i]) then self.Groups[i]:Print() end
-	end
-end
 
 function SuperSurvivorGroupManager:Load()
 	if (DoesFileExist("SurvivorGroup0.lua")) then -- only load if any groups detected at all
 		self.GroupCount = 0
-		print("loading groups")
+		
 		while DoesFileExist("SurvivorGroup" .. tostring(self.GroupCount) .. ".lua") do
-			print("loading group#" .. tostring(self.GroupCount))
 			local newGroup = self:newGroup()
 			newGroup:Load()
 		end

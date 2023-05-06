@@ -1,12 +1,14 @@
 SurenderTask = {}
 SurenderTask.__index = SurenderTask
 
+local isLocalLoggingEnabled = false;
+
 function SurenderTask:new(superSurvivor, enemy)
+	CreateLogLine("SurenderTask", isLocalLoggingEnabled, "function: SurenderTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
 
-	superSurvivor:DebugSay("SurenderTask is about to trigger a StopWalk! ")
 	superSurvivor:StopWalk()
 	o.parent = superSurvivor
 	o.Name = "Surender"
@@ -38,7 +40,7 @@ function SurenderTask:isComplete()
 					and IsoPlayer.getCoopPVP()))
 			and getDistanceBetween(self.parent.player, self.enemy.player) < 6)
 		and (self.NowSafeTicks < 12));
-	print("SurenderTask:isComplete:" .. tostring(result))
+
 	return result
 end
 

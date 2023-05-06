@@ -1,7 +1,10 @@
 HoldStillTask = {}
 HoldStillTask.__index = HoldStillTask
 
+local isLocalLoggingEnabled = false;
+
 function HoldStillTask:new(superSurvivor, playerInitiated)
+	CreateLogLine("HoldStillTask", isLocalLoggingEnabled, "function: HoldStillTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -14,7 +17,6 @@ function HoldStillTask:new(superSurvivor, playerInitiated)
 	o.Ticks = 0
 	o.Spoke = false
 	o.Complete = false
-	o.parent:DebugSay("HoldStillTask is about to trigger a StopWalk! ")
 	o.parent:StopWalk()
 	o.parent:setWalkingPermitted(false)
 	o.playerMoved = false
@@ -58,7 +60,6 @@ function HoldStillTask:update()
 	end
 
 	if (self.parent:isInAction()) then
-		self.parent:DebugSay("HoldStillTask is about to trigger a StopWalk! Path B")
 		self.parent:StopWalk()
 	end
 end

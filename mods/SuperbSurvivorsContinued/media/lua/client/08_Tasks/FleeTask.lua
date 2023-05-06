@@ -17,7 +17,6 @@ end
 function FleeTask:isComplete()
 	if (self.parent:getDangerSeenCount() == 0) or self.parent:needToFollow() then
 		self.parent:StopWalk()
-		--print(self:getName().."stopping walking7")
 		self.parent:setRunning(false)
 		return true
 	else

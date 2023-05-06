@@ -4,6 +4,7 @@ GatherWoodTask.__index = GatherWoodTask
 local isLocalLoggingEnabled = false;
 
 function GatherWoodTask:new(superSurvivor, BringHere)
+	CreateLogLine("GatherWoodTask", isLocalLoggingEnabled, "function: GatherWoodTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -17,8 +18,6 @@ function GatherWoodTask:new(superSurvivor, BringHere)
 	o.Target = nil
 	o.CarryingToPoint = false
 	o.Complete = false
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

@@ -1,7 +1,10 @@
 FirstAideTask = {}
 FirstAideTask.__index = FirstAideTask
 
+local isLocalLoggingEnabled = false;
+
 function FirstAideTask:new(superSurvivor)
+	CreateLogLine("FirstAideTask", isLocalLoggingEnabled, "function: FirstAideTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -14,7 +17,6 @@ function FirstAideTask:new(superSurvivor)
 	o.Ticks = 0
 	o.WorkingBP = nil
 	o.WorkingItem = nil
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 	return o
 end
 
@@ -27,8 +29,9 @@ function FirstAideTask:isComplete()
 end
 
 function FirstAideTask:isValid()
+	CreateLogLine("FirstAideTask", isLocalLoggingEnabled, "function: FirstAideTask:isValid() called");
 	if (not self.parent) or (not self.parent:HasInjury()) then
-		print(self.parent:getName() .. ": First aide task not valid")
+		CreateLogLine("FirstAideTask", isLocalLoggingEnabled, self.parent:getName() .. ": First aide task not valid");
 		return false
 	else
 		return true
@@ -36,9 +39,9 @@ function FirstAideTask:isValid()
 end
 
 function FirstAideTask:update()
+	CreateLogLine("FirstAideTask", isLocalLoggingEnabled, "function: FirstAideTask:update() called");
 	if (not self:isValid()) then return false end
 	if (not self.parent:isInAction() == false) then
-		print("is in action")
 		return false
 	end
 
@@ -54,11 +57,8 @@ function FirstAideTask:update()
 			item = self.parent.player:getInventory():getItemFromType("RippedSheets")
 			if (item == nil) then item = self.parent.player:getInventory():AddItem("Base.RippedSheets") end
 			self.WorkingItem = item;
-			--print(self.parent:getName()..": adding apply bandage TA")
-			self.parent:DebugSay("FirstAideTask is about to trigger a StopWalk! Path B")
 			self.parent:StopWalk()
 			self.myTimedAction = ISApplyBandage:new(self.parent.player, self.parent.player, item, bp, true)
-			if (not self.myTimedAction) then print("failed to create timed action apply bandage") end
 			ISTimedActionQueue.add(self.myTimedAction)
 			self.parent:Wait(3)
 			break
@@ -73,13 +73,10 @@ function FirstAideTask:update()
 			playerObj:setAnimVariable("BandageType", "UpperBody")
 			playerObj:setOverrideHandModels(nil, nil);
 		end
-		--print("startomg force performing stuck first aide task")
 	elseif (self.Ticks > 20) then
-		--o.myTimedAction:perform()
 		self.parent:Get():getBodyDamage():SetBandaged(self.WorkingBP:getIndex(), true, 50, self.WorkingItem:isAlcoholic(),
 			self.WorkingItem:getModule() .. "." .. self.WorkingItem:getType());
 		self.parent:Get():getInventory():Remove(self.item)
-		--print("force performing stuck first aide task")
 		self.Ticks = 0
 	end
 end

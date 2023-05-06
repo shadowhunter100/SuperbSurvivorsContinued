@@ -1,7 +1,10 @@
 WashSelfTask = {}
 WashSelfTask.__index = WashSelfTask
 
+local isLocalLoggingEnabled = false;
+
 function WashSelfTask:new(superSurvivor)
+	CreateLogLine("WashSelfTask", isLocalLoggingEnabled, "function: WashSelfTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -19,7 +22,6 @@ function WashSelfTask:new(superSurvivor)
 	o.Complete = false
 	o.WasSuccessful = false
 
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 	superSurvivor:RoleplaySpeak(getActionText("LookForItem_Before") .. "Wash Water" .. getActionText("LookForItem_After"))
 	return o
 end
@@ -37,21 +39,19 @@ function WashSelfTask:getWasSuccessful()
 end
 
 function WashSelfTask:update()
+	CreateLogLine("WashSelfTask", isLocalLoggingEnabled, "function: WashSelfTask:update() called");
 	if (getSpecificPlayer(0):isAsleep()) then return false end
 	if (not self:isValid()) or self.parent:getDangerSeenCount() > 0 then
-		--self.parent:Speak("completing")
 		self.Complete = true
 		return false
 	end
 
 	if (self.parent:isInAction()) then
-		--self.parent:Speak("waiting for non action")
 		return false
 	end
 
 
 	if (self.TargetItem == nil) then
-		--print("going to WashSelfNearBy:"..self.itemtype)
 		self.TargetItem = self.parent:FindThisNearBy("WashWater", "Category")
 	end
 
@@ -75,8 +75,7 @@ function WashSelfTask:update()
 	end
 
 	if (not targetSquare) then
-		print("error cannot locate location of returned item")
-		--self.Complete = true
+		CreateLogLine("WashSelfTask", isLocalLoggingEnabled, "error cannot locate targetSquare");
 		self.TargetItem = nil
 		self.Complete = true
 		return false

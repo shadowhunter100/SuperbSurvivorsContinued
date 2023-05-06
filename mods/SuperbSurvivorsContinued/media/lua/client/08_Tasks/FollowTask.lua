@@ -1,7 +1,11 @@
 FollowTask = {}
 FollowTask.__index = FollowTask
 
+local isLocalLoggingEnabled = false;
+
 function FollowTask:new(superSurvivor, FollowMeplayer)
+	CreateLogLine("FollowTask", isLocalLoggingEnabled, "function: FollowTask:new() called");
+
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -34,12 +38,9 @@ function FollowTask:new(superSurvivor, FollowMeplayer)
 	o.FollowDistanceOffset = 0
 
 	if (o.group ~= nil) then
-		--o.FollowDistanceOffset = ((o.group:getFollowCount()-1) * 3)
 		o.FollowDistanceOffset = 0
-		print(superSurvivor:getName() .. ": setting distance offset to " .. tostring(o.FollowDistanceOffset))
 	end
 
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 	return o
 end
 
@@ -63,8 +64,11 @@ function FollowTask:needToFollow()
 	if self.Complete == true or self.parent == nil or self.FollowChar == nil or self.FollowChar:getCurrentSquare() == nil then return false end
 
 	local distance = getDistanceBetween(self.parent.player, self.FollowChar)
-	if (distance > GFollowDistance + self.FollowDistanceOffset) or (self.parent:getBuilding() ~= self.FollowChar:getCurrentSquare():getBuilding()) or self.parent:Get():getVehicle() or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle()) then
-		--	if (distance > GFollowDistance - (Option_FollowDistance / self.FollowDistanceOffset ) ) or (self.parent:getBuilding() ~= self.FollowChar:getCurrentSquare():getBuilding()) or self.parent:Get():getVehicle() or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle() ) then
+	if (distance > GFollowDistance + self.FollowDistanceOffset)
+		or (self.parent:getBuilding() ~= self.FollowChar:getCurrentSquare():getBuilding())
+		or self.parent:Get():getVehicle()
+		or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle())
+	then
 		self.parent:NPC_ERW_AroundMainPlayer(Option_FollowDistance) -- ERW stands for 'EnforceRunWalk'
 		return true
 	else
@@ -92,13 +96,12 @@ function FollowTask:isDoorClaimed(tempDoor)
 end
 
 function FollowTask:update()
+	CreateLogLine("FollowTask", isLocalLoggingEnabled, "function: FollowTask:update() called");
 	if (not self:isValid()) then return false end
 
 	local distance = getDistanceBetween(self.parent.player, self.FollowChar)
-	--if(distance > self.LastDistance) then self.parent:StopWalk() end
 
-	self.parent:setSneaking(self.FollowChar:isSneaking()) -- sneaking if perosn you follow is
-	--print(self.parent:getName()..": isInAction = "..tostring(self.parent:isInAction()))
+	self.parent:setSneaking(self.FollowChar:isSneaking()) -- sneaking if person you follow is
 
 	-- they keep talking
 	if (ZombRand(70) == 0) and (not NoIdleChatter) then
@@ -117,61 +120,40 @@ function FollowTask:update()
 			self.parent:Speak(getActionText("WeBackToBase"))
 		end
 
-		-- Option_FollowDistance is replacing the "+5" that it normally defaults to, to the in game settings
-		-- U7 - Moving that variable to the NPC_ERW_AroundMainPlayer function.
-		--		if (distance > (GFollowDistance+self.FollowDistanceOffset+5)) or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle()) then
-		--[[ Nolan: this does not appear to work at all, follower never runs. reverting to old code for now
-		if (distance < (GFollowDistance+self.FollowDistanceOffset + (Option_FollowDistance / 5 ) )) or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle()) then
-			self.parent:setRunning(false)
-			self.parent:NPC_EnforceWalkNearMainPlayer() -- New
-		else
-			if (distance - (Option_FollowDistance / self.FollowDistanceOffset ) >= (GFollowDistance+self.FollowDistanceOffset )) then
-				self.parent:setRunning(true)
-				print("self.parent:setRunning(true)")
-			end
-		end
-		]]
-		--old code
 		if (distance > (GFollowDistance + self.FollowDistanceOffset + 5)) or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle()) then
 			self.parent:setRunning(true)
 		else
 			self.parent:setRunning(false)
 		end
 
-
-
 		local ropeSquare = nil
 		if (self.FollowChar:getZ() > self.parent.player:getZ()) and (self.parent:isInSameBuilding(self.FollowChar) == false) then
 			ropeSquare = self.parent:findNearestSheetRopeSquare(false)
 			if (ropeSquare) then
-				--luautils.walkAdj(self.parent.player, ropeSquare)
 				ISTimedActionQueue.add(ISWalkToTimedAction:new(self.parent.player, ropeSquare))
 				ISTimedActionQueue.add(ISClimbSheetRopeAction:new(self.parent.player, false))
 				self.parent:Wait(4)
 			else
-				--self.parent:Speak("no rope square")
+				CreateLogLine("FollowTask", isLocalLoggingEnabled, "no rope square");
 			end
 		elseif (self.FollowChar:getZ() < self.parent.player:getZ()) and (self.parent:isInSameBuilding(self.FollowChar) == false) then
 			ropeSquare = self.parent:findNearestSheetRopeSquare(true)
 			if (ropeSquare) then
-				--self.parent:Speak("here i am")
 				local window = GetSquaresNearWindow(ropeSquare)
 				if (window) then
-					self.parent:DebugSay("FollowTask is about to trigger a StopWalk! Path A")
 					self.parent:StopWalk()
 					local indoorSquare = window:getIndoorSquare()
 					ISTimedActionQueue.add(ISWalkToTimedAction:new(self.parent.player, indoorSquare))
 					ISTimedActionQueue.add(ISClimbThroughWindow:new(self.parent.player, window, 20))
-					--ISTimedActionQueue.add(ISClimbSheetRopeAction:new(self.parent.player, true))
 					self.parent:Wait(4)
 				end
 			else
-				--self.parent:Speak("no rope square")
+				CreateLogLine("FollowTask", isLocalLoggingEnabled, "no rope square");
 			end
 		end
 
 		if not ropeSquare then
-			--print(self.parent:getName()..tostring(self.FollowChar:getVehicle() ~= nil) .. " and " .. tostring(self.parent:Get():getVehicle() == nil))
+
 			if (distance > (GFollowDistance + self.FollowDistanceOffset)) and (self.parent:Get():getVehicle() == nil) then
 				local gotosquare = self.FollowChar:getCurrentSquare()
 				if (gotosquare ~= nil) then
@@ -181,11 +163,8 @@ function FollowTask:update()
 						self.parent.TargetBuilding = nil
 					end
 					self.parent:walkTo(gotosquare)
-					--self.parent.player:getPathFindBehavior2():pathToCharacter(self.FollowChar)
-					--self.parent.player:Say("walkTo")
 				end
 			elseif (self.FollowChar:getVehicle() ~= nil) and (self.parent:Get():getVehicle() == nil) then
-				print(self.parent:getName() .. " get in car")
 				local car = self.FollowChar:getVehicle()
 				self.MySeat = -1
 				local doorseat = -1
@@ -193,15 +172,14 @@ function FollowTask:update()
 				local lastgoodDoorDistance = 999
 				local tempDoor = nil
 				local numOfSeats = car:getScript():getPassengerCount()
-				print(self.parent:getName() .. "number of seats: " .. tostring(numOfSeats))
+				
 				for seat = numOfSeats - 1, 1, -1 do
 					tempDoor = car:getPassengerDoor(seat)
 					if (not tempDoor) then tempDoor = car:getPassengerDoor2(seat) end
-					--tempDoor = car:getClosestWindow(self.parent.player)
 
 					local tempdistance = getDistanceBetween(tempDoor, self.parent.player)
 					if (tempDoor ~= nil) then
-						print("seat#" .. tostring(seat) .. " door is " .. tostring(tempDoor:getId()))
+						
 						if (lastgoodDoor == nil) or (ZombRand(2) == 1) then
 							lastgoodDoor = tempDoor
 							--car.lol()
@@ -211,12 +189,10 @@ function FollowTask:update()
 					end
 					if (self.MySeat == -1) and (car:isSeatOccupied(seat) == false) then
 						self.MySeat = seat
-						print(self.parent:getName() .. "my seat is " .. tostring(seat))
 					end
 					if (doorseat ~= -1) and (self.MySeat ~= -1) then break end
 				end
-				print("door seat is " .. tostring(doorseat))
-				print(self.parent:getName() .. tostring(self.MySeat) .. "," .. tostring(lastgoodDoor))
+
 				if (self.MySeat ~= -1) then
 					local doorsquare
 
@@ -225,8 +201,6 @@ function FollowTask:update()
 					if (doorsquare ~= nil) then
 						self.parent:StopWalk()
 						local distance = getDistanceBetween(self.parent.player, doorsquare)
-						print(self.parent:getName() ..
-							": adding enter vehicle timed actions and waiting, dist:" .. tostring(distance))
 
 						if (distance > 3) then
 							ISTimedActionQueue.add(ISWalkToTimedAction:new(self.parent:Get(), doorsquare))

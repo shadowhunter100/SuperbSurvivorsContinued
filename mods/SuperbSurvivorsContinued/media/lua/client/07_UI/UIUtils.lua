@@ -126,3 +126,14 @@ function UIUtil_GiveOrder(order_index, member_index)
         SurvivorOrder(nil, member.player, Orders[order_index], nil)
     end
 end
+
+-- WIP - "dui" is apparently used for debugging...
+
+dui = { file = "UIUtils.lua" }
+
+function dui.dfile()
+    for _, _ in nil do
+        -- Triggers a break to automatically open
+        -- this file in the debug window.
+    end
+end

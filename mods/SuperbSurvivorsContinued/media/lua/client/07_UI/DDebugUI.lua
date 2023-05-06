@@ -1,6 +1,10 @@
+require "07_UI/UIUtils";
+
 local debug_mode = false
 local context_options = {}
 ddbugui = {}
+
+local isLocalLoggingEnabled = false;
 
 context_options.show_context_menu_file = function(debug_table)
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
@@ -225,7 +229,7 @@ ddui = { file = "DDebugUI.lua" }
 table.insert(ddbugui, 1, ddui)
 table.insert(ddbugui, 2, dssi)
 table.insert(ddbugui, 3, dssip)
-table.insert(ddbugui, 4, dui)
+table.insert(ddbugui, 4, dui) -- WIP - "dui" is undefined...
 table.insert(ddbugui, 5, dssw)
 table.insert(ddbugui, 6, dssbp)
 table.insert(ddbugui, 7, dssl)
@@ -238,13 +242,10 @@ function ddui.dfile()
 end
 
 function ddui.dbug()
-    print("=================")
-    print("ddui::dbug")
+	CreateLogLine("DDebugUI", isLocalLoggingEnabled, "ddui.dbug() called");
     remove_panel_debug()
-    print("remove_panel_debug()")
     create_panel_debug()
     ddbugui = {}
-    print("create_panel_debug()")
     table.insert(ddbugui, 1, ddui)
     table.insert(ddbugui, 2, dssi)
     table.insert(ddbugui, 3, dssip)
@@ -252,7 +253,6 @@ function ddui.dbug()
     table.insert(ddbugui, 5, dssw)
     table.insert(ddbugui, 6, dssbp)
     table.insert(ddbugui, 7, dssl)
-    print("=================")
 end
 
 --****************************************************

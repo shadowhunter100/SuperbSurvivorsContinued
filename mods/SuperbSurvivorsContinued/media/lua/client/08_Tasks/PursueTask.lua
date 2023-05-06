@@ -1,7 +1,10 @@
 PursueTask = {}
 PursueTask.__index = PursueTask
 
+local isLocalLoggingEnabled = false;
+
 function PursueTask:new(superSurvivor, target)
+	CreateLogLine("PursueTask", isLocalLoggingEnabled, "function: PursueTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -31,23 +34,11 @@ function PursueTask:new(superSurvivor, target)
 		o.parent:reEquipGun()
 	end
 
-	--	o.parent:DebugSay(tostring(o.parent:getCurrentTask()).." Started!" )
-
 	return o
 end
 
 function PursueTask:OnComplete()
 	if (self.SwitchBackToMele) then self.parent:reEquipMele() end
-
-	--if (self.parent.LastEnemeySeen ~= nil) and (self.parent.player ~= nil) then
-	--	local theDistance = getDistanceBetween(self.parent.LastEnemeySeen, self.parent.player)
-	--	local minrange = self.parent:getMinWeaponRange()
-	--	
-	--	if (theDistance <= minrange) then
-	--		self.parent:StopWalk()
-	--		self.parent:DebugSay("Pursure done")
-	--	end
-	--end
 end
 
 function PursueTask:isComplete()
@@ -71,12 +62,11 @@ function PursueTask:update()
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
 
-	if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
-		if (self.parent:needToReadyGun(weapon)) then
+	if self.parent:hasGun() then               -- Despite the name, it means 'has gun in the npc's hand'
+		if (self.parent:needToReadyGun(weapon)) then -- WIP - "weapo" is undefined...
 			self.parent:setRunning(false)
 			self.parent:ReadyGun(weapon)
 			self.parent:Wait(3) -- wait to allow reloading etc to finish
-			print(self.parent:getName() .. "returning false bc need to prep gun")
 			return false
 		end
 	end

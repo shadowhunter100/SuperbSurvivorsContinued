@@ -1,7 +1,10 @@
 PatrolTask = {}
 PatrolTask.__index = PatrolTask
 
+local isLocalLoggingEnabled = false;
+
 function PatrolTask:new(superSurvivor, square1, square2)
+	CreateLogLine("PatrolTask", isLocalLoggingEnabled, "function: PatrolTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -36,7 +39,6 @@ function PatrolTask:new(superSurvivor, square1, square2)
 	o.parent = superSurvivor
 	o.Name = "Patrol"
 	o.OnGoing = true
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 	return o
 end
 

@@ -1,7 +1,10 @@
 GuardTask = {}
 GuardTask.__index = GuardTask
 
+local isLocalLoggingEnabled = false;
+
 function GuardTask:new(superSurvivor, square)
+	CreateLogLine("GuardTask", isLocalLoggingEnabled, "function: GuardTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -10,8 +13,6 @@ function GuardTask:new(superSurvivor, square)
 	o.parent = superSurvivor
 	o.Name = "Guard"
 	o.OnGoing = true
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

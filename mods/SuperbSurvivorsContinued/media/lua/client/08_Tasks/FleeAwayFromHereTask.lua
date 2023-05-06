@@ -1,7 +1,10 @@
 FleeFromHereTask = {}
 FleeFromHereTask.__index = FleeFromHereTask
 
+local isLocalLoggingEnabled = false;
+
 function FleeFromHereTask:new(superSurvivor, fleeFromHere)
+	CreateLogLine("FleeAwayFromHereTask", isLocalLoggingEnabled, "function: FleeFromHereTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -11,8 +14,6 @@ function FleeFromHereTask:new(superSurvivor, fleeFromHere)
 	o.OnGoing = false
 	o.fleeFromHere = fleeFromHere
 	if o.parent.TargetBuilding ~= nil then o.parent:MarkAttemptedBuildingExplored(o.parent.TargetBuilding) end -- otherwise he just keeps running back to the building though the threat likely lingers there
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

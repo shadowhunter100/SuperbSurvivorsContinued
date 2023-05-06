@@ -1,7 +1,10 @@
 EatFoodTask = {}
 EatFoodTask.__index = EatFoodTask
 
+local isLocalLoggingEnabled = false;
+
 function EatFoodTask:new(superSurvivor, food)
+	CreateLogLine("EatFoodTask", isLocalLoggingEnabled, "EatFoodTask:new() Called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -21,7 +24,6 @@ function EatFoodTask:new(superSurvivor, food)
 	o.EatingStarted = false
 	o.OnGoing = false
 	o.eatthisMuch = 1.00
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -68,12 +70,12 @@ function EatFoodTask:openCanned(thisFood)
 	if (openCan ~= nil) then
 		return openCan
 	else
-		print("food type\"" .. dtype .. "\" Not found")
 		return self.parent:Get():getInventory():AddItem("Base.OpenBeans")
 	end
 end
 
 function EatFoodTask:update()
+	CreateLogLine("EatFoodTask", isLocalLoggingEnabled, "EatFoodTask:update() Called");
 	if (not self:isValid()) then
 		self.Complete = true
 		return false
@@ -119,15 +121,11 @@ function EatFoodTask:update()
 			else
 				self.eatthisMuch = 1.00
 			end
-			--print(self.parent:getName() .. " eat " .. tostring(hunger)..","..tostring(HungerChange)..","..tostring(self.eatthisMuch))
 
 			self.parent:RoleplaySpeak(getActionText("EatFood_Before") ..
 			self.TheFood:getDisplayName() .. getActionText("EatFood_After"));
-			self.parent:DebugSay("EatFoodTask is about to trigger a StopWalk! ")
-			self.parent:StopWalk()
+			self.parent:StopWalk();
 			ISTimedActionQueue.add(ISEatFoodAction:new(self.parent.player, self.TheFood, self.eatthisMuch))
-			--self.parent.player:getStats():setHunger(self.parent.player:getStats():getHunger() + self.TheFood:getHungChange());
-			--self.parent.player:getInventory():Remove(self.TheFood)	
 			self.EatingStarted = true
 		else
 			self.Complete = true
@@ -142,10 +140,7 @@ function EatFoodTask:update()
 			playerObj:setAnimVariable("FoodType", "can");
 			playerObj:setOverrideHandModels(nil, nil);
 		end
-		--print("startomg force performing stuck first aide task")
 	elseif (self.Ticks > 20) then
-		--percentage = self.percentage * percentage;
-		--self.character:Eat(self.TheFood,self.eatthisMuch)
 		self.Complete = true
 		self.parent:StopWalk()
 		self.Ticks = 0

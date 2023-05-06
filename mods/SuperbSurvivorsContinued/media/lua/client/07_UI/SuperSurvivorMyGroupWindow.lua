@@ -1,17 +1,20 @@
 GroupWindow = ISCollapsableWindow:derive("GroupWindow");
 
+local isLocalLoggingEnabled = false;
+
 function GroupWindow:initialise()
 	ISCollapsableWindow.initialise(self);
 end
 
 local function SSItemClickHandle()
+	CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "SSItemClickHandle() called");
 	local GID = SSM:Get(0):getGroupID()
 	local members = SSGM:Get(GID):getMembers()
 	local selected = tonumber(myGroupWindow:getSelected())
 	local member = members[selected]
-	--print("selected is:"..tostring(selected))
+
 	if (member) then
-		--getSpecificPlayer(0):Say(tostring(member:getName()))
+		CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, tostring(member:getName()));
 		mySurvivorInfoWindow:Load(member)
 		mySurvivorInfoWindow:setVisible(true)
 	end
@@ -24,7 +27,6 @@ function GroupWindow:new(x, y, width, height)
 	self.__index = self;
 	o.title = getContextMenuText("YourGroupMembers");
 	o.pin = false;
-	--o:noBackground();
 
 	return o;
 end
@@ -35,10 +37,9 @@ function GroupWindow:setText(newText)
 end
 
 function GroupWindow:getSelected()
-	--return self.HomeWindow.selected;
-	local index = self.HomeWindow.selected
-	--local index = self.HomeWindow.mouseoverselected
-	local item = self.HomeWindow.items[index]
+	local index = self.HomeWindow.selected;
+	local item = self.HomeWindow.items[index];
+
 	if (item) then
 		return item.item
 	else
@@ -47,15 +48,13 @@ function GroupWindow:getSelected()
 end
 
 function GroupWindow:setSelected(CodeName)
-	--for i,v in ipairs(self.HomeWindow.items) do
 	for i = 1, #self.HomeWindow.items do
 		local v = self.HomeWindow.items[i]
-		--print(tostring(v.item).. "==".. tostring(CodeName))
+
 		if v.item == CodeName then
 			self.HomeWindow.mouseoverselected = i
 			self.HomeWindow.selected = i
 			self.HomeWindow:ensureVisible(i)
-			--print("selected set to "..tostring(i))
 			return true
 		end
 	end
@@ -78,7 +77,7 @@ function GroupWindow:Update()
 	local Group = SSGM:Get(GID)
 
 	if (Group == nil) then
-		print("Fixing player has no group")
+		CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "Fixing player has no group...");
 		Group = SSGM:newGroup()
 		Group:addMember(SSM:Get(0), getContextMenuText("Job_Leader"))
 	end
@@ -87,10 +86,10 @@ function GroupWindow:Update()
 		MyGroupMembers = Group:getMembers()
 
 		if not Group:isMember(SSM:Get(0)) then
-			print("Fixing player not in own group")
+			CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "Fixing Player is not in own group...");
 			Group:addMember(SSM:Get(0), getContextMenuText("Job_Leader"))
 		elseif not Group:hasLeader() then
-			print("Fixing no group leader")
+			CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "Fixing no group leader...");
 			Group:setLeader(0)
 		end
 
@@ -104,18 +103,19 @@ function GroupWindow:Update()
 				role = " (" .. tostring(value:getGroupRole()) .. ")"
 			elseif (value.getName ~= nil) and ((value:isDead()) or (not value:saveFileExists())) then
 				name = value:getName()
-				role = " (" .. getText("IGUI_health_Deceased") .. ")"
-				print("removing loaded survivor (" ..
-				name .. ") from group by obj bc no save file detected or isDead was true[" ..
-				tostring(value:isDead()) .. "]")
-				print("pre removal members count is:" .. tostring(Group:getMemberCount()))
+				role = " (" .. getText("IGUI_health_Deceased") .. ")";
+
+				CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "removing loaded survivor (" ..
+					name .. ") from group by obj bc no save file detected or isDead was true[" ..
+					tostring(value:isDead()) .. "]"
+				);
 				Group:removeMember(value:getID())
-				print("post removal members count is:" .. tostring(Group:getMemberCount()))
 			elseif (value.getName ~= nil) and (value:isInCell() == false) then
 				name = value:getName()
 				local coords = GetCoordsFromID(value:getID())
 				if (coords == 0) then
-					print("re-loading survivor who has no loc on survivor map")
+					CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled,
+						"re-loading survivor who has no loc on survivor map");
 					SSM:LoadSurvivor(value:getID(), getSpecificPlayer(0):getCurrentSquare())
 					coords = "re-loaded!"
 				end
@@ -123,17 +123,17 @@ function GroupWindow:Update()
 			elseif (not checkSaveFileExists("Survivor" .. tostring(value))) then
 				name = getContextMenuText("MIASurvivor") .. "[" .. tostring(value) .. "]"
 				role = " (" .. getText("IGUI_health_Deceased") .. ")"
-				Group:Print()
-				print("removing unloaded survivor " .. tostring(value) .. " from group by id bc no save file detected")
-				--print("pre removal members count is:" .. tostring(Group:getMemberCount()))
+				CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "removing unloaded survivor "
+					.. tostring(value)
+					.. " from group by id bc no save file detected"
+				);
 				Group:removeMember(value)
-				--print("post removal members count is:" .. tostring(Group:getMemberCount()))
-				--Group:Print()
 			else
 				name = getContextMenuText("MIASurvivor") .. "[" .. tostring(value) .. "]"
 				local coords = GetCoordsFromID(value)
 				if (coords == 0) then
-					print("re-loading survivor who has no loc on survivor map")
+					CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled,
+						"re-loading survivor who has no loc on survivor map");
 					SSM:LoadSurvivor(value, getSpecificPlayer(0):getCurrentSquare())
 					coords = "re-loaded!"
 				end
@@ -148,7 +148,7 @@ function GroupWindow:Update()
 		local base = ""
 		if (baseloc ~= nil) then base = tostring(baseloc:getX()) .. "," .. tostring(baseloc:getY()) end
 		self:setHeaderText(getContextMenuText("BaseLocation") ..
-		"(" .. getSpecificPlayer(0):getModData().Group .. "): " .. base)
+			"(" .. getSpecificPlayer(0):getModData().Group .. "): " .. base)
 	end
 
 	self.HomeWindow:sort()

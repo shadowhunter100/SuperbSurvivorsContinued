@@ -1,8 +1,12 @@
 DialogueTask = {}
 DialogueTask.__index = DialogueTask
 
+local isLocalLoggingEnabled = false;
+
 function DialogueTask:new(superSurvivor, TalkToMe, Dialogue, isYesOrNoQuestion, Trigger, YesResultActions,
 						  NoResultActions, ContinueResultActions, useWindowDialogue)
+	CreateLogLine("DialogueTask", isLocalLoggingEnabled, "DialogueTask:new() Called");
+
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -29,12 +33,10 @@ function DialogueTask:new(superSurvivor, TalkToMe, Dialogue, isYesOrNoQuestion, 
 	o.Dialogue = Dialogue
 
 	if (isYesOrNoQuestion) and (YesResultActions == nil) then
-		print("Warning: YesResultActions=nil on question dialogue!")
+		CreateLogLine("DialogueTask", isLocalLoggingEnabled, "Warning: YesResultActions=nil on question dialogue!");
 	end
 
 	if (not o.Dialogue) then return nil end
-
-
 
 	return o
 end
@@ -48,7 +50,6 @@ function DialogueTask:isComplete()
 			self.parent.HasQuestion = true
 			self.parent.NoResultActions = self.NoResultActions --
 			self.parent.YesResultActions = self.YesResultActions -- 			
-			print("set QuestionTrigger moddata onto " .. tostring(self.parent:getName()))
 		end
 		return true
 	else
@@ -65,6 +66,7 @@ function DialogueTask:isValid()
 end
 
 function DialogueTask:update()
+	CreateLogLine("DialogueTask", isLocalLoggingEnabled, "DialogueTask:update() Called");
 	if (not self:isValid()) then return false end
 
 	if (self.parent:isInAction() == false) then
@@ -72,7 +74,6 @@ function DialogueTask:update()
 		if (distance > 1.8) then
 			self.parent:walkTo(self.Aite:getCurrentSquare())
 		else
-			self.parent:DebugSay("DialogueTask is about to trigger a StopWalk! ")
 			self.parent:StopWalk()
 			self.parent.player:faceThisObject(self.Aite)
 

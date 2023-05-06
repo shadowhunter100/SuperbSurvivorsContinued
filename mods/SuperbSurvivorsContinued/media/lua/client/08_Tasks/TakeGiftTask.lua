@@ -1,7 +1,10 @@
 TakeGiftTask = {}
 TakeGiftTask.__index = TakeGiftTask
 
+local isLocalLoggingEnabled = false;
+
 function TakeGiftTask:new(superSurvivor, gift)
+	CreateLogLine("TakeGiftTask", isLocalLoggingEnabled, "function: TakeGiftTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -17,8 +20,6 @@ function TakeGiftTask:new(superSurvivor, gift)
 	o.OnGoing = false
 	o.Ticks = 0
 	o.Complete = false
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end
@@ -84,23 +85,18 @@ function TakeGiftTask:update()
 
 				local itemType = self.TheGift:getType()
 
-
-
 				if self.TheGift:getCategory() == "Container" then
 					self.parent:getBag():Remove(self.TheGift)
 					self.parent:Get():getInventory():AddItem(self.TheGift)
 					self.parent:RoleplaySpeak(getActionText("SD_EquipsArmor"))
 					self.parent.player:setClothingItem_Back(self.TheGift)
 				elseif instanceof(self.TheGift, "Clothing") then
-					print("gift clothing body location is:" .. tostring(self.TheGift:getBodyLocation()))
 					self.parent:getBag():Remove(self.TheGift)
 					self.parent:Get():getInventory():AddItem(self.TheGift)
 					self.parent:RoleplaySpeak(getActionText("EquipsArmor"))
 					self.parent:WearThis(self.TheGift)
 				end
 			else
-				self.parent:DebugSay("ThreatenTask is about to trigger a StopWalk! ")(
-				"TakeGiftTask is about to trigger a StopWalk! ")
 				self.parent:StopWalk()
 				ISTimedActionQueue.add(ISInventoryTransferAction:new(self.parent.player, self.TheGift,
 					self.TheGift:getContainer(), self.parent:getBag(), 20))

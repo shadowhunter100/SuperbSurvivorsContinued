@@ -1,7 +1,10 @@
 TaskManager = {}
 TaskManager.__index = TaskManager
 
+local isLocalLoggingEnabled = false;
+
 function TaskManager:new(superSurvivor)
+	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -25,17 +28,18 @@ function TaskManager:setTaskUpdateLimit(toValue)
 end
 
 function TaskManager:AddToTop(newTask)
+	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:AddToTop() called");
 	if (newTask == nil) then return false end
 
-	self.LastLastTask = LastTask
+	self.LastLastTask = LastTask -- WIP - undefined global...
 	self.LastTask = self:getCurrentTask()
 	self.CurrentTask = newTask.Name
 
 	if (self.LastTask == self.CurrentTask) then
-		--print("warning. "..self.parent:getName() .. " task loop? " .. self.CurrentTask)
+		CreateLogLine("TaskManager", isLocalLoggingEnabled, "... possibly stuck in task loop ...");
 	end
 	if (self.LastLastTaskt == self.CurrentTask) then
-		--print("warning. "..self.parent:getName() .. " task alternating? " .. self.CurrentTask)
+		CreateLogLine("TaskManager", isLocalLoggingEnabled, "... possibly stuck in task loop ...");
 	end
 
 	self.TaskUpdateCount = 0
@@ -54,8 +58,11 @@ function TaskManager:AddToBottom(newTask)
 end
 
 function TaskManager:Display()
+	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:Display() called");
 	for i = 1, self.TaskCount - 1 do
-		if (self.Tasks[i] ~= nil) then return print(self.Tasks[i].Name) end
+		if (self.Tasks[i] ~= nil) then
+			CreateLogLine("TaskManager", isLocalLoggingEnabled, tostring(self.Tasks[i].Name));
+		end
 	end
 end
 
@@ -69,7 +76,6 @@ function TaskManager:clear()
 end
 
 function TaskManager:moveDown()
-	--self.parent:DebugSay(self.Tasks[0].Name.." isComplete:"..tostring((self.Tasks[0]:isComplete() == true)))
 	while ((not self.Tasks[0]) or (self.Tasks[0]:isComplete() == true)) do
 		if (self.Tasks[0] ~= nil) and (self.Tasks[0].OnComplete ~= nil) then self.Tasks[0]:OnComplete() end
 
@@ -132,19 +138,21 @@ function TaskManager:getTaskFromName(thisName)
 end
 
 function TaskManager:update()
+	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:update() called");
 	self = AIManager(self) -- WIP - THIS IS THE REFERENCE TO THE AI FOLDER FILES
 
 	if (self == nil) then
 		return
 	end
 
-	local currentTask = self:getCurrentTask()
-	--if(self.parent.Reducer % 180 == 0) then self.parent:DebugSay(currentTask..tostring(self.TaskCount) .. ": " .. tostring(self.TaskUpdateCount).."/"..tostring(self.TaskUpdateLimit)) end
+	local currentTask = self:getCurrentTask();
 
 	if (self.TaskUpdateLimit ~= 0) and (self.TaskUpdateLimit ~= nil) and (self.TaskUpdateCount > self.TaskUpdateLimit) then
 		self.Tasks[0] = nil
-		self:moveDown()
-		print(self.parent:getName() .. " just stopped their task due to setTaskUpdateLimit")
+		self:moveDown();
+
+		CreateLogLine("TaskManager", isLocalLoggingEnabled,
+			self.parent:getName() .. " stopped their task due to setTaskUpdateLimit");
 	elseif (self.Tasks[0] ~= nil)
 		and (self.Tasks[0] ~= false)
 		and (self.Tasks[0]:isComplete() == false) then
@@ -152,6 +160,5 @@ function TaskManager:update()
 		self.TaskUpdateCount = self.TaskUpdateCount + 1
 	else
 		self:moveDown()
-		--self.parent:DebugSay("else")	
 	end
 end

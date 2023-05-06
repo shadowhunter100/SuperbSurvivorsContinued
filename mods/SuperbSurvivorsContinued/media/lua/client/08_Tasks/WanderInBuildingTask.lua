@@ -1,7 +1,10 @@
 WanderInBuildingTask = {}
 WanderInBuildingTask.__index = WanderInBuildingTask
 
+local isLocalLoggingEnabled = false;
+
 function WanderInBuildingTask:new(superSurvivor, building)
+	CreateLogLine("WanderInBuildingTask", isLocalLoggingEnabled, "function: WanderInBuildingTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -17,7 +20,7 @@ function WanderInBuildingTask:new(superSurvivor, building)
 	else
 		o.Building = building
 	end
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
+
 	return o
 end
 
@@ -48,7 +51,7 @@ function WanderInBuildingTask:update()
 		if (sq ~= nil) and (not sq:isOutside()) then
 			self.parent:walkTo(sq);
 		else
-			print("error getting walk sq")
+			CreateLogLine("WanderInBuildingTask", isLocalLoggingEnabled, "error getting walk sq");
 		end
 	end
 end

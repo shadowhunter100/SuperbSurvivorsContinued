@@ -1,6 +1,7 @@
 require "07_UI/UIUtils";
 
 local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
+local isLocalLoggingEnabled = false;
 
 --****************************************************
 -- DRichTextPanel
@@ -221,13 +222,9 @@ function dssip.dfile()
 end
 
 function dssip.dbug()
-    print("=================")
-    print("dssip::dbug")
+	CreateLogLine("SuperSurvivorInfoPanel", isLocalLoggingEnabled, "dssip.dbug() called");
     remove_panel_survivor_info()
-    print("remove_panel_survivor_info()")
     create_panel_survivor_info()
-    print("create_panel_survivor_info()")
-    print("=================")
 end
 
 --****************************************************

@@ -4,6 +4,7 @@ LootCategoryTask.__index = LootCategoryTask
 local isLocalLoggingEnabled = false;
 
 function LootCategoryTask:new(superSurvivor, building, category, thisQuantity)
+	CreateLogLine("LootTask", isLocalLoggingEnabled, "function: LootCategoryTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -101,12 +102,10 @@ function LootCategoryTask:update()
 	self.PlayerBag = self.parent:getBag()
 
 	if (not self.Building) then
-		self.parent:DebugSay("no building")
 
 		self.Complete = true
 		self.parent:Speak(getActionText("NotInBuilding"))
 	elseif (not self.parent:hasRoomInBag()) then
-		self.parent:DebugSay("no room in bag")
 
 		self.Container = nil
 		self.Complete = true
@@ -180,38 +179,28 @@ function LootCategoryTask:update()
 		end
 
 		if (self.Container == nil) then
-			self.parent:DebugSay("container nil")
-			--if (self.parent ~= nil) then self.parent:Wait(10) end
 			self.Complete = true
 		elseif (instanceof(self.Container, "ItemContainer")) then
 			local distance = getDistanceBetween(self.Container:getSourceGrid(), self.parent.player)
 			if (distance > 2.1) or (self.parent.player:getZ() ~= self.Floor) then
-				self.parent:DebugSay("too far")
-
 				local trySquare = self.Container:getSourceGrid()
 
 				if trySquare ~= nil and trySquare:getRoom() ~= nil then
 					self.TargetBuilding = trySquare:getRoom():getBuilding()
-					self.parent:DebugSay("reset target: " .. tostring(self.TargetBuilding))
 				end
 				self.parent:walkTo(trySquare)
 				self.parent:WalkToAttempt(trySquare)
 				if (self.Container:getSourceGrid()) and (self.parent:getWalkToAttempt(self.Container:getSourceGrid()) > 8) then
-					self.parent:DebugSay("blocked " ..
-						tostring(self.parent:getWalkToAttempt(self.Container:getSourceGrid())))
 					self.Container = nil
-					--if (self.parent ~= nil) then self.parent:Wait(10) end
 					self.Complete = true
-				end -- cant get to it 9blocked)
+				end
 			else
-				self.parent:DebugSay("else")
 				local item = FindItemByCategory(self.Container, self.Category, self.parent)
 				if (item ~= nil) then
 					self.FoundCount = self.FoundCount + 1
 					self.parent:RoleplaySpeak(getActionText("TakesFromCont_Before") ..
 						item:getDisplayName() .. getActionText("TakesFromCont_After"))
 					if (self.parent:hasRoomInBagFor(item)) then
-						self.parent:DebugSay("LootCategoryTask is about to trigger a StopWalk! Path B ")
 						self.parent:StopWalk()
 						ISTimedActionQueue.add(ISInventoryTransferAction:new(self.parent.player, item, self.Container,
 							self.PlayerBag, nil))
@@ -220,18 +209,17 @@ function LootCategoryTask:update()
 						self.Container:DoRemoveItem(item)
 					end
 				else
-					self.parent:DebugSay("ContainerSquareLooted")
 					self.parent:ContainerSquareLooted(self.Container:getSourceGrid(), self.Category)
 					self.Container = nil
 				end
 			end
 		elseif (instanceof(self.Container, "InventoryItem")) then
 			if (self.Container:getWorldItem() == nil) then
-				self.parent:DebugSay("container has no world item")
 				self.Container = nil
 				return false
 			end
-			local distance = getDistanceBetween(self.Container:getWorldItem():getSquare(), self.parent.player)
+			local distance = getDistanceBetween(self.Container:getWorldItem():getSquare(), self.parent.player);
+
 			if (distance > 2.0) or (self.parent.player:getZ() ~= self.Floor) then
 				if (self.parent.player:getPath2() == nil) then
 					self.parent.player:StopAllActionQueue()
@@ -239,10 +227,7 @@ function LootCategoryTask:update()
 					self.parent:walkTo(sq)
 					if (sq:getRoom() ~= nil) then
 						self.TargetBuilding = sq:getRoom():getBuilding()
-						self.parent:DebugSay("walk to: " .. tostring(self.TargetBuilding))
 					end
-				else
-					self.parent:DebugSay("??")
 				end
 			else
 				local item = self.Container
@@ -260,20 +245,17 @@ function LootCategoryTask:update()
 
 					if (item ~= nil) then
 						local ssquare = getSourceSquareOfItem(item, self.parent.player)
-						--print(tostring(ssquare))
+						
 						if (ssquare ~= nil) then
 							local OwnerGroupId = SSGM:GetGroupIdFromSquare(ssquare)
 							local TakerGroupId = self.parent.player:getModData().Group
 							if (OwnerGroupId ~= -1) and (TakerGroupId ~= OwnerGroupId) then
-								print("ga stealing detected!")
 								SSGM:Get(OwnerGroupId):stealingDetected(self.parent.player)
 							end
 						end
 					end
 				end
 			end
-		else
-			self.parent:DebugSay("?")
 		end
 	end
 	if self.FoundCount >= self.Quantity then self.Complete = true end
