@@ -74,7 +74,7 @@ end
 
 function FarmingTask:getPlant(sq)
 	local plant
-	-- WIP - What is "basicFarming"? "basicFarming" is undefined...
+	-- WIP - Cows: What is "basicFarming"? "basicFarming" is undefined...
 	plant = basicFarming.getCurrentPlanting(sq)
 
 	if plant then

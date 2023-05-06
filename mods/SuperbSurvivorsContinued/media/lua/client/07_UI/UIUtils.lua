@@ -129,7 +129,7 @@ function UIUtil_GiveOrder(order_index, member_index)
     end
 end
 
--- WIP - "dui" is apparently used for debugging...
+-- WIP - Cows: "dui" is apparently used for debugging...
 
 dui = { file = "UIUtils.lua" }
 
