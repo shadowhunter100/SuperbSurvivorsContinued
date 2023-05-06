@@ -20,6 +20,7 @@ PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-pol
 * *__This "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__*
 
 ## Here are the workshop items I have found, but were uncredited
+* CharacterSave - https://steamcommunity.com/sharedfiles/filedetails/?id=2673317083&searchtext=charactersave by Tchernobill
 * Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.  
   * I have attempted to remove all references to Brita's. If you spot it in the code, please notify me so it can be removed.  
 * ORGM - https://steamcommunity.com/sharedfiles/filedetails/?id=514618604 by Fenris Wolf  
