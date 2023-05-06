@@ -4444,5 +4444,3 @@ function SuperSurvivor:NPC_ForceFindNearestBuilding()
 		self.TargetBuilding = self.TargetSquare:getRoom():getBuilding()
 	end
 end
-
--- ALL DEBUG FUNCTIONS GO BELOW HERE --
