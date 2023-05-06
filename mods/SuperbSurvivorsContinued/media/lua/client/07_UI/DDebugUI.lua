@@ -229,7 +229,7 @@ ddui = { file = "DDebugUI.lua" }
 table.insert(ddbugui, 1, ddui)
 table.insert(ddbugui, 2, dssi)
 table.insert(ddbugui, 3, dssip)
-table.insert(ddbugui, 4, dui) -- WIP - "dui" is undefined...
+table.insert(ddbugui, 4, dui) -- WIP - Cows: "dui" is undefined...
 table.insert(ddbugui, 5, dssw)
 table.insert(ddbugui, 6, dssbp)
 table.insert(ddbugui, 7, dssl)

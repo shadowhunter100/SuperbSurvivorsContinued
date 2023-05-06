@@ -47,7 +47,7 @@ function GetRandomSurvivorSuit(SS)
 	CreateLogLine("SuperSurvivorSuitsUtilities", isLocalLoggingEnabled, "Random suit result: " .. tostring(result));
 
 	local suitTable = tempTable[result];
-	-- WIP - Why even iterate? I thought the suit was mapped?...
+	-- WIP - Cows: Why even iterate? I thought the suit was mapped?...
 	for i = 1, #suitTable do
 		if (suitTable[i] ~= nil) then
 			SS:WearThis(suitTable[i])
@@ -55,7 +55,7 @@ function GetRandomSurvivorSuit(SS)
 	end
 
 	if randomize then
-		-- WIP - Why even iterate? I thought the suit was mapped?...
+		-- WIP - Cows: Why even iterate? I thought the suit was mapped?...
 		for i = 1, ZombRand(0, 3) do
 			tempTable = SurvivorRandomSuits[table.randFrom(SurvivorRandomSuits)]
 			local rresult = table.randFrom(tempTable)
@@ -84,7 +84,7 @@ end
 function SetRandomSurvivorSuit(SS, tbl, name)
 	local suitTable = SurvivorRandomSuits[tbl][name]
 	if suitTable then
-		-- WIP - Why even iterate? I thought the suit was mapped?...
+		-- WIP - Cows: Why even iterate? I thought the suit was mapped?...
 		for i = 1, #suitTable do
 			if (suitTable[i] ~= nil) then
 				SS:WearThis(suitTable[i])

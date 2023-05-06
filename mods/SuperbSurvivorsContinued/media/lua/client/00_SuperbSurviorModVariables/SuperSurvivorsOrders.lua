@@ -1,5 +1,5 @@
--- Global Survivor Orders
--- This was moved out of the "SuperSurvivorUtilities.lua" file.
+-- Cows: Global Survivor Orders
+-- Cows: This was moved out of the "SuperSurvivorUtilities.lua" file.
 Orders = {
     "Barricade",
     "Chop Wood",

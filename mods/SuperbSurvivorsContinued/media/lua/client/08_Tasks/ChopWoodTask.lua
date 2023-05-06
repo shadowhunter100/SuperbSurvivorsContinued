@@ -33,7 +33,7 @@ function ChopWoodTask:isValid()
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function ChopWoodTask:update()
 	CreateLogLine("ChopWoodTask", isLocalLoggingEnabled, "ChopWoodTask:update() Called");
 	if (not self:isValid()) then return false end
@@ -127,7 +127,7 @@ function ChopWoodTask:update()
 					local maxx = math.floor(player:getX() + range);
 					local miny = math.floor(player:getY() - range);
 					local maxy = math.floor(player:getY() + range);
-					-- local sstring = " around here"; -- WIP - Commented out, unused variable...
+					-- local sstring = " around here"; -- WIP - Cows: Commented out, unused variable...
 
 					if (self.group ~= nil) then
 						if (choparea[1] ~= 0) then
@@ -135,8 +135,9 @@ function ChopWoodTask:update()
 							maxx = choparea[2]
 							miny = choparea[3]
 							maxy = choparea[4]
+							--  WIP - Cows: Commented out, unused variable...
 							-- sstring =
-							-- " in the designated area" --..tostring(minx)..","..tostring(miny)..":"..tostring(maxx)..","..tostring(maxy) --  WIP - Commented out, unused variable...
+							-- " in the designated area" --..tostring(minx)..","..tostring(miny)..":"..tostring(maxx)..","..tostring(maxy) 
 							range = 150
 						end
 					end

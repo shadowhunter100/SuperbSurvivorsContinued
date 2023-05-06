@@ -1,7 +1,7 @@
 require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList";
 require "05_Other/SuperSurvivorManager";
 
--- WIP - ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
+-- WIP - Cows: ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
 OnTickTicks = 0;
 SuperSurvivorSelectAnArea = false;
@@ -70,7 +70,7 @@ end
 
 Events.OnRenderTick.Add(SuperSurvivorsOnTick)
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorRandomSpawn(square)
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
@@ -106,7 +106,7 @@ function SuperSurvivorRandomSpawn(square)
 	return ASuperSurvivor
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorsLoadGridsquare(square)
 	if (square ~= nil) then
 		local x = square:getX()
@@ -129,7 +129,7 @@ function SuperSurvivorsLoadGridsquare(square)
 			SSGM:Load()
 
 			-- I don't think we need this now? But Further testing is needed
-			-- WIP - IS IT SAFE TO REMOVE? AND WHICH ARE NOT SAFE TO REMOVE?
+			-- WIP - Cows: IS IT SAFE TO REMOVE? AND WHICH ARE NOT SAFE TO REMOVE?
 			local gameVersion = getCore():getGameVersion()
 			IsDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() > 50 and gameVersion:getMinor() < 53)
 			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
@@ -162,7 +162,7 @@ function SuperSurvivorsLoadGridsquare(square)
 			SurvivorMap[key] = {} -- i think this is faster			
 		end
 
-		-- WIP - Need to rework the spawning functions and logic...
+		-- WIP - Cows: Need to rework the spawning functions and logic...
 		if (square:getModData().SurvivorSquareLoaded == nil)
 			and (square:getZ() == 0 or square:isOutside() == false)
 			and (not SuperSurvivorPresetSpawn(square))
@@ -311,7 +311,7 @@ function SuperSurvivorsHotKeyOrder(index)
 	end
 end
 
--- WIP - Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
+-- WIP - Cows: Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
 	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
 
@@ -342,7 +342,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 			local victimSquare2 = victimSquare1:getTileInDirection(dir)
 			local coveredFire = false
 
-			-- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+			-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 			for q = 1, 2 do
 				local objs
 				if q == 1 then
@@ -490,7 +490,7 @@ end
 Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
 
 -- ALT SPAWNING
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorsNewSurvivorManager()
 	-- To make sure if the player has chosen not to use Alt spawning
 	if (AlternativeSpawning == 1) or (getSpecificPlayer(0):isAsleep()) then
@@ -508,7 +508,7 @@ function SuperSurvivorsNewSurvivorManager()
 
 	if (getSpecificPlayer(0) == nil) then return false end
 	--this unrelated to raiders but need this to run every once in a while
-	-- WIP - WHY DOES THIS NEED TO RUN?
+	-- WIP - Cows: WHY DOES THIS NEED TO RUN?
 	getSpecificPlayer(0):getModData().hitByCharacter = false
 	getSpecificPlayer(0):getModData().semiHostile = false
 	getSpecificPlayer(0):getModData().dealBreaker = nil
@@ -562,7 +562,7 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 
-	-- WIP - Need to rework the spawning functions and logic...
+	-- WIP - Cows: Need to rework the spawning functions and logic...
 	if (success) and (spawnSquare) then
 		-- ALT SPAWNING SECTION --
 		-- SURVIVOR, NON RAIDER SPAWNING
@@ -619,7 +619,7 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFivePercent()
 	if (AlternativeSpawning == 2) then
 		SuperSurvivorsNewSurvivorManager()
@@ -628,7 +628,7 @@ function SuperSurSurvivorSpawnGenFivePercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenTenPercent()
 	if (AlternativeSpawning == 3) then
 		SuperSurvivorsNewSurvivorManager()
@@ -637,7 +637,7 @@ function SuperSurSurvivorSpawnGenTenPercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenTwentyPercent()
 	if (AlternativeSpawning == 4) then
 		SuperSurvivorsNewSurvivorManager()
@@ -646,7 +646,7 @@ function SuperSurSurvivorSpawnGenTwentyPercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenThirtyPercent()
 	if (AlternativeSpawning == 5) then
 		SuperSurvivorsNewSurvivorManager()
@@ -655,7 +655,7 @@ function SuperSurSurvivorSpawnGenThirtyPercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFourtyPercent()
 	if (AlternativeSpawning == 6) then
 		SuperSurvivorsNewSurvivorManager()
@@ -664,7 +664,7 @@ function SuperSurSurvivorSpawnGenFourtyPercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurSurvivorSpawnGenFiftyPercent()
 	if (AlternativeSpawning == 7) then
 		SuperSurvivorsNewSurvivorManager()
@@ -673,7 +673,7 @@ function SuperSurSurvivorSpawnGenFiftyPercent()
 	end
 end
 
--- WIP - Need to rework the spawning functions and logic...
+-- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
 	local RealAlternativeSpawning = AlternativeSpawning - 1
 	for i = RealAlternativeSpawning, 1, -1 do
@@ -770,7 +770,7 @@ function SuperSurvivorsRaiderManager()
 		end
 
 
-		-- WIP - Need to rework the spawning functions and logic...
+		-- WIP - Cows: Need to rework the spawning functions and logic...
 		if (success) and (spawnSquare) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
 			if (getSpecificPlayer(0):isAsleep()) then
@@ -789,7 +789,7 @@ function SuperSurvivorsRaiderManager()
 			end
 
 			for i = 1, GroupSize do
-				-- WIP - why is "raider" a global variable? it wasn't even initiated previously...
+				-- WIP - Cows: why is "raider" a global variable? it wasn't even initiated previously...
 				raider = SuperSurvivorRandomSpawn(spawnSquare)
 				if (i == 1) then
 					RaiderGroup:addMember(raider, "Leader")

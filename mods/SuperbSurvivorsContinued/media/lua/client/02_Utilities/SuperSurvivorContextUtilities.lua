@@ -162,9 +162,9 @@ function GetCoordsFromID(id)
 	return 0
 end
 
--- WIP - getDistanceBetween() should have been capitalized as a global function...
--- WIP - this function is literally spammed between all active instances, slowing down the game performance drastically.
--- WIP - in about 30 seconds, this function was called over 11,000 times.
+-- WIP - Cows: getDistanceBetween() should have been capitalized as a global function...
+-- WIP - Cows: this function is literally spammed between all active instances, slowing down the game performance drastically.
+-- WIP - Cows: in about 30 seconds, this function was called over 11,000 times.
 --- gets the distance between 2 things (objects, zombies, npcs or players)
 ---@param z1 any instance one
 ---@param z2 any instance two
@@ -321,7 +321,7 @@ local function getSquaresWindow(cs)
 	return nil
 end
 
--- WIP - GetSquaresNearWindow() is the second most frequently called function after getDistanceBetween().
+-- WIP - Cows: GetSquaresNearWindow() is the second most frequently called function after getDistanceBetween().
 --- gets the nearest adjacent window square of 'cs'
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
@@ -398,7 +398,7 @@ function GetDoorsOutsideSquare(door, player)
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 --- gets the closest unlocked door
 ---@param building any
 ---@param character any

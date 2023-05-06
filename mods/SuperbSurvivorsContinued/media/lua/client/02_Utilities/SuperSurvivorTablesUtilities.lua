@@ -79,10 +79,10 @@ function table.save(tbl, fileName)
 	local writeFile = getModFileWriter(ModId, thepath, true, false)
 
 	for i = 1, #tbl do
-		writeFile:write(tbl[i] .. "\r\n"); -- WIP - console.txt logged an error tracing to this line
+		writeFile:write(tbl[i] .. "\r\n");
 	end
 
-	writeFile:close(); -- WIP - console.txt logged an error tracing to this line
+	writeFile:close();
 
 	CreateLogLine("SuperSurvivorTablesUtilities", isLocalLoggingEnabled, "--- table.save() END ---");
 end

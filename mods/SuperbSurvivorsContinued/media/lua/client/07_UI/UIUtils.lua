@@ -96,12 +96,12 @@ function UIUtil_GetMemberInfo(member_index)
     elseif member.getName ~= nil and member:isInCell() == false then
         name = member:getName()
         local coords = GetCoordsFromID(member:getID())
-        -- WIP - WHAT IS "COORD"? IS THIS A TYPO?
+        -- WIP - Cows: WHAT WAS "coord"? IS THIS A TYPO? Renamed to "coords"
         if coords == 0 then
             SSM:LoadSurvivor(member:getID(), getSpecificPlayer(0):getCurrentSquare())
             coords = "0"
         end
-        -- role = coords -- why is role assigned coords?
+        -- role = coords -- WIP - Cows: why is "role" assigned coords?
     elseif not checkSaveFileExists("Survivor" .. tostring(member)) then
         name = getContextMenuText("MIASurvivor") .. "[" .. tostring(member) .. "]"
         role = getText("IGUI_health_Deceased")

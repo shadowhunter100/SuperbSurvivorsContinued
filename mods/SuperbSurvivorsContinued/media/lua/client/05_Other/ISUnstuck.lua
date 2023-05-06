@@ -1,5 +1,5 @@
 --[[
-    WIP - This entire file was cut-pasted from "07_UI/SuperSurvivorsContextMenu.lua".
+    WIP - Cows: This entire file was cut-pasted from "07_UI/SuperSurvivorsContextMenu.lua".
     There are NO active references  in this mod project to any of the functions here...
     What was even planned with these functions?
 --]]

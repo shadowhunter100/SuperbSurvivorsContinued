@@ -1604,7 +1604,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1619,7 +1619,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1634,7 +1634,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1649,7 +1649,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1664,7 +1664,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1679,7 +1679,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1774,7 +1774,7 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 		end
 
 		if (PresetSpawn.Patrolling ~= nil) then
-			local patrolSquare = getCell():getGridSquare(x + PresetSpawn.PX, y + PresetSpawn.PY, PresetSpawn.Z) -- WIP - Console.txt logged an error at this line
+			local patrolSquare = getCell():getGridSquare(x + PresetSpawn.PX, y + PresetSpawn.PY, PresetSpawn.Z) -- WIP - Cows: Console.txt logged an error at this line
 			SuperSurvivor.player:getModData().PX = x + PresetSpawn.PX
 			SuperSurvivor.player:getModData().PY = y + PresetSpawn.PY
 			SuperSurvivor.player:getModData().PZ = PresetSpawn.Z
@@ -1833,7 +1833,8 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 			SuperSurvivor:SuitUp(PresetSpawn.Suit)
 		end
 
-		-- WIP - WHAT ARE THE CHANGES? THIS MAKES NO SENSE AND I SEE NO NUMBER VALUE ASSIGNED
+		-- WIP - Cows: WHAT ARE THE CHANGES? THIS MAKES NO SENSE AND I SEE NO NUMBER VALUE ASSIGNED
+		--  WIP - Cows: why is Aresenal[26] uncredited...?
 		--	Arsenal[26]'s changes -- start
 		--	NOTE : This previously started at line #455, didn't work since NPC not spawned yet.
 		--	NOTE : I've always started additional PresetSpawn parameters way down here without issues.
@@ -1894,7 +1895,7 @@ function SuperSurvivorPresetSpawn(square)
 		then
 			square:getModData().SurvivorSquareLoaded = true;
 
-			SuperSurvivorPresetSpawnThis(RPresetSpawns[i]) -- WIP - console.txt logged an error at this line
+			SuperSurvivorPresetSpawnThis(RPresetSpawns[i]);
 			return true
 		end
 	end

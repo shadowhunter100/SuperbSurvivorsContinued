@@ -65,7 +65,7 @@ function PursueTask:update()
 
 
 	if self.parent:hasGun() then               -- Despite the name, it means 'has gun in the npc's hand'
-		if (self.parent:needToReadyGun(weapon)) then -- WIP - "weapo" is undefined...
+		if (self.parent:needToReadyGun(weapon)) then -- WIP - Cows: "weapon" is undefined...
 			self.parent:setRunning(false)
 			self.parent:ReadyGun(weapon)
 			self.parent:Wait(3) -- wait to allow reloading etc to finish

@@ -34,7 +34,7 @@ function GatherWoodTask:isValid()
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function GatherWoodTask:update()
 	CreateLogLine("GatherWoodTask", isLocalLoggingEnabled, "function: GatherWoodTask:update() called");
 	if (not self:isValid()) then return false end
@@ -86,7 +86,7 @@ function GatherWoodTask:update()
 						and (self.WoodStorageArea ~= nil)
 						and (IsSquareInArea(Square, self.WoodStorageArea) == false)
 					then
-						local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
+						local distance = getDistanceBetween(Square, player); -- WIP - Cows: literally spammed inside the nested for loops...
 						local closeobjects = Square:getWorldObjects();
 						for i = 0, closeobjects:size() - 1 do
 							if (closeobjects:get(i):getItem()) and ((closeobjects:get(i):getItem():getType() == "Log") or (closeobjects:get(i):getItem():getType() == "Plank")) and ((closeobjects:get(i):getModData().isClaimed == nil) or (gamehours > (closeobjects:get(i):getModData().isClaimed + 0.05))) and (distance < closestsoFar) then

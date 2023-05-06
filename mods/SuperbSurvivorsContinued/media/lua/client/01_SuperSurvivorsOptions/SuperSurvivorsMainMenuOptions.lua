@@ -1,5 +1,5 @@
 --[[
-    -- WIP - The Game Options is likely conflicting with "Expanded Helicopter Events"
+    -- WIP - Cows: The Game Options is likely conflicting with "Expanded Helicopter Events"
     https://steamcommunity.com/sharedfiles/filedetails/?id=2458631365&searchtext=exapanded+helicopter
 ]]
 -- console.txt message below

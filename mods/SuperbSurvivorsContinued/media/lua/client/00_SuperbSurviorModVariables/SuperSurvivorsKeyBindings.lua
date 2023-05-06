@@ -1,5 +1,5 @@
 --[[
-    WIP - Found the documentation...
+    WIP - Cows: Found the documentation...
     https://projectzomboid.com/modding/zombie/core/Core.html#addKeyBinding(java.lang.String,java.lang.Integer)
     Does the key override? How do we create a category in keys.ini?
     Maybe look into ModOptions to handle the key bindings?
@@ -7,7 +7,7 @@
 
 local isLocalLoggingEnabled = false;
 
--- WIP - The keybinding needs to be reworked.
+-- WIP - Cows: The keybinding needs to be reworked.
 -- Using the global keyBinding table, to store all our binding values
 local function insertKeyBinding()
 	CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "function: insertKeyBinding() called");

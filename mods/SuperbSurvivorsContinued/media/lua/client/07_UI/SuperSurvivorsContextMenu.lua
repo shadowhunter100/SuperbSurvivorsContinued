@@ -48,7 +48,7 @@ function SurvivorOrder(test, player, order, orderParam)
 			if (area) then
 				ASuperSurvivor:Speak(getContextMenuText("IGoGuard"))
 				TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, area))
-				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit) -- WIP - "AutoWorkTaskTimeLimit" is undefined...
+				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit) -- WIP - Cows: "AutoWorkTaskTimeLimit" is undefined...
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, GetRandomAreaSquare(area)))
 				ASuperSurvivor:Speak("And Where are you wanting me to guard at again? Show me an area to guard at.")
 			else
@@ -371,7 +371,7 @@ end
 
 function AnswerTriggerQuestionYes(test, SS)
 	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	SS.HasBikuri = false   -- erase question option -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
 	SS.YesResultActions = nil -- erase question option
 	SS.TriggerName = nil   -- erase question option
@@ -379,7 +379,7 @@ end
 
 function AnswerTriggerQuestionNo(test, SS)
 	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
+	SS.HasBikuri = false   -- erase question option  -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
 	SS.YesResultActions = nil -- erase question option
 	SS.TriggerName = nil   -- erase question option
