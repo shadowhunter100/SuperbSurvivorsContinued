@@ -1,25 +1,27 @@
+local isLocalLoggingEnabled = false;
+
 function SuperSurvivorPlayerInit(player)
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "function: SuperSurvivorPlayerInit() called");
 	player:getModData().isHostile = false
 	player:getModData().semiHostile = false
 	player:getModData().hitByCharacter = false
 	player:getModData().ID = 0
 	player:setBlockMovement(false)
 	player:setNPC(false)
-	print("initing player index " .. tostring(player:getPlayerNum()))
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "initing player index " .. tostring(player:getPlayerNum()));
 
 	if (player:getPlayerNum() == 0) then
-		print("initing player index 0")
 		SSM:init()
 		MyGroup = SSGM:newGroup()
 		MyGroup:addMember(SSM:Get(0), "Leader")
 		local spawnBuilding = SSM:Get(0):getBuilding()
 		if (spawnBuilding) then -- spawn building is default group base
-			print("set building " .. tostring(MyGroup:getID()))
+			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "set building " .. tostring(MyGroup:getID()));
 			local def = spawnBuilding:getDef()
 			local bounds = { def:getX(), (def:getX() + def:getW()), def:getY(), (def:getY() + def:getH()), 0 }
 			MyGroup:setBounds(bounds)
 		else
-			print("did not spawn in building")
+			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "Did not spawn in a building!");
 		end
 
 		local wife
@@ -38,14 +40,11 @@ function SuperSurvivorPlayerInit(player)
 			local GID, Group
 
 			if (SSM:Get(0):getGroupID() == nil) then
-				print("SSGM:newGroup() " .. tostring(SSGM:getCount()))
 				Group = SSGM:newGroup()
 				GID = Group:getID()
 				Group:addMember(SSM:Get(0), "Leader")
-				print("POST SSGM:newGroup() " .. tostring(SSGM:getCount()))
 			else
 				GID = SSM:Get(0):getGroupID()
-				print("main player has group id detected:" .. tostring(GID))
 				Group = SSGM:Get(GID)
 			end
 
@@ -55,12 +54,6 @@ function SuperSurvivorPlayerInit(player)
 			local tm = wife:getTaskManager()
 			wife:setAIMode("Follow")
 			tm:AddToTop(followtask)
-
-			--if(ZombRand(100) < (ChanceToSpawnWithGun)) then
-			--	wife:giveWeapon(getWeapon(RangeWeapons[ZombRand(1,#RangeWeapons)]),true) 				
-			--elseif(ZombRand(100) < (ChanceToSpawnWithWep)) then
-			--	wife:giveWeapon(MeleWeapons[ZombRand(1,#MeleWeapons)],true)
-			--end
 
 			GlobalWife = wife
 		end
@@ -126,7 +119,7 @@ function SuperSurvivorPlayerInit(player)
 
 		if (SSM:Get(0)) then SSM:Get(0):setName(mydesc:getForename()) end
 	else
-		print("finished initing player index " .. tostring(player:getPlayerNum()))
+		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "finished initing player index " .. tostring(player:getPlayerNum()));
 	end
 end
 
@@ -146,7 +139,7 @@ function SuperSurvivorGlobalUpdate(player)
 
 		local spottedList = player:getCell():getObjectList()
 		if (spottedList ~= nil) then
-			--print("dovision " .. tostring(spottedList:size()))
+			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "dovision " .. tostring(spottedList:size()));
 			for i = 0, spottedList:size() - 1 do
 				local character = spottedList:get(i);
 				if (character ~= nil) and (character ~= player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
@@ -184,7 +177,6 @@ end
 
 function getGunShotWoundBP(player)
 	if (not instanceof(player, "IsoPlayer")) then
-		--print("not a player object was given to getGunshotwoundBP")
 		return nil
 	end
 
@@ -201,13 +193,11 @@ function getGunShotWoundBP(player)
 		end
 	end
 	if (not foundBP) then
-		--print("no body part with gunshot wound")
 		return nil
 	end
 	local result = ZombRand(1, #list)
 	local index = list[result]
 	local outBP = bps:get(index)
-	--print("body part found was: " .. tostring(outBP))
 	return outBP
 end
 
@@ -261,7 +251,6 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 		if (weapon ~= nil) and (not weapon:isAimedFirearm()) and (weapon:getPushBackMod() > 0.3) then
 			victim:StopAllActionQueue()
 			local dot = victim:getDotWithForwardDirection(wielder:getX(), wielder:getY());
-			--print("dot="..tostring(dot))
 			if (dot < 0) then
 				ISTimedActionQueue.add(ISGetHitFromBehindAction:new(victim, wielder))
 			elseif (dot > 0) then
@@ -280,21 +269,7 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 
 			SSM:PublicExecution(SSW, SSV)
 		end
-
-		--if IsNpcDamageBroken and SSV:getID() ~= 0 then
-		--	--print("hitConsequences " .. tostring(victim:getBodyDamage():getHealth()) )
-		--	--victim:hitConsequences(weapon, wielder, false, damage, false)
-		--	local parts = {}
-		--	parts[0] = BodyPartType.Head
-		--	parts[1] = BodyPartType.Torso_Upper
-		--	parts[2] = BodyPartType.Hand_L
-		--	parts[3] = BodyPartType.Hand_R
-		--	parts[4] = BodyPartType.UpperLeg_L
-		--	parts[5] = BodyPartType.UpperLeg_R
-		--	victim:getBodyDamage():getBodyPart(parts[ZombRand(#parts)]):AddDamage(damage*100.0);
-		--	victim:getBodyDamage():Update();
-		--	--print("post post getHealth is " .. tostring(victim:getBodyDamage():getHealth()) )
-		--end
+		
 		if IsNpcDamageBroken and instanceof(victim, "IsoPlayer") and instanceof(wielder, "IsoPlayer") and not (victim:isLocalPlayer()) then
 			if weapon:getType() == "BareHands" then
 				return

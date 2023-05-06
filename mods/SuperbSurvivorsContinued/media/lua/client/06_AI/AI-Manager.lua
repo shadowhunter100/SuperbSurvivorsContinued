@@ -5,6 +5,7 @@
 -- Functions to Attempt-Clean / Make this file easier to read --
 -- #CleanCode      		                                      --
 -- ---------------------------------------------------------- --
+local isLocalLoggingEnabled = false;
 
 --- Checks if TaskName the current task of the AiTmi
 ---@param AiTmi (table) Task Manager
@@ -31,11 +32,7 @@ function AIManager(TaskMangerIn)
 	local AiTmi          = TaskMangerIn     -- Used for AiNPC_TaskIsNot code cleanup/easier-to-read
 	local NPC            = TaskMangerIn.parent -- Used to Cleanup some of the function's long names
 
-	--print(NPC:getName()..": " ..tostring(ASuperSurvivor:needToFollow()))
-
 	if (ASuperSurvivor:needToFollow()) or (ASuperSurvivor:Get():getVehicle() ~= nil) then return TaskMangerIn end -- if in vehicle skip AI -- or high priority follow
-
-
 
 	if (TaskMangerIn == nil) or (ASuperSurvivor == nil) then
 		return false
@@ -109,8 +106,6 @@ function AIManager(TaskMangerIn)
 			NPC.LastEnemeySeen = nil
 			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
-
-			NPC:DebugSay("Companion Went FAR too far away, CLEARING TASKS - and returning companion!")
 		end
 	end
 
@@ -142,7 +137,6 @@ function AIManager(TaskMangerIn)
 		-- ----- Perception Buff --- --
 		--	NPC:Companion_DoSixthSenseScan()
 		-- ------------------------- --
-		--NPC:DebugSay("AM I CLOSE ENOUGH TO ATTACK?: "..tostring(( (getDistanceBetween(ASuperSurvivor.LastEnemeySeen,ImFollowingThisChar) > GFollowDistance) )))
 		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
 		if (
 				(TaskMangerIn:getCurrentTask() ~= "Attack")
@@ -151,7 +145,6 @@ function AIManager(TaskMangerIn)
 				and (Task_Is_Not("Flee"))
 				and (ASuperSurvivor:isInSameRoom(ASuperSurvivor.LastEnemeySeen))
 
-			---	and (ASuperSurvivor:isInSameRoom(ASuperSurvivor.LastEnemeySeen))
 			)
 			--and ( (ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)))  -- this make them not move to engage zombie even a few tiles away when in follow mode? is that intentional
 			and (ASuperSurvivor:getDangerSeenCount() > 0)                                                           -- cant attack what you don't see. must have seen an enemy in danger range to attack
@@ -167,15 +160,10 @@ function AIManager(TaskMangerIn)
 				and (not EnemySuperSurvivor.player:getModData().dealBreaker)
 			then
 				TaskMangerIn:AddToTop(ThreatenTask:new(ASuperSurvivor, EnemySuperSurvivor, "Scram"))
-				ASuperSurvivor:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_03")
 			else
 				TaskMangerIn:AddToTop(AttackTask:new(ASuperSurvivor))
-				ASuperSurvivor:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_04")
 			end
 		end
-
-
-
 
 		-- --------------------------------- --
 		-- 	Reload Gun
@@ -185,23 +173,19 @@ function AIManager(TaskMangerIn)
 		then
 			NPC:setNeedAmmo(false)
 			NPC:reEquipGun()
-			NPC:DebugSay("Companion RELOAD_Gun_0001")
 		end
 
 		-- --------------------------------- --
 		-- 	Ready Weapon
 		--  NPC:getDangerSeenCount() removed
 		-- --------------------------------- --
-		if (NPC:needToReadyGun(weapon)) then
-			NPC:DebugSay(tostring(((NPC:needToReload()) or (NPC:needToReadyGun(weapon)))) ..
-				"," ..
-				tostring(((ASuperSurvivor:hasAmmoForPrevGun()) or SurvivorInfiniteAmmo)) ..
-				"," .. tostring(NPC:usingGun()) .. "," .. tostring((ASuperSurvivor:getNeedAmmo())))
-		end
-		if ((NPC:needToReload()) or (NPC:needToReadyGun(weapon))) and ((ASuperSurvivor:hasAmmoForPrevGun()) or SurvivorInfiniteAmmo) and NPC:usingGun() -- removed and (ASuperSurvivor:getNeedAmmo() condition -
+		if ((NPC:needToReload())
+				or (NPC:needToReadyGun(weapon)))
+			and ((ASuperSurvivor:hasAmmoForPrevGun())
+				or SurvivorInfiniteAmmo)
+			and NPC:usingGun() -- removed and (ASuperSurvivor:getNeedAmmo() condition -
 		then
 			NPC:ReadyGun(weapon)
-			if (NPC:isSpeaking() == false) then NPC:DebugSay("Companion READY_Gun_0001") end
 		end
 
 		-- ----------------------------- --
@@ -209,7 +193,6 @@ function AIManager(TaskMangerIn)
 		-- ----------------------------- --
 		if (ASuperSurvivor:hasWeapon()) and (ASuperSurvivor:Get():getPrimaryHandItem() == nil) and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon") then
 			TaskMangerIn:AddToTop(EquipWeaponTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion EQUIP_Gun_0001")
 		end
 
 		-- Careful setting up Flee to heal and 'healing', they will conflict very easily.
@@ -227,7 +210,6 @@ function AIManager(TaskMangerIn)
 			)
 		then
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion FLEEINGTASK_0001")
 		end
 
 		-- ----------- --
@@ -237,7 +219,6 @@ function AIManager(TaskMangerIn)
 			if (TaskMangerIn:getCurrentTask() ~= "First Aide")
 			then
 				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor)) -- If general healing
-				NPC:DebugSay("Companion HealSelf_0001")
 			end
 		end
 	end
@@ -292,7 +273,6 @@ function AIManager(TaskMangerIn)
 		then
 			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(SurenderTask:new(ASuperSurvivor, SSM:Get(0)))
-			NPC:DebugSay("Surrender Task Triggered! Reference Number ST_0001")
 			return TaskMangerIn
 		end
 	end
@@ -303,7 +283,6 @@ function AIManager(TaskMangerIn)
 	--	if ((TaskMangerIn:getCurrentTask() ~= "Attack") and (TaskMangerIn:getCurrentTask() ~= "Threaten") and not ((TaskMangerIn:getCurrentTask() == "Surender") and EnemyIsSurvivor) and (TaskMangerIn:getCurrentTask() ~= "Doctor") and (ASuperSurvivor:isInSameRoom(ASuperSurvivor.LastEnemeySeen)) and (TaskMangerIn:getCurrentTask() ~= "Flee")) and ((ASuperSurvivor:hasWeapon() and ((ASuperSurvivor:getDangerSeenCount() >= 1) or (ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)))) or (ASuperSurvivor:hasWeapon() == false and (ASuperSurvivor:getDangerSeenCount() == 1) and (not EnemyIsSurvivor))) and (IHaveInjury == false) and (ASuperSurvivor:inFrontOfLockedDoor() == false)  then
 
 	if not (AiNPC_Job_Is(NPC, "Companion")) then
-		--NPC:DebugSay("AM I CLOSE ENOUGH TO ATTACK?: "..tostring(( (getDistanceBetween(ASuperSurvivor.LastEnemeySeen,ImFollowingThisChar) > GFollowDistance) )))
 		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
 		if (
 				(TaskMangerIn:getCurrentTask() ~= "Attack")
@@ -327,10 +306,8 @@ function AIManager(TaskMangerIn)
 				and (not EnemySuperSurvivor.player:getModData().dealBreaker)
 			then
 				TaskMangerIn:AddToTop(ThreatenTask:new(ASuperSurvivor, EnemySuperSurvivor, "Scram"))
-				ASuperSurvivor:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_06")
 			else
 				TaskMangerIn:AddToTop(AttackTask:new(ASuperSurvivor))
-				ASuperSurvivor:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_05")
 			end
 		end
 	end
@@ -360,7 +337,6 @@ function AIManager(TaskMangerIn)
 			and (ASuperSurvivor:getDangerSeenCount() > 0)
 		then
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Find Safe place if Injured condition triggered! Reference Number FBTII_000_01")
 		end
 	end
 	-- ----------------------------- --
@@ -387,8 +363,6 @@ function AIManager(TaskMangerIn)
 					TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 					TaskMangerIn:AddToTop(FleeFromHereTask:new(ASuperSurvivor, ASuperSurvivor:Get():getCurrentSquare()))
 				end
-
-				ASuperSurvivor:DebugSay("Bandage Injuries if no threat nearby triggered! Reference Number 000_000_02")
 			end
 		end
 	end
@@ -434,11 +408,6 @@ function AIManager(TaskMangerIn)
 
 				if not (AiNPC_Job_Is(NPC, "Guard")) and not (AiNPC_Job_Is(NPC, "Doctor")) then
 					TaskMangerIn:AddToTop(FleeFromHereTask:new(ASuperSurvivor, ASuperSurvivor:Get():getCurrentSquare()))
-					ASuperSurvivor:DebugSay(
-						"Flee from too many zombies condition triggered! Reference Number LCT_000_02_REG")
-				else
-					ASuperSurvivor:DebugSay(
-						"Flee from too many zombies condition triggered! Reference Number LCT_000_02_ALT")
 				end
 			end
 		end
@@ -450,21 +419,16 @@ function AIManager(TaskMangerIn)
 		and (isRAMBO < 2)
 	then
 		if ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe)) then
-			--print(tostring(NPC.EnemiesOnMe)..","..tostring(CanTollerateEnemiesOnMe)..","..tostring(ASuperSurvivor.LastEnemeySeen:GetAnimSetName()))
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion FLEEINGTASK_0003")
 		end
 		if ((NPC.EnemiesOnMe > 0) and (ASuperSurvivor:usingGun() and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))) then
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion FLEEINGTASK_0004")
 		end
 		if (IHaveInjury and (NPC.dangerSeenCount > 0)) then
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion FLEEINGTASK_0005")
 		end
 		if (NPC.dangerSeenCount > Bravery) then
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Companion FLEEINGTASK_0002")
 		end
 	end
 
@@ -474,8 +438,6 @@ function AIManager(TaskMangerIn)
 	-- ----------------------------- --
 	if (false) and (ASuperSurvivor:getAIMode() ~= "Random Solo") and ((ASuperSurvivor:isStarving()) or (ASuperSurvivor:isDyingOfThirst())) then
 		-- leave group and look for food if starving
-		ASuperSurvivor:DebugSay(
-			"Left the building because starving or thirsty condition triggered! Reference Number 000_000_04")
 
 		ASuperSurvivor:setAIMode("Random Solo")
 
@@ -492,15 +454,11 @@ function AIManager(TaskMangerIn)
 			if (HisGroup) then
 				local area = HisGroup:getGroupAreaCenterSquare("FoodStorageArea")
 				if (area) then
-					ASuperSurvivor:DebugSay(
-						"Hunber/Thirst-Like Conditions Met in AImanager - Reference Number DHFB_0002")
 					ASuperSurvivor:walkTo(area)
 				end
 			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Food", "Category", 1))
-			ASuperSurvivor:DebugSay("Hunber/Thirst-Like Conditions Met in AImanager - Reference Number DHFB_0003")
 		elseif (ASuperSurvivor:hasFood()) then
-			ASuperSurvivor:DebugSay("Hunber/Thirst-Like Conditions Met in AImanager - Reference Number DHFB_0004")
 			TaskMangerIn:AddToTop(EatFoodTask:new(ASuperSurvivor, ASuperSurvivor:getFood()))
 		end
 	end
@@ -516,8 +474,6 @@ function AIManager(TaskMangerIn)
 				ASuperSurvivor:Speak("I'm going to get some food before I die of hunger.")
 			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Water", "Category", 1))
-			ASuperSurvivor:DebugSay(
-				"Not enter new building condition met! Condition number (to compare in ai manager file) 0004")
 		end
 	end
 
@@ -542,7 +498,6 @@ function AIManager(TaskMangerIn)
 	then
 		ASuperSurvivor:Speak(GetDialogue("HeyYou"))
 		ASuperSurvivor:SpokeTo(ASuperSurvivor.LastSurvivorSeen:getModData().ID)
-		ASuperSurvivor:DebugSay("Listen Task Condition Met! Reference Number 0005")
 		TaskMangerIn:AddToTop(ListenTask:new(ASuperSurvivor, ASuperSurvivor.LastSurvivorSeen, true))
 	end
 
@@ -562,7 +517,6 @@ function AIManager(TaskMangerIn)
 			ASuperSurvivor:setNeedAmmo(false)
 			-- Reminder: re-enable this
 			ASuperSurvivor:reEquipGun()
-			ASuperSurvivor:DebugSay("GetNeed ammo condition met in AiManager Triggered! Reference Number 006")
 		end
 	end
 
@@ -572,7 +526,6 @@ function AIManager(TaskMangerIn)
 	if not (AiNPC_Job_Is(NPC, "Companion")) then
 		if (ASuperSurvivor:hasWeapon()) and (ASuperSurvivor:Get():getPrimaryHandItem() == nil) and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon") then
 			TaskMangerIn:AddToTop(EquipWeaponTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Weapon related condition met in AI manager triggered! Reference number 007")
 		end
 	end
 
@@ -580,13 +533,14 @@ function AIManager(TaskMangerIn)
 	-- 	Equip Weapon Task            --
 	-- ----------------------------- --
 	if not (AiNPC_Job_Is(NPC, "Companion")) then -- removed and (ASuperSurvivor:getNeedAmmo() == false) condition as I dont remember what that is for
-		if (IsInAction == false) and ASuperSurvivor:usingGun() and (ASuperSurvivor:getDangerSeenCount() == 0) and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))) and (NPC:NPC_FleeWhileReadyingGun()) then
-			--print(ASuperSurvivor:getName() .. " AI detected need to ready gun")
+		if (IsInAction == false)
+			and ASuperSurvivor:usingGun()
+			and (ASuperSurvivor:getDangerSeenCount() == 0)
+			and ((ASuperSurvivor:needToReload())
+				or (ASuperSurvivor:needToReadyGun(weapon)))
+			and (NPC:NPC_FleeWhileReadyingGun())
+		then
 			ASuperSurvivor:ReadyGun(weapon)
-			if (NPC:isSpeaking() == false) then
-				ASuperSurvivor:DebugSay(
-					"Weapon related condition met in AI manager triggered! Reference number 0008")
-			end
 		end
 	end
 
@@ -597,7 +551,6 @@ function AIManager(TaskMangerIn)
 	--if not (AiNPC_Job_Is(NPC,"Companion"))  then
 	--	if (NPC.LastEnemeySeen ~= nil) and ((NPC:isInSameRoom(NPC.LastEnemeySeen)) or (NPC:RealCanSee(NPC.LastEnemeySeen))) and (AiNPC_Task_Is(NPC,"Enter New Building")) then
 	--		TaskMangerIn:AddToTop(AttackTask:new(ASuperSurvivor))
-	--		NPC:DebugSay("Shifting from Enter New Building to Attack! Task! Reference Number ENB_T_PT_0001")
 	--	end
 	--end
 
@@ -629,9 +582,6 @@ function AIManager(TaskMangerIn)
 						TaskMangerIn:clear()
 						TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor,
 							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
-						NPC:DebugSay("GuardTask Cond_000_Cleared")
-					else
-						NPC:DebugSay("GuardTask Cond_000_failed_clear")
 					end
 				end
 
@@ -639,63 +589,27 @@ function AIManager(TaskMangerIn)
 					if (HisGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (HisGroup:getGroupArea("GuardArea")) then
 						TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor,
 							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
-						NPC:DebugSay("GuardTask Cond_0001")
 					end
 				end
 
 				if (HisGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (CenterBaseSquare ~= nil) and not (IsInBase) then
 					TaskMangerIn:AddToTop(WanderInBaseTask:new(ASuperSurvivor))
-					if (NPC:isSpeaking() == false) then NPC:DebugSay("GuardTask Cond_0003") end
 				elseif (HisGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (CenterBaseSquare == nil) and not (IsInBase) then
 					TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, HisGroup:getRandomBaseSquare()))
-					NPC:DebugSay("GuardTask Cond_0004 - Uh boss? There's no guard area OR base areas that you have set.")
 				end
 			else
 				if Task_Is("Flee") then NPC:NPC_ShouldRunOrWalk() end
-				if (NPC:isSpeaking() == false) then NPC:DebugSay("GuardTask Cond_0005") end
 			end
 		end
 
-
-		--if (NPC:getName() ~= nil) and (NPC:getAIMode() ~= nil) and (NPC:getCurrentTask() ~= nil) and (NPC:getGroupRole() ~= nil) and (NPC:getCurrentTask() ~= nil) and (IsInAction ~= nil) then
-		----	print("basetasks " .. ASuperSurvivor:getName().." "..ASuperSurvivor:getAIMode() .. " " .. TaskMangerIn:getCurrentTask() .. " " .. ASuperSurvivor:getGroupRole() .. " " .. ASuperSurvivor:getCurrentTask() .. " " .. tostring(IsInAction))
-		----	print("")
-		--end
-
-
-		if (not SurvivorsFindWorkThemselves or not IsInBase) and (ASuperSurvivor:getGroupRole() == "Guard") and (ASuperSurvivor:getCurrentTask() == "None") and (not IsInAction) and (ZombRand(4) == 0) then
-			--	local randresult = ZombRand(10) + 1
-			--	--print("Guard - random job result is:"..tostring(randresult))
-			--	if(randresult == 1) then
-			--	
-			--		ASuperSurvivor:Speak(getActionText("IGoRelax"))
-			--		TaskMangerIn:AddToTop(WanderInBaseTask:new(ASuperSurvivor))
-			--		ASuperSurvivor:DebugSay("Relax condition met in AI manager! Reference number 0009")
-			--		
-			--	else
-			--	
-			--		local area = HisGroup:getGroupArea("GuardArea")
-			--		if(area) then 		
-			--			ASuperSurvivor:Speak(getActionText("IGoGuard"))
-			--			TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor,area)) 					
-			--			TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
-			--			ASuperSurvivor:DebugSay("Guard area condition met in AI manager! Reference number 000-10")
-			--		else
-			--		--	print("Guard condition area was nil")
-			--			ASuperSurvivor:DebugSay("Guard condition met in AI manager! Reference number 000-11")
-			--		end
-			--	end
-		elseif (ASuperSurvivor:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
+		if (ASuperSurvivor:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
 			if (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Doctor") then
 				local randresult = ZombRand(10) + 1
-				--print("Doctor - random job result is:"..tostring(randresult))
 				if (randresult == 1) then
 					ASuperSurvivor:Speak(getActionText("IGoRelax"))
 					TaskMangerIn:AddToTop(WanderInBaseTask:new(ASuperSurvivor))
-					ASuperSurvivor:DebugSay("Wander In base condition met in AI manager! Reference number 000-12")
 				else
 					local medicalarea = HisGroup:getGroupArea("MedicalStorageArea")
-					ASuperSurvivor:DebugSay("Wander in base condition met in AI manager! Reference number 000-13")
 
 					local gotoSquare
 					if (medicalarea) and (medicalarea[1] ~= 0) then
@@ -711,7 +625,7 @@ function AIManager(TaskMangerIn)
 			elseif (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Farmer") then
 				if (SurvivorsFindWorkThemselves) and (RainManager.isRaining() == false) then
 					local randresult = ZombRand(10) + 1
-					--print("random job result is:"..tostring(randresult))
+
 					if (randresult == 1) then
 						ASuperSurvivor:Speak(getActionText("IGoRelax"))
 						TaskMangerIn:AddToTop(WanderInBaseTask:new(ASuperSurvivor))
@@ -723,7 +637,7 @@ function AIManager(TaskMangerIn)
 							TaskMangerIn:AddToTop(FarmingTask:new(ASuperSurvivor))
 							TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 						else
-							--	print("farming area was nil")
+							CreateLogLine("AI-Manager", isLocalLoggingEnabled, "farming area was nil");
 						end
 					end
 				end
@@ -733,18 +647,14 @@ function AIManager(TaskMangerIn)
 				-- So if you are another modder that has the torch, that's looking to make Followers listen to you more, Follower = 'companion'
 			elseif (ASuperSurvivor:getGroupRole() == "Companion") then -- Not new, this was here before
 				TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
-			elseif (SurvivorsFindWorkThemselves) and not (AiNPC_Job_Is(NPC, "Guard")) and not (AiNPC_Job_Is(NPC, "Leader")) and not (AiNPC_Job_Is(NPC, "Doctor")) and not (AiNPC_Job_Is(NPC, "Farming")) then
-				--	print("yes im a worker: "..tostring(ASuperSurvivor:Get():getBodyDamage():getWetness()))
-
-				--if(RainManager.isRaining()) and (ASuperSurvivor:Get():getBodyDamage():getWetness() > 0.5) and (ASuperSurvivor:Get():isOutside()) and (TaskMangerIn.TaskUpdateLimit ~= 0) and (TaskMangerIn:getCurrentTask() ~= "Enter New Building") and (TaskMangerIn:getCurrentTask() ~= "Find Building") then
-				--	ASuperSurvivor:Speak(getActionText("RainingGoInside"))
-				--	TaskMangerIn:clear()
-				--	TaskMangerIn:AddToTop(AttemptEntryIntoBuildingTask:new(ASuperSurvivor,nil))
-				--	TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
-				--end
-
+			elseif (SurvivorsFindWorkThemselves)
+				and not (AiNPC_Job_Is(NPC, "Guard"))
+				and not (AiNPC_Job_Is(NPC, "Leader"))
+				and not (AiNPC_Job_Is(NPC, "Doctor"))
+				and not (AiNPC_Job_Is(NPC, "Farming"))
+			then
 				if (ASuperSurvivor:Get():getBodyDamage():getWetness() < 0.2) then
-					--print(ASuperSurvivor:getName().."/" .. ASuperSurvivor:getGroupRole() .." yes i should look for work")
+					
 					if (SafeToGoOutAndWork) then
 						TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 
@@ -838,18 +748,8 @@ function AIManager(TaskMangerIn)
 							jobScores[key] = ZombRand(0, value)
 						end
 
-						-- priority assignments (post-randomize)
-						--if ASuperSurvivor:getGroupRole() == "Doctor" then
-						--	jobScores["Doctor"] = jobScores["Doctor"] + 3
-						--elseif ASuperSurvivor:getGroupRole() == "Farmer" then
-						--	jobScores["Farming"] = jobScores["Farming"] + 3
-						--elseif ASuperSurvivor:getGroupRole() == "Guard" then
-						--	jobScores["Guard"] = jobScores["Guard"] + 3
-						--end
-
 						-- find the best task
 						for key, value in pairs(jobScores) do
-							--print(key..":"..tostring(value))
 							if value >= jobScores[job] then job = key end
 						end
 
@@ -894,7 +794,7 @@ function AIManager(TaskMangerIn)
 								TaskMangerIn:AddToTop(ForageTask:new(ASuperSurvivor))
 								TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 							else
-								--	print("forageSquare was nil")
+								CreateLogLine("AI-Manager", isLocalLoggingEnabled, "forage area was nil");
 							end
 						elseif (job == "Chop Wood") then
 							if (chopWoodSquare) then
@@ -902,7 +802,7 @@ function AIManager(TaskMangerIn)
 								TaskMangerIn:AddToTop(ChopWoodTask:new(ASuperSurvivor))
 								TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 							else
-								--	print("chopWoodArea was nil")
+								CreateLogLine("AI-Manager", isLocalLoggingEnabled, "chopWoodArea area was nil");
 							end
 						elseif (job == "Farming") then
 							if (farmingArea) then
@@ -910,7 +810,7 @@ function AIManager(TaskMangerIn)
 								TaskMangerIn:AddToTop(FarmingTask:new(ASuperSurvivor))
 								TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 							else
-								--	print("farmingArea area was nil")
+								CreateLogLine("AI-Manager", isLocalLoggingEnabled, "farmingArea area was nil");
 							end
 						elseif (job == "Guard") then
 							if (guardArea) then
@@ -918,7 +818,7 @@ function AIManager(TaskMangerIn)
 								TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, guardArea))
 								TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 							else
-								--	print("guardArea was nil")
+								CreateLogLine("AI-Manager", isLocalLoggingEnabled, "guardArea area was nil");
 							end
 						elseif (job == "Doctor") then
 							local medicalarea = HisGroup:getGroupArea("MedicalStorageArea")
@@ -956,7 +856,6 @@ function AIManager(TaskMangerIn)
 			if (baseSq ~= nil) then
 				ASuperSurvivor:Speak(getActionText("IGoBackBase"))
 				TaskMangerIn:AddToTop(ReturnToBaseTask:new(ASuperSurvivor))
-				ASuperSurvivor:DebugSay("none task condition met in AI manager! Reference number Alt_000-A01")
 			end
 		end
 	end
@@ -966,31 +865,37 @@ function AIManager(TaskMangerIn)
 	-- ----------------------------------------------------------- --
 
 	-- TODO test: maybe add 'if not in attack / pursue / threaten , then do ' along with the 'none tasks'
-	-- if(ASuperSurvivor.DebugMode) then print(ASuperSurvivor:getAIMode()) end
 
-	if (ASuperSurvivor:getAIMode() == "Random Solo") and (TaskMangerIn:getCurrentTask() ~= "Listen") and (TaskMangerIn:getCurrentTask() ~= "Take Gift") then -- solo random survivor AI flow	
-		if (TaskMangerIn:getCurrentTask() == "None") and (ASuperSurvivor.TargetBuilding ~= nil) and (not ASuperSurvivor:getBuildingExplored(ASuperSurvivor.TargetBuilding)) and (not ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)) then
+	if (ASuperSurvivor:getAIMode() == "Random Solo")
+		and (TaskMangerIn:getCurrentTask() ~= "Listen")
+		and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
+	then -- solo random survivor AI flow	
+		if (TaskMangerIn:getCurrentTask() == "None")
+			and (ASuperSurvivor.TargetBuilding ~= nil)
+			and (not ASuperSurvivor:getBuildingExplored(ASuperSurvivor.TargetBuilding))
+			and (not ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen))
+		then
 			TaskMangerIn:AddToTop(AttemptEntryIntoBuildingTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding))
-			ASuperSurvivor:DebugSay(
-				"Attempt entry into building Task condition met in AI manager! Reference number B_0001")
-
-			--		V backup just in case
-			--		elseif(TaskMangerIn:getCurrentTask() == "None") then
 		elseif (TaskMangerIn:getCurrentTask() == "None") and ((not EnemyIsSurvivor) or (not ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen))) then
 			TaskMangerIn:AddToTop(FindUnlootedBuildingTask:new(ASuperSurvivor))
-			ASuperSurvivor:DebugSay("Find Unlooted Building Task condition met in AI manager! Reference number B_0002")
 		end
 
 		if (ASuperSurvivor.TargetBuilding ~= nil) or (ASuperSurvivor:inUnLootedBuilding()) then
 			if ASuperSurvivor.TargetBuilding == nil then ASuperSurvivor.TargetBuilding = ASuperSurvivor:getBuilding() end
-			if (not ASuperSurvivor:hasWeapon()) and (TaskMangerIn:getCurrentTask() ~= "Loot Category") and (ASuperSurvivor:getDangerSeenCount() <= 0) and (ASuperSurvivor:inUnLootedBuilding()) and (NPC:isTargetBuildingClaimed(ASuperSurvivor.TargetBuilding) == false) then
-				ASuperSurvivor:DebugSay("Loot Task condition met in AI manager! Reference number B_0003")
+			if (not ASuperSurvivor:hasWeapon()) and (TaskMangerIn:getCurrentTask() ~= "Loot Category")
+				and (ASuperSurvivor:getDangerSeenCount() <= 0)
+				and (ASuperSurvivor:inUnLootedBuilding())
+				and (NPC:isTargetBuildingClaimed(ASuperSurvivor.TargetBuilding) == false)
+			then
 				TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding, "Food", 2))
 				TaskMangerIn:AddToTop(EquipWeaponTask:new(ASuperSurvivor))
 				TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding, "Weapon", 2))
-			elseif (ASuperSurvivor:hasRoomInBag()) and (TaskMangerIn:getCurrentTask() ~= "Loot Category") and (ASuperSurvivor:getDangerSeenCount() <= 0) and (ASuperSurvivor:inUnLootedBuilding()) and (NPC:isTargetBuildingClaimed(ASuperSurvivor.TargetBuilding) == false) then
+			elseif (ASuperSurvivor:hasRoomInBag())
+				and (TaskMangerIn:getCurrentTask() ~= "Loot Category")
+				and (ASuperSurvivor:getDangerSeenCount() <= 0) and (ASuperSurvivor:inUnLootedBuilding())
+				and (NPC:isTargetBuildingClaimed(ASuperSurvivor.TargetBuilding) == false)
+			then
 				TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding, "Food", 1))
-				ASuperSurvivor:DebugSay(" Task condition met in AI manager! Reference number B_0004")
 			end
 		end
 		if (SurvivorBases) and
@@ -1008,36 +913,33 @@ function AIManager(TaskMangerIn)
 			(ASuperSurvivor:isInSameBuildingWithEnemyAlt() == false) and -- That way npc doesn't stop what they're doing moment they look away from a hostile
 			(ASuperSurvivor:hasFood())
 		then
-			ASuperSurvivor:DebugSay("Wander in building Task condition met in AI manager! Reference number C_0001")
 			TaskMangerIn:clear()
 			ASuperSurvivor:setBaseBuilding(ASuperSurvivor:getBuilding())
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding()))
 			TaskMangerIn:AddToTop(LockDoorsTask:new(ASuperSurvivor, true))
 			TaskMangerIn:AddToTop(BarricadeBuildingTask:new(ASuperSurvivor))
 			ASuperSurvivor:Speak("This will be my base.")
-			--print(ASuperSurvivor:getName() .. " making base")
 			local GroupId = SSGM:GetGroupIdFromSquare(ASuperSurvivor:Get():getCurrentSquare())
-			--ASuperSurvivor:Speak(tostring(GroupId))
+
+			CreateLogLine("AI-Manager", isLocalLoggingEnabled, tostring(ASuperSurvivor:getName()) .. " is making a base");
+			CreateLogLine("AI-Manager", isLocalLoggingEnabled, tostring(GroupId) .. " is the base id");
+
 			if (GroupId == -1) then -- if the base this npc is gonna stay in is not declared as another base then they set it as thier base.
-				--	print("New base")
 				local nGroup = SSGM:newGroup()
 				nGroup:addMember(ASuperSurvivor, "Leader")
 				local def = ASuperSurvivor:getBuilding():getDef()
 				local bounds = { def:getX() - 1, (def:getX() + def:getW() + 1), def:getY() - 1,
 					(def:getY() + def:getH() + 1), 0 }
 				nGroup:setBounds(bounds)
-				--ASuperSurvivor:Speak(tostring(nGroup:getID()))
 			elseif ((SSM:Get(0) == nil) or (GroupId ~= SSM:Get(0):getGroupID())) then
 				local OwnerGroup = SSGM:Get(GroupId)
 				local LeaderID = OwnerGroup:getLeader()
-				--	print("Joining g:" .. GroupId .. " l:" .. LeaderID)
 				if (LeaderID ~= 0) then
 					OwnerGroup:addMember(ASuperSurvivor, "Worker")
 					ASuperSurvivor:Speak("Please let me stay here")
 					local LeaderObj = SSM:Get(LeaderID)
 					if (LeaderObj) then
 						LeaderObj:Speak("Welcome to our Group")
-						--	print("Accepted by " .. LeaderObj:getName())
 					end
 				end
 			end
@@ -1046,8 +948,6 @@ function AIManager(TaskMangerIn)
 
 		if ((SurvivorBases) and (ASuperSurvivor:isStarving()) or (ASuperSurvivor:isDyingOfThirst())) and (ASuperSurvivor:getBaseBuilding() ~= nil) then -- leave group and look for food if starving
 			-- random survivor in base is starving - reset so he goes back out looking for food and re base there
-			--print(ASuperSurvivor:getName() .. " leaving group because starving")
-
 			ASuperSurvivor:setAIMode("Random Solo")
 			if (ASuperSurvivor:getGroupID() ~= nil) then
 				local group = SSGM:Get(ASuperSurvivor:getGroupID())
@@ -1055,15 +955,13 @@ function AIManager(TaskMangerIn)
 			end
 			ASuperSurvivor:getTaskManager():clear()
 			ASuperSurvivor:Speak(getActionText("LeaveBCHungry"))
-			print(ASuperSurvivor:getName() .. ": clearing task manager because too hungry")
+			CreateLogLine("AI-Manager", isLocalLoggingEnabled, tostring(ASuperSurvivor:getName()) .. ": clearing task manager because too hungry");
 			ASuperSurvivor:resetAllTables()
 			ASuperSurvivor:setBaseBuilding(nil)
 			if (ASuperSurvivor:Get():getStats():getHunger() > 0.30) then ASuperSurvivor:Get():getStats():setHunger(0.30) end
 			if (ASuperSurvivor:Get():getStats():getThirst() > 0.30) then ASuperSurvivor:Get():getStats():setThirst(0.30) end
 		end
 	end
-
-	--if(ASuperSurvivor.DebugMode) then ASuperSurvivor:DebugSay(ASuperSurvivor:getName().." "..ASuperSurvivor:getAIMode() .. " AIManager3 " .. TaskMangerIn:getCurrentTask()) end
 
 	return TaskMangerIn
 end

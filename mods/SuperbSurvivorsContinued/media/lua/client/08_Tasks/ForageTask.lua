@@ -1,7 +1,10 @@
 ForageTask = {}
 ForageTask.__index = ForageTask
 
+local isLocalLoggingEnabled = false;
+
 function ForageTask:new(superSurvivor)
+	CreateLogLine("ForageTask", isLocalLoggingEnabled, "function: ForageTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -12,8 +15,6 @@ function ForageTask:new(superSurvivor)
 	o.OnGoing = false
 	o.Complete = false
 	o.ForagedCount = 0
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

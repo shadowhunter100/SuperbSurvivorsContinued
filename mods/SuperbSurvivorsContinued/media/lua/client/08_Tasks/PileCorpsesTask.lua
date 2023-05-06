@@ -4,6 +4,7 @@ PileCorpsesTask.__index = PileCorpsesTask
 local isLocalLoggingEnabled = false;
 
 function PileCorpsesTask:new(superSurvivor, BringHere)
+	CreateLogLine("PileCorpsesTask", isLocalLoggingEnabled, "function: PileCorpsesTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -17,7 +18,6 @@ function PileCorpsesTask:new(superSurvivor, BringHere)
 	o.TargetSquare = nil
 	o.Complete = false
 
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 	o.parent:setLastWeapon()
 	return o
 end
@@ -57,11 +57,9 @@ function PileCorpsesTask:update()
 			else
 				local Corpse = player:getInventory():FindAndReturn("CorpseMale")
 				if not Corpse then Corpse = player:getInventory():FindAndReturn("CorpseFemale") end
-				--self.BringHereSquare:AddWorldInventoryItem(Corpse,(ZombRand(10)/100),(ZombRand(10)/100),0)
-				--self.parent.player:getInventory():DoRemoveItem(Corpse)
-				self.parent:DebugSay("PileCorpsesTask is about to trigger a StopWalk! ")
+
 				self.parent:StopWalk()
-				--print(self:getName().."stopping walking4")
+
 				ISTimedActionQueue.add(ISDropItemAction:new(self.parent:Get(), Corpse, 30))
 				self.parent:Get():setPrimaryHandItem(nil)
 				self.parent:Get():setSecondaryHandItem(nil)

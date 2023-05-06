@@ -1,7 +1,10 @@
 EquipWeaponTask = {}
 EquipWeaponTask.__index = EquipWeaponTask
 
+local isLocalLoggingEnabled = false;
+
 function EquipWeaponTask:new(superSurvivor)
+	CreateLogLine("EquipWeaponTask", isLocalLoggingEnabled, "EquipWeaponTask:new() Called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -11,7 +14,6 @@ function EquipWeaponTask:new(superSurvivor)
 
 	o.OnGoing = true
 	o.Complete = false
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

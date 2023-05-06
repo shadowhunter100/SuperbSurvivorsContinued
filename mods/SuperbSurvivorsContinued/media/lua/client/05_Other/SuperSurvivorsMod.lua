@@ -1,4 +1,4 @@
-require "02_Utilities/SuperSurvivorWeaponsList"
+require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList"
 
 -- WIP - ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
@@ -358,6 +358,8 @@ end
 
 -- WIP - Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
+	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
+
 	if (getSpecificPlayer(0)) then
 		--getSpecificPlayer(0):Say(tostring(keyNum))
 
@@ -435,13 +437,11 @@ function SuperSurvivorKeyBindAction(keyNum)
 							member:Get():getForname() .. getActionText("ComeWithMe_After"))
 						member:getTaskManager():clear()
 						member:getTaskManager():AddToTop(FollowTask:new(member, mySS:Get()))
-						--mySS:DebugSay("Follow Task triggered in supersurvivorsmod - path a")
 					else
-						--("getClosestMember returned nil")
+						CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "getClosestMember returned nil");
 					end
 				else
-					--mySS:DebugSay("no group")
-					--("cant call close member bc no group for player detected")
+					CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "no group for player found");
 				end
 			end
 		elseif (keyNum == getCore():getKey("Call Closest Group Member")) then -- t key
@@ -454,11 +454,10 @@ function SuperSurvivorKeyBindAction(keyNum)
 						mySS:Get():Say(member:Get():getForname() .. ", come here.")
 						member:getTaskManager():AddToTop(ListenTask:new(member, mySS:Get(), false))
 					else
-						--("getClosestMember returned nil")
+						CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "getClosestMember returned nil");
 					end
 				else
-					--mySS:DebugSay("no group")
-					--("cant call close member bc no group for player detected")
+					CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "no group for player found");
 				end
 			end
 		elseif (keyNum == 1) then -- esc key
@@ -466,7 +465,6 @@ function SuperSurvivorKeyBindAction(keyNum)
 			SSM:SaveAll()
 			SSGM:Save()
 			saveSurvivorMap()
-			-- The 'key' in markouts are the default keys befor a player changes them
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")
 			SuperSurvivorsHotKeyOrder(index)
@@ -490,14 +488,10 @@ function SuperSurvivorKeyBindAction(keyNum)
 			else
 				dest = Group:getGroupAreaCenterSquare("FoodStorageArea")
 			end
-			-- WIP - where did this "self" come from? commented out until further notice...
-			-- if (not dest) then dest = self.parent.player:getCurrentSquare() end
 
 			if (storagecontainer) then
 				getSpecificPlayer(0):Say(tostring(storagecontainer));
 				GTask = CleanInvTask:new(SS, dest, false);
-			else
-
 			end
 		elseif (keyNum == 0) then
 			getSpecificPlayer(0):Say(tostring("updating"));
@@ -888,120 +882,3 @@ function SSCreatePlayerHandle(newplayerID)
 end
 
 Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
-
--- DEBUG FUNCTIONS BELOW
-function SuperSurvivorDoRandomSpawnsDebug()
-	if (DebugOptions == true) then
-		local RealAlternativeSpawning = AlternativeSpawning - 1
-		for i = RealAlternativeSpawning, 1, -1
-		do -- It will run through these only so many times depending on the options itself. Should reduce lag.
-			print("---------------- SuperSurvivorDoRandomSpawns() START  -----------------------")
-			print("")
-			print("")
-			print("")
-			print("AltSpawnPercent			=	" .. tostring(AltSpawnPercent))
-			print("i _________________ 	=	" .. tostring(i))
-			print("")
-			print(
-				"This may not give true answers, it's testing ZombRand and how it works. To see if EVERY time it's called does it create a new one, EVEN in a For i = 1 do scenario. So don't fall for if it 'fails' or 'passes'. It's testing RANDOM.")
-			print("")
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 2) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 2) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 2) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 3) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 3) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 3) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 4) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 4) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 4) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 5) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 5) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 5) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 6) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 6) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 6) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning >= 7) then
-				print(
-					"Testing a ZombRand AltSpawnPercent and (AlternativeSpawning >= 7) Pass: " .. tostring(ZombRand(100)))
-			else
-				print("Testing a ZombRand AltSpawnPercent - 1 and (AlternativeSpawning >= 7) Fail: " ..
-					tostring(ZombRand(100)))
-			end
-			print("")
-			print("")
-			print("")
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFivePercent() 	(==true==)")
-				SuperSurSurvivorSpawnGenFivePercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFivePercent() 		(=false=)")
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenTenPercent() 		(==true==)")
-				SuperSurSurvivorSpawnGenTenPercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenTenPercent() 		(=false=)")
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenTwentyPercent() 	(==true==)")
-				SuperSurSurvivorSpawnGenTwentyPercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenTwentyPercent() 	(=false=)")
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenThirtyPercent() 	(==true==)")
-				SuperSurSurvivorSpawnGenThirtyPercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenThirtyPercent() 	(=false=)")
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFourtyPercent() 	(==true==)")
-				SuperSurSurvivorSpawnGenFourtyPercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFourtyPercent() 	(=false=)")
-			end
-			if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFiftyPercent()	(==true==)")
-				SuperSurSurvivorSpawnGenFiftyPercent()
-			else
-				print(tostring(AltSpawnPercent) ..
-					" - altspawnpercent, i = " .. tostring(i) .. " SuperSurSurvivorSpawnGenFiftyPercent()		(=false=)")
-			end
-			print("")
-			print("")
-			print("")
-			print("---------------- SuperSurvivorDoRandomSpawns() FINISH -----------------------")
-		end
-	end
-end

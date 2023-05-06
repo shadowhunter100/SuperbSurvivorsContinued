@@ -55,11 +55,9 @@ function AIManager_Companion(TMI)
 			if (DistanceBetweenMainPlayer > 10) then                                                             -- Double checker
 				TMI:clear()
 				TMI:AddToTop(FollowTask:new(NPC, getSpecificPlayer(0)))
-				NPC:DebugSay("Companion Went FAR too far away, CLEARING TASKS - and returning companion!")
 			end
 			-- This will avoid clearing tasks if can help it, so the NPC can remember to do things like heal and reload
 			TMI:AddToTop(FollowTask:new(NPC, getSpecificPlayer(0)))
-			NPC:DebugSay("Companion Went too far away, returning companion!")
 		end
 
 
@@ -116,10 +114,8 @@ function AIManager_Companion(TMI)
 					and (not EnemySuperSurvivor.player:getModData().dealBreaker)
 				then
 					TMI:AddToTop(ThreatenTask:new(NPC, EnemySuperSurvivor, "Scram"))
-					NPC:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_01")
 				else
 					TMI:AddToTop(AttackTask:new(NPC))
-					NPC:DebugSay("Threaten/Attack Task condition triggered! Reference Number ATC_000_02")
 				end
 			end
 		end
@@ -138,7 +134,6 @@ function AIManager_Companion(TMI)
 			then
 				NPC:setNeedAmmo(false)
 				NPC:reEquipGun()
-				NPC:DebugSay("Companion RELOAD_Gun_0001")
 			end
 		end
 
@@ -155,7 +150,6 @@ function AIManager_Companion(TMI)
 				and (NPC:NPC_FleeWhileReadyingGun())
 			then
 				NPC:ReadyGun(weapon)
-				if (NPC:isSpeaking() == false) then NPC:DebugSay("Companion READY_Gun_0001") end
 			end
 		end
 
@@ -164,7 +158,6 @@ function AIManager_Companion(TMI)
 		-- ----------------------------- --
 		if (NPC:hasWeapon()) and (NPC:Get():getPrimaryHandItem() == nil) and (TMI:getCurrentTask() ~= "Equip Weapon") and (NPC_TaskIsNot("First Aide")) then
 			TMI:AddToTop(EquipWeaponTask:new(NPC))
-			NPC:DebugSay("Companion EQUIP_Gun_0001")
 		end
 
 		-- Careful setting up Flee to heal and 'healing', they will conflict very easily.
@@ -180,7 +173,6 @@ function AIManager_Companion(TMI)
 		then
 			--	TMI:AddToTop(FindBuildingTask:new(NPC))	
 			TMI:AddToTop(FindUnlootedBuildingTask:new(NPC))
-			NPC:DebugSay("Companion HEALING_0001")
 		end
 
 		-- ----------- --
@@ -198,7 +190,6 @@ function AIManager_Companion(TMI)
 				and (TMI:getCurrentTask() ~= "Hold Still")
 			then
 				TMI:AddToTop(FirstAideTask:new(NPC)) -- If general healing
-				NPC:DebugSay("Companion HealSelf_0001")
 			end
 		end
 	end

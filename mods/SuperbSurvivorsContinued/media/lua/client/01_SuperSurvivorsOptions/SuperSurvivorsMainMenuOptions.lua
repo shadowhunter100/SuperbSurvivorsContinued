@@ -1,5 +1,5 @@
 --[[
-    -- WIP - The Game Options is likely conflicting with "Expanded Helicopter Events"  
+    -- WIP - The Game Options is likely conflicting with "Expanded Helicopter Events"
     https://steamcommunity.com/sharedfiles/filedetails/?id=2458631365&searchtext=exapanded+helicopter
 ]]
 -- console.txt message below
@@ -8,93 +8,104 @@
 local isLocalLoggingEnabled = false;
 
 local function getOptionText(text)
-	return getText("UI_Option_SS_" .. text)
+    return getText("UI_Option_SS_" .. text)
 end
 
 local function saveSurvivorOptions()
-	local writeFile = getFileWriter("SurvivorOptions.lua", true, false)
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: saveSurvivorOptions() called");
+    local writeFile = getFileWriter("SurvivorOptions.lua", true, false)
 
-	for index, value in pairs(SuperSurvivorOptions) do
-		writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n");
-	end
-	writeFile:close();
+    for index, value in pairs(SuperSurvivorOptions) do
+        writeFile:write(tostring(index) .. " " .. tostring(value) .. "\r\n");
+    end
+    writeFile:close();
 end
 
 local function superSurvivorSetOption(option, ToValue)
-	SuperSurvivorOptions[option] = ToValue
-	saveSurvivorOptions()
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: superSurvivorSetOption() called");
+    SuperSurvivorOptions[option] = ToValue
+    saveSurvivorOptions()
 end
 
 local GameOption = ISBaseObject:derive("GameOption");
 
 function GameOption:new(name, control, arg1, arg2)
-	local o = {}
-	setmetatable(o, self)
-	self.__index = self
-	o.name = name
-	o.control = control
-	o.arg1 = arg1
-	o.arg2 = arg2
-	if control.isCombobox then
-		control.onChange = self.onChangeComboBox
-		control.target = o
-	end
-	if control.isTickBox then
-		control.changeOptionMethod = self.onChangeTickBox
-		control.changeOptionTarget = o
-	end
-	if control.isSlider then
-		control.targetFunc = self.onChangeVolumeControl
-		control.target = o
-	end
-	return o
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:new() called");
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    o.name = name
+    o.control = control
+    o.arg1 = arg1
+    o.arg2 = arg2
+    if control.isCombobox then
+        control.onChange = self.onChangeComboBox
+        control.target = o
+    end
+    if control.isTickBox then
+        control.changeOptionMethod = self.onChangeTickBox
+        control.changeOptionTarget = o
+    end
+    if control.isSlider then
+        control.targetFunc = self.onChangeVolumeControl
+        control.target = o
+    end
+    return o
 end
 
 function GameOption:toUI()
-	print('ERROR: option "' .. self.name .. '" missing toUI()')
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:toUI() called");
 end
 
 function GameOption:apply()
-	print('ERROR: option "' .. self.name .. '" missing apply()')
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:apply() called");
 end
 
 function GameOption:resetLua()
-	MainOptions.instance.resetLua = true
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:resetLua() called");
+    MainOptions.instance.resetLua = true
 end
 
 function GameOption:restartRequired(oldValue, newValue)
-	if getCore():getOptionOnStartup(self.name) == nil then
-		getCore():setOptionOnStartup(self.name, oldValue)
-	end
-	if getCore():getOptionOnStartup(self.name) == newValue then
-		return
-	end
-	MainOptions.instance.restartRequired = true
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:restartRequired() called");
+    if getCore():getOptionOnStartup(self.name) == nil then
+        getCore():setOptionOnStartup(self.name, oldValue)
+    end
+    if getCore():getOptionOnStartup(self.name) == newValue then
+        return
+    end
+    MainOptions.instance.restartRequired = true
 end
 
 function GameOption:onChangeComboBox(box)
-	self.gameOptions:onChange(self)
-	if self.onChange then
-		self:onChange(box)
-	end
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled,
+        "function: GameOption:onChangeComboBox() called");
+    self.gameOptions:onChange(self)
+    if self.onChange then
+        self:onChange(box)
+    end
 end
 
 function GameOption:onChangeTickBox(index, selected)
-	self.gameOptions:onChange(self)
-	if self.onChange then
-		self:onChange(index, selected)
-	end
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:onChangeTickBox() called");
+    self.gameOptions:onChange(self)
+    if self.onChange then
+        self:onChange(index, selected)
+    end
 end
 
 function GameOption:onChangeVolumeControl(control, volume)
-	self.gameOptions:onChange(self)
-	if self.onChange then
-		self:onChange(control, volume)
-	end
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled,
+        "function: GameOption:onChangeVolumeControl() called");
+    self.gameOptions:onChange(self)
+    if self.onChange then
+        self:onChange(control, volume)
+    end
 end
 
 --TODO: separate UI into sections (spawn , raiders , hotkeys)
 function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, options, description)
+    CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled, "function: GameOption:addCustomCombo() called");
     local spawnrateCombo = self:addCombo(splitpoint, y, comboWidth, 20, label, options, 1)
     if description then
         spawnrateCombo:setToolTipMap({ defaultTooltip = description });
@@ -112,12 +123,14 @@ function MainOptions:addCustomCombo(id, splitpoint, y, comboWidth, label, option
             superSurvivorSetOption(id, box.selected)
             SuperSurvivorsRefreshSettings()
         else
-            -- print("error could not set " .. id .. " option")
+            CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled,
+                "function: gameOption:apply() called and error could not set " .. id .. " option");
         end
     end
 
     function gameOption:onChange(box)
-        -- print("option changed to " .. tostring(box.selected))
+        CreateLogLine("SuperSurvivorsMainMenuOptions", isLocalLoggingEnabled,
+            "function: gameOption:addCustomCombo() called and changed to: " .. tostring(box.selected));
     end
 
     self.gameOptions:add(gameOption)

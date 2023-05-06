@@ -1602,7 +1602,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1616,7 +1617,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1630,7 +1632,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1644,7 +1647,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1658,7 +1662,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1672,7 +1677,8 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkName = "Doctor",
 	PerkLevel = 5,
 	isFemale = false,
-	Name = getText("ContextMenu_SD_DoctorPrefix_Before") .. GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
+	GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1704,12 +1710,10 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 	local square = getCell():getGridSquare(PresetSpawn.X, PresetSpawn.Y, PresetSpawn.Z)
 
 	if (square:getModData().thisSquareSpawnedPreset == true) then
-		--print("not spawning present because thisSquareSpawnedPreset already = true ")
 		return false
 	end
 
 	if (PresetSpawn.isItemSpawn ~= nil) and (PresetSpawn.itemType ~= nil) then
-		--print("PresetSpawn isItemSpawn ")
 		local item = PresetSpawn.itemType
 		local count = PresetSpawn.count
 		if not count then count = 1 end
@@ -1724,7 +1728,6 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 		end
 		if (PresetSpawn.GroupID) then square:getModData().Group = PresetSpawn.GroupID end -- who it belongs to
 	else
-		--print("PresetSpawn normal survivor ")
 		if PresetSpawn.isFemale ~= nil then isFemale = PresetSpawn.isFemale end
 		local SuperSurvivor = SSM:spawnSurvivor(isFemale, square)
 		if (SuperSurvivor == nil) then return false end
@@ -1784,10 +1787,6 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 			local tempGroup = SSGM:Get(PresetSpawn.GroupID)
 
 			tempGroup:addMember(SuperSurvivor, Role)
-
-			--print("added " .. SuperSurvivor:getName() .. " to group " .. tostring(PresetSpawn.GroupID) .. "-" .. tostring(SuperSurvivor:getGroupID()))
-		else
-			--print("No group ID for survivor " .. SuperSurvivor:getName())
 		end
 
 		if (PresetSpawn.NoParty ~= nil) then
@@ -1821,7 +1820,7 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 					level = PresetSpawn.PerkLevel
 				end
 				local count = 0;
-				--print("leveling perk: "..tostring(perk))
+
 				while (count < level) do
 					SuperSurvivor.player:LevelPerk(perk);
 					count = count + 1;
@@ -1879,7 +1878,6 @@ end
 function SuperSurvivorPresetSpawn(square)
 	if (RPresetSpawns ~= nil) then
 		if (NoPreSetSpawn) then
-			--print("NoPreSetSpawn = true, canceling preset spawn")
 			return false
 		end
 
@@ -1895,12 +1893,9 @@ function SuperSurvivorPresetSpawn(square)
 		then
 			square:getModData().SurvivorSquareLoaded = true;
 
-			--print("preset spawned at " .. tostring(x).."," .. tostring(y).."," .. tostring(z))
 			SuperSurvivorPresetSpawnThis(RPresetSpawns[i]) -- WIP - console.txt logged an error at this line
 			return true
 		end
-	else
-		--print("RPresetSpawns = nil???")
 	end
 
 	return false

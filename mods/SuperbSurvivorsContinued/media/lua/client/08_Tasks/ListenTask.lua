@@ -1,7 +1,10 @@
 ListenTask = {}
 ListenTask.__index = ListenTask
 
+local isLocalLoggingEnabled = false;
+
 function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
+	CreateLogLine("ListenTask", isLocalLoggingEnabled, "function: ListenTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -15,7 +18,6 @@ function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
 	o.TicksSinceLastExchange = 0
 	o.Spoke = false
 	o.IsNPConNPC = ((o.parent.player:isLocalPlayer() == false) and (TalkToMe:isLocalPlayer() == false))
-	o.parent:DebugSay("ListenTask is about to trigger a StopWalk! ")
 	o.parent:StopWalk()
 	superSurvivor:Speak(GetDialogueSpeech("Respond"))
 
@@ -54,7 +56,6 @@ function ListenTask:update()
 		if (distance > 1.8) then
 			self.parent:walkTo(self.Aite:getCurrentSquare())
 		else
-			self.parent:DebugSay("ListenTask is about to trigger a StopWalk! Path B")
 			self.parent:StopWalk()
 			self.parent.player:faceThisObject(self.Aite)
 			if (self.Spoke == false) then

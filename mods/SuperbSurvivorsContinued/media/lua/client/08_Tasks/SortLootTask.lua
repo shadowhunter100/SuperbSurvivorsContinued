@@ -1,11 +1,13 @@
 SortLootTask = {}
 SortLootTask.__index = SortLootTask
 
+local isLocalLoggingEnabled = false;
+
 function SortLootTask:new(superSurvivor, incldHandItems)
+	CreateLogLine("SortLootTask", isLocalLoggingEnabled, "function: SortLootTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
-	superSurvivor:DebugSay("SortLootTask is about to trigger a StopWalk! ")
 	superSurvivor:StopWalk()
 	if (incldHandItems == nil) then incldHandItems = false end
 	o.parent = superSurvivor
@@ -65,7 +67,6 @@ function SortLootTask:update()
 		if (sweapon == nil) then sweapon = 0 end
 
 		-- exlude ammo types and ammo box types
-		self.parent:DebugSay("SortLootTask is about to trigger a StopWalk! (Path B) ")
 		self.parent:StopWalk()
 		local items = inv:getItems();
 		if (items) then
@@ -74,7 +75,6 @@ function SortLootTask:update()
 				if (item ~= nil) then
 					local DropSquare = self.Group:getBestGroupAreaContainerForItem(item)
 					if (instanceof(DropSquare, "IsoObject")) then
-						print("CleanInvTask given a ISOObject container")
 						self.TheDropContainer = DropSquare
 						self.TheDropSquare = DropSquare:getSquare()
 					else
@@ -86,11 +86,6 @@ function SortLootTask:update()
 						self.parent:walkTo(self.TheDropSquare)
 						return false
 					else
-						print("drop " ..
-							tostring(item:getDisplayName()) ..
-							" " ..
-							tostring(item:isEquipped()) ..
-							" " .. tostring(self.parent.player:isEquipped(item)) .. tostring(item:getBodyLocation()))
 						if (item:isBroken()) or (
 								(not self.parent.player:isEquipped(item))
 								and (not item:isEquipped())
@@ -103,7 +98,6 @@ function SortLootTask:update()
 										and (item ~= pweapon)
 										and (item ~= sweapon)))
 							) then
-
 							local container
 							if (self.TheDropContainer ~= nil) then
 								if (self.TheDropContainer:getContainer() ~= nil) then
@@ -129,7 +123,6 @@ function SortLootTask:update()
 											if (items:get(j):getContainer() ~= nil) then
 												local c = items:get(j):getContainer()
 												if (c ~= nil) then --and (c:HasType(item:getCat())) then
-													--print(tostring(items:get(j):getName()..": found container for " .. tostring(items:get(j):getType())))
 													container = c
 												end
 											end
@@ -182,7 +175,6 @@ function SortLootTask:update()
 					if (item ~= nil) then
 						local DropSquare = self.Group:getBestGroupAreaContainerForItem(item)
 						if (instanceof(DropSquare, "IsoObject")) then
-							print("CleanInvTask given a ISOObject container")
 							self.TheDropContainer = DropSquare
 							self.TheDropSquare = DropSquare:getSquare()
 						else
@@ -200,19 +192,16 @@ function SortLootTask:update()
 									and (item ~= self.parent.LastGunUsed)
 									and (item ~= self.parent.LastMeleUsed)
 									and (self.parent:isAmmoForMe(item:getType()) == false)
-									and (item ~= sweapon)
-								) then
-								print("drop bag " ..
-									tostring(item:getDisplayName()) ..
-									" " ..
-									tostring(item:isEquipped()) .. " " .. tostring(self.parent.player:isEquipped(item)))
-								if (self.TheDropContainer ~= nil) and (self.TheDropContainer.getContainer ~= nil) and (self.TheDropContainer:getContainer():hasRoomFor(self.parent.player, item)) then
+									and (item ~= sweapon))
+							then
+								if (self.TheDropContainer ~= nil)
+									and (self.TheDropContainer.getContainer ~= nil)
+									and (self.TheDropContainer:getContainer():hasRoomFor(self.parent.player, item))
+								then
 									local container = self.TheDropContainer:getContainer()
-									--self.parent.player:Say("Here i am 2")
 									ISTimedActionQueue.add(ISInventoryTransferAction:new(self.parent.player, item, bag,
 										container, nil))
 								else
-									--self.parent.player:Say("Here i am 3")
 									square:AddWorldInventoryItem(item, (ZombRand(1, 9) / 10), (ZombRand(1, 9) / 10), 0.0);
 									bag:DoRemoveItem(item);
 								end

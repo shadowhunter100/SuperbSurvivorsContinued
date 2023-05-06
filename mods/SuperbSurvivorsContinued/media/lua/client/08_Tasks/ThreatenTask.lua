@@ -1,7 +1,10 @@
 ThreatenTask = {}
 ThreatenTask.__index = ThreatenTask
 
+local isLocalLoggingEnabled = false;
+
 function ThreatenTask:new(superSurvivor, Aite, Demands)
+	CreateLogLine("ThreatenTask", isLocalLoggingEnabled, "function: ThreatenTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -22,9 +25,6 @@ function ThreatenTask:new(superSurvivor, Aite, Demands)
 	o.SquareAtThreat = nil
 	o.TicksWaitedForResponse = 0
 
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
-
-
 	return o
 end
 
@@ -32,7 +32,6 @@ function ThreatenTask:isComplete()
 	if (not self.Complete) then
 		return false
 	else
-		self.parent:DebugSay("ThreatenTask is about to trigger a StopWalk! ")
 		self.parent:StopWalk()
 		return true
 	end
@@ -62,9 +61,8 @@ end
 
 function ThreatenTask:dealComplete()
 	if self.StartedThreatening then
-		if Demands == "Scram" then
+		if Demands == "Scram" then -- WIP - "Demands" is undefined...
 			if self.theDistance >= 20 and not self.parent.player:CanSee(self.Aite.player) then
-				self.parent:DebugSay(self.parent:getName() .. " ThreatenTask complete")
 				return true
 			end
 		end
@@ -77,7 +75,7 @@ function ThreatenTask:update()
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
 	if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
-		if (self.parent:needToReadyGun(weapon)) then
+		if (self.parent:needToReadyGun(weapon)) then -- WIP - "weapon" is undefined...
 			self.parent:ReadyGun(weapon)
 			return false
 		end
@@ -89,8 +87,6 @@ function ThreatenTask:update()
 
 	if (self.StartedThreatening == true) then
 		if (self:dealBreaker()) then
-			--self.parent.player:getModData().isRobber = false
-			--self.parent.player:getModData().isHostile = true
 			self.parent:Speak("alright you asking for it!")
 			self.Aite.player:getModData().dealBreaker = true
 			self.Complete = true
@@ -106,7 +102,6 @@ function ThreatenTask:update()
 
 
 	if (self.parent.player:IsAttackRange(self.Aite:getX(), self.Aite:getY(), self.Aite:getZ())) or (self.theDistance < 0.65) then
-		self.parent:DebugSay("ThreatenTask is about to trigger a StopWalk! Path A ")
 		self.parent:StopWalk()
 		self.parent.player:NPCSetAiming(true)
 		self.parent.player:faceThisObject(self.Aite.player)
@@ -116,16 +111,13 @@ function ThreatenTask:update()
 			self.SquareAtThreat = self.Aite.player:getCurrentSquare()
 
 			if self.Aite.player:isLocalPlayer() == false then
-				self.parent:DebugSay("ThreatenTask B is about to trigger a StopWalk! Path B")
 				self.Aite:StopWalk()
 				self.Aite:getTaskManager():clear()
 				self.Aite:getTaskManager():AddToTop(FleeFromHereTask:new(self.parent, self.Aite.player:getCurrentSquare()))
-				--self.Aite:getTaskManager():AddToTop(SurenderTask:new(self.parent, self.Aite))	
 			end
 			self.StartedThreatening = true
 		end
 
-		--	elseif(self.parent:isWalkingPermitted() and (not self.parent:inFrontOfLockedDoor())) then
 	elseif (self.parent:isWalkingPermitted()) then
 		self.parent:NPC_ManageLockedDoors() -- This function should force walking away if stuck
 		self.parent:NPC_ShouldRunOrWalk()
@@ -147,11 +139,7 @@ function ThreatenTask:update()
 			self.parent:NPC_ShouldRunOrWalk()
 			self.parent:NPC_EnforceWalkNearMainPlayer()
 		end
-
-
-		--self.parent:setRunning(true) -- Newly added - No. The other movements manage this already
 	else -- Added to the 'if anything fails, go somewhere else'
-		self.parent:DebugSay("THREATEN TASK - something is wrong")
 		self.parent:NPCTask_DoWander()
 		self.parent:NPCTask_DoAttemptEntryIntoBuilding()
 		return false

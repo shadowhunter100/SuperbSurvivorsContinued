@@ -1,7 +1,10 @@
 ReturnToBaseTask = {}
 ReturnToBaseTask.__index = ReturnToBaseTask
 
+local isLocalLoggingEnabled = false;
+
 function ReturnToBaseTask:new(superSurvivor)
+	CreateLogLine("ReturnToBase", isLocalLoggingEnabled, "function: ReturnToBaseTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -9,15 +12,14 @@ function ReturnToBaseTask:new(superSurvivor)
 	o.parent = superSurvivor
 	o.Name = "Return To Base"
 	o.OnGoing = false
-	o.GroupID = superSurvivor:getGroupID()
+	o.GroupID = superSurvivor:getGroupID();
+
 	if (not o.GroupID) then
-		superSurvivor:DebugSay("no group id")
+		CreateLogLine("ReturnToBase", isLocalLoggingEnabled, tostring(o.Name) .. "no group id");
 		return nil
 	end
 	o.Group = SSGM:Get(o.GroupID)
 	o.BaseCoords = o.Group:getBaseCenterCoords()
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

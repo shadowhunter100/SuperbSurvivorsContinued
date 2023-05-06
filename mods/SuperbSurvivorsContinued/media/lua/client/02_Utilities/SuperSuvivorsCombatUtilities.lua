@@ -174,7 +174,7 @@ local function getAmmoType(weapon)
 	end
 
 	if (out == nil) then
-		print("no bullets found for weapon: " .. wepType)
+		CreateLogLine("SuperSuvivorsCombatUtilities", isLocalLoggingEnabled, "no ammo found");
 		return nil
 	end
 

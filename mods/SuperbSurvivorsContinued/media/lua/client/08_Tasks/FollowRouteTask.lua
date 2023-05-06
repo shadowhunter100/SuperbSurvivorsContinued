@@ -1,7 +1,10 @@
 FollowRouteTask = {}
 FollowRouteTask.__index = FollowRouteTask
 
+local isLocalLoggingEnabled = false;
+
 function FollowRouteTask:new(superSurvivor, RouteID)
+	CreateLogLine("FollowRouteTask", isLocalLoggingEnabled, "function: FollowRouteTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
@@ -13,15 +16,13 @@ function FollowRouteTask:new(superSurvivor, RouteID)
 	o.parent = superSurvivor
 
 	if (RouteID ~= nil) and (RouteID ~= 0) then
-		print("route id " .. tostring(RouteID) .. " set to moddata")
 		o.parent:setRouteID(RouteID)
 	elseif (o.parent:getRouteID() ~= 0) then
 		RouteID = o.parent:getRouteID()
 	end
-	print("route id :" .. tostring(o.parent:getRouteID()))
+
 	o.TheRoute = SurvivorRoutes[RouteID]
 	if (o.TheRoute == nil) then
-		print("could not find a route in params or moddata")
 		return nil
 	end
 
@@ -39,8 +40,6 @@ function FollowRouteTask:new(superSurvivor, RouteID)
 			closestSoFar = tempDistance
 		end
 	end
-
-	o.parent:DebugSay(tostring(o.parent:getCurrentTask()) .. " Started!")
 
 	return o
 end

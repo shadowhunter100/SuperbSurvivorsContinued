@@ -169,18 +169,14 @@ function SuperSurvivorManager:update()
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
 			if (self.SuperSurvivors[i].TargetSquare ~= nil and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ() and getGameSpeed() > 1) then
-				print("DANGER ZONE")
 				self.SuperSurvivors[i].TargetSquare = nil
-				self.SuperSurvivors[i]:DebugSay("SuperSurvivorManager Update() is about to trigger a StopWalk!")
 				self.SuperSurvivors[i]:StopWalk()
 				self.SuperSurvivors[i]:Wait(10)
-				--self.SuperSurvivors[i]:getTaskManager():AddToTop(WanderTask:new(self.SuperSurvivors[i]))
 			end
 		end
 
 		if (self.SuperSurvivors[i] ~= nil) and (self.MainPlayer ~= i) and (self.SuperSurvivors[i]:updateTime()) and (not self.SuperSurvivors[i].player:isAsleep()) and (self.SuperSurvivors[i]:isInCell()) then
 			self.SuperSurvivors[i]:update()
-			--	if(self.SuperSurvivors[i].DebugMode) then print(self.SuperSurvivors[i]:getName() .. " update()") end
 		end
 	end
 end
@@ -237,8 +233,6 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 				and self.SuperSurvivors[i].player:CanSee(getSpecificPlayer(0))
 			then
 				-- flee from the crazy murderer
-				print(self.SuperSurvivors[i]:getName() .. " fleeing from the crazy murderer")
-				--print("FLEEFROM2 " .. self.SuperSurvivors[i]:GetName())
 				self.SuperSurvivors[i]:getTaskManager():AddToTop(FleeFromHereTask:new(self.SuperSurvivors[i],
 					SSW:Get():getCurrentSquare()))
 				self.SuperSurvivors[i]:SpokeTo(SSW:Get():getModData().ID)
@@ -252,7 +246,6 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 				and not self.SuperSurvivors[i]:RealCanSee(getSpecificPlayer(0))
 				and (getDistanceBetween(getSpecificPlayer(0), self.SuperSurvivors[i].player) <= range)
 			then
-				print(self.SuperSurvivors[i]:getName() .. " adding go check it out task")
 				self.SuperSurvivors[i]:getTaskManager():AddToTop(GoCheckItOutTask:new(self.SuperSurvivors[i],
 					getSpecificPlayer(0):getCurrentSquare()))
 			end
@@ -343,9 +336,8 @@ function loadSurvivorMap()
 	tempTable = table.load("SurvivorManagerInfo")
 	if (tempTable) and (tempTable[1]) then
 		SSM.SurvivorCount = tonumber(tempTable[1])
-		print("set SurvivorCount:" .. tostring(tempTable[1]) .. " from SurvivorManagerInfo file");
 	else
-		print("SurvivorManagerInfo was not found. this save file could be corrupt");
+		CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "LoadSurvivorMap Failed, possibly corrupted");
 	end
 
 	SurvivorLocX = KVTableLoad("SurvivorLocX")

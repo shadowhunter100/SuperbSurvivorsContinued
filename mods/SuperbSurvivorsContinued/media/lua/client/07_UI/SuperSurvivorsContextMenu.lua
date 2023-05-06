@@ -1,6 +1,7 @@
 require "TimedActions/ISBaseTimedAction"
 
 ISUnStuckAction = ISBaseTimedAction:derive("ISUnStuckAction");
+local isLocalLoggingEnabled = false;
 
 function ISUnStuckAction:isValid()
 	return true
@@ -89,11 +90,10 @@ function SurvivorOrder(test, player, order, orderParam)
 			if (area) then
 				ASuperSurvivor:Speak(getContextMenuText("IGoGuard"))
 				TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, area))
-				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
+				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit) -- WIP - "AutoWorkTaskTimeLimit" is undefined...
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, GetRandomAreaSquare(area)))
 				ASuperSurvivor:Speak("And Where are you wanting me to guard at again? Show me an area to guard at.")
 			else
-				print("settubg player current square as guard sqwuarte")
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, getSpecificPlayer(0):getCurrentSquare()))
 			end
 		elseif (order == "Patrol") then
@@ -188,9 +188,6 @@ function SurvivorOrder(test, player, order, orderParam)
 				-- check containers in square
 				local containerobj = group:getGroupAreaContainer("FoodStorageArea")
 				TaskMangerIn:AddToTop(CleanInvTask:new(ASuperSurvivor, containerobj, false))
-
-				--container = square:getContainer();
-				--if(not container) then container = square:getItemContainer() end
 			end
 		elseif (order == "Doctor") and (ASuperSurvivor:Get():getPerkLevel(Perks.FromString("Doctor")) >= 1 or ASuperSurvivor:Get():getPerkLevel(Perks.FromString("First Aid")) >= 1) then
 			TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
@@ -205,14 +202,13 @@ function SurvivorOrder(test, player, order, orderParam)
 end
 
 function MedicalCheckSurvivor(test, player)
-	--ISTimedActionQueue.add(ISWalkToTimedAction:new(getSpecificPlayer(0), player:getCurrentSquare()));
-	--ISTimedActionQueue.add(ISMedicalCheckAction:new(getSpecificPlayer(0), player));
 	if luautils.walkAdj(getSpecificPlayer(0), player:getCurrentSquare()) then
 		ISTimedActionQueue.add(ISMedicalCheckAction:new(getSpecificPlayer(0), player))
 	end
 end
 
 function AskToJoin(test, player) -- When the NPC asks another npc to join a group
+	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: AskToJoin() called");
 	local SS = SSM:Get(player:getModData().ID)
 	local MySS = SSM:Get(0)
 	getSpecificPlayer(0):Say(getActionText("CanIJoin"))
@@ -223,7 +219,7 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 
 	if (result) then
 		local group = SS:getGroup()
-		print("join group " .. SS:getGroupID())
+		CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "joining group: " .. tostring(SS:getGroupID()));
 
 		if (group) then
 			SS:Speak(GetDialogueSpeech("Roger"));
@@ -238,21 +234,21 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 				end
 			else
 				group:addMember(MySS, getJobText("Partner"))
-				--	group:addMember(MySS, getJobText("Companion"))
 			end
 		end
 	else
 		SS:Speak(GetDialogueSpeech("No"))
 	end
+	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "--- function: AskToJoin() END ---");
 end
 
 function InviteToParty(test, player) -- When the player offers an NPC to join the group
+	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: InviteToParty() called");
 	local SS = SSM:Get(player:getModData().ID)
 	getSpecificPlayer(0):Say(getActionText("YouWantToJoin"))
 	SS:PlusRelationshipWP(1.0) -- Slight bonus to what existed, npcs are a bit rude
 
 	local Relationship = SS:getRelationshipWP()
-	--player:Say(tostring(Relationship))
 	local result = ((ZombRand(10) + Relationship) >= 8)
 
 	local task = SS:getTaskManager():getTaskFromName("Listen")
@@ -279,7 +275,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 		if (Group) then
 			Group:addMember(SS, getJobText("Companion")) -- was Partner
 		else
-			print("error could not find or create group")
+			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "error could not find or create group");
 		end
 
 		local followtask = FollowTask:new(SS, getSpecificPlayer(0))
@@ -314,7 +310,6 @@ function OfferFood(test, player)
 	local gift = RSS:getFacingSquare():AddWorldInventoryItem(food, 0.5, 0.5, 0)
 
 	if (foodcontainer ~= nil) then foodcontainer:DoRemoveItem(food) end
-	--ISTimedActionQueue.add(ISInventoryTransferAction:new (getSpecificPlayer(0), food, food:getContainer(), SSM:Get(0):getFacingSquare():getContainerItem("floor"):getContainer(), 1))
 
 	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
 	SS:PlusRelationshipWP(2.0)
@@ -373,14 +368,13 @@ function AskToLeave(test, SS)
 	getSpecificPlayer(0):getModData().semiHostile = true
 	SS.player:getModData().hitByCharacter = true
 	SS:getTaskManager():clear()
-	--print("FLEEFROM3 " .. SS:GetName())
 	SS:getTaskManager():AddToTop(FleeFromHereTask:new(SS, getSpecificPlayer(0):getCurrentSquare()))
 
 	local GroupID = SS:getGroupID()
 	if (GroupID ~= nil) then
 		local group = SSGM:Get(GroupID)
+
 		if (group) then
-			print("pvp alert being scrammed")
 			group:PVPAlert(getSpecificPlayer(0))
 		end
 	end
@@ -390,14 +384,13 @@ function AskToLeave(test, SS)
 end
 
 function AskToDrop(test, SS)
+	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: AskToDrop() called");
 	getSpecificPlayer(0):Say("Drop your Loot!!");
 	SS:Speak("Okay dont shoot!");
 	if (SS:getBuilding() ~= nil) then SS:MarkBuildingExplored(SS:getBuilding()) end
 	if (SS.TargetBuilding ~= nil) then SS:MarkBuildingExplored(SS.TargetBuilding) end
-	getSpecificPlayer(0):getModData().semiHostile = true
-	--SS.player:getModData().hitByCharacter = true
-	SS:getTaskManager():clear()
-	--print("FLEEFROM4 " .. SS:GetName())
+	getSpecificPlayer(0):getModData().semiHostile = true;
+	SS:getTaskManager():clear();
 	SS:getTaskManager():AddToTop(FleeFromHereTask:new(SS, getSpecificPlayer(0):getCurrentSquare()))
 	SS:getTaskManager():AddToTop(CleanInvTask:new(SS, SS.player:getCurrentSquare(), true))
 
@@ -405,7 +398,7 @@ function AskToDrop(test, SS)
 	if (GroupID ~= nil) then
 		local group = SSGM:Get(GroupID)
 		if (group) then
-			print("pvp alert being robbed")
+			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "pvp alert being robbed");
 			group:PVPAlert(getSpecificPlayer(0))
 		end
 	end
@@ -419,7 +412,6 @@ function DebugCharacterSwap(test, SS)
 end
 
 function AnswerTriggerQuestionYes(test, SS)
-	if (SS.YesResultActions == nil) then print("warning AnswerTriggerQuestionYes detect nil YesResultActions") end
 	SS.HasQuestion = false -- erase question option
 	SS.HasBikuri = false   -- erase question option -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
@@ -428,7 +420,6 @@ function AnswerTriggerQuestionYes(test, SS)
 end
 
 function AnswerTriggerQuestionNo(test, SS)
-	if (SS.NoResultActions == nil) then print("warning AnswerTriggerQuestionNo detect nil NoResultActions") end
 	SS.HasQuestion = false -- erase question option
 	SS.HasBikuri = false   -- erase question option  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	SS.NoResultActions = nil -- erase question option
@@ -460,116 +451,8 @@ function DebugCharacterToggleBM(test, SS)
 	SS:Get():setBlockMovement(not SS:Get():isBlockMovement())
 end
 
-function DebugCharacterOutput(test, SS)
-	SS.DebugMode = not SS.DebugMode
-	local distance = getDistanceBetween(SS.player, getSpecificPlayer(0));
-	print("SS Name:" .. tostring(SS:getName()))
-	print("SS ID:" .. tostring(SS:getID()))
-	print("isBlockMovement:" .. tostring(SS:Get():isBlockMovement()))
-	print("isNPC:" .. tostring(SS:Get():isNPC()))
-	print("isLocalPlayer:" .. tostring(SS:Get():isLocalPlayer()))
-	print("NPCRunning:" .. tostring(SS:Get():NPCGetRunning()))
-	print("isSneaking:" .. tostring(SS:Get():isSneaking()))
-	print("isAiming:" .. tostring(SS:Get():isAiming()))
-	print("infectionLevel:" .. tostring(SS:Get():getBodyDamage():getInfectionLevel()))
-	print("isinAction:" .. tostring(SS:isInAction()))
-	print("MDbWalking:" .. tostring(SS.player:getModData().bWalking))
-	print("bWalking:" .. tostring(SS:Get():getVariableBoolean("bWalking")))
-	print("isPathing:" .. tostring(SS:Get():isPathing()))
-	print("isBehaviourMoving:" .. tostring(SS.player:isBehaviourMoving()))
-	print("isMoving:" .. tostring(SS.player:isMoving()))
-	print("isPerformingAnAction:" .. tostring(SS:Get():isPerformingAnAction()))
-	print("AttackAnim:" .. tostring(SS:Get():getVariableBoolean("AttackAnim")))
-	print("ShoveAnim:" .. tostring(SS:Get():getVariableBoolean("ShoveAnim")))
-	print("isAttacking:" .. tostring(SS:Get():getVariableBoolean("isAttacking")))
-	print("StompAnim:" .. tostring(SS:Get():getVariableBoolean("StompAnim")))
-	print("IsUnloading:" .. tostring(SS:Get():getVariableBoolean("IsUnloading")))
-	print("IsRacking:" .. tostring(SS:Get():getVariableBoolean("IsRacking")))
-	print("ignoreMovement:" .. tostring(SS:Get():getVariableBoolean("ignoreMovement")))
-	print("hideWeaponModel:" .. tostring(SS:Get():getVariableBoolean("hideWeaponModel")))
-	print("isAiming:" .. tostring(SS:Get():getVariableBoolean("isAiming")))
-	print("NPCisAiming:" .. tostring(SS:Get():getVariableBoolean("NPCisAiming")))
-	print("bAimAtFloor:" .. tostring(SS:Get():getVariableBoolean("bAimAtFloor")))
-	print("bUpdateModelTextures:" .. tostring(SS:Get():getVariableBoolean("bUpdateModelTextures")))
-	print("m_isBumpDone:" .. tostring(SS:Get():getVariableBoolean("m_isBumpDone")))
-	print("m_bumpFall:" .. tostring(SS:Get():getVariableBoolean("m_bumpFall")))
-	print("m_bumpStaggered:" .. tostring(SS:Get():getVariableBoolean("m_bumpStaggered")))
-	print("fallOnFront:" .. tostring(SS:Get():getVariableBoolean("fallOnFront")))
-	print("hitFromBehind:" .. tostring(SS:Get():getVariableBoolean("hitFromBehind")))
-	print("IgnoreStaggerBack:" .. tostring(SS:Get():getVariableBoolean("IgnoreStaggerBack")))
-	print("AttackWasSuperAttack:" .. tostring(SS:Get():getVariableBoolean("AttackWasSuperAttack")))
-	print("superAttack:" .. tostring(SS:Get():getVariableBoolean("superAttack")))
-	print("pathing:" .. tostring(SS:Get():getVariableBoolean("pathing")))
-	print("bSneaking:" .. tostring(SS:Get():getVariableBoolean("bSneaking")))
-	print("blockTurning:" .. tostring(SS:Get():getVariableBoolean("blockTurning")))
-	print("getCurrentState():" .. tostring(SS:Get():getCurrentState()))
-	print("IsInMeleeAttack:" .. tostring(SS:Get():IsInMeleeAttack()))
-	print("DistanceToMainPlayer:" .. tostring(distance))
-	print("AIMode:" .. tostring(SS:getAIMode()))
-	print("needToFollow:" .. tostring(SS:needToFollow()))
-	print("TaskManagerOutput:")
-	SS:getTaskManager():Display()
-	print("-------------------------End of NPC Debug---------------------------------")
-
-	--SS:StopWalk()
-end
-
 function DebugCharacterUnStuck(test, SS)
 	SS.player:getAdvancedAnimator():SetState("idle")
-	--	SS:StopWalk()		
-	--	SS.player:NPCSetAttack(true);w
-	--	SS.player:NPCSetMelee(true);
-	--	SS.player:AttemptAttack(10.0);
-	--SS.player:AttemptAttack(10)		
-	--SS.player:setVariable("bDoShove", true)	
-	--SS.player:setForceShove(true);
-	--SS.player:setVariable("initiateAttack", true)
-	--SS.player:setVariable("attackStarted", true)
-	--SS.player:setVariable("attackType", nil)
-
-	--when frozen - these appear to always be set this way
-	--SS:isInAction() == false
-	--SS.player:getModData().bWalking == true
-	--isMoving SS:Get():isMoving() == true
-	--SS:Get():getVariableBoolean("AttackAnim") == false
-	--SS:Get():getVariableBoolean("ShoveAnim") == false
-
-	--SS.player:PlayAnimWithSpeed("Run",999);
-	--SS.player:clearVariable("TimedActionType");
-	--SS.player:clearVariable("BumpFallType");
-	--SS.player:clearVariable("WeaponReloadType");
-	--SS.player:setPerformingAnAction(true)
-	--SS.player:clearVariable("bdoshove")
-	--SS.player:clearVariable("isattacking")
-	--SS.player:clearVariable("AttackAnim")
-	--clearVariable("bShoveAiming");
-	--clearVariable("bShoveAiming");
-	--
-	--[[
-	SS.player:setNPC(false)
-	SS.player:setBlockMovement(false)
-	SS.player:update()
-	SS.player:setNPC(true)
-	SS.player:setBlockMovement(true)
-	ISTimedActionQueue.add(ISGetHitFromBehindAction:new(SS.player,getSpecificPlayer(0)))
-	
-	
-	local xoff = SS.player:getX() + ZombRand(-3,3)
-    local yoff = SS.player:getY() + ZombRand(-3,3)	
-    SS:DebugSay("CheckForIfStuck is about to trigger a StopWalk!")
-    SS:StopWalk()
-	ISTimedActionQueue.add(ISGetHitFromBehindAction:new(SS.player,getSpecificPlayer(0)))
-    SS:WalkToPoint(xoff,yoff,SS.player:getZ())
-	ISTimedActionQueue.add(ISGetHitFromBehindAction:new(SS.player,getSpecificPlayer(0)))
-	
-	SS.player:setPerformingAnAction(true)
-	SS.player:setVariable("bPathfind", true)	
-	SS.player:setVariable("bKnockedDown", true)
-	SS.player:setVariable("AttackAnim", true)
-	SS.player:setVariable("BumpFall", true)
-	
-	ISTimedActionQueue.add(ISGetHitFromBehindAction:new(SS.player,getSpecificPlayer(0)))
-	--]]
 end
 
 function DebugSpawnSoldier()
@@ -720,17 +603,12 @@ function survivorMenu(context, o)
 			if (DebugOptions) then
 				submenu:addOption(getContextMenuText("Debug_Character_Swap"), nil, DebugCharacterSwap,
 					SS, nil)
-			end                       -- debut character swap
+			end -- debut character swap
 			if (DebugOptions) then
 				submenu:addOption(getContextMenuText("Debug_Infect&Murder_Character"), nil,
 					DebugCharacterKill, SS, nil)
-			end                       -- debut character swap
-			--if (DebugOptions) then submenu:addOption("Debug Toggle isBM ("..tostring(o:getModData().ID)..")", nil, DebugCharacterToggleBM, SS, nil) end -- debut character swap
-			--if (DebugOptions) then submenu:addOption("Debug Toggle isNPC ("..tostring(o:getModData().ID)..")", nil, DebugCharacterToggleNPC, SS, nil) end -- debut character swap
-			if (DebugOptions) then
-				submenu:addOption(getContextMenuText("Debug_Character_Output"), nil,
-					DebugCharacterOutput, SS, nil)
-			end                         -- debut character swap
+			end -- debut character swap
+
 			if (DebugOptions) then
 				submenu:addOption(getContextMenuText("Debug_Unstuck"), nil, DebugCharacterUnStuck, SS,
 					nil)
@@ -930,6 +808,7 @@ function StartSelectingArea(test, area)
 end
 
 function SelectingArea(test, area, value)
+	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: SelectingArea() called");
 	-- value 0 means cancel, -1 is clear, 1 is set
 	if (value ~= 0) then
 		if (value == -1) then
@@ -953,10 +832,10 @@ function SelectingArea(test, area, value)
 				math.floor(HighlightY2),
 				math.floor(getSpecificPlayer(0):getZ())
 			}
-			group:setBounds(baseBounds)
-			print("set base bounds:" ..
+			group:setBounds(baseBounds);
+			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "set base bounds:" ..
 				tostring(HighlightX1) .. "," ..
-				tostring(HighlightX2) .. " : " .. tostring(HighlightY1) .. "," .. tostring(HighlightY2))
+				tostring(HighlightX2) .. " : " .. tostring(HighlightY1) .. "," .. tostring(HighlightY2));
 		else
 			group:setGroupArea(area, math.floor(HighlightX1), math.floor(HighlightX2), math.floor(HighlightY1),
 				math.floor(HighlightY2), getSpecificPlayer(0):getZ())
@@ -1116,21 +995,5 @@ function SetName(test, SS)
 	modal:initialise()
 	modal:addToUIManager()
 end
-
---Own Name Setting Section--
---function OnSetOwnName(test, button, character)
---   if button.internal == "OK" then
---        if button.parent.entry:getText() and button.parent.entry:getText() ~= "" then
---			character:SetOwnName(button.parent.entry:getText())
---        end
---    end
---end
---function SetOwnName(test, character)
---	local name = character:getDescriptor():getForename()
---	local modal = ISTextBox:new(0, 0, 280, 180, getContextMenuText("SetOwnName"), name, nil, OnSetOwnName, 0, character)
---   modal:initialise()
---   modal:addToUIManager()
---end
---Section Complete--
 
 Events.OnFillWorldObjectContextMenu.Add(SurvivorsFillWorldObjectContextMenu);

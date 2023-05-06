@@ -1,6 +1,8 @@
 require "ISUI/ISLayoutManager"
 local ThePVPButton = ISButton:derive("ThePVPButton");
 
+local isLocalLoggingEnabled = false;
+
 function SurvivorTogglePVP()
 	if (IsoPlayer.getCoopPVP() == true) then
 		getSpecificPlayer(0):Say(getContextMenuText("PVPDisabled"));
@@ -23,14 +25,9 @@ function SurvivorTogglePVP()
 end
 
 function SurvivorsCreatePVPButton()
+	CreateLogLine("SuperSurvivorPVPButton", isLocalLoggingEnabled, "SurvivorsCreatePVPButton() called");
 	PVPTextureOn = getTexture("media/textures/PVPOn.png");
 	PVPTextureOff = getTexture("media/textures/PVPOff.png");
-
-	if (not PVPTextureOff) then
-		print("could not load media/textures/PVPOff.png");
-	else
-		print("Succesfully load media/textures/PVPOff.png");
-	end
 
 	PVPButton = ThePVPButton:new(getCore():getScreenWidth() - 100, getCore():getScreenHeight() - 50, 25, 25, "", nil,
 		SurvivorTogglePVP);

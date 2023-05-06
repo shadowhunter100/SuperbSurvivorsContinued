@@ -5,7 +5,9 @@ local window_width = 850
 local panel_height = 30*10
 local context_options = {}
 local survivor_headers = {}
-survivor_panels = {}
+local isLocalLoggingEnabled = false;
+
+SurvivorPanels = {}
 
 base_area_visibility = {
     ["Bounds"] = { area_shown = false, group_id = nil, button_title = "show" },
@@ -27,7 +29,7 @@ base_area_visibility = {
 -- PanelGroup
 --****************************************************
 local PanelGroup = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
-table.insert(survivor_panels, 1, PanelGroup)
+table.insert(SurvivorPanels, 1, PanelGroup)
 
 function PanelGroup:dupdate()
     self:clearChildren()
@@ -105,7 +107,7 @@ end
 --****************************************************
 local PanelBase = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
 PanelBase:setVisible(false)
-table.insert(survivor_panels, 2, PanelBase)
+table.insert(SurvivorPanels, 2, PanelBase)
 
 -- PanelBaseEntry
 local PanelBaseEntry = ISPanel:derive("PanelBaseEntry")
@@ -234,7 +236,7 @@ end
 --****************************************************
 local PanelCompanions = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
 PanelCompanions:setVisible(false)
-table.insert(survivor_panels, 3, PanelCompanions)
+table.insert(SurvivorPanels, 3, PanelCompanions)
 
 function PanelCompanions:dupdate()
     self:clearChildren()
@@ -474,7 +476,7 @@ function on_click_base_show(group_id, area_name)
         base_area_visibility[area_name].area_shown = true
         base_area_visibility[area_name].button_title = "hide"
     end
-    survivor_panels[2]:dupdate()
+    SurvivorPanels[2]:dupdate()
 end
 
 function on_click_tab(target_headers, target_panel)
@@ -482,7 +484,7 @@ function on_click_tab(target_headers, target_panel)
         if header == target_headers then header:setVisible(true)
         else header:setVisible(false) end
     end
-    for _, panel in pairs(survivor_panels) do
+    for _, panel in pairs(SurvivorPanels) do
         if panel == target_panel then
             panel:setVisible(true)
             panel:dupdate()
@@ -632,29 +634,26 @@ end
 
 function event_set_group_role()
     if window_super_survivors:isVisible() then
-        print("event_set_group_role()")
-        survivor_panels[1]:dupdate()
-        survivor_panels[3]:dupdate()
+        CreateLogLine("SuperSurvivorWindow", isLocalLoggingEnabled, "function: event_set_group_role() called");
+        SurvivorPanels[1]:dupdate()
+        SurvivorPanels[3]:dupdate()
     end
 end
 Events.on_update_group_role.Add(event_set_group_role)
 
 function event_update_group_role()
     if window_super_survivors:isVisible() then
-        print("event_update_group_role()")
-        survivor_panels[1]:dupdate()
-        survivor_panels[3]:dupdate()
+        CreateLogLine("SuperSurvivorWindow", isLocalLoggingEnabled, "function: event_update_group_role() called");
+        SurvivorPanels[1]:dupdate()
+        SurvivorPanels[3]:dupdate()
     end
 end
 Events.on_update_group_role.Add(event_update_group_role)
 
 function event_every_minute()
     if window_super_survivors:isVisible() then
-        --for _, panel in pairs(survivor_panels) do
-        --    panel:dupdate()
-        --end
-        survivor_panels[1]:dupdate()
-        survivor_panels[3]:dupdate()
+        SurvivorPanels[1]:dupdate()
+        SurvivorPanels[3]:dupdate()
     end
 end
 Events.EveryOneMinute.Add(event_every_minute)
@@ -672,13 +671,8 @@ function dssw.dfile()
 end
 
 function dssw.dbug()
-    print("=================")
-    print("dssw::dbug")
     remove_window_super_survivors()
-    print("remove_window_super_survivors()")
     create_window_super_survivors()
-    print("create_window_super_survivors()")
-    print("=================")
 end
 
 --****************************************************

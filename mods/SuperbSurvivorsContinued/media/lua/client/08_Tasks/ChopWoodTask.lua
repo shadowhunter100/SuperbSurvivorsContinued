@@ -41,7 +41,6 @@ function ChopWoodTask:update()
 	if (self.parent:isInAction() == false) then
 		local choparea = self.group:getGroupArea("ChopTreeArea")
 		if (choparea[1] ~= 0) and (not IsSquareInArea(self.parent.player, choparea)) then -- if chop area set but not in it, first go there
-			self.parent:DebugSay("going to chop area")
 			local tempsq = GetRandomAreaSquare(choparea)
 			self.parent:walkTo(tempsq)
 			self.parent:Wait(1)

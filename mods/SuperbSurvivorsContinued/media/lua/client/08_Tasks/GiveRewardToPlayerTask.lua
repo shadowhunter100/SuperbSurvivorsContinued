@@ -1,17 +1,18 @@
 GiveRewardToPlayerTask = {}
 GiveRewardToPlayerTask.__index = GiveRewardToPlayerTask
 
+local isLocalLoggingEnabled = false;
+
 function GiveRewardToPlayerTask:new(superSurvivor, DropSquare, itemType, quantity)
+	CreateLogLine("GiveRewardToPlayerTask", isLocalLoggingEnabled, "function: GiveRewardToPlayerTask:new() called");
 	local o = {}
 	setmetatable(o, self)
 	self.__index = self
-	superSurvivor:DebugSay("GiveRewardToPlayerTask is about to trigger a StopWalk! ")
 	superSurvivor:StopWalk()
 
 	if (instanceof(DropSquare, "IsoPlayer")) then
 		o.TheDropSquare = DropSquare:getCurrentSquare()
 	elseif (instanceof(DropSquare, "IsoObject")) then
-		print("GiveRewardToPlayerTask given a ISOObject container")
 		o.TheDropContainer = DropSquare
 		o.TheDropSquare = DropSquare:getSquare()
 	else

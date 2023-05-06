@@ -1,3 +1,5 @@
+local isLocalLoggingEnabled = false;
+
 function DoctorNeedsCleanBandage(bp)
 	if (bp:HasInjury()) and (bp:bandaged() == true) and (bp:getBandageLife() <= 0) then return true end
 	return false
@@ -33,8 +35,9 @@ function DoctorNeedsSplint(bp)
 end
 
 function DoctorDetermineTreatement(bp)
+	CreateLogLine("SuperSurvivorDoctor", isLocalLoggingEnabled, "DoctorDetermineTreatement() called");
 	if not instanceof(bp, "BodyPart") then
-		print("error non body part given to DoctorDetermineTreatement")
+		CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "error non body part given to DoctorDetermineTreatement");
 		return "?"
 	end
 
