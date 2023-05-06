@@ -1,4 +1,4 @@
-require "SuperSurvivorGroup" -- comment out for local debugging, uncomment for game.
+require "SuperSurvivorGroup";
 
 SuperSurvivorGroupManager = {}
 SuperSurvivorGroupManager.__index = SuperSurvivorGroupManager
