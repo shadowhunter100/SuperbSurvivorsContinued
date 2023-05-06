@@ -19,12 +19,13 @@ PZ has a declared policy on modding: https://projectzomboid.com/blog/modding-pol
 * Based on the current code review of the workshop item, I have found some of the referencing functions from other mods but were uncredited.  
 * *__This "Continuation" fork of "Superb Survivors!" will be removing any non-essential referenced mods and referenced workshop items, as their original authors likely never granted permission and I wish to respect them.__*
 
-## Here are the workshop items I have found, but were uncredited
-* CharacterSave - https://steamcommunity.com/sharedfiles/filedetails/?id=2673317083&searchtext=charactersave by Tchernobill
+## Here are the workshop items I have found, but were uncredited previously...
 * Brita's Mod - ... too many to list in the workshop, I can't find which one Superb Survivors was referencing and it broke a few things on spawning npcs.  
   * I have attempted to remove all references to Brita's. If you spot it in the code, please notify me so it can be removed.  
+* CharacterSave - https://steamcommunity.com/sharedfiles/filedetails/?id=2673317083&searchtext=charactersave by Tchernobill
 * ORGM - https://steamcommunity.com/sharedfiles/filedetails/?id=514618604 by Fenris Wolf  
 * Subpar Survivors - https://steamcommunity.com/sharedfiles/filedetails/?id=2521330369 by SlightlyMadMan
+*The above referenced mods have been removed in this "Continuation".
 
 ## What will be done in this mod?
 In this "Continuation", I will attempt to fix the known (and unknown) issues while updating the core functionalities.  
