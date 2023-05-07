@@ -47,9 +47,9 @@ function ChopWoodTask:update()
 		else
 			local player = self.parent:Get()
 			--player:Say(tostring(player:getStats():getEndurance()))
+			-- WIP - Cows: Does this mean current actor has less than 50% endurance?
 			if (player:getStats():getEndurance() < 0.50) then
-				if (self.parent.Reducer % 240 == 0) then self.parent:RoleplaySpeak(getActionText("Resting")) end
-				player:getStats():setEndurance(player:getStats():getEndurance() + 0.01)
+				player:getStats():setEndurance(player:getStats():getEndurance() + 0.50)
 				return
 			end
 
@@ -86,6 +86,8 @@ function ChopWoodTask:update()
 					if self.Axe ~= nil then
 						ISTimedActionQueue.add(ISInventoryTransferAction:new(player, self.Axe, bag,
 							inv, nil))
+					else
+						inv:AddItem("Base.Axe")
 					end
 				end
 				if (self.Axe == nil) then
@@ -96,9 +98,6 @@ function ChopWoodTask:update()
 					end
 				end
 				if (self.Axe ~= nil and self.Axe:isBroken()) then
-					--player:getCurrentSquare():AddWorldInventoryItem(self.Axe,(ZombRand(10)/100),(ZombRand(10)/100),0)
-					--player:getInventory():DoRemoveItem(self.Axe)
-					--player:getInventory():Remove(self.Axe);
 					self.Axe = nil
 					player:setPrimaryHandItem(nil)
 					player:setSecondaryHandItem(nil)
