@@ -139,22 +139,22 @@ function SuperSurvivorGlobalUpdate(player)
 	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "function: SuperSurvivorGlobalUpdate() called");
 	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "DebugOptions: " .. tostring(DebugOptions));
 
-	if (DebugOptions) and player:isLocalPlayer() then
-		--DoVision for debug - main player
+	-- if (DebugOptions) and player:isLocalPlayer() then
+	-- 	--DoVision for debug - main player
 
-		local spottedList = player:getCell():getObjectList()
-		if (spottedList ~= nil) then
-			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "dovision " .. tostring(spottedList:size()));
-			for i = 0, spottedList:size() - 1 do
-				local character = spottedList:get(i);
-				if (character ~= nil) and (character ~= player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
-					player:spotted(character, true)
-					character:setAlpha(1)
-					character:setTargetAlpha(1)
-				end
-			end
-		end
-	end
+	-- 	local spottedList = player:getCell():getObjectList()
+	-- 	if (spottedList ~= nil) then
+	-- 		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "dovision " .. tostring(spottedList:size()));
+	-- 		for i = 0, spottedList:size() - 1 do
+	-- 			local character = spottedList:get(i);
+	-- 			if (character ~= nil) and (character ~= player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
+	-- 				player:spotted(character, true)
+	-- 				character:setAlpha(1)
+	-- 				character:setTargetAlpha(1)
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 
 	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "updating player id...");
 	if (player and player:getModData().ID ~= nil) then
