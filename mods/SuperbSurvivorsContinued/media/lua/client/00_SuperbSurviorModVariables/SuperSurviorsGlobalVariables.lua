@@ -13,6 +13,9 @@ GFollowDistance = 5; -- Update: Don't try to turn gfollowdistance into a variabl
 -- Cows: Global String
 StringTest = "This is a Global String Test";
 
+-- Cows: Moved out of SuperSurvivorsContextMenu.lua
+LootTypes = { "Food", "Weapon", "Item", "Clothing", "Container", "Literature" };
+
 -- Cows: Global Hair Colors
 HairColors = {}
 HairColors["white"] = ImmutableColor.new(0.75, 0.74, 0.72)

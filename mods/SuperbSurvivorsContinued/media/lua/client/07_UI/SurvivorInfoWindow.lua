@@ -66,19 +66,12 @@ function SurvivorInfoWindow:Load(ASuperSurvivor)
 	newText = newText ..
 	"(" .. tostring(ASuperSurvivor:getGroupRole()) .. "/" .. ASuperSurvivor:getCurrentTask() .. ")" .. "\n\n"
 
-	for i = 1, size(SurvivorPerks) do
+	for i = 1, GetTableSize(SurvivorPerks) do
 		player:getModData().PerkCount = i;
 		level = player:getPerkLevel(Perks.FromString(SurvivorPerks[i]));
 		if (level ~= nil) and (SurvivorPerks[i] ~= nil) and (level > 0) then
 			local display_perk = PerkFactory.getPerkName(Perks.FromString(SurvivorPerks[i]))
-			--if( string.match(SurvivorPerks[i], "Blade") ) or ( SurvivorPerks[i] == "Axe" ) then
-			--	display_perk = getText("IGUI_perks_Blade") .. " " .. display_perk
-			--elseif( string.match(SurvivorPerks[i], "Blunt") ) then
-			--	display_perk = getText("IGUI_perks_Blunt") .. " " .. display_perk
-			--else
 
-			--end
-			--display_perk = display_perk .. " ("..SurvivorPerks[i]..")"
 			if display_perk == nil then
 				display_perk = tostring(SurvivorPerks[i]) .. "?"
 			end
