@@ -60,13 +60,6 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
 
 	if (result) then
-		if (AchievementsEnabled) then
-			if (not MyAchievementManager:isComplete("MakingFriends")) then
-				MyAchievementManager:setComplete(
-					"MakingFriends", true)
-			end
-		end
-
 		SS:Speak(GetDialogueSpeech("Roger"))
 		local GID, Group
 		if (SSM:Get(0):getGroupID() == nil) then
@@ -212,21 +205,6 @@ function AskToDrop(test, SS)
 	SS:Speak("!!")
 end
 
-function AnswerTriggerQuestionYes(test, SS)
-	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	SS.NoResultActions = nil -- erase question option
-	SS.YesResultActions = nil -- erase question option
-	SS.TriggerName = nil   -- erase question option
-end
-
-function AnswerTriggerQuestionNo(test, SS)
-	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option  -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	SS.NoResultActions = nil -- erase question option
-	SS.YesResultActions = nil -- erase question option
-	SS.TriggerName = nil   -- erase question option
-end
 
 function OfferArmor(test, SS, item)
 	local player = SS:Get()
@@ -300,11 +278,6 @@ function ForceWeaponType(test, SS, useMele)
 	end
 end
 
-function ViewSurvivorInfo(test, ss)
-	mySurvivorInfoWindow:Load(ss)
-	mySurvivorInfoWindow:setVisible(true)
-end
-
 function TalkToSurvivor(test, SS)
 	getSpecificPlayer(0):Say(GetDialogueSpeech("HelloThere"))
 
@@ -344,16 +317,6 @@ function survivorMenu(context, o)
 			local medicalOption = submenu:addOption(getText("ContextMenu_Medical_Check"), nil, MedicalCheckSurvivor, o,
 				nil);
 			local toolTip = MakeToolTip(medicalOption, getContextMenuText("AidCheck"), getContextMenuText("AidCheckDesc"));
-
-			if (SS.HasQuestion) then
-				MakeToolTip(
-					submenu:addOption("Answer 'YES'", nil, AnswerTriggerQuestionYes, SS, nil),
-					"Answer YES to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
-			end
-			if (SS.HasQuestion) then
-				MakeToolTip(submenu:addOption("Answer 'NO'", nil, AnswerTriggerQuestionNo, SS, nil),
-					"Answer NO to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
-			end
 		end
 		if (o:getModData().isHostile ~= true)
 			and ((SS:getTaskManager():getCurrentTask() == "Listen")
@@ -446,11 +409,6 @@ function survivorMenu(context, o)
 
 				local SetNameOption = submenu:addOption(getContextMenuText("SetName"), nil, SetName, SS, true)
 			end
-
-			local viewinfoOption = submenu:addOption(getContextMenuText("ViewSurvivorInfo"), nil, ViewSurvivorInfo, SS,
-				nil)
-			local tooltip = MakeToolTip(viewinfoOption, getContextMenuText("ViewSurvivorInfo"),
-				getContextMenuText("ViewSurvivorInfoDesc"))
 
 			if (SSM:Get(0):hasFood()) then
 				submenu:addOption(getContextMenuText("OfferFood"), nil, OfferFood, o, nil);

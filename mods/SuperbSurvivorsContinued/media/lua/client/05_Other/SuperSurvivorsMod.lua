@@ -201,13 +201,13 @@ function SuperSurvivorsLoadGridsquare(square)
 		end
 	end
 end
+
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
 
 function SuperSurvivorsInit()
 	GroupWindowCreate()
 
 	SurvivorsCreatePVPButton()
-	AchievementsEnabled = false
 
 	SurvivorTogglePVP()
 
@@ -331,7 +331,7 @@ function SurvivorOrder(test, player, order, orderParam)
 			if (area) then
 				ASuperSurvivor:Speak(getContextMenuText("IGoGuard"))
 				TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, area))
-				TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit) -- WIP - Cows: "AutoWorkTaskTimeLimit" is undefined...
+				TaskMangerIn:setTaskUpdateLimit(300) -- WIP - Cows: the value used to be "AutoWorkTaskTimeLimit", which was undefined locally... found "AutoWorkTaskTimeLimit" in AI-Manager.lua, defaults to 300... so 300 will be assigned here
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, GetRandomAreaSquare(area)))
 				ASuperSurvivor:Speak("And Where are you wanting me to guard at again? Show me an area to guard at.")
 			else
@@ -342,21 +342,31 @@ function SurvivorOrder(test, player, order, orderParam)
 			TaskMangerIn:AddToTop(PatrolTask:new(ASuperSurvivor, getSpecificPlayer(0):getCurrentSquare(),
 				ASuperSurvivor:Get():getCurrentSquare()))
 		elseif (order == "Return To Base") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end -- To prevent follower companion tasks overwrite
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end -- To prevent follower companion tasks overwrite
 			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(ReturnToBaseTask:new(ASuperSurvivor))
 		elseif (order == "Explore") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:AddToTop(WanderTask:new(ASuperSurvivor))
 		elseif (order == "Stop") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:clear()
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() ~= nil) then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding()))
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() == nil) then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, nil))
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
@@ -382,7 +392,9 @@ function SurvivorOrder(test, player, order, orderParam)
 			ASuperSurvivor:setGroupRole(GetJobText("Timberjack"))
 		elseif (order == "Hold Still") then
 			TaskMangerIn:AddToTop(HoldStillTask:new(ASuperSurvivor, true))
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Guard")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Guard"))
+			end
 		elseif (order == "Gather Wood") then
 			ASuperSurvivor:setGroupRole(GetJobText("Hauler"))
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
@@ -399,7 +411,9 @@ function SurvivorOrder(test, player, order, orderParam)
 		elseif (order == "Dismiss") then
 			ASuperSurvivor:setAIMode("Random Solo")
 			local group = SSGM:Get(ASuperSurvivor:getGroupID())
-			if (group) then group:removeMember(ASuperSurvivor:getID()) end
+			if (group) then
+				group:removeMember(ASuperSurvivor:getID())
+			end
 
 			ASuperSurvivor:getTaskManager():clear()
 			if (ZombRand(3) == 0) then
@@ -408,17 +422,20 @@ function SurvivorOrder(test, player, order, orderParam)
 			else
 				ASuperSurvivor:Speak(GetDialogueSpeech("IfYouThinkSo"))
 			end
-		elseif (order == "Unlock Doors") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
-			TaskMangerIn:AddToTop(LockDoorsTask:new(ASuperSurvivor, false))
 		elseif (order == "Go Find Food") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Food", "Category", 1))
 		elseif (order == "Go Find Weapon") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Weapon", "Category", 1))
 		elseif (order == "Go Find Water") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
+			if (ASuperSurvivor:getGroupRole() == "Companion") then
+				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Water", "Category", 1))
 		elseif (order == "Clean Up Inventory") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
@@ -430,7 +447,10 @@ function SurvivorOrder(test, player, order, orderParam)
 				local containerobj = group:getGroupAreaContainer("FoodStorageArea")
 				TaskMangerIn:AddToTop(CleanInvTask:new(ASuperSurvivor, containerobj, false))
 			end
-		elseif (order == "Doctor") and (ASuperSurvivor:Get():getPerkLevel(Perks.FromString("Doctor")) >= 1 or ASuperSurvivor:Get():getPerkLevel(Perks.FromString("First Aid")) >= 1) then
+		elseif (order == "Doctor")
+			and (ASuperSurvivor:Get():getPerkLevel(Perks.FromString("Doctor")) >= 1
+				or ASuperSurvivor:Get():getPerkLevel(Perks.FromString("First Aid")) >= 1)
+		then
 			TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
 			ASuperSurvivor:setGroupRole(GetJobText("Doctor"))
 		elseif (order == "Doctor") then
@@ -463,64 +483,23 @@ end
 -- WIP - Cows: Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
 	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
+	local playerSurvivor = getSpecificPlayer(0);
 
-	if (getSpecificPlayer(0)) then
-		--getSpecificPlayer(0):Say(tostring(keyNum))
+	if (playerSurvivor) then
+		-- playerSurvivor:Say(tostring(keyNum));
 
 		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
-			local ss = SuperSurvivorRandomSpawn(getSpecificPlayer(0):getCurrentSquare());
+			local ss = SuperSurvivorRandomSpawn(playerSurvivor:getCurrentSquare());
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
 			if (GFollowDistance ~= 50) then
 				GFollowDistance = GFollowDistance + 1;
 			end
-			getSpecificPlayer(0):Say("Spread out more(" .. tostring(GFollowDistance) .. ")");
+			playerSurvivor:Say("Spread out more(" .. tostring(GFollowDistance) .. ")");
 		elseif (keyNum == getCore():getKey("Lower Follow Distance")) then
 			if (GFollowDistance ~= 0) then
 				GFollowDistance = GFollowDistance - 1;
 			end
-			getSpecificPlayer(0):Say("Stay closer(" .. tostring(GFollowDistance) .. ")");
-		elseif (keyNum == 0) then
-			local attacker = getSpecificPlayer(0)
-			local weapon = attacker:getPrimaryHandItem()
-			local angle = getSpecificPlayer(0):getAngle()
-			local dir = IsoDirections.fromAngle(angle)
-			dir = IsoDirections.reverse(dir)
-			getSpecificPlayer(0):Say("reverse facing dir is: " .. tostring(dir))
-
-			local victimSquare1 = getSpecificPlayer(0):getCurrentSquare()
-			local victimSquare2 = victimSquare1:getTileInDirection(dir)
-			local coveredFire = false
-
-			-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
-			for q = 1, 2 do
-				local objs
-				if q == 1 then
-					objs = victimSquare2:getObjects()
-				else
-					objs = victimSquare1:getObjects()
-				end
-
-				local aimingPerk = attacker:getPerkLevel(Perks.Aiming)
-				local hitChance = weapon:getHitChance() + weapon:getAimingPerkHitChanceModifier() * aimingPerk
-				local movePenalty = attacker:getBeenMovingFor() - (weapon:getAimingTime() + aimingPerk * 2);
-
-				if movePenalty < 0 then movePenalty = 0 end
-				if attacker:HasTrait("Marksman") then hitChance = hitChance + 20 end
-
-				for i = 1, objs:size() do
-					if (objs:get(i)) then
-						if ZombRand(100) > getCoverValue(objs:get(i)) then
-							coveredFire = true
-							break
-						end
-						--getSpecificPlayer(0):Say(tostring(objs:get(i):getObjectName()))
-					end
-				end
-
-				if (coveredFire) then break end
-			end
-
-			getSpecificPlayer(0):Say(tostring(coveredFire))
+			playerSurvivor:Say("Stay closer(" .. tostring(GFollowDistance) .. ")");
 		elseif (keyNum == getCore():getKey("Call Closest Non-Group Member")) then
 			local mySS = SSM:Get(0)
 
@@ -569,6 +548,12 @@ function SuperSurvivorKeyBindAction(keyNum)
 			SSM:SaveAll()
 			SSGM:Save()
 			SaveSurvivorMap()
+			CreateLogLine("SuperSurvivorsMod", true, "Logging groups...");
+			CreateLogLine("SuperSurvivorsMod", true, "Groups Count: " .. tostring(SSGM.GroupCount));
+			CreateLogLine("SuperSurvivorsMod", true, tostring(SSGM.Groups));
+			CreateLogLine("SuperSurvivorsMod", true, "Logging Survivors...");
+			CreateLogLine("SuperSurvivorsMod", true, "Survivors Count:" .. tostring(SSM.SurvivorCount));
+			CreateLogLine("SuperSurvivorsMod", true, "Survivors:" .. tostring(SSM.SuperSurvivors));
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")
 			SuperSurvivorsHotKeyOrder(index)
@@ -581,25 +566,6 @@ function SuperSurvivorKeyBindAction(keyNum)
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key
 			local index = SuperSurvivorGetOption("SSHotkey4")
 			SuperSurvivorsHotKeyOrder(index)
-		elseif (keyNum == 0) then
-			local SS = SSM:Get(0);
-			local Group = SS:getGroup();
-
-			local storagecontainer = Group:getGroupAreaContainer("FoodStorageArea")
-			local dest
-			if (storagecontainer) then
-				dest = storagecontainer
-			else
-				dest = Group:getGroupAreaCenterSquare("FoodStorageArea")
-			end
-
-			if (storagecontainer) then
-				getSpecificPlayer(0):Say(tostring(storagecontainer));
-				GTask = CleanInvTask:new(SS, dest, false);
-			end
-		elseif (keyNum == 0) then
-			getSpecificPlayer(0):Say(tostring("updating"));
-			GTask:update();
 		end
 	end
 end

@@ -12,14 +12,9 @@ local function SSItemClickHandle()
 	CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "SSItemClickHandle() called");
 	local GID = SSM:Get(0):getGroupID()
 	local members = SSGM:Get(GID):getMembers()
-	local selected = tonumber(myGroupWindow:getSelected())
+	local selected = tonumber(MyGroupWindow:getSelected())
 	local member = members[selected]
 
-	if (member) then
-		CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, tostring(member:getName()));
-		mySurvivorInfoWindow:Load(member)
-		mySurvivorInfoWindow:setVisible(true)
-	end
 end
 
 function GroupWindow:new(x, y, width, height)
@@ -182,9 +177,9 @@ end
 
 function GroupWindowCreate()
 	local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
-	myGroupWindow = GroupWindow:new(15, 285, 300, 620 + FONT_HGT_SMALL)
-	myGroupWindow:addToUIManager();
-	myGroupWindow:setVisible(false);
-	myGroupWindow.pin = true;
-	myGroupWindow.resizable = true
+	MyGroupWindow = GroupWindow:new(15, 285, 300, 620 + FONT_HGT_SMALL)
+	MyGroupWindow:addToUIManager();
+	MyGroupWindow:setVisible(false);
+	MyGroupWindow.pin = true;
+	MyGroupWindow.resizable = true
 end
