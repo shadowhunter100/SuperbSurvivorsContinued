@@ -1878,6 +1878,18 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 end
 
 function SuperSurvivorPresetSpawn(square)
+	local sc = 1;
+
+	RPresetSpawns = {};
+
+	while PresetSpawns[sc] do
+		if PresetSpawns[sc].Z == nil then PresetSpawns[sc].Z = 0 end
+		local pindex = PresetSpawns[sc].X .. PresetSpawns[sc].Y .. PresetSpawns[sc].Z;
+		RPresetSpawns[pindex] = PresetSpawns[sc];
+		RPresetSpawns[pindex].ID = sc;
+		sc = sc + 1;
+	end
+
 	if (RPresetSpawns ~= nil) then
 		if (NoPreSetSpawn) then
 			return false

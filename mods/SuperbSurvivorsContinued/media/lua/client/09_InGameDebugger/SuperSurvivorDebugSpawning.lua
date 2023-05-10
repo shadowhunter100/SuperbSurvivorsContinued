@@ -58,3 +58,23 @@ function SuperSurvivorSoldierSpawnMeleeHostile(square)
 
 	return ASuperSurvivor
 end
+
+--[[
+	The functions here were cut-pasted here from "SuperSurvivorsContextMenu.lua"; the spawning functions should only come after all configurations 
+	and specifications are clearly defined and set.
+--]]
+function DebugSpawnSoldier()
+	local ss = SuperSurvivorSoldierSpawn(getSpecificPlayer(0):getCurrentSquare())
+end
+
+function DebugSpawnSoldierMelee()
+	local ss = SuperSurvivorSoldierSpawnMelee(getSpecificPlayer(0):getCurrentSquare())
+end
+
+function DebugSpawnSoldierHostile()
+	local ss = SuperSurvivorSoldierSpawnHostile(getSpecificPlayer(0):getCurrentSquare())
+end
+
+function DebugSpawnSoldierMeleeHostile()
+	local ss = SuperSurvivorSoldierSpawnMeleeHostile(getSpecificPlayer(0):getCurrentSquare())
+end

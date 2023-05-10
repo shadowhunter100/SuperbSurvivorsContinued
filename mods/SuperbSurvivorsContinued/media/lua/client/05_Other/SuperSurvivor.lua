@@ -432,8 +432,7 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 				or getSpecificPlayer(0) == nil
 				or (not getSpecificPlayer(0):CanSee(self.player))))
 	then
-		return
-			false
+		return false
 	end
 
 	if (self.JustSpoke == true) and (self.TicksSinceSpoke == 0) then
