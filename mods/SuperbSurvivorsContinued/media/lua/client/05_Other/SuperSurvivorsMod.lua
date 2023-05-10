@@ -545,15 +545,19 @@ function SuperSurvivorKeyBindAction(keyNum)
 				end
 			end
 		elseif (keyNum == 1) then -- esc key
+			local isSaveFunctionLoggingEnabled = false;
 			SSM:SaveAll()
 			SSGM:Save()
 			SaveSurvivorMap()
-			CreateLogLine("SuperSurvivorsMod", true, "Logging groups...");
-			CreateLogLine("SuperSurvivorsMod", true, "Groups Count: " .. tostring(SSGM.GroupCount));
-			CreateLogLine("SuperSurvivorsMod", true, tostring(SSGM.Groups));
-			CreateLogLine("SuperSurvivorsMod", true, "Logging Survivors...");
-			CreateLogLine("SuperSurvivorsMod", true, "Survivors Count:" .. tostring(SSM.SurvivorCount));
-			CreateLogLine("SuperSurvivorsMod", true, "Survivors:" .. tostring(SSM.SuperSurvivors));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Groups Count: " .. tostring(SSGM.GroupCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
+			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors Count:" .. tostring(SSM.SurvivorCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
+			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
 			local index = SuperSurvivorGetOption("SSHotkey1")
 			SuperSurvivorsHotKeyOrder(index)
