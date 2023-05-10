@@ -212,21 +212,6 @@ function AskToDrop(test, SS)
 	SS:Speak("!!")
 end
 
-function AnswerTriggerQuestionYes(test, SS)
-	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	SS.NoResultActions = nil -- erase question option
-	SS.YesResultActions = nil -- erase question option
-	SS.TriggerName = nil   -- erase question option
-end
-
-function AnswerTriggerQuestionNo(test, SS)
-	SS.HasQuestion = false -- erase question option
-	SS.HasBikuri = false   -- erase question option  -- WIP - Cows: WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	SS.NoResultActions = nil -- erase question option
-	SS.YesResultActions = nil -- erase question option
-	SS.TriggerName = nil   -- erase question option
-end
 
 function OfferArmor(test, SS, item)
 	local player = SS:Get()
@@ -344,16 +329,6 @@ function survivorMenu(context, o)
 			local medicalOption = submenu:addOption(getText("ContextMenu_Medical_Check"), nil, MedicalCheckSurvivor, o,
 				nil);
 			local toolTip = MakeToolTip(medicalOption, getContextMenuText("AidCheck"), getContextMenuText("AidCheckDesc"));
-
-			if (SS.HasQuestion) then
-				MakeToolTip(
-					submenu:addOption("Answer 'YES'", nil, AnswerTriggerQuestionYes, SS, nil),
-					"Answer YES to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
-			end
-			if (SS.HasQuestion) then
-				MakeToolTip(submenu:addOption("Answer 'NO'", nil, AnswerTriggerQuestionNo, SS, nil),
-					"Answer NO to the following NPC Question", tostring(SS.player:getModData().lastThingIsaid))
-			end
 		end
 		if (o:getModData().isHostile ~= true)
 			and ((SS:getTaskManager():getCurrentTask() == "Listen")

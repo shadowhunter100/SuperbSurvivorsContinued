@@ -63,17 +63,9 @@ function SuperSurvivor:new(isFemale, square)
 	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
 	survivorObject.userName:ReadString(survivorObject.player:getForname())
 
-	survivorObject.Bikuri = TextDrawObject.new();          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setAllowAnyImage(true);          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultFont(UIFont.Large);    -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultColors(255, 255, 0, 255); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:ReadString("!")                  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-
 	survivorObject.NoResultActions = {}
 	survivorObject.YesResultActions = {}
 	survivorObject.ContinueResultActions = {}
-	survivorObject.HasQuestion = false
-	survivorObject.HasBikuri = false -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	survivorObject.TriggerName = ""
 
 	survivorObject.AmmoTypes = {}
@@ -175,17 +167,9 @@ function SuperSurvivor:newLoad(ID, square)
 	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
 	survivorObject.userName:ReadString(survivorObject.player:getForname())
 
-	survivorObject.Bikuri = TextDrawObject.new()           -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setAllowAnyImage(true);          -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultFont(UIFont.Large);    -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:setDefaultColors(255, 255, 0, 255); -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	survivorObject.Bikuri:ReadString("!")                  -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-
 	survivorObject.NoResultActions = {}
 	survivorObject.YesResultActions = {}
 	survivorObject.ContinueResultActions = {}
-	survivorObject.HasQuestion = false
-	survivorObject.HasBikuri = false -- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
 	survivorObject.TriggerName = ""
 
 	survivorObject.AmmoTypes = {}
@@ -469,12 +453,6 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 	sy = sy - self.userName:getHeight()
 
 	self.userName:AddBatchedDraw(sx, sy, true)
-
-	-- WIP - WHAT IS BIKURI? THERE IS NO DOCUMENTATION HERE...
-	if (self.HasQuestion or self.HasBikuri) then
-		sy = sy - self.Bikuri:getHeight()
-		self.Bikuri:AddBatchedDraw(sx, sy, true)
-	end
 end
 
 function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
