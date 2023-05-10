@@ -1,5 +1,4 @@
 require "05_Other/SuperSurvivorManager";
-require "07_UI/SurvivorInfoWindow";
 
 GroupWindow = ISCollapsableWindow:derive("GroupWindow");
 
@@ -16,13 +15,6 @@ local function SSItemClickHandle()
 	local selected = tonumber(MyGroupWindow:getSelected())
 	local member = members[selected]
 
-	if (MySurvivorInfoWindow) then  -- Check if MySurvivorInfoWindow is ready to be loaded with the "require" import...
-		if (member) then
-			CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, tostring(member:getName()));
-			MySurvivorInfoWindow:Load(member)
-			MySurvivorInfoWindow:setVisible(true)
-		end
-	end
 end
 
 function GroupWindow:new(x, y, width, height)
