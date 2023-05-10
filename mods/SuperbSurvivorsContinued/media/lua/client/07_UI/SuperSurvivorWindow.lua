@@ -1,9 +1,9 @@
 require "05_Other/SuperSurvivorManager";
 require "07_UI/UIUtils";
 
-local window_height = (30*10)+20+44+2
+local window_height = (30 * 10) + 20 + 44 + 2
 local window_width = 850
-local panel_height = 30*10
+local panel_height = 30 * 10
 local context_options = {}
 local survivor_headers = {}
 local isLocalLoggingEnabled = false;
@@ -29,7 +29,7 @@ base_area_visibility = {
 --****************************************************
 -- PanelGroup
 --****************************************************
-local PanelGroup = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
+local PanelGroup = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
 table.insert(SurvivorPanels, 1, PanelGroup)
 
 function PanelGroup:dupdate()
@@ -38,17 +38,21 @@ function PanelGroup:dupdate()
     local switch = 0
     local group = UIUtil_GetGroup()
     local group_members = group:getMembers()
-    for i=1, #group_members do
+    for i = 1, #group_members do
         local name, role = UIUtil_GetMemberInfo(i)
         if role == "IGUI_SS_Job_Leader" then role = getContextMenuText("Job_Leader") end
         local panel_entry = ISPanel:new(0, dy, 850, 30)
         panel_entry.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
         panel_entry.backgroundColor = { r = 0, g = 0, b = 0, a = 0 }
-        panel_entry.dwidth = 850/3
-        local cat_member_name = ISButton:new(0, 0, panel_entry.dwidth, 30, tostring(name), nil, function() context_options.show_context_menu_member(i) end)
-        local cat_member_role = ISButton:new(panel_entry.dwidth, 0, panel_entry.dwidth, 30, tostring(role), nil, function() context_options.show_context_menu_role(i) end)
-        local cat_member_inventory = ISButton:new(panel_entry.dwidth*2, 0, panel_entry.dwidth/2, 30, "Inventory", nil, function() create_panel_inventory_transfer(i) end)
-        local cat_member_loadout = ISButton:new(panel_entry.dwidth*2+cat_member_inventory.width-1, 0, panel_entry.dwidth/2, 30, "Equipment", nil, function() create_panel_loadout(i) end)
+        panel_entry.dwidth = 850 / 3
+        local cat_member_name = ISButton:new(0, 0, panel_entry.dwidth, 30, tostring(name), nil,
+            function() context_options.show_context_menu_member(i) end)
+        local cat_member_role = ISButton:new(panel_entry.dwidth, 0, panel_entry.dwidth, 30, tostring(role), nil,
+            function() context_options.show_context_menu_role(i) end)
+        local cat_member_inventory = ISButton:new(panel_entry.dwidth * 2, 0, panel_entry.dwidth / 2, 30, "Inventory", nil,
+            function() create_panel_inventory_transfer(i) end)
+        local cat_member_loadout = ISButton:new(panel_entry.dwidth * 2 + cat_member_inventory.width - 1, 0,
+            panel_entry.dwidth / 2, 30, "Equipment", nil, function() create_panel_loadout(i) end)
         if i == 1 then cat_member_inventory.enable = false end
         if i == 1 then cat_member_loadout.enable = false end
         cat_member_name.borderColor = { r = 0, g = 0, b = 0, a = 0 }
@@ -73,21 +77,23 @@ function PanelGroup:dupdate()
         panel_entry:addChild(cat_member_inventory)
         panel_entry:addChild(cat_member_loadout)
         self:addChild(panel_entry)
-        dy = dy+30
+        dy = dy + 30
     end
     self:addScrollBars()
     self:setScrollWithParent(false)
     self:setScrollChildren(true)
-    self:setScrollHeight(30*#group_members)
+    self:setScrollHeight(30 * #group_members)
 end
 
 function PanelGroup:prerender()
     self:setStencilRect(0, 0, self.width, self.height)
     if self.background then
-        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r, self.backgroundColor.g, self.backgroundColor.b)
+        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r,
+            self.backgroundColor.g, self.backgroundColor.b)
     end
     if self.border then
-        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r, self.borderColor.g, self.borderColor.b)
+        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r,
+            self.borderColor.g, self.borderColor.b)
     end
 end
 
@@ -96,9 +102,9 @@ function PanelGroup:render()
 end
 
 function PanelGroup:onMouseWheel(dir)
-    dir = dir*-1
-    dir = (self:getScrollHeight()/50)*dir
-    dir = self:getYScroll()+dir
+    dir = dir * -1
+    dir = (self:getScrollHeight() / 50) * dir
+    dir = self:getYScroll() + dir
     self:setYScroll(dir)
     return true
 end
@@ -106,7 +112,7 @@ end
 --****************************************************
 -- PanelBase
 --****************************************************
-local PanelBase = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
+local PanelBase = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
 PanelBase:setVisible(false)
 table.insert(SurvivorPanels, 2, PanelBase)
 
@@ -122,11 +128,11 @@ function is_area_set(area_name)
     local sum = 0
     if area_name == "Bounds" then
         for _, j in ipairs(group.Bounds) do
-            sum = sum+j
+            sum = sum + j
         end
     else
         for _, j in ipairs(group.GroupAreas[area_name]) do
-            sum = sum+j
+            sum = sum + j
         end
     end
     return (sum ~= 0) and true or false
@@ -134,12 +140,16 @@ end
 
 function PanelBaseEntry:createChildren()
     local context_area_name = (self.area_name == "Bounds") and "BaseArea" or self.area_name
-    local cat_area_name = ISButton:new(1, 0, self.dwidth, 30, getText("ContextMenu_SS_"..context_area_name), nil, function() print(self.area_name) end)
-    local cat_area_set = ISButton:new(self.dwidth+1, 0, self.dwidth, 30, self.area_set, nil, nil)
-    local cat_area_show = ISButton:new(self.dwidth*2, 0, self.dwidth, 30, base_area_visibility[self.area_name].button_title, nil, function() on_click_base_show(self.group_id, self.area_name) end)
-    local cat_area_edit = ISButton:new(self.dwidth*3, 0, self.dwidth, 30, "edit", nil, function() create_panel_base_info(self.area_name) end)
+    local cat_area_name = ISButton:new(1, 0, self.dwidth, 30, getText("ContextMenu_SS_" .. context_area_name), nil,
+        function() print(self.area_name) end)
+    local cat_area_set = ISButton:new(self.dwidth + 1, 0, self.dwidth, 30, self.area_set, nil, nil)
+    local cat_area_show = ISButton:new(self.dwidth * 2, 0, self.dwidth, 30,
+        base_area_visibility[self.area_name].button_title, nil,
+        function() on_click_base_show(self.group_id, self.area_name) end)
+    local cat_area_edit = ISButton:new(self.dwidth * 3, 0, self.dwidth, 30, "edit", nil,
+        function() create_panel_base_info(self.area_name) end)
     cat_area_name.onMouseDown = function() return end
-    cat_area_set.onMouseDown = function() return  end
+    cat_area_set.onMouseDown = function() return end
     cat_area_name.borderColor = { r = 0, g = 0, b = 0, a = 0 }
     cat_area_set.borderColor = { r = 0, g = 0, b = 0, a = 0 }
     cat_area_show.borderColor = { r = 0, g = 0, b = 0, a = 0 }
@@ -173,7 +183,7 @@ function PanelBaseEntry:new(x, y, width, height, area_name, area_set, area_show,
     self.__index = self
     o.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     o.backgroundColor = { r = 0, g = 0, b = 0, a = 0 }
-    o.dwidth = 850/4
+    o.dwidth = 850 / 4
     o.area_name = area_name
     o.area_set = area_set
     o.area_show = area_show
@@ -190,33 +200,37 @@ function PanelBase:dupdate()
     local group = UIUtil_GetGroup()
     -- bounds area
     local base_set = (is_area_set("Bounds")) and "set" or "not set"
-    local panel_entry_base = PanelBaseEntry:new(0, dy, window_width, 30, "Bounds", base_set, base_area_visibility["Bounds"].button_title, switch, group_id)
+    local panel_entry_base = PanelBaseEntry:new(0, dy, window_width, 30, "Bounds", base_set,
+        base_area_visibility["Bounds"].button_title, switch, group_id)
     switch = (switch == 0) and 1 or 0
     self:addChild(panel_entry_base)
-    dy = dy+30
+    dy = dy + 30
     -- group areas
     local area_count = 1
     for area_name, _ in pairs(group.GroupAreas) do
         local area_set = (is_area_set(tostring(area_name))) and "set" or "not set"
-        local panel_entry_area = PanelBaseEntry:new(0, dy, window_width, 30, tostring(area_name), area_set, base_area_visibility[tostring(area_name)].button_title, switch, group_id)
+        local panel_entry_area = PanelBaseEntry:new(0, dy, window_width, 30, tostring(area_name), area_set,
+            base_area_visibility[tostring(area_name)].button_title, switch, group_id)
         switch = (switch == 0) and 1 or 0
         self:addChild(panel_entry_area)
-        dy = dy+30
-        area_count = area_count+1
+        dy = dy + 30
+        area_count = area_count + 1
     end
     self:addScrollBars()
     self:setScrollWithParent(false)
     self:setScrollChildren(true)
-    self:setScrollHeight(30*area_count)
+    self:setScrollHeight(30 * area_count)
 end
 
 function PanelBase:prerender()
     self:setStencilRect(0, 0, self.width, self.height)
     if self.background then
-        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r, self.backgroundColor.g, self.backgroundColor.b)
+        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r,
+            self.backgroundColor.g, self.backgroundColor.b)
     end
     if self.border then
-        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r, self.borderColor.g, self.borderColor.b)
+        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r,
+            self.borderColor.g, self.borderColor.b)
     end
 end
 
@@ -225,9 +239,9 @@ function PanelBase:render()
 end
 
 function PanelBase:onMouseWheel(dir)
-    dir = dir*-1
-    dir = (self:getScrollHeight()/50)*dir
-    dir = self:getYScroll()+dir
+    dir = dir * -1
+    dir = (self:getScrollHeight() / 50) * dir
+    dir = self:getYScroll() + dir
     self:setYScroll(dir)
     return true
 end
@@ -235,7 +249,7 @@ end
 --****************************************************
 -- PanelCompanions
 --****************************************************
-local PanelCompanions = ISPanel:new(0, 14+1+25+3, window_width, panel_height)
+local PanelCompanions = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
 PanelCompanions:setVisible(false)
 table.insert(SurvivorPanels, 3, PanelCompanions)
 
@@ -246,23 +260,27 @@ function PanelCompanions:dupdate()
     local group = UIUtil_GetGroup()
     local group_members = group:getMembers()
     local companion_count = 0
-    for i=1, #group_members do
+    for i = 1, #group_members do
         local name, role, _, ai_mode = UIUtil_GetMemberInfo(i)
         local panel_entry = ISPanel:new(0, dy, 850, 30)
         panel_entry.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
         panel_entry.backgroundColor = { r = 0, g = 0, b = 0, a = 0 }
-        panel_entry.dwidth = 850/4
-        local cat_companion_name = ISButton:new(1, 0, panel_entry.dwidth, 30, tostring(name), nil, function() context_options.show_context_menu_member(i) end)
-        local cat_companion_task = ISButton:new(panel_entry.dwidth+1, 0, panel_entry.dwidth, 30, tostring(ai_mode), nil, nil)
-        local cat_companion_order = ISButton:new(panel_entry.dwidth*2, 0, panel_entry.dwidth, 30, "order", nil, function() context_options.show_context_menu_order(i) end)
-        local cat_companion_call = ISButton:new(panel_entry.dwidth*3, 0, panel_entry.dwidth, 30, "call", nil, function() on_click_companion_call(i) end)
+        panel_entry.dwidth = 850 / 4
+        local cat_companion_name = ISButton:new(1, 0, panel_entry.dwidth, 30, tostring(name), nil,
+            function() context_options.show_context_menu_member(i) end)
+        local cat_companion_task = ISButton:new(panel_entry.dwidth + 1, 0, panel_entry.dwidth, 30, tostring(ai_mode), nil,
+            nil)
+        local cat_companion_order = ISButton:new(panel_entry.dwidth * 2, 0, panel_entry.dwidth, 30, "order", nil,
+            function() context_options.show_context_menu_order(i) end)
+        local cat_companion_call = ISButton:new(panel_entry.dwidth * 3, 0, panel_entry.dwidth, 30, "call", nil,
+            function() on_click_companion_call(i) end)
         cat_companion_task.onMouseDown = function() return end
         cat_companion_name.borderColor = { r = 0, g = 0, b = 0, a = 0 }
         cat_companion_task.borderColor = { r = 0, g = 0, b = 0, a = 0 }
         cat_companion_order.borderColor = { r = 0, g = 0, b = 0, a = 0 }
         cat_companion_call.borderColor = { r = 0, g = 0, b = 0, a = 0 }
         if role == "Companion" then
-            companion_count = companion_count+1
+            companion_count = companion_count + 1
             if switch == 0 then
                 cat_companion_name.backgroundColor = { r = 0.25, g = 0.31, b = 0.37, a = 0.3 }
                 cat_companion_task.backgroundColor = { r = 0.25, g = 0.31, b = 0.37, a = 0.3 }
@@ -283,22 +301,24 @@ function PanelCompanions:dupdate()
             panel_entry:addChild(cat_companion_order)
             panel_entry:addChild(cat_companion_call)
             self:addChild(panel_entry)
-            dy = dy+30
+            dy = dy + 30
         end
     end
     self:addScrollBars()
     self:setScrollWithParent(false)
     self:setScrollChildren(true)
-    self:setScrollHeight(30*companion_count)
+    self:setScrollHeight(30 * companion_count)
 end
 
 function PanelCompanions:prerender()
     self:setStencilRect(0, 0, self.width, self.height)
     if self.background then
-        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r, self.backgroundColor.g, self.backgroundColor.b)
+        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r,
+            self.backgroundColor.g, self.backgroundColor.b)
     end
     if self.border then
-        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r, self.borderColor.g, self.borderColor.b)
+        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r,
+            self.borderColor.g, self.borderColor.b)
     end
 end
 
@@ -307,9 +327,9 @@ function PanelCompanions:render()
 end
 
 function PanelCompanions:onMouseWheel(dir)
-    dir = dir*-1
-    dir = (self:getScrollHeight()/50)*dir
-    dir = self:getYScroll()+dir
+    dir = dir * -1
+    dir = (self:getScrollHeight() / 50) * dir
+    dir = self:getYScroll() + dir
     self:setYScroll(dir)
     return true
 end
@@ -339,20 +359,21 @@ function WindowSuperSurvivors:initialize()
 end
 
 function WindowSuperSurvivors:createChildren()
-    self.y_pos = 14+3
-    self.tab_width = self.width/3
+    self.y_pos = 14 + 3
+    self.tab_width = self.width / 3
     self.tab_height = 20
     ISCollapsableWindow.createChildren(self)
     -- headers group
     self.headers_group = ISPanel:new(0, self.y_pos, self.width, 25)
     table.insert(survivor_headers, 1, self.headers_group)
-    self.headers_group_width = self.width/3
+    self.headers_group_width = self.width / 3
     self.headers_group_name = ISButton:new(0, 0, self.headers_group_width, 25, "Name", nil, nil)
     self.headers_group_status = ISButton:new(self.headers_group_width, 0, self.headers_group_width, 25, "Role", nil, nil)
-    self.headers_group_inventory = ISButton:new(self.headers_group_width*2, 0, self.headers_group_width, 25, "Inventory", nil, nil)
-    self.headers_group_name.onMouseDown = function() return  end
-    self.headers_group_status.onMouseDown = function() return  end
-    self.headers_group_inventory.onMouseDown = function() return  end
+    self.headers_group_inventory = ISButton:new(self.headers_group_width * 2, 0, self.headers_group_width, 25,
+        "Inventory", nil, nil)
+    self.headers_group_name.onMouseDown = function() return end
+    self.headers_group_status.onMouseDown = function() return end
+    self.headers_group_inventory.onMouseDown = function() return end
     self.headers_group_name.backgroundColorMouseOver = self.headers_group_name.backgroundColor
     self.headers_group_status.backgroundColorMouseOver = self.headers_group_status.backgroundColor
     self.headers_group_inventory.backgroundColorMouseOver = self.headers_group_inventory.backgroundColor
@@ -364,15 +385,16 @@ function WindowSuperSurvivors:createChildren()
     self.headers_base = ISPanel:new(0, self.y_pos, self.width, 25)
     self.headers_base:setVisible(false)
     table.insert(survivor_headers, 1, self.headers_base)
-    self.headers_base_width = self.width/4
+    self.headers_base_width = self.width / 4
     self.headers_base_area = ISButton:new(1, 0, self.headers_base_width, 25, "Area", nil, nil)
-    self.headers_base_status = ISButton:new(self.headers_base_width+1, 0, self.headers_base_width, 25, "Set", nil, nil)
-    self.headers_base_show = ISButton:new(self.headers_base_width*2, 0, self.headers_base_width, 25, "Show", nil, nil)
-    self.headers_base_modify = ISButton:new(self.headers_base_width*3, 0, self.headers_base_width, 25, "Modify", nil, nil)
-    self.headers_base_area.onMouseDown = function() return  end
-    self.headers_base_status.onMouseDown = function() return  end
-    self.headers_base_show.onMouseDown = function() return  end
-    self.headers_base_modify.onMouseDown = function() return  end
+    self.headers_base_status = ISButton:new(self.headers_base_width + 1, 0, self.headers_base_width, 25, "Set", nil, nil)
+    self.headers_base_show = ISButton:new(self.headers_base_width * 2, 0, self.headers_base_width, 25, "Show", nil, nil)
+    self.headers_base_modify = ISButton:new(self.headers_base_width * 3, 0, self.headers_base_width, 25, "Modify", nil,
+        nil)
+    self.headers_base_area.onMouseDown = function() return end
+    self.headers_base_status.onMouseDown = function() return end
+    self.headers_base_show.onMouseDown = function() return end
+    self.headers_base_modify.onMouseDown = function() return end
     self.headers_base_area.backgroundColorMouseOver = self.headers_base_area.backgroundColor
     self.headers_base_status.backgroundColorMouseOver = self.headers_base_status.backgroundColor
     self.headers_base_show.backgroundColorMouseOver = self.headers_base_show.backgroundColor
@@ -386,15 +408,18 @@ function WindowSuperSurvivors:createChildren()
     self.headers_companions = ISPanel:new(0, self.y_pos, self.width, 25)
     self.headers_companions:setVisible(false)
     table.insert(survivor_headers, 1, self.headers_companions)
-    self.headers_companions_width = self.width/4
+    self.headers_companions_width = self.width / 4
     self.headers_companions_name = ISButton:new(1, 0, self.headers_companions_width, 25, "Name", nil, nil)
-    self.headers_companions_task = ISButton:new(self.headers_companions_width+1, 0, self.headers_companions_width, 25, "Task", nil, nil)
-    self.headers_companions_command = ISButton:new(self.headers_companions_width*2, 0, self.headers_companions_width, 25, "Command", nil, nil)
-    self.headers_companions_call = ISButton:new(self.headers_companions_width*3, 0, self.headers_companions_width, 25, "Call", nil, nil)
-    self.headers_companions_name.onMouseDown = function() return  end
-    self.headers_companions_task.onMouseDown = function() return  end
-    self.headers_companions_command.onMouseDown = function() return  end
-    self.headers_base_modify.onMouseDown = function() return  end
+    self.headers_companions_task = ISButton:new(self.headers_companions_width + 1, 0, self.headers_companions_width, 25,
+        "Task", nil, nil)
+    self.headers_companions_command = ISButton:new(self.headers_companions_width * 2, 0, self.headers_companions_width,
+        25, "Command", nil, nil)
+    self.headers_companions_call = ISButton:new(self.headers_companions_width * 3, 0, self.headers_companions_width, 25,
+        "Call", nil, nil)
+    self.headers_companions_name.onMouseDown = function() return end
+    self.headers_companions_task.onMouseDown = function() return end
+    self.headers_companions_command.onMouseDown = function() return end
+    self.headers_base_modify.onMouseDown = function() return end
     self.headers_companions_name.backgroundColorMouseOver = self.headers_companions_name.backgroundColor
     self.headers_companions_task.backgroundColorMouseOver = self.headers_companions_task.backgroundColor
     self.headers_companions_command.backgroundColorMouseOver = self.headers_companions_command.backgroundColor
@@ -409,10 +434,13 @@ function WindowSuperSurvivors:createChildren()
     self:addChild(PanelBase)
     self:addChild(PanelCompanions)
     -- tabs
-    self.tabs = ISPanel:new(0, self.height-25+3, 846, self.tab_height)
-    self.tab_group = ISButton:new(0, 0, self.tab_width, self.tab_height, "Group", nil, function() on_click_tab(self.headers_group, PanelGroup) end)
-    self.tab_base = ISButton:new(self.tab_width, 0, self.tab_width, self.tab_height, "Base", nil, function() on_click_tab(self.headers_base, PanelBase) end)
-    self.tab_companions = ISButton:new(self.tab_width*2, 0, self.tab_width, self.tab_height, "Companions", nil, function() on_click_tab(self.headers_companions, PanelCompanions) end)
+    self.tabs = ISPanel:new(0, self.height - 25 + 3, 846, self.tab_height)
+    self.tab_group = ISButton:new(0, 0, self.tab_width, self.tab_height, "Group", nil,
+        function() on_click_tab(self.headers_group, PanelGroup) end)
+    self.tab_base = ISButton:new(self.tab_width, 0, self.tab_width, self.tab_height, "Base", nil,
+        function() on_click_tab(self.headers_base, PanelBase) end)
+    self.tab_companions = ISButton:new(self.tab_width * 2, 0, self.tab_width, self.tab_height, "Companions", nil,
+        function() on_click_tab(self.headers_companions, PanelCompanions) end)
     self.tab_group.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     self.tab_base.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     self.tab_companions.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
@@ -446,7 +474,8 @@ function remove_button_super_survivors()
 end
 
 function create_button_super_survivors()
-    button_super_survivors = ButtonSuperSurvivors:new(getCore():getScreenWidth()-(125+100+8), getCore():getScreenHeight()-50, 100, 25, "survivors", nil, function() window_super_survivors_visibility() end)
+    button_super_survivors = ButtonSuperSurvivors:new(getCore():getScreenWidth() - (125 + 100 + 8),
+        getCore():getScreenHeight() - 50, 100, 25, "survivors", nil, function() window_super_survivors_visibility() end)
     button_super_survivors.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     button_super_survivors:setVisible(true)
     button_super_survivors:setEnable(true)
@@ -458,7 +487,8 @@ function remove_button_reload_menu()
 end
 
 function create_button_reload_menu()
-    button_reload_menu = ButtonReloadMenu:new(getCore():getScreenWidth()-(100+25+8), getCore():getScreenHeight()-50, 25, 25, "!", nil, function() dssw.dbug() end)
+    button_reload_menu = ButtonReloadMenu:new(getCore():getScreenWidth() - (100 + 25 + 8), getCore():getScreenHeight() -
+    50, 25, 25, "!", nil, function() dssw.dbug() end)
     button_reload_menu.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     button_reload_menu:setVisible(true)
     button_reload_menu:setEnable(true)
@@ -482,14 +512,19 @@ end
 
 function on_click_tab(target_headers, target_panel)
     for _, header in pairs(survivor_headers) do
-        if header == target_headers then header:setVisible(true)
-        else header:setVisible(false) end
+        if header == target_headers then
+            header:setVisible(true)
+        else
+            header:setVisible(false)
+        end
     end
     for _, panel in pairs(SurvivorPanels) do
         if panel == target_panel then
             panel:setVisible(true)
             panel:dupdate()
-        else panel:setVisible(false) end
+        else
+            panel:setVisible(false)
+        end
     end
 end
 
@@ -498,7 +533,7 @@ function on_click_companion_call(member_index)
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
     if member then
-        getSpecificPlayer(0):Say(getActionText("CallName_Before")..member:getName()..getActionText("CallName_After"))
+        getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
     end
 end
@@ -540,7 +575,7 @@ context_options.show_context_menu_role = function(member_index)
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
-    context_menu:addOption("Call", nil, function() on_click_companion_call(member_index)  end)
+    context_menu:addOption("Call", nil, function() on_click_companion_call(member_index) end)
     local order = context_menu:addOption("Order", nil, nil)
     local sub_order = context_menu:getNew(context_menu)
     sub_order:addOption("Barricade", nil, function() UIUtil_GiveOrder(1, member_index) end)
@@ -579,8 +614,8 @@ context_options.show_context_menu_member = function(member_index)
     if member_index == 1 then return end
     local member = SSGM:Get(SSM:Get(0):getGroupID()):getMembers()[member_index]
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
-    context_menu:addOption("Information", nil, function() show_survivor_info(member_index)  end)
-    context_menu:addOption("Inventory", nil, function() create_panel_inventory_transfer(member_index)  end)
+    context_menu:addOption("Information", nil, function() ShowSurvivorInfo(member_index) end)
+    context_menu:addOption("Inventory", nil, function() create_panel_inventory_transfer(member_index) end)
     local use_weapon = context_menu:addOption("Use Weapon", nil, nil)
     local sub_use_weapon = context_menu:getNew(context_menu)
     sub_use_weapon:addOption("Gun", nil, function() ForceWeaponType(nil, member, true) end)
@@ -604,11 +639,12 @@ function base_area_visibility.event_update_area_highlight()
                 local x2 = coords[2]
                 local y1 = coords[3]
                 local y2 = coords[4]
-                for i=x1, x2 do
-                    for j=y1, y2 do
+                for i = x1, x2 do
+                    for j = y1, y2 do
                         local cell = getCell():getGridSquare(i, j, getSpecificPlayer(0):getZ())
                         if cell and cell:getFloor() then
-                            cell:getFloor():setHighlightColor(AreaColors[area_name].r, AreaColors[area_name].g, AreaColors[area_name].b, AreaColors[area_name].a)
+                            cell:getFloor():setHighlightColor(AreaColors[area_name].r, AreaColors[area_name].g,
+                                AreaColors[area_name].b, AreaColors[area_name].a)
                             cell:getFloor():setHighlighted(true)
                         end
                     end
@@ -617,6 +653,7 @@ function base_area_visibility.event_update_area_highlight()
         end
     end
 end
+
 Events.OnRenderTick.Add(base_area_visibility.event_update_area_highlight)
 
 function wrap_set_group_role(func)
@@ -640,6 +677,7 @@ function event_set_group_role()
         SurvivorPanels[3]:dupdate()
     end
 end
+
 Events.on_update_group_role.Add(event_set_group_role)
 
 function event_update_group_role()
@@ -649,6 +687,7 @@ function event_update_group_role()
         SurvivorPanels[3]:dupdate()
     end
 end
+
 Events.on_update_group_role.Add(event_update_group_role)
 
 function event_every_minute()
@@ -657,6 +696,7 @@ function event_every_minute()
         SurvivorPanels[3]:dupdate()
     end
 end
+
 Events.EveryOneMinute.Add(event_every_minute)
 
 --****************************************************
@@ -686,4 +726,5 @@ function super_survivor_window_entry_point()
     --SuperSurvivor.setGroupRole = wrap_set_group_role(SuperSurvivor.setGroupRole)
     --SurvivorOrder = wrap_survivor_order(SurvivorOrder)
 end
+
 Events.OnGameStart.Add(super_survivor_window_entry_point)
