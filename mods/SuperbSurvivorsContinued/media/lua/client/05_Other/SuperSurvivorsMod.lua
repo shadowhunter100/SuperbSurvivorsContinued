@@ -407,9 +407,6 @@ function SurvivorOrder(test, player, order, orderParam)
 			else
 				ASuperSurvivor:Speak(GetDialogueSpeech("IfYouThinkSo"))
 			end
-		elseif (order == "Unlock Doors") then
-			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
-			TaskMangerIn:AddToTop(LockDoorsTask:new(ASuperSurvivor, false))
 		elseif (order == "Go Find Food") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then ASuperSurvivor:setGroupRole(GetJobText("Worker")) end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Food", "Category", 1))
