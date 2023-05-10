@@ -20,7 +20,9 @@ end
 
 function SuperSurvivorGroupManager:GetGroupIdFromSquare(square)
 	for i = 0, self.GroupCount do
-		if (self.Groups[i]) and (self.Groups[i]:IsInBounds(square)) then return self.Groups[i]:getID() end
+		if (self.Groups[i]) and (self.Groups[i]:IsInBounds(square)) then
+			return self.Groups[i]:getID()
+		end
 	end
 	return -1
 end
@@ -50,11 +52,10 @@ function SuperSurvivorGroupManager:Save()
 	end
 end
 
-
 function SuperSurvivorGroupManager:Load()
 	if (DoesFileExist("SurvivorGroup0.lua")) then -- only load if any groups detected at all
 		self.GroupCount = 0
-		
+
 		while DoesFileExist("SurvivorGroup" .. tostring(self.GroupCount) .. ".lua") do
 			local newGroup = self:newGroup()
 			newGroup:Load()
