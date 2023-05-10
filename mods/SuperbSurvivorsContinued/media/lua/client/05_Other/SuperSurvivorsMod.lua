@@ -207,7 +207,6 @@ function SuperSurvivorsInit()
 	GroupWindowCreate()
 
 	SurvivorsCreatePVPButton()
-	AchievementsEnabled = false
 
 	SurvivorTogglePVP()
 

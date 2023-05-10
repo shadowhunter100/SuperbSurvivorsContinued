@@ -7,14 +7,17 @@ SurvivorInfoWindow = ISCollapsableWindow:derive("SurvivorInfoWindow");
 function CallButtonPressed()
 	local GID = SSM:Get(0):getGroupID()
 	local members = SSGM:Get(GID):getMembers()
-	local selected = tonumber(myGroupWindow:getSelected())
-	local member = members[selected]
-	if (member) then
-		getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
-		member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
+
+	if (MyGroupWindow) then -- SuperSurvivorMyGroupWindow.lua is initialized AFTER SurviviorInfoWindow because of "require"... so this needs to be checked.
+		local selected = tonumber(MyGroupWindow:getSelected())
+		local member = members[selected]
+		if (member) then
+			getSpecificPlayer(0):Say(getActionText("CallName_Before") ..
+			member:getName() .. getActionText("CallName_After"))
+			member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
+		end
 	end
 end
-
 function SurvivorInfoWindow:initialise()
 	ISCollapsableWindow.initialise(self);
 end
@@ -138,19 +141,19 @@ end
 
 function SurvivorInfoWindowCreate()
 	local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
-	mySurvivorInfoWindow = SurvivorInfoWindow:new(300, 270, FONT_HGT_SMALL * 6 + 175, FONT_HGT_SMALL * 10 + 500)
-	mySurvivorInfoWindow:addToUIManager();
-	mySurvivorInfoWindow:setVisible(false);
-	mySurvivorInfoWindow.pin = true;
-	mySurvivorInfoWindow.resizable = true
+	MySurvivorInfoWindow = SurvivorInfoWindow:new(300, 270, FONT_HGT_SMALL * 6 + 175, FONT_HGT_SMALL * 10 + 500)
+	MySurvivorInfoWindow:addToUIManager();
+	MySurvivorInfoWindow:setVisible(false);
+	MySurvivorInfoWindow.pin = true;
+	MySurvivorInfoWindow.resizable = true
 
 	-- build compatibility check---
 	local player = getSpecificPlayer(0)
 	if (player.setSceneCulled == nil) then -- this function only exists in build 41
 		local text = "\n\n\nWARNING!! WARNING!! ERROR!!\n\nSUBPAR SURVIVORS MOD INCOMPATIBLE WITH THIS BUILD! \n\n";
 		text = text .. "Please see the TIS forum or Discord to get help changng over to build 41."
-		mySurvivorInfoWindow:setVisible(true);
-		mySurvivorInfoWindow:setText(text);
+		MySurvivorInfoWindow:setVisible(true);
+		MySurvivorInfoWindow:setText(text);
 	end
 end
 

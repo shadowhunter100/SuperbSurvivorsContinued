@@ -1,4 +1,5 @@
 require "05_Other/SuperSurvivorManager";
+require "07_UI/SurvivorInfoWindow";
 
 GroupWindow = ISCollapsableWindow:derive("GroupWindow");
 
@@ -12,13 +13,15 @@ local function SSItemClickHandle()
 	CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "SSItemClickHandle() called");
 	local GID = SSM:Get(0):getGroupID()
 	local members = SSGM:Get(GID):getMembers()
-	local selected = tonumber(myGroupWindow:getSelected())
+	local selected = tonumber(MyGroupWindow:getSelected())
 	local member = members[selected]
 
-	if (member) then
-		CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, tostring(member:getName()));
-		mySurvivorInfoWindow:Load(member)
-		mySurvivorInfoWindow:setVisible(true)
+	if (MySurvivorInfoWindow) then  -- Check if MySurvivorInfoWindow is ready to be loaded with the "require" import...
+		if (member) then
+			CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, tostring(member:getName()));
+			MySurvivorInfoWindow:Load(member)
+			MySurvivorInfoWindow:setVisible(true)
+		end
 	end
 end
 
@@ -182,9 +185,9 @@ end
 
 function GroupWindowCreate()
 	local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)
-	myGroupWindow = GroupWindow:new(15, 285, 300, 620 + FONT_HGT_SMALL)
-	myGroupWindow:addToUIManager();
-	myGroupWindow:setVisible(false);
-	myGroupWindow.pin = true;
-	myGroupWindow.resizable = true
+	MyGroupWindow = GroupWindow:new(15, 285, 300, 620 + FONT_HGT_SMALL)
+	MyGroupWindow:addToUIManager();
+	MyGroupWindow:setVisible(false);
+	MyGroupWindow.pin = true;
+	MyGroupWindow.resizable = true
 end

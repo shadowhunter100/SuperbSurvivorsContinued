@@ -1,4 +1,5 @@
 require "05_Other/SuperSurvivorManager";
+require "07_UI/SurvivorInfoWindow";
 
 -- the job 'companion' has alot of embedding put into it to keep it from breaking away from main player
 -- So if you add new commands for the npcs through here, make sure you keep in mind about companions
@@ -60,13 +61,6 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
 
 	if (result) then
-		if (AchievementsEnabled) then
-			if (not MyAchievementManager:isComplete("MakingFriends")) then
-				MyAchievementManager:setComplete(
-					"MakingFriends", true)
-			end
-		end
-
 		SS:Speak(GetDialogueSpeech("Roger"))
 		local GID, Group
 		if (SSM:Get(0):getGroupID() == nil) then
@@ -286,8 +280,8 @@ function ForceWeaponType(test, SS, useMele)
 end
 
 function ViewSurvivorInfo(test, ss)
-	mySurvivorInfoWindow:Load(ss)
-	mySurvivorInfoWindow:setVisible(true)
+	MySurvivorInfoWindow:Load(ss)
+	MySurvivorInfoWindow:setVisible(true)
 end
 
 function TalkToSurvivor(test, SS)
