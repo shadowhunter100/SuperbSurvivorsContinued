@@ -279,11 +279,6 @@ function ForceWeaponType(test, SS, useMele)
 	end
 end
 
-function ViewSurvivorInfo(test, ss)
-	MySurvivorInfoWindow:Load(ss)
-	MySurvivorInfoWindow:setVisible(true)
-end
-
 function TalkToSurvivor(test, SS)
 	getSpecificPlayer(0):Say(GetDialogueSpeech("HelloThere"))
 
@@ -415,11 +410,6 @@ function survivorMenu(context, o)
 
 				local SetNameOption = submenu:addOption(getContextMenuText("SetName"), nil, SetName, SS, true)
 			end
-
-			local viewinfoOption = submenu:addOption(getContextMenuText("ViewSurvivorInfo"), nil, ViewSurvivorInfo, SS,
-				nil)
-			local tooltip = MakeToolTip(viewinfoOption, getContextMenuText("ViewSurvivorInfo"),
-				getContextMenuText("ViewSurvivorInfoDesc"))
 
 			if (SSM:Get(0):hasFood()) then
 				submenu:addOption(getContextMenuText("OfferFood"), nil, OfferFood, o, nil);
