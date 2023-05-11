@@ -394,10 +394,6 @@ function MainOptions:create()
     self:addCustomCombo('FollowDistance', splitpoint, y, comboWidth, getOptionText("FollowGlobalRange"), options,
         getOptionText("FollowGlobalRangeDesc"))
 
-    local options = NPC_Options_OffOn()
-    self:addCustomCombo('Perception_Bonus', splitpoint, y, comboWidth, getOptionText("PerceptionBonus"), options,
-        getOptionText("PerceptionBonusDesc"))
-
     local options = NPC_Options_ZeroToOneHundredAbsolute()
     self:addCustomCombo('Panic_Distance', splitpoint, y, comboWidth, getOptionText("Panic_Distance"), options,
         getOptionText("Panic_DistanceDesc"))

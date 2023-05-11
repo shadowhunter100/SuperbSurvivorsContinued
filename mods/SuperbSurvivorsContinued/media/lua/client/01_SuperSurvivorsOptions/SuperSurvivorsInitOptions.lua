@@ -64,7 +64,6 @@ if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions[
 
 if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
 
-if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
 
 if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
 if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
@@ -173,8 +172,6 @@ function SuperSurvivorGetOptionValue(option)
 		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
 	elseif (option == "Option_FollowDistance") then
 		return (num + 2)
-	elseif (option == "Option_Perception_Bonus") then
-		return (num)
 	elseif (option == "Option_ForcePVP") and (num == 1) then
 		return 0
 	elseif (option == "Option_ForcePVP") and (num == 2) then
@@ -250,8 +247,6 @@ end
 -- ----------------------- --
 function SuperSurvivorsRefreshSettings()
 	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
-
-	Option_Perception_Bonus = SuperSurvivorGetOptionValue("Option_Perception_Bonus")
 
 	Option_Display_Survivor_Names = SuperSurvivorGetOptionValue("Option_Display_Survivor_Names")
 	Option_Display_Hostile_Color = SuperSurvivorGetOptionValue("Option_Display_Hostile_Color")

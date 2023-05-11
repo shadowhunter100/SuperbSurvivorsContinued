@@ -122,7 +122,6 @@ function AIManager(TaskMangerIn)
 		-- Don't add 'and AiNPC_TaskIsNot(AiTmi,"First Aide")' because you want companions to still attack enemies while hurt
 		-- ------------------------- --
 
-		-- ----- Perception Buff --- --
 
 		-- ------------ --
 		-- Pursue
@@ -135,7 +134,6 @@ function AIManager(TaskMangerIn)
 		-- ----------- --
 		-- Attack
 		-- ----------- --
-		-- ----- Perception Buff --- --
 		-- ------------------------- --
 		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
 		if (

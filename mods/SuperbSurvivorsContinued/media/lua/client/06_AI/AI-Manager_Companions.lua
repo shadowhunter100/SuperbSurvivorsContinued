@@ -79,7 +79,6 @@ function AIManager_Companion(TMI)
 		-- Pursue
 		-- ------------ --
 		if NPC_TaskIsNot("First Aide") and NPC_TaskIsNot("Pursue") and NPC_TaskIsNot("Attack") then
-			-- ----- Perception Buff --- --
 
 			if (EnemyIsSurvivor or EnemyIsZombie) then
 				TMI:AddToTop(PursueTask:new(NPC, NPC.LastEnemeySeen))
@@ -89,8 +88,6 @@ function AIManager_Companion(TMI)
 		-- Attack
 		-- ----------- --
 		if (NPC_TaskIsNot("First Aide")) then
-			-- ----- Perception Buff --- --
-			-- ------------------------- --
 
 			if (
 					(TMI:getCurrentTask() ~= "Attack")
