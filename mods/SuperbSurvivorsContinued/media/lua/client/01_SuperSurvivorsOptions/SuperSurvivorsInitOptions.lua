@@ -68,7 +68,6 @@ if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["
 if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
 if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
 if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
-if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
 if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
 
 if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
@@ -167,8 +166,6 @@ function SuperSurvivorGetOptionValue(option)
 		return (((num - 2) * 5) * 24)
 	elseif (option == "RaidersChance") then
 		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
-	elseif (option == "Option_FollowDistance") then
-		return (num + 2)
 	elseif (option == "Option_ForcePVP") and (num == 1) then
 		return 0
 	elseif (option == "Option_ForcePVP") and (num == 2) then
@@ -239,7 +236,6 @@ function SuperSurvivorsRefreshSettings()
 	Option_Panic_Distance = SuperSurvivorGetOptionValue("Option_Panic_Distance")
 
 	Option_ForcePVP = SuperSurvivorGetOptionValue("Option_ForcePVP")
-	Option_FollowDistance = SuperSurvivorGetOptionValue("Option_FollowDistance")
 	RoleplayMessage = SuperSurvivorGetOptionValue('RoleplayMessage')
 
 	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")
