@@ -492,7 +492,7 @@ function SuperSurvivor:reload()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reload() called");
 	local cs = self.player:getCurrentSquare()
 	local id = self:getID()
-	self:delete()
+	self:deleteSurvivor()
 	self.player = self:spawnPlayer(cs, nil)
 	self:loadPlayer(cs, id)
 end
@@ -3066,8 +3066,8 @@ function SuperSurvivor:setID(id)
 	self.player:getModData().ID = id;
 end
 
-function SuperSurvivor:delete()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:delete() called");
+function SuperSurvivor:deleteSurvivor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:deleteSurvivor() called");
 	self.player:getInventory():emptyIt();
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);
@@ -3517,10 +3517,10 @@ function SuperSurvivor:openBoxForGun()
 		local modl = ammoBox:getModule() .. "."
 
 		local tempBullet = instanceItem(modl .. ammotype)
-		local groupcount = tempBullet:getCount()
+		local bulletCount = tempBullet:getCount()
 		local count = 0
 
-		count = (GetBoxCount(ammoBox:getType()) / groupcount)
+		count = (GetBoxCount(ammoBox:getType()) / bulletCount)
 
 		for i = 1, count do
 			inv:AddItem(modl .. ammotype)

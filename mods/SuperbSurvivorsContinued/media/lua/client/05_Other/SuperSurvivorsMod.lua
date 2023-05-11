@@ -96,14 +96,15 @@ function SuperSurvivorRandomSpawn(square)
 	local zlist = getCell():getZombieList();
 	if (zlist ~= nil) then
 		for i = zlist:size() - 1, 0, -1 do
-			z = zlist:get(i);
+			local z = zlist:get(i);
+
 			if z ~= nil and (math.abs(z:getX() - square:getX()) < 2) and (math.abs(z:getY() - square:getY()) < 2) and (z:getZ() == square:getZ()) then
 				z:removeFromWorld();
 			end
 		end
 	end
 
-	return ASuperSurvivor
+	return ASuperSurvivor;
 end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
@@ -172,15 +173,18 @@ function SuperSurvivorsLoadGridsquare(square)
 					local RaiderGroup = SSGM:newGroup()
 					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then RaiderGroup = SSGM:newGroup() end
 					local GroupSize = ZombRand(2, 5) + math.floor(hours / (24 * 30))
-					if (GroupSize > 10) then GroupSize = 10 end
-					if (GroupSize < 2) then GroupSize = 2 end
+					if (GroupSize > Max_Group_Size) then
+						GroupSize = Max_Group_Size
+					elseif (GroupSize < Min_Group_Size) then
+						GroupSize = Min_Group_Size
+					end
 					local oldGunSpawnChance = ChanceToSpawnWithGun
 					ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5
 					local groupHostility
 					local Leader
 
 					for i = 1, GroupSize do
-						raider = SuperSurvivorRandomSpawn(square)
+						local raider = SuperSurvivorRandomSpawn(square);
 						if (i == 1) then
 							RaiderGroup:addMember(raider, "Leader")
 							groupHostility = raider.player:getModData().isHostile
@@ -191,7 +195,9 @@ function SuperSurvivorsLoadGridsquare(square)
 							raider:getTaskManager():AddToTop(FollowTask:new(raider, Leader:Get()))
 						end
 
-						if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+						if (raider:hasWeapon() == false) then
+							raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]);
+						end
 					end
 					ChanceToSpawnWithGun = oldGunSpawnChance
 				else
@@ -546,16 +552,18 @@ function SuperSurvivorKeyBindAction(keyNum)
 			end
 		elseif (keyNum == 1) then -- esc key
 			local isSaveFunctionLoggingEnabled = false;
-			SSM:SaveAll()
-			SSGM:Save()
-			SaveSurvivorMap()
+			SSM:SaveAll();
+			SSGM:Save();
+			SaveSurvivorMap();
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Groups Count: " .. tostring(SSGM.GroupCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+				"Groups Count: " .. tostring(SSGM.GroupCount));
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
 			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors Count:" .. tostring(SSM.SurvivorCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+				"Survivors Count:" .. tostring(SSM.SurvivorCount));
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
 			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
@@ -690,8 +698,8 @@ function SuperSurvivorsNewSurvivorManager()
 
 		if (GroupSize > AltSpawnGroupSize) then
 			GroupSize = AltSpawnGroupSize
-		elseif (GroupSize < 1) then
-			GroupSize = 1
+		elseif (GroupSize < Min_Group_Size) then
+			GroupSize = Min_Group_Size
 		end
 
 		-- Since the options update 0-100 , this may need changing
@@ -699,7 +707,7 @@ function SuperSurvivorsNewSurvivorManager()
 		ChanceToSpawnWithGun    = ChanceToSpawnWithGun --* 1.5
 
 		for i = 1, GroupSize do
-			raider = SuperSurvivorRandomSpawn(spawnSquare)
+			local raider = SuperSurvivorRandomSpawn(spawnSquare)
 			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
 			--else RaiderGroup:addMember(raider,"Guard") end
 

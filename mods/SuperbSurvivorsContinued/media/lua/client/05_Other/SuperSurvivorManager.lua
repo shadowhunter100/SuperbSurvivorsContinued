@@ -62,7 +62,7 @@ function SuperSurvivorManager:LoadSurvivor(ID, square)
 			if (self.SuperSurvivors[ID]:isInCell()) then
 				return false
 			else
-				self.SuperSurvivors[ID]:delete()
+				self.SuperSurvivors[ID]:deleteSurvivor()
 			end
 		end
 
@@ -73,11 +73,17 @@ function SuperSurvivorManager:LoadSurvivor(ID, square)
 
 		self.SuperSurvivors[ID]:refreshName()
 
-		if (self.SuperSurvivors[ID]:Get():getModData().isHostile == true) then self.SuperSurvivors[ID]:setHostile(true) end
+		if (self.SuperSurvivors[ID]:Get():getModData().isHostile == true) then
+			self.SuperSurvivors[ID]:setHostile(true)
+		end
 
-		if (self.SurvivorCount == nil) then self.SurvivorCount = 1 end
+		if (self.SurvivorCount == nil) then
+			self.SurvivorCount = 1
+		end
 
-		if (ID > self.SurvivorCount) then self.SurvivorCount = ID end
+		if (ID > self.SurvivorCount) then
+			self.SurvivorCount = ID;
+		end
 		self.SuperSurvivors[ID].player:getModData().LastSquareSaveX = nil
 		self.SuperSurvivors[ID]:SaveSurvivor()
 
@@ -310,9 +316,10 @@ SSM = SuperSurvivorManager:new()
 function LoadSurvivorMap()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:LoadSurvivorMap() called");
 	local tempTable = {}
-	tempTable = table.load("SurvivorManagerInfo")
+	tempTable = table.load("SurvivorManagerInfo");
+
 	if (tempTable) and (tempTable[1]) then
-		SSM.SurvivorCount = tonumber(tempTable[1])
+		SSM.SurvivorCount = tonumber(tempTable[1]);
 	else
 		CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "LoadSurvivorMap Failed, possibly corrupted");
 	end
