@@ -1709,6 +1709,9 @@ SurvivorRoutes = {
 
 function SuperSurvivorPresetSpawnThis(PresetSpawn)
 	local square = getCell():getGridSquare(PresetSpawn.X, PresetSpawn.Y, PresetSpawn.Z)
+	local x = square:getX();
+	local y = square:getY();
+	local z = square:getZ();
 
 	if (square:getModData().thisSquareSpawnedPreset == true) then
 		return false
