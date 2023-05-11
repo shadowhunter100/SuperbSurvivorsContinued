@@ -388,10 +388,6 @@ function MainOptions:create()
     self:addCustomCombo('WifeSpawn', splitpoint, y, comboWidth, getOptionText("WifeSpawn"), options,
         getOptionText("WifeSpawnDesc"))
 
-    local options = NPC_Options_OffOn()
-    self:addCustomCombo('LockNLoad', splitpoint, y, comboWidth, getOptionText("LockNLoad"), options,
-        getOptionText("LockNLoadDesc"))
-
     y = y + spacing4x
 
     local options = { "3", "4", "5", "6", "7", "8", "9", "10" }

@@ -56,65 +56,6 @@ function SuperSurvivorPlayerInit(player)
 			local tm = wife:getTaskManager()
 			wife:setAIMode("Follow")
 			tm:AddToTop(followtask)
-
-			GlobalWife = wife
-		end
-
-		if (player:getModData().LockNLoad == nil) and (SuperSurvivorGetOptionValue("LockNLoad") == true) then
-			local SSME = SSM:Get(0)
-			SSME:WearThis("Shoes_ArmyBoots")
-			SSME:WearThis("Vest_BulletArmy")
-			SSME:WearThis("Trousers_CamoGreen")
-			SSME:WearThis("Shirt_CamoGreen")
-			SSME:WearThis("Hat_Army")
-
-			if (wife) then
-				wife:WearThis("Shoes_ArmyBoots")
-				wife:WearThis("Vest_BulletArmy")
-				wife:WearThis("Trousers_CamoGreen")
-				wife:WearThis("Shirt_CamoGreen")
-				wife:WearThis("Hat_Army")
-			end
-
-			local bat = player:getInventory():AddItem("Base.BaseballBat");
-			local gun = player:getInventory():AddItem("Base.Pistol");
-			local mag
-
-			for i = 1, 4 do
-				mag = player:getInventory():AddItem(gun:getMagazineType());
-				mag:setCurrentAmmoCount(15)
-			end
-
-			player:getInventory():AddItem("Base.Bullets9mmBox");
-			player:getInventory():AddItem("Base.Bullets9mmBox");
-			player:getInventory():AddItem("Base.Bullets9mmBox");
-			player:getInventory():AddItem("Base.Bullets9mmBox");
-
-			--gun:setClip(mag)
-			if (wife) then
-				local pistol = wife:Get():getInventory():AddItem("Base.HuntingRifle");
-				wife:Get():getInventory():AddItem("Base.308Clip");
-				wife:Get():setPrimaryHandItem(pistol)
-				wife:Get():setSecondaryHandItem(pistol)
-
-				for i = 1, 12 do
-					wife:Get():getInventory():AddItem("Base.308Bullets");
-				end
-			end
-
-			for i = 1, 8 do
-				player:LevelPerk(Perks.FromString("Aiming"))
-			end
-
-			for i = 1, 8 do
-				player:LevelPerk(Perks.FromString("Reloading"))
-			end
-
-			if (wife) then
-				for i = 1, 8 do wife:Get():LevelPerk(Perks.FromString("Aiming")) end
-			end
-
-			player:getModData().LockNLoad = true
 		end
 
 		local mydesc = getSpecificPlayer(0):getDescriptor();

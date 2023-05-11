@@ -49,7 +49,6 @@ SuperSurvivorOptions = loadSurvivorOptions()
 if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
 if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
 if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
-if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
 if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
 if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
 if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
@@ -101,8 +100,6 @@ function SuperSurvivorGetOptionValue(option)
 	local num = SuperSurvivorGetOption(option)
 
 	if (option == "WifeSpawn") then
-		return (num ~= 1)
-	elseif (option == "LockNLoad") then
 		return (num ~= 1)
 	elseif (option == "SpawnRate") and (num == 1) then
 		return 0
