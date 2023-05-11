@@ -171,15 +171,17 @@ function SuperSurvivorsLoadGridsquare(square)
 				if (ZombRand(15) == 0) then -- spawn group
 					local hours = getGameTime():getWorldAgeHours()
 					local RaiderGroup = SSGM:newGroup()
-					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then RaiderGroup = SSGM:newGroup() end
+
+					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then
+						RaiderGroup = SSGM:newGroup()
+					end
+
 					local GroupSize = ZombRand(2, 5) + math.floor(hours / (24 * 30))
 					if (GroupSize > Max_Group_Size) then
 						GroupSize = Max_Group_Size
 					elseif (GroupSize < Min_Group_Size) then
 						GroupSize = Min_Group_Size
 					end
-					local oldGunSpawnChance = ChanceToSpawnWithGun
-					ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5
 					local groupHostility
 					local Leader
 
@@ -199,7 +201,6 @@ function SuperSurvivorsLoadGridsquare(square)
 							raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]);
 						end
 					end
-					ChanceToSpawnWithGun = oldGunSpawnChance
 				else
 					SuperSurvivorRandomSpawn(square)
 				end
@@ -708,10 +709,6 @@ function SuperSurvivorsNewSurvivorManager()
 			GroupSize = Min_Group_Size
 		end
 
-		-- Since the options update 0-100 , this may need changing
-		local oldGunSpawnChance = ChanceToSpawnWithGun
-		ChanceToSpawnWithGun    = ChanceToSpawnWithGun --* 1.5
-
 		for i = 1, GroupSize do
 			local raider = SuperSurvivorRandomSpawn(spawnSquare)
 			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
@@ -747,7 +744,6 @@ function SuperSurvivorsNewSurvivorManager()
 
 			GetRandomSurvivorSuit(raider) -- WIP: Cows - Consider creating a preset outfit for raiders?
 		end
-		ChanceToSpawnWithGun = oldGunSpawnChance
 		RaiderGroup:AllSpokeTo()
 	end
 end
