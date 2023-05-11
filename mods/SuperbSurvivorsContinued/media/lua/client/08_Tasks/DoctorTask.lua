@@ -52,7 +52,7 @@ function DoctorTask:FindPatient()
 			Square = getCell():getGridSquare(x, y, player:getZ())
 
 			if (Square ~= nil) then
-				local distance = getDistanceBetween(Square, player); -- WIP - literally spammed inside the nested for loops...
+				local distance = getDistanceBetween(Square, player); -- WIP - Cows: literally spammed inside the nested for loops...
 				local closeobjects = Square:getMovingObjects()
 
 				for i = 0, closeobjects:size() - 1 do

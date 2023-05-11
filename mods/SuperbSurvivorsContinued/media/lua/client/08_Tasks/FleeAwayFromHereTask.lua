@@ -13,7 +13,11 @@ function FleeFromHereTask:new(superSurvivor, fleeFromHere)
 	o.Name = "Flee From Spot"
 	o.OnGoing = false
 	o.fleeFromHere = fleeFromHere
-	if o.parent.TargetBuilding ~= nil then o.parent:MarkAttemptedBuildingExplored(o.parent.TargetBuilding) end -- otherwise he just keeps running back to the building though the threat likely lingers there
+
+	-- WIP - Cows: Need to figure out what is causing npcs to run around doing nothing when zombies are spotted indoors...
+	if o.parent.TargetBuilding ~= nil then
+		o.parent:MarkAttemptedBuildingExplored(o.parent.TargetBuilding)
+	end -- otherwise he just keeps running back to the building though the threat likely lingers there
 
 	return o
 end
