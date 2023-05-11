@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 require "00_SuperbSurviorModVariables/SuperSurvivorsOrders";
 require "00_SuperbSurviorModVariables/SuperSurvivorWeaponsList";
 require "05_Other/SuperSurvivorManager";
@@ -673,7 +674,8 @@ function SuperSurvivorsNewSurvivorManager()
 	local drange = range * 2
 
 	for i = 1, 10 do
-		local spawnLocation = ZombRand(4)
+		local spawnLocation = ZombRand(4);
+		local x, y; -- WIP - Cows: x, y are not used anywhere else... keep it local for each iteration.
 		if (spawnLocation == 0) then
 			--mySS:Speak("spawn from north")
 			x = center:getX() + (ZombRand(drange) - range);
@@ -882,7 +884,8 @@ function SuperSurvivorsRaiderManager()
 		local drange = range * 2
 
 		for i = 1, 10 do
-			local spawnLocation = ZombRand(4)
+			local spawnLocation = ZombRand(4);
+			local x, y;
 			if (spawnLocation == 0) then
 				--mySS:Speak("spawn from north")
 				x = center:getX() + (ZombRand(drange) - range);
@@ -909,7 +912,6 @@ function SuperSurvivorsRaiderManager()
 			end
 		end
 
-
 		-- WIP - Cows: Need to rework the spawning functions and logic...
 		if (success) and (spawnSquare) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
@@ -930,7 +932,7 @@ function SuperSurvivorsRaiderManager()
 
 			for i = 1, GroupSize do
 				-- WIP - Cows: why is "raider" a global variable? it wasn't even initiated previously...
-				raider = SuperSurvivorRandomSpawn(spawnSquare)
+				local raider = SuperSurvivorRandomSpawn(spawnSquare)
 				if (i == 1) then
 					RaiderGroup:addMember(raider, "Leader")
 				else
