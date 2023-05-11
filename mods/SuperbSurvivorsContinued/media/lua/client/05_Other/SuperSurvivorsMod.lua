@@ -682,7 +682,13 @@ function SuperSurvivorsNewSurvivorManager()
 
 		spawnSquare = getCell():getGridSquare(x, y, 0)
 
-		if (spawnSquare ~= nil) and (not hisGroup:IsInBounds(spawnSquare)) and spawnSquare:isOutside() and (not spawnSquare:IsOnScreen()) and (not spawnSquare:isSolid()) and (spawnSquare:isSolidFloor()) then
+		if (spawnSquare ~= nil)
+			and (not hisGroup:IsInBounds(spawnSquare))
+			and spawnSquare:isOutside()
+			and (not spawnSquare:IsOnScreen())
+			and (not spawnSquare:isSolid())
+			and (spawnSquare:isSolidFloor())
+		then
 			success = true
 			break
 		end
@@ -739,7 +745,7 @@ function SuperSurvivorsNewSurvivorManager()
 				bag:AddItem(food)
 			end
 
-			GetRandomSurvivorSuit(raider) -- Even if it says 'raider' it's not giving raider outfits
+			GetRandomSurvivorSuit(raider) -- WIP: Cows - Consider creating a preset outfit for raiders?
 		end
 		ChanceToSpawnWithGun = oldGunSpawnChance
 		RaiderGroup:AllSpokeTo()
