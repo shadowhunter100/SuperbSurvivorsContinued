@@ -83,5 +83,6 @@
         "triggerEvent",
         "UIFont",
         "ZombRand",
+        "Events"
     ]
 }
