@@ -51,6 +51,8 @@ end
 
 function AttackTask:update()
 	CreateLogLine("AttackTask", isLocalLoggingEnabled, "function: AttackTask:update() called");
+	local weapon = self.parent.player:getPrimaryHandItem(); -- WIP - Cows: This is a test assignment...
+
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
 	if (self.parent:isWalkingPermitted()) then

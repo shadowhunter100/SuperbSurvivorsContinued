@@ -1,4 +1,6 @@
-require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList";
+---@diagnostic disable: need-check-nil
+require "00_SuperbSurviorModVariables/SuperSurvivorsOrders";
+require "00_SuperbSurviorModVariables/SuperSurvivorWeaponsList";
 require "05_Other/SuperSurvivorManager";
 
 -- WIP - Cows: ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
@@ -96,14 +98,15 @@ function SuperSurvivorRandomSpawn(square)
 	local zlist = getCell():getZombieList();
 	if (zlist ~= nil) then
 		for i = zlist:size() - 1, 0, -1 do
-			z = zlist:get(i);
+			local z = zlist:get(i);
+
 			if z ~= nil and (math.abs(z:getX() - square:getX()) < 2) and (math.abs(z:getY() - square:getY()) < 2) and (z:getZ() == square:getZ()) then
 				z:removeFromWorld();
 			end
 		end
 	end
 
-	return ASuperSurvivor
+	return ASuperSurvivor;
 end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
@@ -170,17 +173,22 @@ function SuperSurvivorsLoadGridsquare(square)
 				if (ZombRand(15) == 0) then -- spawn group
 					local hours = getGameTime():getWorldAgeHours()
 					local RaiderGroup = SSGM:newGroup()
-					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then RaiderGroup = SSGM:newGroup() end
+
+					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then
+						RaiderGroup = SSGM:newGroup()
+					end
+
 					local GroupSize = ZombRand(2, 5) + math.floor(hours / (24 * 30))
-					if (GroupSize > 10) then GroupSize = 10 end
-					if (GroupSize < 2) then GroupSize = 2 end
-					local oldGunSpawnChance = ChanceToSpawnWithGun
-					ChanceToSpawnWithGun = ChanceToSpawnWithGun --* 1.5
+					if (GroupSize > Max_Group_Size) then
+						GroupSize = Max_Group_Size
+					elseif (GroupSize < Min_Group_Size) then
+						GroupSize = Min_Group_Size
+					end
 					local groupHostility
 					local Leader
 
 					for i = 1, GroupSize do
-						raider = SuperSurvivorRandomSpawn(square)
+						local raider = SuperSurvivorRandomSpawn(square);
 						if (i == 1) then
 							RaiderGroup:addMember(raider, "Leader")
 							groupHostility = raider.player:getModData().isHostile
@@ -191,9 +199,10 @@ function SuperSurvivorsLoadGridsquare(square)
 							raider:getTaskManager():AddToTop(FollowTask:new(raider, Leader:Get()))
 						end
 
-						if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+						if (raider:hasWeapon() == false) then
+							raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]);
+						end
 					end
-					ChanceToSpawnWithGun = oldGunSpawnChance
 				else
 					SuperSurvivorRandomSpawn(square)
 				end
@@ -296,6 +305,12 @@ end
 	and specifications are clearly defined and set.
 --]]
 function SurvivorOrder(test, player, order, orderParam)
+	local isLoggingSurvivorOrder = false;
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "function: SurvivorOrder() called");
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "test: " .. tostring(test));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "player: " .. tostring(player));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "order: " .. tostring(order));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(orderParam));
 	if (player ~= nil) then
 		local ASuperSurvivor = SSM:Get(player:getModData().ID)
 		local TaskMangerIn = ASuperSurvivor:getTaskManager()
@@ -458,7 +473,11 @@ function SurvivorOrder(test, player, order, orderParam)
 		end
 
 		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
-		getSpecificPlayer(0):Say(tostring(ASuperSurvivor:getName()) .. ", " .. OrderDisplayName[order]);
+		CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(OrderDisplayName));
+		getSpecificPlayer(0):Say(
+			tostring(ASuperSurvivor:getName()) ..
+			", " .. OrderDisplayName[order]
+		);
 	end
 end
 
@@ -546,16 +565,18 @@ function SuperSurvivorKeyBindAction(keyNum)
 			end
 		elseif (keyNum == 1) then -- esc key
 			local isSaveFunctionLoggingEnabled = false;
-			SSM:SaveAll()
-			SSGM:Save()
-			SaveSurvivorMap()
+			SSM:SaveAll();
+			SSGM:Save();
+			SaveSurvivorMap();
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Groups Count: " .. tostring(SSGM.GroupCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+				"Groups Count: " .. tostring(SSGM.GroupCount));
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
 			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors Count:" .. tostring(SSM.SurvivorCount));
+			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+				"Survivors Count:" .. tostring(SSM.SurvivorCount));
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
 			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
@@ -653,7 +674,8 @@ function SuperSurvivorsNewSurvivorManager()
 	local drange = range * 2
 
 	for i = 1, 10 do
-		local spawnLocation = ZombRand(4)
+		local spawnLocation = ZombRand(4);
+		local x, y; -- WIP - Cows: x, y are not used anywhere else... keep it local for each iteration.
 		if (spawnLocation == 0) then
 			--mySS:Speak("spawn from north")
 			x = center:getX() + (ZombRand(drange) - range);
@@ -674,7 +696,13 @@ function SuperSurvivorsNewSurvivorManager()
 
 		spawnSquare = getCell():getGridSquare(x, y, 0)
 
-		if (spawnSquare ~= nil) and (not hisGroup:IsInBounds(spawnSquare)) and spawnSquare:isOutside() and (not spawnSquare:IsOnScreen()) and (not spawnSquare:isSolid()) and (spawnSquare:isSolidFloor()) then
+		if (spawnSquare ~= nil)
+			and (not hisGroup:IsInBounds(spawnSquare))
+			and spawnSquare:isOutside()
+			and (not spawnSquare:IsOnScreen())
+			and (not spawnSquare:isSolid())
+			and (spawnSquare:isSolidFloor())
+		then
 			success = true
 			break
 		end
@@ -690,16 +718,12 @@ function SuperSurvivorsNewSurvivorManager()
 
 		if (GroupSize > AltSpawnGroupSize) then
 			GroupSize = AltSpawnGroupSize
-		elseif (GroupSize < 1) then
-			GroupSize = 1
+		elseif (GroupSize < Min_Group_Size) then
+			GroupSize = Min_Group_Size
 		end
 
-		-- Since the options update 0-100 , this may need changing
-		local oldGunSpawnChance = ChanceToSpawnWithGun
-		ChanceToSpawnWithGun    = ChanceToSpawnWithGun --* 1.5
-
 		for i = 1, GroupSize do
-			raider = SuperSurvivorRandomSpawn(spawnSquare)
+			local raider = SuperSurvivorRandomSpawn(spawnSquare)
 			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
 			--else RaiderGroup:addMember(raider,"Guard") end
 
@@ -731,9 +755,8 @@ function SuperSurvivorsNewSurvivorManager()
 				bag:AddItem(food)
 			end
 
-			GetRandomSurvivorSuit(raider) -- Even if it says 'raider' it's not giving raider outfits
+			GetRandomSurvivorSuit(raider) -- WIP: Cows - Consider creating a preset outfit for raiders?
 		end
-		ChanceToSpawnWithGun = oldGunSpawnChance
 		RaiderGroup:AllSpokeTo()
 	end
 end
@@ -861,7 +884,8 @@ function SuperSurvivorsRaiderManager()
 		local drange = range * 2
 
 		for i = 1, 10 do
-			local spawnLocation = ZombRand(4)
+			local spawnLocation = ZombRand(4);
+			local x, y;
 			if (spawnLocation == 0) then
 				--mySS:Speak("spawn from north")
 				x = center:getX() + (ZombRand(drange) - range);
@@ -888,7 +912,6 @@ function SuperSurvivorsRaiderManager()
 			end
 		end
 
-
 		-- WIP - Cows: Need to rework the spawning functions and logic...
 		if (success) and (spawnSquare) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
@@ -909,7 +932,7 @@ function SuperSurvivorsRaiderManager()
 
 			for i = 1, GroupSize do
 				-- WIP - Cows: why is "raider" a global variable? it wasn't even initiated previously...
-				raider = SuperSurvivorRandomSpawn(spawnSquare)
+				local raider = SuperSurvivorRandomSpawn(spawnSquare)
 				if (i == 1) then
 					RaiderGroup:addMember(raider, "Leader")
 				else

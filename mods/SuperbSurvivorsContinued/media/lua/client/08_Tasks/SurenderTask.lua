@@ -31,7 +31,7 @@ function SurenderTask:isComplete()
 
 	local result = (not (self.enemy.player:isAiming()
 			and (self.enemy:usingGun()
-				or (not ASuperSurvivor:RealCanSee(self.enemy)
+				or (not self.parent:RealCanSee(self.enemy) -- WIP - Cows: Test assignment ... "ASuperSurvivor" was never assigned... need to find out what the deal is here...
 					and getDistanceBetween(self.enemy, self.parent.player) <= 3))
 			and self.enemy.player:CanSee(self.parent.player) and facingResult > 0.95
 			and (self.parent:isEnemy(self.enemy.player)
@@ -39,7 +39,8 @@ function SurenderTask:isComplete()
 					and self.enemy.player:isLocalPlayer()
 					and IsoPlayer.getCoopPVP()))
 			and getDistanceBetween(self.parent.player, self.enemy.player) < 6)
-		and (self.NowSafeTicks < 12));
+		and (self.NowSafeTicks < 12)
+	);
 
 	return result
 end

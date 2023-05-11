@@ -1,8 +1,10 @@
 // Defined under PZ modding documentation, sorted alphabetically
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.html#AdjacentFreeTileFinder(zombie.iso.IsoGridSquare,zombie.characters.IsoPlayer)
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodBodyPartType.html
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodClothingType.html
 // https://projectzomboid.com/modding/zombie/ui/UI_BodyPart.html#BodyPartType
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#checkSaveFileExists(java.lang.String)
+// https://projectzomboid.com/modding/zombie/characters/CharacterActionAnims.html
 // https://www.projectzomboid.com/modding/zombie/core/Core.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCell()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getCore()
@@ -42,11 +44,14 @@
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#ZombRand(double)
 {
     "Lua.diagnostics.globals": [
+        "AdjacentFreeTileFinder",
         "BloodBodyPartType",
         "BloodClothingType",
         "BodyPartType",
+        "CharacterActionAnims",
         "checkSaveFileExists",
         "Core",
+        "Events",
         "getCell",
         "getCore",
         "getFileReader",

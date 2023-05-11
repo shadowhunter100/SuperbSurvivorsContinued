@@ -282,7 +282,9 @@ function SuperSurvivor:newSet(player)
 	survivorObject.SquaresExplored = {}
 	survivorObject.SpokeToRecently = {}
 	survivorObject.SquareContainerSquareLooteds = {}
-	for i = 1, #LootTypes do survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {} end
+	for i = 1, #LootTypes do 
+		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
+	end
 
 	survivorObject:setBravePoints(SuperSurvivorBravery)
 
@@ -492,7 +494,7 @@ function SuperSurvivor:reload()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reload() called");
 	local cs = self.player:getCurrentSquare()
 	local id = self:getID()
-	self:delete()
+	self:deleteSurvivor()
 	self.player = self:spawnPlayer(cs, nil)
 	self:loadPlayer(cs, id)
 end
@@ -759,7 +761,7 @@ function SuperSurvivor:getGroup()
 	return nil
 end
 
--- WIP - GET() - is also spammed frequently, need to investigate why it is being called so often.
+-- WIP - Cows: GET() - is also spammed frequently, need to investigate why it is being called so often.
 function SuperSurvivor:Get()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Get() called");
 	return self.player
@@ -770,7 +772,7 @@ function SuperSurvivor:getCurrentTask()
 	return self:getTaskManager():getCurrentTask()
 end
 
--- WIP - Completely removed the old messy logic; survivors are never scared to fight... for now.
+-- WIP - Cows: Completely removed the old messy logic; survivors are never scared to fight... for now.
 function SuperSurvivor:isTooScaredToFight()
 	return false
 end
@@ -1047,7 +1049,9 @@ function SuperSurvivor:isTargetBuildingClaimed(building)
 			local tempgroup = SSGM:GetGroupIdFromSquare(tempsquare)
 
 			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "groupId: " .. tostring(tempgroup));
-			if (tempgroup ~= -1 and tempgroup ~= self:getGroupID()) then return true end
+			if (tempgroup ~= -1 and tempgroup ~= self:getGroupID()) then
+				return true
+			end
 		end
 	end
 
@@ -1347,7 +1351,7 @@ function SuperSurvivor:AttemptedLootBuilding(building)
 	end
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:getUnBarricadedWindow(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getUnBarricadedWindow() called");
 	local WindowOut = nil
@@ -2636,10 +2640,10 @@ function SuperSurvivor:NPCcalculateWalkSpeed()
 		local cs = self.player:getCurrentSquare()
 		if (cs) and cs:HasTree() then
 			local tree = cs:getTree();
-		end
 
-		if tree then
-			wmin = wmin * tree:getSlowFactor(self.player);
+			if tree then
+				wmin = wmin * tree:getSlowFactor(self.player);
+			end
 		end
 	end
 	self.player:setVariable("WalkSpeed", wmin * 0.8);
@@ -2773,7 +2777,7 @@ function SuperSurvivor:update()
 	self:CheckForIfStuck() -- New function to cleanup the update() function
 	self:NPCcalculateWalkSpeed()
 
-	-- WIP - There is actually an error here, and it will run often if the player dies.
+	-- WIP - Cows: There is actually an error here, and it will run often if the player dies.
 	if (not getSpecificPlayer(0):isAsleep()) and (self:getGroupRole() ~= "Random Solo") then
 		self.MyTaskManager:update()
 	end
@@ -3066,8 +3070,8 @@ function SuperSurvivor:setID(id)
 	self.player:getModData().ID = id;
 end
 
-function SuperSurvivor:delete()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:delete() called");
+function SuperSurvivor:deleteSurvivor()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:deleteSurvivor() called");
 	self.player:getInventory():emptyIt();
 	self.player:setPrimaryHandItem(nil);
 	self.player:setSecondaryHandItem(nil);
@@ -3414,8 +3418,6 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 			end
 		end
 		ammotypes = GetAmmoBullets(weapon);
-		-- WIP - possible nil return...
-		---@diagnostic disable-next-line: need-check-nil
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
 		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "no ammo types for weapon:".. tostring(weapon:getType()));
@@ -3517,10 +3519,10 @@ function SuperSurvivor:openBoxForGun()
 		local modl = ammoBox:getModule() .. "."
 
 		local tempBullet = instanceItem(modl .. ammotype)
-		local groupcount = tempBullet:getCount()
+		local bulletCount = tempBullet:getCount()
 		local count = 0
 
-		count = (GetBoxCount(ammoBox:getType()) / groupcount)
+		count = (GetBoxCount(ammoBox:getType()) / bulletCount)
 
 		for i = 1, count do
 			inv:AddItem(modl .. ammotype)
@@ -4066,7 +4068,7 @@ function SuperSurvivor:DrinkFromObject(waterObject)
 	ISTimedActionQueue.add(ISTakeWaterAction:new(playerObj, nil, waterConsumed, waterObject, (waterConsumed * 10) + 15));
 end
 
--- WIP - NEED TO REWORK THE NESTED LOOP CALLS
+-- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function SuperSurvivor:findNearestSheetRopeSquare(down)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:findNearestSheetRopeSquare() called");
 	local sq, CloseSquareSoFar;

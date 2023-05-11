@@ -49,7 +49,6 @@ SuperSurvivorOptions = loadSurvivorOptions()
 if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
 if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
 if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
-if (not SuperSurvivorOptions["LockNLoad"]) then SuperSurvivorOptions["LockNLoad"] = 1 end
 if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
 if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
 if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
@@ -65,21 +64,16 @@ if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions[
 
 if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
 
-if (not SuperSurvivorOptions["Option_Perception_Bonus"]) then SuperSurvivorOptions["Option_Perception_Bonus"] = 2 end
-
 if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
 if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
 if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
 if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
-if (not SuperSurvivorOptions["Option_FollowDistance"]) then SuperSurvivorOptions["Option_FollowDistance"] = 5 end
 if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
 
 if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
 
 if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
 if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
-
-if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
 
 if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
 if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
@@ -101,8 +95,6 @@ function SuperSurvivorGetOptionValue(option)
 	local num = SuperSurvivorGetOption(option)
 
 	if (option == "WifeSpawn") then
-		return (num ~= 1)
-	elseif (option == "LockNLoad") then
 		return (num ~= 1)
 	elseif (option == "SpawnRate") and (num == 1) then
 		return 0
@@ -174,10 +166,6 @@ function SuperSurvivorGetOptionValue(option)
 		return (((num - 2) * 5) * 24)
 	elseif (option == "RaidersChance") then
 		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
-	elseif (option == "Option_FollowDistance") then
-		return (num + 2)
-	elseif (option == "Option_Perception_Bonus") then
-		return (num)
 	elseif (option == "Option_ForcePVP") and (num == 1) then
 		return 0
 	elseif (option == "Option_ForcePVP") and (num == 2) then
@@ -190,18 +178,6 @@ function SuperSurvivorGetOptionValue(option)
 		return (num ~= 1)
 	elseif (option == "Option_Display_Hostile_Color") then
 		return (num ~= 1)
-	elseif (option == "Bravery") and (num == 1) then
-		return 2
-	elseif (option == "Bravery") and (num == 2) then
-		return 4
-	elseif (option == "Bravery") and (num == 3) then
-		return 6
-	elseif (option == "Bravery") and (num == 4) then
-		return 8
-	elseif (option == "Bravery") and (num == 5) then
-		return 10
-	elseif (option == "Bravery") and (num == 6) then
-		return 20
 	elseif (option == "AltSpawn") and (num == 1) then
 		return 1   -- If false
 	elseif (option == "AltSpawn") and (num == 2) then
@@ -254,16 +230,12 @@ end
 function SuperSurvivorsRefreshSettings()
 	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
 
-	Option_Perception_Bonus = SuperSurvivorGetOptionValue("Option_Perception_Bonus")
-
 	Option_Display_Survivor_Names = SuperSurvivorGetOptionValue("Option_Display_Survivor_Names")
 	Option_Display_Hostile_Color = SuperSurvivorGetOptionValue("Option_Display_Hostile_Color")
 
 	Option_Panic_Distance = SuperSurvivorGetOptionValue("Option_Panic_Distance")
 
 	Option_ForcePVP = SuperSurvivorGetOptionValue("Option_ForcePVP")
-	Option_FollowDistance = SuperSurvivorGetOptionValue("Option_FollowDistance")
-	SuperSurvivorBravery = SuperSurvivorGetOptionValue("Bravery")
 	RoleplayMessage = SuperSurvivorGetOptionValue('RoleplayMessage')
 
 	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")

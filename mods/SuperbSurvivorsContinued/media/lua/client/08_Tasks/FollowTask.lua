@@ -71,7 +71,7 @@ function FollowTask:needToFollow()
 		or self.parent:Get():getVehicle()
 		or (self.FollowChar:getVehicle() ~= self.parent:Get():getVehicle())
 	then
-		self.parent:NPC_ERW_AroundMainPlayer(Option_FollowDistance) -- ERW stands for 'EnforceRunWalk'
+		self.parent:NPC_ERW_AroundMainPlayer(GFollowDistance) -- ERW stands for 'EnforceRunWalk'
 		return true
 	else
 		return false

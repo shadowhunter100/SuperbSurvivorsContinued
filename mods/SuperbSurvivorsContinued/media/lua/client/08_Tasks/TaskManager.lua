@@ -1,3 +1,4 @@
+---@diagnostic disable: need-check-nil
 TaskManager = {}
 TaskManager.__index = TaskManager
 
@@ -31,7 +32,7 @@ function TaskManager:AddToTop(newTask)
 	CreateLogLine("TaskManager", isLocalLoggingEnabled, "function: TaskManager:AddToTop() called");
 	if (newTask == nil) then return false end
 
-	self.LastLastTask = LastTask -- WIP - Cows: "LastTask" is undefined...
+	self.LastLastTask = self.LastTask -- WIP - Cows: "LastTask" is undefined...
 	self.LastTask = self:getCurrentTask()
 	self.CurrentTask = newTask.Name
 
