@@ -1,4 +1,5 @@
-require "00_SuperbSurviorModVariables.SuperSurvivorWeaponsList";
+require "00_SuperbSurviorModVariables/SuperSurvivorsOrders";
+require "00_SuperbSurviorModVariables/SuperSurvivorWeaponsList";
 require "05_Other/SuperSurvivorManager";
 
 -- WIP - Cows: ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
@@ -303,6 +304,12 @@ end
 	and specifications are clearly defined and set.
 --]]
 function SurvivorOrder(test, player, order, orderParam)
+	local isLoggingSurvivorOrder = false;
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "function: SurvivorOrder() called");
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "test: " .. tostring(test));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "player: " .. tostring(player));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "order: " .. tostring(order));
+	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(orderParam));
 	if (player ~= nil) then
 		local ASuperSurvivor = SSM:Get(player:getModData().ID)
 		local TaskMangerIn = ASuperSurvivor:getTaskManager()
@@ -465,7 +472,11 @@ function SurvivorOrder(test, player, order, orderParam)
 		end
 
 		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
-		getSpecificPlayer(0):Say(tostring(ASuperSurvivor:getName()) .. ", " .. OrderDisplayName[order]);
+		CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(OrderDisplayName));
+		getSpecificPlayer(0):Say(
+			tostring(ASuperSurvivor:getName()) ..
+			", " .. OrderDisplayName[order]
+		);
 	end
 end
 

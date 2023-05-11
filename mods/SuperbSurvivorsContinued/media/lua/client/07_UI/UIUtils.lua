@@ -1,3 +1,4 @@
+require "00_SuperbSurviorModVariables/SuperSurvivorsOrders";
 require "05_Other/SuperSurvivorManager";
 
 --****************************************************
@@ -119,6 +120,11 @@ function UIUtil_GetMemberInfo(member_index)
 end
 
 function UIUtil_GiveOrder(order_index, member_index)
+    local isLoggingSurvivorOrder = false;
+    CreateLogLine("UIUtils", isLoggingSurvivorOrder, "function: UIUtil_GiveOrder() called");
+    CreateLogLine("UIUtils", isLoggingSurvivorOrder, "order_index: " .. tostring(order_index));
+    CreateLogLine("UIUtils", isLoggingSurvivorOrder, "member_index: " .. tostring(member_index));
+    
     local group_id = SSM:Get(0):getGroupID()
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
