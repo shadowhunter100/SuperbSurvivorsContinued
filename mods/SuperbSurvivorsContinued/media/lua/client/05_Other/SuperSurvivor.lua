@@ -2640,10 +2640,10 @@ function SuperSurvivor:NPCcalculateWalkSpeed()
 		local cs = self.player:getCurrentSquare()
 		if (cs) and cs:HasTree() then
 			local tree = cs:getTree();
-		end
 
-		if tree then
-			wmin = wmin * tree:getSlowFactor(self.player);
+			if tree then
+				wmin = wmin * tree:getSlowFactor(self.player);
+			end
 		end
 	end
 	self.player:setVariable("WalkSpeed", wmin * 0.8);
