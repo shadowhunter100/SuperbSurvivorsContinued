@@ -61,7 +61,7 @@ end
 
 function ThreatenTask:dealComplete()
 	if self.StartedThreatening then
-		if Demands == "Scram" then -- WIP - Cows: "Demands" is undefined...
+		if self.Demands == "Scram" then -- WIP - Cows: "Demands" was undefined... prefixing it with "self." should fix it.
 			if self.theDistance >= 20 and not self.parent.player:CanSee(self.Aite.player) then
 				return true
 			end
