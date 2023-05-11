@@ -42,15 +42,12 @@ function AIManager(TaskMangerIn)
 
 	local Bravery = ASuperSurvivor:getBravePoints()
 	if (Bravery == 0) then ASuperSurvivor:setBravePoints(4) end -- should never be 0
-	local isRAMBO = 0                                        --  use to bypass some fleeing logic etc
 	local CanTollerateEnemiesOnMe = 1;
 	if (Bravery >= 10) then
-		isRAMBO = 1
 		CanTollerateEnemiesOnMe = 2
 	end                          --need to by pass some hard coded values to give players option to have more fearless fighters
 	if (SuperSurvivorBravery >= 20) -- suicidal
 	then
-		isRAMBO = 2
 		CanTollerateEnemiesOnMe = 20
 	end
 
@@ -198,7 +195,6 @@ function AIManager(TaskMangerIn)
 		-- Flee to heal  --
 		-- -----------   --
 		if (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and (isRAMBO < 2)
 			and (
 				((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe) and (NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (not NPC:usingGun())) -- Melee
 				or ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe) and (NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
@@ -347,7 +343,6 @@ function AIManager(TaskMangerIn)
 				and (TaskMangerIn:getCurrentTask() ~= "Flee")
 				and (TaskMangerIn:getCurrentTask() ~= "Doctor")
 				and (TaskMangerIn:getCurrentTask() ~= "Hold Still")
-				and (isRAMBO < 2)
 				and ((NPC:getSeenCount() >= 1) and (Distance_AnyEnemy <= 6)) -- This line doesn't make sense, what if the npc needs to heal outside of hostiles?
 			then
 				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor)) -- If general healing
@@ -373,7 +368,6 @@ function AIManager(TaskMangerIn)
 			and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
 			and (TaskMangerIn:getCurrentTask() ~= "Surender")
 			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and not EnemyIsSurvivor)
-			and (isRAMBO < 2)
 			and
 			(
 				(((NPC:needToReload()) or (NPC:needToReadyGun(weapon))) and ((NPC:getDangerSeenCount() > 1 and (Distance_AnyEnemy < 3) and (EnemyIsZombie)) or ((NPC:getSeenCount() >= 2) and (Distance_AnyEnemy <= 2) and (EnemyIsZombie)))) -- AH HA, gun running away for non-companions when the npc is trying to reload or ready gun
@@ -414,7 +408,6 @@ function AIManager(TaskMangerIn)
 	if ((TaskMangerIn:getCurrentTask() ~= "Flee")
 			and (TaskMangerIn:getCurrentTask() ~= "Surender")
 			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor)))
-		and (isRAMBO < 2)
 	then
 		if ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe)) then
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))

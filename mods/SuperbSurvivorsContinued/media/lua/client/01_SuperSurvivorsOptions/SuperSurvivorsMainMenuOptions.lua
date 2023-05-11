@@ -409,15 +409,6 @@ function MainOptions:create()
     self:addCustomCombo('SurvivorFriendliness', splitpoint, y, comboWidth, getOptionText("SurvivorFriendliness"),
         options, getOptionText("SurvivorFriendlinessDesc"))
 
-    local options =
-    {
-        getOptionText("Cowardly"), getOptionText("Normal"),
-        getOptionText("Brave"), getOptionText("VeryBrave"),
-        "RAMBO!", "Suicidal!"
-    }
-    self:addCustomCombo('Bravery', splitpoint, y, comboWidth, getOptionText("SurvivorBravery"), options,
-        getOptionText("SurvivorBraveryDesc"))
-
     local options = NPC_Options_OffOn()
     self:addCustomCombo('NoPreSetSpawn', splitpoint, y, comboWidth, getOptionText("NoPreSetSpawn"), options,
         getOptionText("NoPreSetSpawnDesc"))

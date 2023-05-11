@@ -9,12 +9,13 @@ SpeakEnabled = true;
 
 -- Cows: Global Integer
 GFollowDistance = 5;      -- Update: Don't try to turn gfollowdistance into a variable from what it equals to. I made followtask add what it needs to add on its own.
-Limit_Npc_Groups = 4;     -- Max npc groups, independent of Raider Groups.
-Limit_Raiders_Groups = 2; -- Max raider groups, independent of npc groups.
-Limit_Npcs_Spawn = 12;    -- Max npc spwans, independent of raiders spawns.
-Limit_Raiders_Spawn = 8;  -- Max raiders spaws, independent of npcs spawns.
-Max_Group_Size = 8;       -- Max number of members in a group
-Min_Group_Size = 1;       -- Min number of members in a group
+Limit_Npc_Groups = 4;     -- Cows: Max npc groups, independent of Raider Groups.
+Limit_Raiders_Groups = 2; -- Cows: Max raider groups, independent of npc groups.
+Limit_Npcs_Spawn = 12;    -- Cows: Max npc spwans, independent of raiders spawns.
+Limit_Raiders_Spawn = 8;  -- Cows: Max raiders spaws, independent of npcs spawns.
+Max_Group_Size = 8;       -- Cows: Max number of members in a group
+Min_Group_Size = 1;       -- Cows: Min number of members in a group
+SuperSurvivorBravery = 6; -- WIP - Cows: Bravery needs to be reworked... because it is literally useless at the moment.
 
 -- Cows: Global String
 StringTest = "This is a Global String Test";

@@ -64,7 +64,6 @@ if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions[
 
 if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
 
-
 if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
 if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
 if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
@@ -76,8 +75,6 @@ if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions
 
 if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
 if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
-
-if (not SuperSurvivorOptions["Bravery"]) then SuperSurvivorOptions["Bravery"] = 4 end
 
 if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
 if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
@@ -184,18 +181,6 @@ function SuperSurvivorGetOptionValue(option)
 		return (num ~= 1)
 	elseif (option == "Option_Display_Hostile_Color") then
 		return (num ~= 1)
-	elseif (option == "Bravery") and (num == 1) then
-		return 2
-	elseif (option == "Bravery") and (num == 2) then
-		return 4
-	elseif (option == "Bravery") and (num == 3) then
-		return 6
-	elseif (option == "Bravery") and (num == 4) then
-		return 8
-	elseif (option == "Bravery") and (num == 5) then
-		return 10
-	elseif (option == "Bravery") and (num == 6) then
-		return 20
 	elseif (option == "AltSpawn") and (num == 1) then
 		return 1   -- If false
 	elseif (option == "AltSpawn") and (num == 2) then
@@ -255,7 +240,6 @@ function SuperSurvivorsRefreshSettings()
 
 	Option_ForcePVP = SuperSurvivorGetOptionValue("Option_ForcePVP")
 	Option_FollowDistance = SuperSurvivorGetOptionValue("Option_FollowDistance")
-	SuperSurvivorBravery = SuperSurvivorGetOptionValue("Bravery")
 	RoleplayMessage = SuperSurvivorGetOptionValue('RoleplayMessage')
 
 	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")

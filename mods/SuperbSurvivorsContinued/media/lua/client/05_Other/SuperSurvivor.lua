@@ -282,7 +282,9 @@ function SuperSurvivor:newSet(player)
 	survivorObject.SquaresExplored = {}
 	survivorObject.SpokeToRecently = {}
 	survivorObject.SquareContainerSquareLooteds = {}
-	for i = 1, #LootTypes do survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {} end
+	for i = 1, #LootTypes do 
+		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
+	end
 
 	survivorObject:setBravePoints(SuperSurvivorBravery)
 
@@ -1047,7 +1049,9 @@ function SuperSurvivor:isTargetBuildingClaimed(building)
 			local tempgroup = SSGM:GetGroupIdFromSquare(tempsquare)
 
 			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "groupId: " .. tostring(tempgroup));
-			if (tempgroup ~= -1 and tempgroup ~= self:getGroupID()) then return true end
+			if (tempgroup ~= -1 and tempgroup ~= self:getGroupID()) then
+				return true
+			end
 		end
 	end
 
