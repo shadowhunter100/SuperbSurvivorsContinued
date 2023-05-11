@@ -1708,7 +1708,8 @@ SurvivorRoutes = {
 
 
 function SuperSurvivorPresetSpawnThis(PresetSpawn)
-	local square = getCell():getGridSquare(PresetSpawn.X, PresetSpawn.Y, PresetSpawn.Z)
+	local square = getCell():getGridSquare(PresetSpawn.X, PresetSpawn.Y, PresetSpawn.Z);
+	local isFemale = false;
 	local x = square:getX();
 	local y = square:getY();
 	local z = square:getZ();
