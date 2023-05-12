@@ -14,7 +14,11 @@ SurvivorRandomSuits["Legendary"]["Bathrobe1"] = {
   "Base.LongCoat_Bathrobe", 
   "Base.Shoes_Slippers"
 }
-
+SurvivorRandomSuits["VeryRare"]["Priest1"] = { -- Cows: Copied from Rare to prevent errors.
+  "Base.Shirt_Priest", 
+  "Base.Trousers_Suit", 
+  "Base.Socks_Ankle", "Base.Shoes_Black"
+}
 SurvivorRandomSuits["Rare"]["Bride1F"] = {
   "Base.WeddingDress", "Base.Shirt_FormalWhite", 
   "Base.Socks_Long", "Base.Shoes_Black"

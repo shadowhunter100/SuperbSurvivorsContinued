@@ -197,7 +197,8 @@ function SuperSurvivorManager:AsleepHealAll()
 end
 
 function SuperSurvivorManager:PublicExecution(SSW, SSV)
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:PublicExecution() called");
+	local isFleeCallLogged = false;
+	CreateLogLine("SuperSurvivorManager", isFleeCallLogged, "function: PublicExecution() called");
 	local maxdistance = 20
 
 	for i = 1, self.SurvivorCount + 1 do
@@ -209,6 +210,7 @@ function SuperSurvivorManager:PublicExecution(SSW, SSV)
 						--chance to attack with gun if see someone near by get executed
 						self.SuperSurvivors[i]:Get():getModData().hitByCharacter = true
 					else
+						CreateLogLine("SuperSurvivorManager", isFleeCallLogged, " is fleeing from PublicExecution");
 						-- flee from the crazy murderer						
 						self.SuperSurvivors[i]:getTaskManager():AddToTop(FleeFromHereTask:new(self.SuperSurvivors[i],
 							SSW:Get():getCurrentSquare()))
