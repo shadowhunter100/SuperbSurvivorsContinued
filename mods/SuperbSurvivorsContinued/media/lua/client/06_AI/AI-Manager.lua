@@ -30,11 +30,17 @@ function AiNPC_Job_IsNot(NPC, JobName) -- AiNPC_Job_IsNot(NPC, "JobName")
 end
 
 function AIManager(TaskMangerIn)
-	local ASuperSurvivor = TaskMangerIn.parent -- the previous variable, trying to convert to "NPC"
-	local AiTmi          = TaskMangerIn     -- Used for AiNPC_TaskIsNot code cleanup/easier-to-read
-	local NPC            = TaskMangerIn.parent -- Used to Cleanup some of the function's long names
+	local isFleeCallLogged = false;
+	CreateLogLine("AI-Manager", false, "function: AIManager() called");
+	local ASuperSurvivor = TaskMangerIn.parent; -- the previous variable, trying to convert to "NPC"
+	local AiTmi = TaskMangerIn;              -- Used for AiNPC_TaskIsNot code cleanup/easier-to-read
+	local NPC = TaskMangerIn.parent;         -- Used to Cleanup some of the function's long names
 
-	if (ASuperSurvivor:needToFollow()) or (ASuperSurvivor:Get():getVehicle() ~= nil) then return TaskMangerIn end -- if in vehicle skip AI -- or high priority follow
+	if (ASuperSurvivor:needToFollow())
+		or (ASuperSurvivor:Get():getVehicle() ~= nil)
+	then
+		return TaskMangerIn
+	end -- if in vehicle skip AI -- or high priority follow
 
 	if (TaskMangerIn == nil) or (ASuperSurvivor == nil) then
 		return false
@@ -46,8 +52,7 @@ function AIManager(TaskMangerIn)
 	if (Bravery >= 10) then
 		CanTollerateEnemiesOnMe = 2
 	end                          --need to by pass some hard coded values to give players option to have more fearless fighters
-	if (SuperSurvivorBravery >= 20) -- suicidal
-	then
+	if (SuperSurvivorBravery >= 20) then
 		CanTollerateEnemiesOnMe = 20
 	end
 
@@ -203,6 +208,10 @@ function AIManager(TaskMangerIn)
 				or (NPC.dangerSeenCount >= 5)
 			)
 		then
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers Seen: " .. tostring(NPC.dangerSeenCount));
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking: " .. tostring(NPC.EnemiesOnMe));
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is reloading: " .. tostring(ASuperSurvivor:needToReload()));
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 
@@ -346,15 +355,18 @@ function AIManager(TaskMangerIn)
 				and ((NPC:getSeenCount() >= 1) and (Distance_AnyEnemy <= 6)) -- This line doesn't make sense, what if the npc needs to heal outside of hostiles?
 			then
 				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor)) -- If general healing
-				TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
+				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is injured...");
+				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing..."); -- WIP - Cows: WHY ARE THE FLEE TASKS BEING CALLED CONSEQUTIVELY?
+				TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor));
+
 				if (ZombRand(3) == 0) then
 					NPC:NPC_ShouldRunOrWalk()
 				end
 
 				if ((NPC:getSeenCount() >= 3) and (Distance_AnyEnemy <= 3)) then -- If EMERGENCY run away and heal
 					TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor))
-					TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-					TaskMangerIn:AddToTop(FleeFromHereTask:new(ASuperSurvivor, ASuperSurvivor:Get():getCurrentSquare()))
+					-- TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor)) -- WIP - Cows: WHY ARE THE FLEE TASKS BEING CALLED CONSEQUTIVELY?
+					-- TaskMangerIn:AddToTop(FleeFromHereTask:new(ASuperSurvivor, ASuperSurvivor:Get():getCurrentSquare())) -- WIP - Cows: WHY ARE THE FLEE TASKS BEING CALLED CONSEQUTIVELY?
 				end
 			end
 		end
@@ -382,23 +394,28 @@ function AIManager(TaskMangerIn)
 					or (not ASuperSurvivor:hasWeapon() and (ASuperSurvivor:getDangerSeenCount() > 0))
 
 					or (IHaveInjury and ASuperSurvivor:getDangerSeenCount() > 0)
-
 					or (EnemyIsSurvivorHasGun and ASuperSurvivor:hasGun() == false)
 
 					or (ASuperSurvivor:isTooScaredToFight())
-
 				)
 			)
 		then
 			--when piling corpses the survivor may not be holding weapon, this should not count as not having a weapon so in this case simply end the pile corpse task (which will cause re-equip weapon and trigger more reasonable reaction)
-			if ((TaskMangerIn:getCurrentTask() == "LootCategoryTask") or (TaskMangerIn:getCurrentTask() == "Pile Corpses")) then -- currently to dangerous to loot said building. so give up it
+			if ((TaskMangerIn:getCurrentTask() == "LootCategoryTask")
+					or (TaskMangerIn:getCurrentTask() == "Pile Corpses"))
+			then
 				local task = TaskMangerIn:getTask();
 				if (task ~= nil) then task:ForceFinish() end
 			else
-				ASuperSurvivor:getTaskManager():clear()
+				ASuperSurvivor:getTaskManager():clear();
+				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
 				TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 
-				if not (AiNPC_Job_Is(NPC, "Guard")) and not (AiNPC_Job_Is(NPC, "Doctor")) then
+				if not (AiNPC_Job_Is(NPC, "Guard"))
+					and not (AiNPC_Job_Is(NPC, "Doctor"))
+				then
+					CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is not a guard");
+					CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
 					TaskMangerIn:AddToTop(FleeFromHereTask:new(ASuperSurvivor, ASuperSurvivor:Get():getCurrentSquare()))
 				end
 			end
@@ -410,15 +427,22 @@ function AIManager(TaskMangerIn)
 			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor)))
 	then
 		if ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe)) then
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking: " .. tostring(NPC.EnemiesOnMe) .. " | can fight: " ..  tostring(CanTollerateEnemiesOnMe));
+			CreateLogLine("AI-Manager", isFleeCallLogged, "too many enemies, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 		if ((NPC.EnemiesOnMe > 0) and (ASuperSurvivor:usingGun() and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))) then
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking, but need to reload, Survivor is fleeing");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 		if (IHaveInjury and (NPC.dangerSeenCount > 0)) then
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | isInjured? " ..  tostring(IHaveInjury));
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is injured and enemy is attacking, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 		if (NPC.dangerSeenCount > Bravery) then
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | Bravery: " ..  tostring(Bravery));
+			CreateLogLine("AI-Manager", isFleeCallLogged, "Bravery checked failed, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 	end
@@ -645,7 +669,6 @@ function AIManager(TaskMangerIn)
 				and not (AiNPC_Job_Is(NPC, "Farming"))
 			then
 				if (ASuperSurvivor:Get():getBodyDamage():getWetness() < 0.2) then
-					
 					if (SafeToGoOutAndWork) then
 						TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 
@@ -946,7 +969,8 @@ function AIManager(TaskMangerIn)
 			end
 			ASuperSurvivor:getTaskManager():clear()
 			ASuperSurvivor:Speak(getActionText("LeaveBCHungry"))
-			CreateLogLine("AI-Manager", isLocalLoggingEnabled, tostring(ASuperSurvivor:getName()) .. ": clearing task manager because too hungry");
+			CreateLogLine("AI-Manager", isLocalLoggingEnabled,
+				tostring(ASuperSurvivor:getName()) .. ": clearing task manager because too hungry");
 			ASuperSurvivor:resetAllTables()
 			ASuperSurvivor:setBaseBuilding(nil)
 			if (ASuperSurvivor:Get():getStats():getHunger() > 0.30) then ASuperSurvivor:Get():getStats():setHunger(0.30) end

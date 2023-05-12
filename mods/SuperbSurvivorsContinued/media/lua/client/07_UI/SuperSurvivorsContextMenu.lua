@@ -158,6 +158,8 @@ function OfferWeapon(test, player)
 end
 
 function AskToLeave(test, SS)
+	local isFleeCallLogged = false;
+	CreateLogLine("SuperSurvivorsContextMenu", isFleeCallLogged, "function: AskToLeave() called");
 	getSpecificPlayer(0):Say("Scram! Or Die!");
 
 	if (SS:getBuilding() ~= nil) then SS:MarkBuildingExplored(SS:getBuilding()) end
@@ -165,7 +167,9 @@ function AskToLeave(test, SS)
 
 	getSpecificPlayer(0):getModData().semiHostile = true
 	SS.player:getModData().hitByCharacter = true
-	SS:getTaskManager():clear()
+	SS:getTaskManager():clear();
+
+	CreateLogLine("SuperSurvivorsContextMenu", isFleeCallLogged, tostring(SS:getName()) .. " is leaving...");
 	SS:getTaskManager():AddToTop(FleeFromHereTask:new(SS, getSpecificPlayer(0):getCurrentSquare()))
 
 	local GroupID = SS:getGroupID()
@@ -182,13 +186,15 @@ function AskToLeave(test, SS)
 end
 
 function AskToDrop(test, SS)
-	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: AskToDrop() called");
+	local isFleeCallLogged = false;
+	CreateLogLine("SuperSurvivorsContextMenu", isFleeCallLogged, "function: AskToDrop() called");
 	getSpecificPlayer(0):Say("Drop your Loot!!");
 	SS:Speak("Okay dont shoot!");
 	if (SS:getBuilding() ~= nil) then SS:MarkBuildingExplored(SS:getBuilding()) end
 	if (SS.TargetBuilding ~= nil) then SS:MarkBuildingExplored(SS.TargetBuilding) end
 	getSpecificPlayer(0):getModData().semiHostile = true;
 	SS:getTaskManager():clear();
+	CreateLogLine("SuperSurvivorsContextMenu", isFleeCallLogged, tostring(SS:getName()) .. " dropped and is leaving...");
 	SS:getTaskManager():AddToTop(FleeFromHereTask:new(SS, getSpecificPlayer(0):getCurrentSquare()))
 	SS:getTaskManager():AddToTop(CleanInvTask:new(SS, SS.player:getCurrentSquare(), true))
 
@@ -304,7 +310,7 @@ function CallSurvivor(test, player)
 	SS:getTaskManager():AddToTop(ListenTask:new(SS, getSpecificPlayer(0), false))
 end
 
-function survivorMenu(context, o)
+local function survivorMenu(context, o)
 	if (instanceof(o, "IsoPlayer") and o:getModData().ID ~= nil and o:getModData().ID ~= SSM:getRealPlayerID()) then -- make sure its a valid survivor
 		local ID = o:getModData().ID
 		local SS = SSM:Get(o:getModData().ID)

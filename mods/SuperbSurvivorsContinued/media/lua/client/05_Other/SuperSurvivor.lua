@@ -2368,13 +2368,23 @@ function SuperSurvivor:NPCTask_DoFindUnlootedBuilding()
 end
 
 function SuperSurvivor:NPCTask_DoFleeFromHere()
+	local isFleeCallLogged = false;
+	CreateLogLine("SuperSurvivor", isFleeCallLogged, "function: NPCTask_DoFleeFromHere() called");
+
 	if (self:getTaskManager():getCurrentTask() ~= "Flee From Spot") or (self:getTaskManager():getCurrentTask() ~= "Flee") then
+		CreateLogLine("SuperSurvivor", isFleeCallLogged, tostring(self:getName()) .. " is fleeing from here");
 		self:getTaskManager():AddToTop(FleeFromHereTask:new(self, self.player:getCurrentSquare()))
 	end
 end
 
-function SuperSurvivor:NPCTask_DoFlee() -- Which is different from ^
-	if (self:getTaskManager():getCurrentTask() ~= "Flee") or (self:getTaskManager():getCurrentTask() ~= "Flee From Spot") then
+function SuperSurvivor:NPCTask_DoFlee() -- Which is different from NPCTask_DoFleeFromHere()	
+	local isFleeCallLogged = false;
+	CreateLogLine("SuperSurvivor", isFleeCallLogged, "function: NPCTask_DoFlee() called");
+
+	if (self:getTaskManager():getCurrentTask() ~= "Flee")
+		or (self:getTaskManager():getCurrentTask() ~= "Flee From Spot")
+	then
+		CreateLogLine("SuperSurvivor", isFleeCallLogged, tostring(self:getName()) .. " is fleeing");
 		self:getTaskManager():AddToTop(FleeTask:new(self))
 	end
 end

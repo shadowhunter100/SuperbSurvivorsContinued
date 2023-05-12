@@ -72,8 +72,10 @@ function ThreatenTask:dealComplete()
 end
 
 function ThreatenTask:update()
+	local isFleeCallLogged = false;
+	CreateLogLine("ThreatenTask", isFleeCallLogged, "function: ThreatenTask:update() called");
 	local weapon = self.parent.player:getPrimaryHandItem(); -- WIP - Cows: This is a test assignment...
-	
+
 	if (not self:isValid()) or (self:isComplete()) then return false end
 
 	if self.parent:hasGun() then -- Despite the name, it means 'has gun in the npc's hand'
@@ -115,6 +117,7 @@ function ThreatenTask:update()
 			if self.Aite.player:isLocalPlayer() == false then
 				self.Aite:StopWalk()
 				self.Aite:getTaskManager():clear()
+				CreateLogLine("ThreatenTask", isFleeCallLogged, "Survivor is fleeing from here");
 				self.Aite:getTaskManager():AddToTop(FleeFromHereTask:new(self.parent, self.Aite.player:getCurrentSquare()))
 			end
 			self.StartedThreatening = true
