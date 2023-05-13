@@ -11,7 +11,7 @@
             "type": "lua",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/00_Testing/SuperSurvivor.Test.lua"
+            "program": "${workspaceFolder}/00_SuperbSurviorModVariables/Test.lua"
         }
     ]
 }
