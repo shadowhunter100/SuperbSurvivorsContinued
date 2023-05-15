@@ -28,15 +28,7 @@ function SuperSurvivorGetOptionValue(option)
 	local num = SuperSurvivorGetOption(option);
 	CreateLogLine("SuperSurvivorsInitOptions", isLocalLoggingEnabled,
 		"option: " .. tostring(option) .. " | num: " .. tostring(num));
-	if (option == "DebugOptions") then
-		return (num ~= 1)
-	elseif (option == "DebugSay") then
-		return (num ~= 1)
-	elseif (option == "DebugSay_Distance") then
-		return (num - 1)
-	elseif (option == "RaidersChance") then
-		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
-	elseif (option == "AltSpawn") and (num == 1) then
+	if (option == "AltSpawn") and (num == 1) then
 		return 1   -- If false
 	elseif (option == "AltSpawn") and (num == 2) then
 		return 2   -- If true
@@ -143,7 +135,6 @@ RaidersChance = 70;
 -- Player Related
 IsPlayerBaseSafe = true; -- WIP - Cows: true to prevent NPCs from claiming or visiting the player base... this needs to be verified and tested.
 IsPVPEnabled = true;
-DebugOptions = 2;
 
 -- UI Related
 IsDisplayingNpcName = true;
@@ -161,10 +152,6 @@ function SuperSurvivorsRefreshSettings()
 	AltSpawnPercent = SuperSurvivorGetOptionValue("AltSpawnPercent")
 	NoPreSetSpawn = NoPresetSpawn;
 	NoIdleChatter = CanIdleChat;
-
-	DebugOptions = SuperSurvivorGetOptionValue("DebugOptions")
-	DebugOption_DebugSay = SuperSurvivorGetOptionValue("DebugSay")
-	DebugOption_DebugSay_Distance = SuperSurvivorGetOptionValue("DebugSay_Distance")
 
 	IsSafeBaseActive = IsPlayerBaseSafe;
 	NpcSurvivorCanCreateBases = CanNpcsCreateBase;

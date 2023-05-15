@@ -276,24 +276,6 @@ function MainOptions:create()
     self:addCustomCombo('Panic_Distance', splitpoint, y, comboWidth, getOptionText("Panic_Distance"), options,
         getOptionText("Panic_DistanceDesc"))
 
-    y = y + spacing4x;
-
-    local options = NPC_Options_OffOn()
-    self:addCustomCombo('DebugOptions', splitpoint, y, comboWidth, getOptionText("DebugOptions"), options,
-        getOptionText("DebugOptionsDesc"))
-
-    local options = NPC_Options_OffOn()
-    self:addCustomCombo('DebugSay', splitpoint, y, comboWidth, getOptionText("DebugSay"), options,
-        getOptionText("DebugSayDesc"))
-
-    local options = NPC_Options_ZeroToOneHundredAbsolute()
-    self:addCustomCombo('DebugSay_Distance', splitpoint, y, comboWidth, getOptionText("DebugSay_Distance"), options,
-        getOptionText("DebugSay_DistanceDesc"))
-
-    local options = NPC_Options_OffOn()
-    self:addCustomCombo('WarningMSG', splitpoint, y, comboWidth, getOptionText("WarningMSG"), options,
-        getOptionText("WarningMSGDesc"))
-
     -- Controls the rest of the menu, don't put options under this line you're reading --
     self.addY = self.addY + MainOptions.translatorPane:getHeight() + 22;
 
