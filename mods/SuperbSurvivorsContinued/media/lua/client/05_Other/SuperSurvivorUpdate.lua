@@ -10,7 +10,8 @@ function SuperSurvivorPlayerInit(player)
 	player:getModData().ID = 0
 	player:setBlockMovement(false)
 	player:setNPC(false)
-	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "initing player index " .. tostring(player:getPlayerNum()));
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
+		"initing player index " .. tostring(player:getPlayerNum()));
 
 	if (player:getPlayerNum() == 0) then
 		SSM:init()
@@ -27,7 +28,9 @@ function SuperSurvivorPlayerInit(player)
 		end
 
 		local wife
-		if (player:getModData().WifeID == nil) and (SuperSurvivorGetOptionValue("WifeSpawn") == true) then
+		if (player:getModData().WifeID == nil)
+			and (WifeSpawn == true)
+		then
 			player:getModData().WifeID = 0;
 
 			wife = SSM:spawnSurvivor(not player:isFemale(), player:getCurrentSquare());
@@ -36,6 +39,14 @@ function SuperSurvivorPlayerInit(player)
 
 			wife:Get():getModData().InitGreeting = GetDialogueSpeech("WifeIntro");
 			wife:Get():getModData().seenZombie = true;
+			local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
+			local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");
+
+			wife:Get():setPrimaryHandItem(baseballBat);
+			wife:Get():setSecondaryHandItem(baseballBat);
+			wife:setMeleWep(baseballBat);
+			wife:setGunWep(pistol);
+
 			MData.MetPlayer = true;
 			MData.isHostile = false;
 
@@ -60,9 +71,12 @@ function SuperSurvivorPlayerInit(player)
 
 		local mydesc = getSpecificPlayer(0):getDescriptor();
 
-		if (SSM:Get(0)) then SSM:Get(0):setName(mydesc:getForename()) end
+		if (SSM:Get(0)) then
+			SSM:Get(0):setName(mydesc:getForename());
+		end
 	else
-		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "finished initing player index " .. tostring(player:getPlayerNum()));
+		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
+			"finished initing player index " .. tostring(player:getPlayerNum()));
 	end
 end
 
@@ -78,47 +92,11 @@ end
 
 function SuperSurvivorGlobalUpdate(player)
 	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "function: SuperSurvivorGlobalUpdate() called");
-	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "DebugOptions: " .. tostring(DebugOptions));
-
-	-- if (DebugOptions) and player:isLocalPlayer() then
-	-- 	--DoVision for debug - main player
-
-	-- 	local spottedList = player:getCell():getObjectList()
-	-- 	if (spottedList ~= nil) then
-	-- 		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "dovision " .. tostring(spottedList:size()));
-	-- 		for i = 0, spottedList:size() - 1 do
-	-- 			local character = spottedList:get(i);
-	-- 			if (character ~= nil) and (character ~= player) and (instanceof(character, "IsoZombie") or instanceof(character, "IsoPlayer")) then
-	-- 				player:spotted(character, true)
-	-- 				character:setAlpha(1)
-	-- 				character:setTargetAlpha(1)
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
 
 	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "updating player id...");
 	if (player and player:getModData().ID ~= nil) then
 		local SS = SSM:Get(player:getModData().ID)
 		if (SS ~= nil) then SS:PlayerUpdate() end
-	end
-end
-
-function getCoverValue(obj)
-	if (tostring(obj:getType()) == "wall") then
-		return 0 -- walls behind player are blocking if on samve sqare
-	elseif (obj:getObjectName() == "Tree") then
-		return 25
-	elseif (obj:getObjectName() == "Window") then
-		return 70
-	elseif (obj:getObjectName() == "Door") then
-		return 80
-	elseif (obj:getObjectName() == "Counter") then
-		return 80
-	elseif (obj:getObjectName() == "IsoObject") then
-		return 10 -- drastically lowered because small stuff like garbage was blocking shots
-	else
-		return 0
 	end
 end
 
@@ -216,7 +194,7 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 
 			SSM:PublicExecution(SSW, SSV)
 		end
-		
+
 		if IsNpcDamageBroken and instanceof(victim, "IsoPlayer") and instanceof(wielder, "IsoPlayer") and not (victim:isLocalPlayer()) then
 			if weapon:getType() == "BareHands" then
 				return

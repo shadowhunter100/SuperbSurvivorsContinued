@@ -1895,7 +1895,7 @@ function SuperSurvivorPresetSpawn(square)
 	end
 
 	if (RPresetSpawns ~= nil) then
-		if (NoPreSetSpawn) then
+		if (NoPresetSpawn) then
 			return false
 		end
 

@@ -282,7 +282,7 @@ function SuperSurvivor:newSet(player)
 	survivorObject.SquaresExplored = {}
 	survivorObject.SpokeToRecently = {}
 	survivorObject.SquareContainerSquareLooteds = {}
-	for i = 1, #LootTypes do 
+	for i = 1, #LootTypes do
 		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
 	end
 
@@ -424,17 +424,17 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 	if (self.JustSpoke == true) and (self.TicksSinceSpoke == 0) then
 		self.TicksSinceSpoke = 250
 
-		if (not Option_Display_Survivor_Names) then
+		if (not IsDisplayingNpcName) then
 			self.userName:ReadString(tostring(self.SayLine1))
-		elseif (Option_Display_Survivor_Names) then
+		elseif (IsDisplayingNpcName) then
 			self.userName:ReadString(self.player:getForname() .. "\n" .. tostring(self.SayLine1))
 		end
 	elseif (self.TicksSinceSpoke > 0) then
 		self.TicksSinceSpoke = self.TicksSinceSpoke - 1
 		if (self.TicksSinceSpoke == 0) then
-			if (not Option_Display_Survivor_Names) then
+			if (not IsDisplayingNpcName) then
 				self.userName:ReadString("");
-			elseif (Option_Display_Survivor_Names) then
+			elseif (IsDisplayingNpcName) then
 				self.userName:ReadString(self.player:getForname());
 			end
 			self.JustSpoke = false
@@ -459,7 +459,7 @@ end
 
 function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setHostile() called");
-	if (Option_Display_Hostile_Color) then -- SuperSurvivorsMod.lua
+	if (IsDisplayingHostileColor) then -- SuperSurvivorsMod.lua
 		if (toValue) then
 			self.userName:setDefaultColors(128, 128, 128, 255);
 			self.userName:setOutlineColors(180, 0, 0, 255);
@@ -612,7 +612,7 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 
 	Buddy:getModData().bWalking = false
 	Buddy:getModData().isHostile = false
-	Buddy:getModData().RWP = SuperSurvivorGetOptionValue("SurvivorFriendliness")
+	Buddy:getModData().RWP = SurvivorFriendliness;
 	Buddy:getModData().AIMode = "Random Solo"
 
 	ISTimedActionQueue.clear(Buddy)
@@ -722,7 +722,6 @@ function SuperSurvivor:getGroupID()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroupID() called");
 	return self.player:getModData().Group
 end
-
 
 function SuperSurvivor:setRunning(toValue)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setRunning() called");
@@ -1042,7 +1041,7 @@ end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingClaimed() called");
-	if (SafeBase) then -- if safe base mode on survivors consider other claimed buildings already explored
+	if (IsPlayerBaseSafe) then -- if safe base mode on survivors consider other claimed buildings already explored
 		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
@@ -1106,7 +1105,7 @@ function SuperSurvivor:getBuildingExplored(building)
 	return false
 end
 
---[[ 
+--[[
 	WIP - isSpeaking() is spammed very frequently... about 19000 times in less than a minute
 	Cows suspect the function is being called even then the speaker is not visible and perhaps in a tick-based frequency.
 	Perhaps it is best to limit the calls to within visible range (no off-screen calls) and set a call frequency limit.
@@ -1131,7 +1130,7 @@ end
 
 function SuperSurvivor:RoleplaySpeak(text)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:RoleplaySpeak() called");
-	if (SuperSurvivorGetOptionValue("RoleplayMessage") == 1) then
+	if (IsRoleplayEnabled) then
 		if (text:match('^\\*(.*)\\*$')) then -- checks if the string already have '*' (some localizations have it)
 			self.SayLine1 = text
 		else
@@ -1359,7 +1358,6 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
-
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, self.player:getZ())
 
@@ -1601,7 +1599,8 @@ function SuperSurvivor:DoVision()
 	CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "Character: " .. tostring(self:getName()));
 
 	if (spottedList ~= nil) then
-		CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "Character - " .. tostring(self:getName()) .. " spotted: " .. tostring(spottedList:size()) .. " objects...");
+		CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled,
+			"Character - " .. tostring(self:getName()) .. " spotted: " .. tostring(spottedList:size()) .. " objects...");
 		for i = 0, spottedList:size() - 1 do
 			local character = spottedList:get(i);
 			CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "DoVision: " .. tostring(character));
@@ -1640,7 +1639,7 @@ function SuperSurvivor:DoVision()
 				end
 			end
 		end
-			
+
 		CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "spottedList end...");
 	end
 
@@ -1935,7 +1934,8 @@ function SuperSurvivor:inFrontOfWindowAndIsOutsideAlt()
 end
 
 function SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
+		"SuperSurvivor:inFrontOfBarricadedWindowAndIsOutsideAlt() called");
 	-- Used door locked code for this, added 'alt' to function name just to be safe for naming
 	local window = self:inFrontOfWindowAlt()
 
@@ -2234,7 +2234,7 @@ function SuperSurvivor:NPC_CheckPursueScore()
 				zRangeToPursue = 5
 				return zRangeToPursue
 			end
-			
+
 			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 			if getDistanceBetween(getSpecificPlayer(0), self.player) >= 10 then
 				zRangeToPursue = 0
@@ -2305,7 +2305,6 @@ end
 function SuperSurvivor:Task_IsPursue_SC()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 	if (self.LastEnemeySeen ~= nil) and (self.player ~= nil) then
-		
 		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
 		local zNPC_AttackRange  = self:isEnemyInRange(self.LastEnemeySeen)
@@ -2742,7 +2741,7 @@ function SuperSurvivor:update()
 	self.player:setBlockMovement(true)
 	self.TriggerHeldDown = false
 
-	if (not SurvivorHunger) then -- removed 'not' for update
+	if (not SurvivorNeedsFoodWater) then -- removed 'not' for update
 		self.player:getStats():setThirst(0.0)
 		self.player:getStats():setHunger(0.0)
 	end
@@ -2760,7 +2759,7 @@ function SuperSurvivor:update()
 	self.player:getStats():setStress(0.0);
 	self.player:getStats():setSanity(1);
 
-	if (not SurvivorsFindWorkThemselves) then
+	if (not SurvivorCanFindWork) then
 		self.player:getStats():setBoredom(0.0);
 	end
 	if (not RainManager.isRaining()) or (not self.player:isOutside()) then
@@ -3222,7 +3221,7 @@ function SuperSurvivor:ReadyGun(weapon)
 
 			if (magazine == nil) then magazine = self.player:getInventory():getFirstTypeRecurse(weapon:getMagazineType()) end
 
-			if (magazine == nil) and (SurvivorInfiniteAmmo) then
+			if (magazine == nil) and (IsInfiniteAmmoEnabled) then
 				magazine = self.player:getInventory():AddItem(weapon:getMagazineType());
 			end
 
@@ -3230,7 +3229,7 @@ function SuperSurvivor:ReadyGun(weapon)
 				readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
 
 				local ammotype = magazine:getAmmoType();
-				if (not self.player:getInventory():containsWithModule(ammotype)) and (magazine:getCurrentAmmoCount() == 0) and (SurvivorInfiniteAmmo) then
+				if (not self.player:getInventory():containsWithModule(ammotype)) and (magazine:getCurrentAmmoCount() == 0) and (IsInfiniteAmmoEnabled) then
 					readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 5
 					magazine:setCurrentAmmoCount(magazine:getMaxAmmo())
 				end
@@ -3243,7 +3242,8 @@ function SuperSurvivor:ReadyGun(weapon)
 
 				return true
 			else
-				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, self:getName() .. " error trying to spawn mag for gun?");
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
+					self:getName() .. " error trying to spawn mag for gun?");
 			end
 		end
 
@@ -3255,11 +3255,11 @@ function SuperSurvivor:ReadyGun(weapon)
 
 			if (magazine == nil) then magazine = self.player:getInventory():getFirstTypeRecurse(weapon:getMagazineType()) end
 
-			if (magazine == nil) and (SurvivorInfiniteAmmo) then
+			if (magazine == nil) and (IsInfiniteAmmoEnabled) then
 				magazine = self.player:getInventory():AddItem(weapon:getMagazineType());
 			end
 
-			if (self:gunAmmoInInvCount(weapon) < 1) and (SurvivorInfiniteAmmo) then
+			if (self:gunAmmoInInvCount(weapon) < 1) and (IsInfiniteAmmoEnabled) then
 				local maxammo = magazine:getMaxAmmo()
 				local amtype = magazine:getAmmoType()
 
@@ -3267,7 +3267,7 @@ function SuperSurvivor:ReadyGun(weapon)
 					local am = instanceItem(amtype)
 					self.player:getInventory():AddItem(am)
 				end
-			elseif (self:gunAmmoInInvCount(weapon) < 1) and (not ISReloadWeaponAction.canShoot(weapon)) and (not SurvivorInfiniteAmmo) then
+			elseif (self:gunAmmoInInvCount(weapon) < 1) and (not ISReloadWeaponAction.canShoot(weapon)) and (not IsInfiniteAmmoEnabled) then
 				local ammo = self:openBoxForGun()
 
 				if ammo == nil then
@@ -3299,11 +3299,12 @@ function SuperSurvivor:ReadyGun(weapon)
 		-- check if we have an empty magazine for the current gun
 		ISReloadWeaponAction.ReloadBestMagazine(self.player, weapon)
 	else -- gun with no magazine
-		if (self:gunAmmoInInvCount(weapon) < 1) and (SurvivorInfiniteAmmo) then
+		if (self:gunAmmoInInvCount(weapon) < 1) and (IsInfiniteAmmoEnabled) then
 			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1;
 			local maxammo = weapon:getMaxAmmo();
 			local ammotype = weapon:getAmmoType();
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, self:getName() .. " needs to spawn ammo type:" .. tostring(ammotype));
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
+				self:getName() .. " needs to spawn ammo type:" .. tostring(ammotype));
 			for i = 0, maxammo do
 				local am = instanceItem(ammotype)
 				self.player:getInventory():AddItem(am)
@@ -3430,7 +3431,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 		ammotypes = GetAmmoBullets(weapon);
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "no ammo types for weapon:".. tostring(weapon:getType()));
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "no ammo types for weapon:" .. tostring(weapon:getType()));
 	end
 end
 
@@ -3492,7 +3493,7 @@ function SuperSurvivor:WeaponReady()
 			ammo = self:FindAndReturn(self.AmmoTypes[i])
 			if (ammo) then break end
 		end
-		if (not ammo) and (SurvivorInfiniteAmmo) then
+		if (not ammo) and (IsInfiniteAmmoEnabled) then
 			ammo = self.player:getInventory():AddItem(self.AmmoTypes[1])
 		end
 
@@ -3784,7 +3785,7 @@ end
 function SuperSurvivor:NPC_MovementManagement()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_MovementManagement() called");
 	if (self:isWalkingPermitted()) and (not self:hasGun()) then
-		local cs = self.LastEnemeySeen:getCurrentSquare()		
+		local cs = self.LastEnemeySeen:getCurrentSquare()
 		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
 		local minrange = self:getMinWeaponRange()
@@ -4016,7 +4017,8 @@ function SuperSurvivor:Attack(victim)
 						end
 					else
 						victim:Hit(weapon, self.player, damage, false, 1.0, false)
-						CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "MELEE STRIKE! For some reason... I shouldn't be using this Attack function! Modder, fix this!")
+						CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
+							"MELEE STRIKE! For some reason... I shouldn't be using this Attack function! Modder, fix this!")
 						self.AtkTicks = 1
 					end
 				end

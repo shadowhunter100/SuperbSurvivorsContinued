@@ -10,8 +10,12 @@ end
 
 local function hex_to_rgb(hex, opacity)
     hex = hex:gsub("#", "")
-    return { r = tonumber(hex:sub(1, 2), 16), g = tonumber(hex:sub(3, 4), 16), b = tonumber(hex:sub(5, 6), 16),
-        a = opacity }
+    return {
+        r = tonumber(hex:sub(1, 2), 16),
+        g = tonumber(hex:sub(3, 4), 16),
+        b = tonumber(hex:sub(5, 6), 16),
+        a = opacity
+    }
 end
 
 local function hex_to_dec(hex, opacity)
@@ -124,14 +128,14 @@ function UIUtil_GiveOrder(order_index, member_index)
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "function: UIUtil_GiveOrder() called");
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "order_index: " .. tostring(order_index));
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "member_index: " .. tostring(member_index));
-    
+
     local group_id = SSM:Get(0):getGroupID()
     local group_members = SSGM:Get(group_id):getMembers()
     local member = group_members[member_index]
     if member then
         getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
-        SurvivorOrder(nil, member.player, Orders[order_index], nil)
+        SurvivorOrder(member.player, Orders[order_index], nil)
     end
 end
 

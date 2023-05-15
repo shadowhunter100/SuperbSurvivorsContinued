@@ -3,268 +3,85 @@
 	I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 	Cows: I've added the Fenris_Wolf in the github credits.
 --]]
-
 -- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
 local isLocalLoggingEnabled = false;
-
-local function doesOptionsFileExist()
-	local readFile = getFileReader("SurvivorOptions.lua", false)
-
-	if (readFile) then
-		return true
-	else
-		return false
-	end
-end
-
-SuperSurvivorOptions = {};
-
-local function loadSurvivorOptions()
-	if (doesOptionsFileExist() == false) then
-		return nil
-	end
-
-	local fileTable = {}
-	local readFile = getFileReader("SurvivorOptions.lua", false)
-	local scanLine = readFile:readLine()
-	while scanLine do
-		local values = {}
-		for input in scanLine:gmatch("%S+") do
-			table.insert(values, input);
-		end
-
-		if (fileTable[values[1]] == nil) then
-			fileTable[values[1]] = {};
-		end
-		fileTable[values[1]] = tonumber(values[2]);
-		scanLine = readFile:readLine();
-		if not scanLine then break; end
-	end
-	readFile:close();
-
-	return fileTable;
-end
-
-SuperSurvivorOptions = loadSurvivorOptions()
-if (not SuperSurvivorOptions) then SuperSurvivorOptions = {} end
-if (not SuperSurvivorOptions["SpawnRate"]) then SuperSurvivorOptions["SpawnRate"] = 7 end
-if (not SuperSurvivorOptions["WifeSpawn"]) then SuperSurvivorOptions["WifeSpawn"] = 1 end
-if (not SuperSurvivorOptions["GunSpawnRate"]) then SuperSurvivorOptions["GunSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["WepSpawnRate"]) then SuperSurvivorOptions["WepSpawnRate"] = 99 end
-if (not SuperSurvivorOptions["HostileSpawnRate"]) then SuperSurvivorOptions["HostileSpawnRate"] = 1 end
-if (not SuperSurvivorOptions["MaxHostileSpawnRate"]) then SuperSurvivorOptions["MaxHostileSpawnRate"] = 17 end
-if (not SuperSurvivorOptions["InfinitAmmo"]) then SuperSurvivorOptions["InfinitAmmo"] = 2 end
-if (not SuperSurvivorOptions["NoPreSetSpawn"]) then SuperSurvivorOptions["NoPreSetSpawn"] = 2 end
-if (not SuperSurvivorOptions["NoIdleChatter"]) then SuperSurvivorOptions["NoIdleChatter"] = 2 end
-if (not SuperSurvivorOptions["SafeBase"]) then SuperSurvivorOptions["SafeBase"] = 2 end
-if (not SuperSurvivorOptions["SurvivorBases"]) then SuperSurvivorOptions["SurvivorBases"] = 2 end
-if (not SuperSurvivorOptions["FindWork"]) then SuperSurvivorOptions["FindWork"] = 2 end
-if (not SuperSurvivorOptions["SurvivorHunger"]) then SuperSurvivorOptions["SurvivorHunger"] = 2 end
-if (not SuperSurvivorOptions["SurvivorFriendliness"]) then SuperSurvivorOptions["SurvivorFriendliness"] = 3 end
-
-if (not SuperSurvivorOptions["Option_WarningMSG"]) then SuperSurvivorOptions["Option_WarningMSG"] = 2 end
-
-if (not SuperSurvivorOptions["RaidersAtLeastHours"]) then SuperSurvivorOptions["RaidersAtLeastHours"] = 13 end
-if (not SuperSurvivorOptions["RaidersAfterHours"]) then SuperSurvivorOptions["RaidersAfterHours"] = 7 end
-if (SuperSurvivorOptions["RaidersAfterHours"] > 22) then SuperSurvivorOptions["RaidersAfterHours"] = 22 end -- fix legacy bad value
-if (not SuperSurvivorOptions["RaidersChance"]) then SuperSurvivorOptions["RaidersChance"] = 3 end
-if (not SuperSurvivorOptions["Option_ForcePVP"]) then SuperSurvivorOptions["Option_ForcePVP"] = 2 end
-
-if (not SuperSurvivorOptions["Option_Panic_Distance"]) then SuperSurvivorOptions["Option_Panic_Distance"] = 21 end
-
-if (not SuperSurvivorOptions["Option_Display_Survivor_Names"]) then SuperSurvivorOptions["Option_Display_Survivor_Names"] = 2 end
-if (not SuperSurvivorOptions["Option_Display_Hostile_Color"]) then SuperSurvivorOptions["Option_Display_Hostile_Color"] = 2 end
-
-if (not SuperSurvivorOptions["AltSpawn"]) then SuperSurvivorOptions["AltSpawn"] = 2 end
-if (not SuperSurvivorOptions["AltSpawnPercent"]) then SuperSurvivorOptions["AltSpawnPercent"] = 10 end
-if (not SuperSurvivorOptions["AltSpawnAmount"]) then SuperSurvivorOptions["AltSpawnAmount"] = 1 end
-if (not SuperSurvivorOptions["SSHotkey1"]) then SuperSurvivorOptions["SSHotkey1"] = 6 end
-if (not SuperSurvivorOptions["SSHotkey2"]) then SuperSurvivorOptions["SSHotkey2"] = 10 end
-if (not SuperSurvivorOptions["SSHotkey3"]) then SuperSurvivorOptions["SSHotkey3"] = 27 end
-if (not SuperSurvivorOptions["SSHotkey4"]) then SuperSurvivorOptions["SSHotkey4"] = 42 end
-
-function SuperSurvivorGetOption(option)
-	if (SuperSurvivorOptions[option] ~= nil) then
-		return tonumber(SuperSurvivorOptions[option])
-	else
-		return 1
-	end
-end
-
-function SuperSurvivorGetOptionValue(option)
-	local num = SuperSurvivorGetOption(option)
-
-	if (option == "WifeSpawn") then
-		return (num ~= 1)
-	elseif (option == "SpawnRate") and (num == 1) then
-		return 0
-	elseif (option == "SpawnRate") and (num == 2) then
-		return 64000
-	elseif (option == "SpawnRate") and (num == 3) then
-		return 32000
-	elseif (option == "SpawnRate") and (num == 4) then
-		return 26000
-	elseif (option == "SpawnRate") and (num == 5) then
-		return 20000
-	elseif (option == "SpawnRate") and (num == 6) then
-		return 16000
-	elseif (option == "SpawnRate") and (num == 7) then
-		return 12000
-	elseif (option == "SpawnRate") and (num == 8) then
-		return 8000
-	elseif (option == "SpawnRate") and (num == 9) then
-		return 4000
-	elseif (option == "SpawnRate") and (num == 10) then
-		return 2500
-	elseif (option == "SpawnRate") and (num == 11) then
-		return 1000
-	elseif (option == "SpawnRate") and (num == 12) then
-		return 400
-	elseif (option == "WepSpawnRate") then
-		return (num - 1) -- then return (num * 5) - 5	-- Marked out old instead of removing it to test
-	elseif (option == "GunSpawnRate") then
-		return (num - 1) -- then return (num * 5) - 5	-- Marked out old instead of removing it to test
-	elseif (option == "HostileSpawnRate") then
-		return (num - 1) -- then return (num * 5) - 5
-	elseif (option == "MaxHostileSpawnRate") then
-		return (num - 1) -- then return (num * 5) - 5
-	elseif (option == "InfinitAmmo") then
-		return (num ~= 1)
-	elseif (option == "NoPreSetSpawn") then
-		return (num ~= 1)
-	elseif (option == "NoIdleChatter") then
-		return (num ~= 1)
-	elseif (option == "SafeBase") then
-		return (num ~= 1)
-	elseif (option == "SurvivorBases") then
-		return (num ~= 1)
-	elseif (option == "DebugOptions") then
-		return (num ~= 1)
-	elseif (option == "DebugSay") then
-		return (num ~= 1)
-	elseif (option == "DebugSay_Distance") then
-		return (num - 1)
-	elseif (option == "FindWork") then
-		return (num ~= 1)
-	elseif (option == "SurvivorHunger") then
-		return (num ~= 1)
-	elseif (option == "SurvivorFriendliness") then
-		return (10 - ((num - 1) * 2)) -- 1 = 10, 2 = 8, 3 = 6
-	elseif (option == "RaidersAtLeastHours") and (num == 21) then
-		return 24
-	elseif (option == "RaidersAtLeastHours") and (num == 22) then
-		return 1
-	elseif (option == "RaidersAtLeastHours") and (num == 23) then
-		return 0
-	elseif (option == "RaidersAtLeastHours") then
-		return ((num * 5) * 24)
-	elseif (option == "RaidersAfterHours") and (num == 2) then
-		return 24
-	elseif (option == "RaidersAfterHours") and (num >= 22) then
-		return 9999999
-	elseif (option == "RaidersAfterHours") then
-		return (((num - 2) * 5) * 24)
-	elseif (option == "RaidersChance") then
-		return ((num + 2) * 24 * 14) -- (6 * 24 * 14)
-	elseif (option == "Option_ForcePVP") and (num == 1) then
-		return 0
-	elseif (option == "Option_ForcePVP") and (num == 2) then
-		return 1
-	elseif (option == "RoleplayMessage") and (num == 1) then
-		return 0
-	elseif (option == "RoleplayMessage") and (num == 2) then
-		return 1
-	elseif (option == "Option_Display_Survivor_Names") then
-		return (num ~= 1)
-	elseif (option == "Option_Display_Hostile_Color") then
-		return (num ~= 1)
-	elseif (option == "AltSpawn") and (num == 1) then
-		return 1   -- If false
-	elseif (option == "AltSpawn") and (num == 2) then
-		return 2   -- If true
-	elseif (option == "AltSpawn") and (num == 3) then
-		return 3   -- If true
-	elseif (option == "AltSpawn") and (num == 4) then
-		return 4   -- If true
-	elseif (option == "AltSpawn") and (num == 5) then
-		return 5   -- If true
-	elseif (option == "AltSpawn") and (num == 6) then
-		return 6   -- If true
-	elseif (option == "AltSpawn") and (num == 7) then
-		return 7   -- If true
-	elseif (option == "AltSpawnPercent") then
-		return (num - 1) -- % chance. in this case, 'num - 1' will make it goto 0 for what 'option 1' is.
-	elseif (option == "AltSpawnAmount") and (num == 1) then
-		return 1
-	elseif (option == "AltSpawnAmount") and (num == 2) then
-		return 2
-	elseif (option == "AltSpawnAmount") and (num == 3) then
-		return 3
-	elseif (option == "AltSpawnAmount") and (num == 4) then
-		return 4
-	elseif (option == "AltSpawnAmount") and (num == 5) then
-		return 5
-	elseif (option == "AltSpawnAmount") and (num == 6) then
-		return 6
-	else
-		return num
-	end
-end
-
--- -- -- -- --
--- WIP - Cows: getContextMenuText() is a globl function... should consider updating the casing to reflect that.
-function getContextMenuText(text)
-	return getText("ContextMenu_SS_" .. text)
-end
-
-SSHotKeyOptions = {}
-
-for i = 1, #Orders do
-	SSHotKeyOptions[i] = getContextMenuText("OrderAll") .. " " .. OrderDisplayName[Orders[i]];
-	table.insert(SSHotKeyOptions, OrderDisplayName[Orders[i]]);
-end
 
 -- ----------------------- --
 -- Options Menu controller --
 -- ----------------------- --
-function SuperSurvivorsRefreshSettings()
-	Option_WarningMSG = SuperSurvivorGetOptionValue("Option_WarningMSG")
 
-	Option_Display_Survivor_Names = SuperSurvivorGetOptionValue("Option_Display_Survivor_Names")
-	Option_Display_Hostile_Color = SuperSurvivorGetOptionValue("Option_Display_Hostile_Color")
+-- WIP - Cows: SuperSurvivorOptions variables...
+-- NPC Spawning
+-- Cows: There were no documentation on what the hell the AlternativeSpawning and spawnrate meant... but there were multiple possible values in ascending order.
+--[[
+	AlternativeSpawning
+	1 - Off
+	2 - five percent
+	3 - ten percent
+	4 - twenty percent
+	5 - thirty percent
+	6 - fourty percent
+	7 - fifty percent
+--]]
+AlternativeSpawning = 2; -- WIP - Cows: Confusing spawning mechanics... needs another look...
+AltSpawnGroupSize = 1;
+--[[
+	SpawnRate
+	0 - Off
+	64000 - "Ultra Low"
+	32000 - "Extremely Low"
+	26000 - "Very Low"
+	20000 - "Low"
+	16000 - "Slightly Lower"
+	12000 - "Normal"
+	8000 - "Slightly Higher"
+	4000 - "High"
+	2500 - "Very High"
+	1000 - "Extremely High"
+	400 - "Ultra High"
+--]]
+BaseNpcSpawnRate = 0;     -- WIP - Cows: Default to Off by default.
+HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
+HostileSpawnRateMax = 17; -- Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value
+NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
+WifeSpawn = true;         -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
 
-	Option_Panic_Distance = SuperSurvivorGetOptionValue("Option_Panic_Distance")
-
-	Option_ForcePVP = SuperSurvivorGetOptionValue("Option_ForcePVP")
-	RoleplayMessage = SuperSurvivorGetOptionValue('RoleplayMessage')
-
-	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")
-	AltSpawnGroupSize = SuperSurvivorGetOptionValue("AltSpawnAmount")
-	AltSpawnPercent = SuperSurvivorGetOptionValue("AltSpawnPercent")
-	NoPreSetSpawn = SuperSurvivorGetOptionValue("NoPreSetSpawn")
-	NoIdleChatter = SuperSurvivorGetOptionValue("NoIdleChatter")
-
-	DebugOptions = SuperSurvivorGetOptionValue("DebugOptions")
-	DebugOption_DebugSay = SuperSurvivorGetOptionValue("DebugSay")
-	DebugOption_DebugSay_Distance = SuperSurvivorGetOptionValue("DebugSay_Distance")
-
-	SafeBase = SuperSurvivorGetOptionValue("SafeBase")
-	SurvivorBases = SuperSurvivorGetOptionValue("SurvivorBases")
-	SuperSurvivorSpawnRate = SuperSurvivorGetOptionValue("SpawnRate")
-	ChanceToSpawnWithGun = SuperSurvivorGetOptionValue("GunSpawnRate")
-	ChanceToSpawnWithWep = SuperSurvivorGetOptionValue("WepSpawnRate")
-	ChanceToBeHostileNPC = SuperSurvivorGetOptionValue("HostileSpawnRate")
-	MaxChanceToBeHostileNPC = SuperSurvivorGetOptionValue("MaxHostileSpawnRate") -- Fixed, it used to contain 'HostileSpawnRate', previously making MaxHostileSpawnRate a useless option
-
-	SurvivorInfiniteAmmo = SuperSurvivorGetOptionValue("InfinitAmmo")
-	SurvivorHunger = SuperSurvivorGetOptionValue("SurvivorHunger")
-	SurvivorsFindWorkThemselves = SuperSurvivorGetOptionValue("FindWork")
+-- NPC Configuration
+CanNpcsCreateBase = false;    -- WIP - Cows: Allow npcs to create bases on their own... this has a huge performance impact.
+IsInfiniteAmmoEnabled = true; -- Cows: Npc Survivors has infinite ammo if true.
+IsRoleplayEnabled = false;    -- WIP - Cows: I don't even think roleplay is actually working... disabling it for now.
+WepSpawnRateGun = 50;         -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
+WepSpawnRateMelee = 100;      -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
 
 
-	RaidsAtLeastEveryThisManyHours = SuperSurvivorGetOptionValue("RaidersAtLeastHours") --(60 * 24)
-	RaidsStartAfterThisManyHours = SuperSurvivorGetOptionValue("RaidersAfterHours")  -- (5 * 24)
+-- NPC Behaviors
+CanIdleChat = false;            -- Cows: true to allow npcs to speak while idle
+PanicDistance = 21;             -- WIP - Cows: Value is used in FleeFromHereTask()... but Fleeing needs to be reworked eventually...
+SurvivorCanFindWork = true;     -- Cows: true to allow npcs to "find work" when they have no tasks at base.
+SurvivorNeedsFoodWater = false; -- Cows: true to activate npc survivor's hunger and thirst needs.
+--[[
+	-- WIP - Cows: There were no documentation on SurvivorFriendliness ... but there were 6 possible "num" values in ascending order.
+	1 - "Desperate for Human Contact"
+	2 - "Very Friendly"
+	3 - "Friendly"
+	4 - "Normal"
+	5 - "Mean"
+	6 - "Very Mean"
+	Originally Calculated as such...  (10 - ((num - 1) * 2));
+	Assuming higher = friendlier, why even bother with the calculation?
+--]]
+SurvivorFriendliness = 10;
 
-	RaidChanceForEveryTenMinutes = SuperSurvivorGetOptionValue("RaidersChance")      --(6 * 24 * 14)
-end
+-- WIP - Cows: There were no documentations on Raiders Spawning ... so this section requires testing...
+-- Raiders, Always hostile
+RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
+RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
+RaidersSpawnChance = 10;           -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
 
-SuperSurvivorsRefreshSettings()
+-- Player Related
+IsPlayerBaseSafe = true; -- WIP - Cows: true to prevent NPCs from claiming or visiting the player base... this needs to be verified and tested.
+IsPVPEnabled = true;
+
+-- UI Related
+IsDisplayingNpcName = true;
+IsDisplayingHostileColor = true;

@@ -77,18 +77,20 @@ function SuperSurvivorRandomSpawn(square)
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48)
-	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC) and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC) then
-		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
+	-- WIP - Cows: Why was chance to be hostile called and calculated twice...? and why divide by 48?
+	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
+
+	if (FinalChanceToBeHostile > HostileSpawnRateMax) and (HostileSpawnRateBase < HostileSpawnRateMax) then
+		FinalChanceToBeHostile = HostileSpawnRateMax;
 	end
 
 	if (ASuperSurvivor ~= nil) then
-		if (ZombRand(100) < (ChanceToSpawnWithGun + math.floor(hoursSurvived / 48))) then
+		if (ZombRand(100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-		elseif (ZombRand(100) < (ChanceToSpawnWithWep + math.floor(hoursSurvived / 48))) then
+		elseif (ZombRand(100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 		end
 		if (ZombRand(100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
@@ -128,10 +130,10 @@ function SuperSurvivorsLoadGridsquare(square)
 			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
 
 			if IsDamageBroken then
-				MaxChanceToBeHostileNPC = 0
+				HostileSpawnRateMax = 0
 			end
 			if IsDamageBroken then
-				RaidsStartAfterThisManyHours = 9999999
+				RaidersStartAfterHours = 9999999
 			end
 
 			if (DoesFileExist("SurvivorLocX")) then
@@ -152,7 +154,7 @@ function SuperSurvivorsLoadGridsquare(square)
 				i = i + 1;
 			end
 			i = 1;
-			SurvivorMap[key] = {} -- i think this is faster			
+			SurvivorMap[key] = {} -- i think this is faster
 		end
 
 		-- WIP - Cows: Need to rework the spawning functions and logic...
@@ -164,8 +166,8 @@ function SuperSurvivorsLoadGridsquare(square)
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 
-			if (SuperSurvivorSpawnRate ~= 0)
-				and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0)
+			if (BaseNpcSpawnRate ~= 0)
+				and (ZombRand(BaseNpcSpawnRate + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
 				and (square:getZoneType() == "TownZone")
 				and (not square:isSolid())
 			then
@@ -214,14 +216,12 @@ end
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
 
 function SuperSurvivorsInit()
-	GroupWindowCreate()
-
-	SurvivorsCreatePVPButton()
-
-	SurvivorTogglePVP()
+	GroupWindowCreate();
+	SurvivorsCreatePVPButton();
+	SurvivorTogglePVP();
 
 	if (IsoPlayer.getCoopPVP() == true
-			or Option_ForcePVP == 1) then
+			or IsPVPEnabled == true) then
 		SurvivorTogglePVP()
 	end
 
@@ -292,6 +292,11 @@ end
 
 Events.OnWeaponSwing.Add(SuperSurvivorsOnSwing)
 
+-- WIP - Cows: getContextMenuText() is a globl function... should consider updating the casing to reflect that.
+function getContextMenuText(text)
+    return getText("ContextMenu_SS_" .. text)
+end
+
 --[[
 	"GetJobText" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
 	and specifications are clearly defined and set.
@@ -304,10 +309,9 @@ end
 	"SurvivorOrder" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
 	and specifications are clearly defined and set.
 --]]
-function SurvivorOrder(test, player, order, orderParam)
+function SurvivorOrder(player, order, orderParam)
 	local isLoggingSurvivorOrder = false;
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "function: SurvivorOrder() called");
-	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "test: " .. tostring(test));
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "player: " .. tostring(player));
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "order: " .. tostring(order));
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(orderParam));
@@ -481,7 +485,8 @@ function SurvivorOrder(test, player, order, orderParam)
 	end
 end
 
-function SuperSurvivorsHotKeyOrder(index)
+-- WIP - Cows: This was made so the 4 arrow keys can be used to call the assigned orders in SuperSurvivorKeyBindAction() ...
+local function superSurvivorsHotKeyOrder(index)
 	local order, isListening
 	if (index <= #Orders) then
 		order = Orders[index]
@@ -494,7 +499,7 @@ function SuperSurvivorsHotKeyOrder(index)
 	if (myGroup) then
 		local myMembers = myGroup:getMembersInRange(SSM:Get(0):Get(), 25, isListening)
 		for i = 1, #myMembers do
-			SurvivorOrder(nil, myMembers[i].player, order, nil)
+			SurvivorOrder(myMembers[i].player, order, nil)
 		end
 	end
 end
@@ -579,18 +584,14 @@ function SuperSurvivorKeyBindAction(keyNum)
 				"Survivors Count:" .. tostring(SSM.SurvivorCount));
 			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
 			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
-		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key
-			local index = SuperSurvivorGetOption("SSHotkey1")
-			SuperSurvivorsHotKeyOrder(index)
-		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key
-			local index = SuperSurvivorGetOption("SSHotkey2")
-			SuperSurvivorsHotKeyOrder(index)
-		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key
-			local index = SuperSurvivorGetOption("SSHotkey3")
-			SuperSurvivorsHotKeyOrder(index)
-		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key
-			local index = SuperSurvivorGetOption("SSHotkey4")
-			SuperSurvivorsHotKeyOrder(index)
+		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key, Order "Follow"
+			superSurvivorsHotKeyOrder(6);
+		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key, Order "Stop"
+			superSurvivorsHotKeyOrder(20);
+		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key, Order "Stand Ground"
+			superSurvivorsHotKeyOrder(19);
+		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key, Order "Barricade"
+			superSurvivorsHotKeyOrder(1);
 		end
 	end
 end
@@ -638,12 +639,12 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48);
+	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
 
-	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC)
-		and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC)
+	if (FinalChanceToBeHostile > HostileSpawnRateMax)
+		and (HostileSpawnRateBase < HostileSpawnRateMax)
 	then
-		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
+		FinalChanceToBeHostile = HostileSpawnRateMax;
 	end
 
 	if (getSpecificPlayer(0) == nil) then return false end
@@ -713,6 +714,7 @@ function SuperSurvivorsNewSurvivorManager()
 	if (success) and (spawnSquare) then
 		-- ALT SPAWNING SECTION --
 		-- SURVIVOR, NON RAIDER SPAWNING
+		-- WIP - Cows: Then the hell are survivors called Raiders? Need to rename those for context...
 		local RaiderGroup = SSGM:newGroup()
 		local GroupSize = ZombRand(1, AltSpawnGroupSize)
 
@@ -762,79 +764,11 @@ function SuperSurvivorsNewSurvivorManager()
 end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFivePercent()
-	if (AlternativeSpawning == 2) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenTenPercent()
-	if (AlternativeSpawning == 3) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenTwentyPercent()
-	if (AlternativeSpawning == 4) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenThirtyPercent()
-	if (AlternativeSpawning == 5) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFourtyPercent()
-	if (AlternativeSpawning == 6) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFiftyPercent()
-	if (AlternativeSpawning == 7) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
-	local RealAlternativeSpawning = AlternativeSpawning - 1
+	local RealAlternativeSpawning = AlternativeSpawning - 1;
+
 	for i = RealAlternativeSpawning, 1, -1 do
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then
-			SuperSurSurvivorSpawnGenFivePercent();
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then
-			SuperSurSurvivorSpawnGenTenPercent();
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then
-			SuperSurSurvivorSpawnGenTwentyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then
-			SuperSurSurvivorSpawnGenThirtyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
-			SuperSurSurvivorSpawnGenFourtyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then SuperSurSurvivorSpawnGenFiftyPercent() end
+		SuperSurvivorsNewSurvivorManager();
 	end
 end
 
@@ -853,19 +787,19 @@ function SuperSurvivorsRaiderManager()
 		SSM:AsleepHealAll()
 	end
 
-	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then getSpecificPlayer(0):getModData().LastRaidTime = (RaidsStartAfterThisManyHours + 2) end
-	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime
-
-	local mySS = SSM:Get(0)
-	local hours = math.floor(getGameTime():getWorldAgeHours())
-	local chance = RaidChanceForEveryTenMinutes
-	if (mySS ~= nil and not mySS:isInBase()) then
-		chance = (RaidChanceForEveryTenMinutes * 1.5)
+	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then 
+		getSpecificPlayer(0):getModData().LastRaidTime = (RaidersStartAfterHours + 2);
 	end
 
-	local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours)
-	local RaiderResult = (ZombRand(chance) == 0)
-	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours)
+	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
+
+	local mySS = SSM:Get(0);
+	local hours = math.floor(getGameTime():getWorldAgeHours());
+	local spawnChanceVal = RaidersSpawnChance;
+
+	local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
+	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
+	local RaiderResult = (spawnChanceVal > ZombRand(100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
 	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
 		local hisGroup = mySS:getGroup()
@@ -968,7 +902,7 @@ function SuperSurvivorsRaiderManager()
 end
 
 Events.EveryTenMinutes.Add(SuperSurvivorsRaiderManager);
-NumberOfLocalPlayers = 0
+NumberOfLocalPlayers = 0;
 
 function SSCreatePlayerHandle(newplayerID)
 	local newplayer = getSpecificPlayer(newplayerID)

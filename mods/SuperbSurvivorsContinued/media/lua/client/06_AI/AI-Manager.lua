@@ -51,7 +51,7 @@ function AIManager(TaskMangerIn)
 	local CanTollerateEnemiesOnMe = 1;
 	if (Bravery >= 10) then
 		CanTollerateEnemiesOnMe = 2
-	end                          --need to by pass some hard coded values to give players option to have more fearless fighters
+	end --need to by pass some hard coded values to give players option to have more fearless fighters
 	if (SuperSurvivorBravery >= 20) then
 		CanTollerateEnemiesOnMe = 20
 	end
@@ -182,7 +182,7 @@ function AIManager(TaskMangerIn)
 		if ((NPC:needToReload())
 				or (NPC:needToReadyGun(weapon)))
 			and ((ASuperSurvivor:hasAmmoForPrevGun())
-				or SurvivorInfiniteAmmo)
+				or IsInfiniteAmmoEnabled)
 			and NPC:usingGun() -- removed and (ASuperSurvivor:getNeedAmmo() condition -
 		then
 			NPC:ReadyGun(weapon)
@@ -211,7 +211,8 @@ function AIManager(TaskMangerIn)
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers Seen: " .. tostring(NPC.dangerSeenCount));
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking: " .. tostring(NPC.EnemiesOnMe));
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is reloading: " .. tostring(ASuperSurvivor:needToReload()));
+			CreateLogLine("AI-Manager", isFleeCallLogged,
+				"Survivor is reloading: " .. tostring(ASuperSurvivor:needToReload()));
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 
@@ -354,7 +355,7 @@ function AIManager(TaskMangerIn)
 				and (TaskMangerIn:getCurrentTask() ~= "Hold Still")
 				and ((NPC:getSeenCount() >= 1) and (Distance_AnyEnemy <= 6)) -- This line doesn't make sense, what if the npc needs to heal outside of hostiles?
 			then
-				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor)) -- If general healing
+				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor))     -- If general healing
 				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is injured...");
 				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing..."); -- WIP - Cows: WHY ARE THE FLEE TASKS BEING CALLED CONSEQUTIVELY?
 				TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor));
@@ -427,7 +428,9 @@ function AIManager(TaskMangerIn)
 			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor)))
 	then
 		if ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe)) then
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking: " .. tostring(NPC.EnemiesOnMe) .. " | can fight: " ..  tostring(CanTollerateEnemiesOnMe));
+			CreateLogLine("AI-Manager", isFleeCallLogged,
+				"Enemies Attacking: " ..
+				tostring(NPC.EnemiesOnMe) .. " | can fight: " .. tostring(CanTollerateEnemiesOnMe));
 			CreateLogLine("AI-Manager", isFleeCallLogged, "too many enemies, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
@@ -436,12 +439,15 @@ function AIManager(TaskMangerIn)
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 		if (IHaveInjury and (NPC.dangerSeenCount > 0)) then
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | isInjured? " ..  tostring(IHaveInjury));
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is injured and enemy is attacking, Survivor is fleeing...");
+			CreateLogLine("AI-Manager", isFleeCallLogged,
+				"Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | isInjured? " .. tostring(IHaveInjury));
+			CreateLogLine("AI-Manager", isFleeCallLogged,
+				"Survivor is injured and enemy is attacking, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
 		if (NPC.dangerSeenCount > Bravery) then
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | Bravery: " ..  tostring(Bravery));
+			CreateLogLine("AI-Manager", isFleeCallLogged,
+				"Dangers seen: " .. tostring(NPC.dangerSeenCount) .. " | Bravery: " .. tostring(Bravery));
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Bravery checked failed, Survivor is fleeing...");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
 		end
@@ -618,7 +624,7 @@ function AIManager(TaskMangerIn)
 		end
 
 		if (ASuperSurvivor:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
-			if (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Doctor") then
+			if (not SurvivorCanFindWork) and (ASuperSurvivor:getGroupRole() == "Doctor") then
 				local randresult = ZombRand(10) + 1
 				if (randresult == 1) then
 					ASuperSurvivor:Speak(getActionText("IGoRelax"))
@@ -637,8 +643,8 @@ function AIManager(TaskMangerIn)
 					TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
 					return TaskMangerIn
 				end
-			elseif (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Farmer") then
-				if (SurvivorsFindWorkThemselves) and (RainManager.isRaining() == false) then
+			elseif (not SurvivorCanFindWork) and (ASuperSurvivor:getGroupRole() == "Farmer") then
+				if (SurvivorCanFindWork) and (RainManager.isRaining() == false) then
 					local randresult = ZombRand(10) + 1
 
 					if (randresult == 1) then
@@ -662,7 +668,7 @@ function AIManager(TaskMangerIn)
 				-- So if you are another modder that has the torch, that's looking to make Followers listen to you more, Follower = 'companion'
 			elseif (ASuperSurvivor:getGroupRole() == "Companion") then -- Not new, this was here before
 				TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
-			elseif (SurvivorsFindWorkThemselves)
+			elseif (SurvivorCanFindWork)
 				and not (AiNPC_Job_Is(NPC, "Guard"))
 				and not (AiNPC_Job_Is(NPC, "Leader"))
 				and not (AiNPC_Job_Is(NPC, "Doctor"))
@@ -912,7 +918,7 @@ function AIManager(TaskMangerIn)
 				TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding, "Food", 1))
 			end
 		end
-		if (SurvivorBases) and
+		if (CanNpcsCreateBase) and
 			(IsInAction == false) and -- New. Hopefully to stop spam
 			(ASuperSurvivor:getBaseBuilding() == nil) and
 			(ASuperSurvivor:getBuilding()) and
@@ -960,7 +966,11 @@ function AIManager(TaskMangerIn)
 		end
 
 
-		if ((SurvivorBases) and (ASuperSurvivor:isStarving()) or (ASuperSurvivor:isDyingOfThirst())) and (ASuperSurvivor:getBaseBuilding() ~= nil) then -- leave group and look for food if starving
+		if ((CanNpcsCreateBase)
+				and (ASuperSurvivor:isStarving())
+				or (ASuperSurvivor:isDyingOfThirst()))
+			and (ASuperSurvivor:getBaseBuilding() ~= nil)
+		then -- leave group and look for food if starving
 			-- random survivor in base is starving - reset so he goes back out looking for food and re base there
 			ASuperSurvivor:setAIMode("Random Solo")
 			if (ASuperSurvivor:getGroupID() ~= nil) then
