@@ -818,7 +818,8 @@ end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
-	local RealAlternativeSpawning = AlternativeSpawning - 1
+	local RealAlternativeSpawning = AlternativeSpawning - 1;
+	-- WIP - Cows: Wtf is going on here? Each of those conditional block calls the same function "SuperSurvivorsNewSurvivorManager()"...
 	for i = RealAlternativeSpawning, 1, -1 do
 		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then
 			SuperSurSurvivorSpawnGenFivePercent();
@@ -835,7 +836,9 @@ function SuperSurvivorDoRandomSpawns()
 		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
 			SuperSurSurvivorSpawnGenFourtyPercent()
 		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then SuperSurSurvivorSpawnGenFiftyPercent() end
+		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then
+			SuperSurSurvivorSpawnGenFiftyPercent()
+		end
 	end
 end
 
