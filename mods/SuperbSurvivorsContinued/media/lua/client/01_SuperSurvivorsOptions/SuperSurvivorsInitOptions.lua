@@ -4,7 +4,7 @@
 	Cows: I've added the Fenris_Wolf in the github credits.
 --]]
 -- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
-local isLocalLoggingEnabled = true;
+local isLocalLoggingEnabled = false;
 
 SuperSurvivorOptions = {
 	["AltSpawn"]        = 2,
@@ -114,7 +114,7 @@ SurvivorFriendliness = 10;      -- WIP - Cows: There were no documentation on Su
 -- WIP - Cows: There were no documentations on Raiders Spawning ... so this section requires testing...
 -- Raiders, Always hostile
 local raidersSpawnFrequency = 1;                           -- Cows: Modify this value to determine spawn frequency
-RaidersSpawnFrequencyByHours = raidersSpawnFrequency * 24; -- WIP - Cows: Spawn frequency in this example is once every 24 hours
+RaidersSpawnFrequencyByHours = raidersSpawnFrequency * 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
 --[[
 	Originally calculated as ((num * 5) * 24)...
 --]]
@@ -122,7 +122,7 @@ RaidersStartAfterHours = 0; -- WIP - Cows: Supposedly determines when raider can
 --[[
 	Originally calculated as (((num - 2) * 5) * 24)...
 --]]
-RaidersChance = 70;
+RaidersSpawnChance = 10; -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
 --[[
 	There were 5 num values defined for RaidersChance...
 	1 - Very High
@@ -167,7 +167,7 @@ function SuperSurvivorsRefreshSettings()
 
 	RaidsAtLeastEveryThisManyHours = RaidersSpawnFrequencyByHours;
 	RaidsStartAfterThisManyHours = RaidersStartAfterHours;
-	RaidChanceForEveryTenMinutes = RaidersChance;
+	RaidChanceForEveryTenMinutes = RaidersSpawnChance;
 end
 
 SuperSurvivorsRefreshSettings();

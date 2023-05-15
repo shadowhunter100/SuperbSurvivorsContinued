@@ -862,11 +862,11 @@ function SuperSurvivorsRaiderManager()
 
 	local mySS = SSM:Get(0);
 	local hours = math.floor(getGameTime():getWorldAgeHours());
-	local chance = RaidChanceForEveryTenMinutes;
+	local spawnChanceVal = RaidChanceForEveryTenMinutes;
 
 	local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours);
 	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours);
-	local RaiderResult = (chance > ZombRand(100)); -- spawn if chance is greater than the random roll of 100.
+	local RaiderResult = (spawnChanceVal > ZombRand(100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
 	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
 		local hisGroup = mySS:getGroup()
