@@ -10,7 +10,8 @@ function SuperSurvivorPlayerInit(player)
 	player:getModData().ID = 0
 	player:setBlockMovement(false)
 	player:setNPC(false)
-	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "initing player index " .. tostring(player:getPlayerNum()));
+	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
+		"initing player index " .. tostring(player:getPlayerNum()));
 
 	if (player:getPlayerNum() == 0) then
 		SSM:init()
@@ -27,7 +28,9 @@ function SuperSurvivorPlayerInit(player)
 		end
 
 		local wife
-		if (player:getModData().WifeID == nil) and (SuperSurvivorGetOptionValue("WifeSpawn") == true) then
+		if (player:getModData().WifeID == nil)
+			and (WifeSpawn == true)
+		then
 			player:getModData().WifeID = 0;
 
 			wife = SSM:spawnSurvivor(not player:isFemale(), player:getCurrentSquare());
@@ -60,9 +63,12 @@ function SuperSurvivorPlayerInit(player)
 
 		local mydesc = getSpecificPlayer(0):getDescriptor();
 
-		if (SSM:Get(0)) then SSM:Get(0):setName(mydesc:getForename()) end
+		if (SSM:Get(0)) then
+			SSM:Get(0):setName(mydesc:getForename());
+		end
 	else
-		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "finished initing player index " .. tostring(player:getPlayerNum()));
+		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
+			"finished initing player index " .. tostring(player:getPlayerNum()));
 	end
 end
 
@@ -216,7 +222,7 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 
 			SSM:PublicExecution(SSW, SSV)
 		end
-		
+
 		if IsNpcDamageBroken and instanceof(victim, "IsoPlayer") and instanceof(wielder, "IsoPlayer") and not (victim:isLocalPlayer()) then
 			if weapon:getType() == "BareHands" then
 				return

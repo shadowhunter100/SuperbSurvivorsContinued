@@ -612,7 +612,7 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 
 	Buddy:getModData().bWalking = false
 	Buddy:getModData().isHostile = false
-	Buddy:getModData().RWP = SuperSurvivorGetOptionValue("SurvivorFriendliness")
+	Buddy:getModData().RWP = SurvivorFriendliness;
 	Buddy:getModData().AIMode = "Random Solo"
 
 	ISTimedActionQueue.clear(Buddy)
@@ -1042,7 +1042,7 @@ end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingClaimed() called");
-	if (SafeBase) then -- if safe base mode on survivors consider other claimed buildings already explored
+	if (IsSafeBaseActive) then -- if safe base mode on survivors consider other claimed buildings already explored
 		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
@@ -1131,7 +1131,7 @@ end
 
 function SuperSurvivor:RoleplaySpeak(text)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:RoleplaySpeak() called");
-	if (SuperSurvivorGetOptionValue("RoleplayMessage") == 1) then
+	if (IsRoleplayEnabled) then
 		if (text:match('^\\*(.*)\\*$')) then -- checks if the string already have '*' (some localizations have it)
 			self.SayLine1 = text
 		else
