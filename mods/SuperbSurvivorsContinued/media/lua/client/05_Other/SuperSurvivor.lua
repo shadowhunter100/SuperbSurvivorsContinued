@@ -2787,7 +2787,10 @@ function SuperSurvivor:update()
 	self:NPCcalculateWalkSpeed()
 
 	-- WIP - Cows: There is actually an error here, and it will run often if the player dies.
-	if (not getSpecificPlayer(0):isAsleep()) and (self:getGroupRole() ~= "Random Solo") then
+	if (not getSpecificPlayer(0):isAsleep())
+		and (self:getGroupRole() ~= "Random Solo")
+		and (getSpecificPlayer(0):isAlive()) -- WIP - Cows: Added a check isPlayerAlive, otherwise errors will be thrown here.
+	then
 		self.MyTaskManager:update()
 	end
 
