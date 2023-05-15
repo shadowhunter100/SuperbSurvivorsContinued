@@ -106,7 +106,7 @@ function FollowTask:update()
 	self.parent:setSneaking(self.FollowChar:isSneaking()) -- sneaking if person you follow is
 
 	-- they keep talking
-	if (ZombRand(70) == 0) and (not NoIdleChatter) then
+	if (ZombRand(70) == 0) and (not CanIdleChat) then
 		self.parent:Speak(GetDialogueSpeech("IdleChatter"))
 	end
 

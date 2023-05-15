@@ -6,69 +6,26 @@
 -- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
 local isLocalLoggingEnabled = false;
 
-SuperSurvivorOptions = {
-	["AltSpawn"]        = 2,
-	["AltSpawnPercent"] = 10,
-	["AltSpawnAmount"]  = 1
-};
-
-function SuperSurvivorGetOption(option)
-	CreateLogLine("SuperSurvivorsInitOptions", isLocalLoggingEnabled, "function: SuperSurvivorGetOption() called");
-	CreateLogLine("SuperSurvivorsInitOptions", isLocalLoggingEnabled,
-		"option: " .. tostring(option) .. " | orderIndex: " .. tostring(SuperSurvivorOptions[option]));
-	if (SuperSurvivorOptions[option] ~= nil) then
-		return tonumber(SuperSurvivorOptions[option])
-	else
-		return 1
-	end
-end
-
-function SuperSurvivorGetOptionValue(option)
-	CreateLogLine("SuperSurvivorsInitOptions", isLocalLoggingEnabled, "function: SuperSurvivorGetOptionValue() called");
-	local num = SuperSurvivorGetOption(option);
-	CreateLogLine("SuperSurvivorsInitOptions", isLocalLoggingEnabled,
-		"option: " .. tostring(option) .. " | num: " .. tostring(num));
-	if (option == "AltSpawn") and (num == 1) then
-		return 1   -- If false
-	elseif (option == "AltSpawn") and (num == 2) then
-		return 2   -- If true
-	elseif (option == "AltSpawn") and (num == 3) then
-		return 3   -- If true
-	elseif (option == "AltSpawn") and (num == 4) then
-		return 4   -- If true
-	elseif (option == "AltSpawn") and (num == 5) then
-		return 5   -- If true
-	elseif (option == "AltSpawn") and (num == 6) then
-		return 6   -- If true
-	elseif (option == "AltSpawn") and (num == 7) then
-		return 7   -- If true
-	elseif (option == "AltSpawnPercent") then
-		return (num - 1) -- % chance. in this case, 'num - 1' will make it goto 0 for what 'option 1' is.
-	elseif (option == "AltSpawnAmount") and (num == 1) then
-		return 1
-	elseif (option == "AltSpawnAmount") and (num == 2) then
-		return 2
-	elseif (option == "AltSpawnAmount") and (num == 3) then
-		return 3
-	elseif (option == "AltSpawnAmount") and (num == 4) then
-		return 4
-	elseif (option == "AltSpawnAmount") and (num == 5) then
-		return 5
-	elseif (option == "AltSpawnAmount") and (num == 6) then
-		return 6
-	else
-		return num
-	end
-end
-
 -- ----------------------- --
 -- Options Menu controller --
 -- ----------------------- --
 
 -- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
--- Cows: There were no documentation on what the hell the spawnrate meant... but there were 12 possible values in ascending order.
+-- Cows: There were no documentation on what the hell the AlternativeSpawning and spawnrate meant... but there were multiple possible values in ascending order.
 --[[
+	AlternativeSpawning
+	1 - Off
+	2 - five percent
+	3 - ten percent
+	4 - twenty percent
+	5 - thirty percent
+	6 - fourty percent
+	7 - fifty percent
+--]]
+AlternativeSpawning = 2; -- WIP - Cows: Confusing spawning mechanics... needs another look...
+--[[
+	SpawnRate
 	0 - Off
 	64000 - "Ultra Low"
 	32000 - "Extremely Low"
@@ -95,13 +52,14 @@ IsRoleplayEnabled = false;    -- WIP - Cows: I don't even think roleplay is actu
 WepSpawnRateGun = 50;         -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
 WepSpawnRateMelee = 100;      -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
 
+
 -- NPC Behaviors
-CanFindWork = true;             -- Cows: true to allow npcs to "find work" when they have no tasks at base.
 CanIdleChat = false;            -- Cows: true to allow npcs to speak while idle
 PanicDistance = 21;             -- WIP - Cows: Value is used in FleeFromHereTask()... but Fleeing needs to be reworked eventually...
+SurvivorCanFindWork = true;     -- Cows: true to allow npcs to "find work" when they have no tasks at base.
 SurvivorNeedsFoodWater = false; -- Cows: true to activate npc survivor's hunger and thirst needs.
-SurvivorFriendliness = 10;      -- WIP - Cows: There were no documentation on SurvivorFriendliness ... but there were 6 possible "num" values in ascending order.
 --[[
+	-- WIP - Cows: There were no documentation on SurvivorFriendliness ... but there were 6 possible "num" values in ascending order.
 	1 - "Desperate for Human Contact"
 	2 - "Very Friendly"
 	3 - "Friendly"
@@ -111,27 +69,14 @@ SurvivorFriendliness = 10;      -- WIP - Cows: There were no documentation on Su
 	Originally Calculated as such...  (10 - ((num - 1) * 2));
 	Assuming higher = friendlier, why even bother with the calculation?
 --]]
+SurvivorFriendliness = 10;
+
 -- WIP - Cows: There were no documentations on Raiders Spawning ... so this section requires testing...
 -- Raiders, Always hostile
-local raidersSpawnFrequency = 1;                           -- Cows: Modify this value to determine spawn frequency
-RaidersSpawnFrequencyByHours = raidersSpawnFrequency * 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
---[[
-	Originally calculated as ((num * 5) * 24)...
---]]
-RaidersStartAfterHours = 0; -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
---[[
-	Originally calculated as (((num - 2) * 5) * 24)...
---]]
-RaidersSpawnChance = 10; -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
---[[
-	There were 5 num values defined for RaidersChance...
-	1 - Very High
-	2 - High
-	3 - Normal
-	4 - Low
-	5 - Very Low
-	Originally calculated as ((num + 2) * 24 * 14) = (5 * 24 * 14)... wtf? wouldn't this always exceed 100?
---]]
+RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
+RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
+RaidersSpawnChance = 10;           -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
+
 -- Player Related
 IsPlayerBaseSafe = true; -- WIP - Cows: true to prevent NPCs from claiming or visiting the player base... this needs to be verified and tested.
 IsPVPEnabled = true;
@@ -139,35 +84,3 @@ IsPVPEnabled = true;
 -- UI Related
 IsDisplayingNpcName = true;
 IsDisplayingHostileColor = true;
-
-function SuperSurvivorsRefreshSettings()
-	Option_Display_Survivor_Names = IsDisplayingNpcName;
-	Option_Display_Hostile_Color = IsDisplayingHostileColor;
-
-	Option_Panic_Distance = PanicDistance;
-	Option_ForcePVP = IsPVPEnabled;
-
-	AlternativeSpawning = SuperSurvivorGetOptionValue("AltSpawn")
-	AltSpawnGroupSize = SuperSurvivorGetOptionValue("AltSpawnAmount")
-	AltSpawnPercent = SuperSurvivorGetOptionValue("AltSpawnPercent")
-	NoPreSetSpawn = NoPresetSpawn;
-	NoIdleChatter = CanIdleChat;
-
-	IsSafeBaseActive = IsPlayerBaseSafe;
-	NpcSurvivorCanCreateBases = CanNpcsCreateBase;
-	SuperSurvivorSpawnRate = BaseNpcSpawnRate;
-	ChanceToSpawnWithGun = WepSpawnRateGun;
-	ChanceToSpawnWithWep = WepSpawnRateMelee;
-	ChanceToBeHostileNPC = HostileSpawnRateBase;
-	MaxChanceToBeHostileNPC = HostileSpawnRateMax; -- Fixed, it used to contain 'HostileSpawnRate', previously making MaxHostileSpawnRate a useless option
-
-	SurvivorInfiniteAmmo = IsInfiniteAmmoEnabled;
-	SurvivorHunger = SurvivorNeedsFoodWater;
-	SurvivorsFindWorkThemselves = CanFindWork;
-
-	RaidsAtLeastEveryThisManyHours = RaidersSpawnFrequencyByHours;
-	RaidsStartAfterThisManyHours = RaidersStartAfterHours;
-	RaidChanceForEveryTenMinutes = RaidersSpawnChance;
-end
-
-SuperSurvivorsRefreshSettings();

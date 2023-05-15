@@ -39,6 +39,14 @@ function SuperSurvivorPlayerInit(player)
 
 			wife:Get():getModData().InitGreeting = GetDialogueSpeech("WifeIntro");
 			wife:Get():getModData().seenZombie = true;
+			local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
+			local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");
+
+			wife:Get():setPrimaryHandItem(baseballBat);
+			wife:Get():setSecondaryHandItem(baseballBat);
+			wife:setMeleWep(baseballBat);
+			wife:setGunWep(pistol);
+
 			MData.MetPlayer = true;
 			MData.isHostile = false;
 

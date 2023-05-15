@@ -182,7 +182,7 @@ function AIManager(TaskMangerIn)
 		if ((NPC:needToReload())
 				or (NPC:needToReadyGun(weapon)))
 			and ((ASuperSurvivor:hasAmmoForPrevGun())
-				or SurvivorInfiniteAmmo)
+				or IsInfiniteAmmoEnabled)
 			and NPC:usingGun() -- removed and (ASuperSurvivor:getNeedAmmo() condition -
 		then
 			NPC:ReadyGun(weapon)
@@ -624,7 +624,7 @@ function AIManager(TaskMangerIn)
 		end
 
 		if (ASuperSurvivor:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
-			if (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Doctor") then
+			if (not SurvivorCanFindWork) and (ASuperSurvivor:getGroupRole() == "Doctor") then
 				local randresult = ZombRand(10) + 1
 				if (randresult == 1) then
 					ASuperSurvivor:Speak(getActionText("IGoRelax"))
@@ -643,8 +643,8 @@ function AIManager(TaskMangerIn)
 					TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
 					return TaskMangerIn
 				end
-			elseif (not SurvivorsFindWorkThemselves) and (ASuperSurvivor:getGroupRole() == "Farmer") then
-				if (SurvivorsFindWorkThemselves) and (RainManager.isRaining() == false) then
+			elseif (not SurvivorCanFindWork) and (ASuperSurvivor:getGroupRole() == "Farmer") then
+				if (SurvivorCanFindWork) and (RainManager.isRaining() == false) then
 					local randresult = ZombRand(10) + 1
 
 					if (randresult == 1) then
@@ -668,7 +668,7 @@ function AIManager(TaskMangerIn)
 				-- So if you are another modder that has the torch, that's looking to make Followers listen to you more, Follower = 'companion'
 			elseif (ASuperSurvivor:getGroupRole() == "Companion") then -- Not new, this was here before
 				TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
-			elseif (SurvivorsFindWorkThemselves)
+			elseif (SurvivorCanFindWork)
 				and not (AiNPC_Job_Is(NPC, "Guard"))
 				and not (AiNPC_Job_Is(NPC, "Leader"))
 				and not (AiNPC_Job_Is(NPC, "Doctor"))
@@ -918,7 +918,7 @@ function AIManager(TaskMangerIn)
 				TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor.TargetBuilding, "Food", 1))
 			end
 		end
-		if (NpcSurvivorCanCreateBases) and
+		if (CanNpcsCreateBase) and
 			(IsInAction == false) and -- New. Hopefully to stop spam
 			(ASuperSurvivor:getBaseBuilding() == nil) and
 			(ASuperSurvivor:getBuilding()) and
@@ -966,7 +966,7 @@ function AIManager(TaskMangerIn)
 		end
 
 
-		if ((NpcSurvivorCanCreateBases)
+		if ((CanNpcsCreateBase)
 				and (ASuperSurvivor:isStarving())
 				or (ASuperSurvivor:isDyingOfThirst()))
 			and (ASuperSurvivor:getBaseBuilding() ~= nil)

@@ -424,17 +424,17 @@ function SuperSurvivor:renderName() -- To do: Make an in game option to hide ren
 	if (self.JustSpoke == true) and (self.TicksSinceSpoke == 0) then
 		self.TicksSinceSpoke = 250
 
-		if (not Option_Display_Survivor_Names) then
+		if (not IsDisplayingNpcName) then
 			self.userName:ReadString(tostring(self.SayLine1))
-		elseif (Option_Display_Survivor_Names) then
+		elseif (IsDisplayingNpcName) then
 			self.userName:ReadString(self.player:getForname() .. "\n" .. tostring(self.SayLine1))
 		end
 	elseif (self.TicksSinceSpoke > 0) then
 		self.TicksSinceSpoke = self.TicksSinceSpoke - 1
 		if (self.TicksSinceSpoke == 0) then
-			if (not Option_Display_Survivor_Names) then
+			if (not IsDisplayingNpcName) then
 				self.userName:ReadString("");
-			elseif (Option_Display_Survivor_Names) then
+			elseif (IsDisplayingNpcName) then
 				self.userName:ReadString(self.player:getForname());
 			end
 			self.JustSpoke = false
@@ -459,7 +459,7 @@ end
 
 function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setHostile() called");
-	if (Option_Display_Hostile_Color) then -- SuperSurvivorsMod.lua
+	if (IsDisplayingHostileColor) then -- SuperSurvivorsMod.lua
 		if (toValue) then
 			self.userName:setDefaultColors(128, 128, 128, 255);
 			self.userName:setOutlineColors(180, 0, 0, 255);
@@ -1041,7 +1041,7 @@ end
 
 function SuperSurvivor:isTargetBuildingClaimed(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingClaimed() called");
-	if (IsSafeBaseActive) then -- if safe base mode on survivors consider other claimed buildings already explored
+	if (IsPlayerBaseSafe) then -- if safe base mode on survivors consider other claimed buildings already explored
 		local tempsquare = GetRandomBuildingSquare(building)
 
 		if (tempsquare ~= nil) then
@@ -2741,7 +2741,7 @@ function SuperSurvivor:update()
 	self.player:setBlockMovement(true)
 	self.TriggerHeldDown = false
 
-	if (not SurvivorHunger) then -- removed 'not' for update
+	if (not SurvivorNeedsFoodWater) then -- removed 'not' for update
 		self.player:getStats():setThirst(0.0)
 		self.player:getStats():setHunger(0.0)
 	end
@@ -2759,7 +2759,7 @@ function SuperSurvivor:update()
 	self.player:getStats():setStress(0.0);
 	self.player:getStats():setSanity(1);
 
-	if (not SurvivorsFindWorkThemselves) then
+	if (not SurvivorCanFindWork) then
 		self.player:getStats():setBoredom(0.0);
 	end
 	if (not RainManager.isRaining()) or (not self.player:isOutside()) then
@@ -3221,7 +3221,7 @@ function SuperSurvivor:ReadyGun(weapon)
 
 			if (magazine == nil) then magazine = self.player:getInventory():getFirstTypeRecurse(weapon:getMagazineType()) end
 
-			if (magazine == nil) and (SurvivorInfiniteAmmo) then
+			if (magazine == nil) and (IsInfiniteAmmoEnabled) then
 				magazine = self.player:getInventory():AddItem(weapon:getMagazineType());
 			end
 
@@ -3229,7 +3229,7 @@ function SuperSurvivor:ReadyGun(weapon)
 				readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
 
 				local ammotype = magazine:getAmmoType();
-				if (not self.player:getInventory():containsWithModule(ammotype)) and (magazine:getCurrentAmmoCount() == 0) and (SurvivorInfiniteAmmo) then
+				if (not self.player:getInventory():containsWithModule(ammotype)) and (magazine:getCurrentAmmoCount() == 0) and (IsInfiniteAmmoEnabled) then
 					readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 5
 					magazine:setCurrentAmmoCount(magazine:getMaxAmmo())
 				end
@@ -3255,11 +3255,11 @@ function SuperSurvivor:ReadyGun(weapon)
 
 			if (magazine == nil) then magazine = self.player:getInventory():getFirstTypeRecurse(weapon:getMagazineType()) end
 
-			if (magazine == nil) and (SurvivorInfiniteAmmo) then
+			if (magazine == nil) and (IsInfiniteAmmoEnabled) then
 				magazine = self.player:getInventory():AddItem(weapon:getMagazineType());
 			end
 
-			if (self:gunAmmoInInvCount(weapon) < 1) and (SurvivorInfiniteAmmo) then
+			if (self:gunAmmoInInvCount(weapon) < 1) and (IsInfiniteAmmoEnabled) then
 				local maxammo = magazine:getMaxAmmo()
 				local amtype = magazine:getAmmoType()
 
@@ -3267,7 +3267,7 @@ function SuperSurvivor:ReadyGun(weapon)
 					local am = instanceItem(amtype)
 					self.player:getInventory():AddItem(am)
 				end
-			elseif (self:gunAmmoInInvCount(weapon) < 1) and (not ISReloadWeaponAction.canShoot(weapon)) and (not SurvivorInfiniteAmmo) then
+			elseif (self:gunAmmoInInvCount(weapon) < 1) and (not ISReloadWeaponAction.canShoot(weapon)) and (not IsInfiniteAmmoEnabled) then
 				local ammo = self:openBoxForGun()
 
 				if ammo == nil then
@@ -3299,7 +3299,7 @@ function SuperSurvivor:ReadyGun(weapon)
 		-- check if we have an empty magazine for the current gun
 		ISReloadWeaponAction.ReloadBestMagazine(self.player, weapon)
 	else -- gun with no magazine
-		if (self:gunAmmoInInvCount(weapon) < 1) and (SurvivorInfiniteAmmo) then
+		if (self:gunAmmoInInvCount(weapon) < 1) and (IsInfiniteAmmoEnabled) then
 			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1;
 			local maxammo = weapon:getMaxAmmo();
 			local ammotype = weapon:getAmmoType();
@@ -3493,7 +3493,7 @@ function SuperSurvivor:WeaponReady()
 			ammo = self:FindAndReturn(self.AmmoTypes[i])
 			if (ammo) then break end
 		end
-		if (not ammo) and (SurvivorInfiniteAmmo) then
+		if (not ammo) and (IsInfiniteAmmoEnabled) then
 			ammo = self.player:getInventory():AddItem(self.AmmoTypes[1])
 		end
 

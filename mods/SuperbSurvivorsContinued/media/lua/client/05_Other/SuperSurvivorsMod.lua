@@ -78,19 +78,19 @@ function SuperSurvivorRandomSpawn(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 
 	-- WIP - Cows: Why was chance to be hostile called and calculated twice...? and why divide by 48?
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48);
+	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
 
-	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC) and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC) then
-		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
+	if (FinalChanceToBeHostile > HostileSpawnRateMax) and (HostileSpawnRateBase < HostileSpawnRateMax) then
+		FinalChanceToBeHostile = HostileSpawnRateMax;
 	end
 
 	if (ASuperSurvivor ~= nil) then
-		if (ZombRand(100) < (ChanceToSpawnWithGun + math.floor(hoursSurvived / 48))) then
+		if (ZombRand(100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-		elseif (ZombRand(100) < (ChanceToSpawnWithWep + math.floor(hoursSurvived / 48))) then
+		elseif (ZombRand(100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 		end
 		if (ZombRand(100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
@@ -130,10 +130,10 @@ function SuperSurvivorsLoadGridsquare(square)
 			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
 
 			if IsDamageBroken then
-				MaxChanceToBeHostileNPC = 0
+				HostileSpawnRateMax = 0
 			end
 			if IsDamageBroken then
-				RaidsStartAfterThisManyHours = 9999999
+				RaidersStartAfterHours = 9999999
 			end
 
 			if (DoesFileExist("SurvivorLocX")) then
@@ -166,8 +166,8 @@ function SuperSurvivorsLoadGridsquare(square)
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 
-			if (SuperSurvivorSpawnRate ~= 0)
-				and (ZombRand(SuperSurvivorSpawnRate + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
+			if (BaseNpcSpawnRate ~= 0)
+				and (ZombRand(BaseNpcSpawnRate + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
 				and (square:getZoneType() == "TownZone")
 				and (not square:isSolid())
 			then
@@ -221,7 +221,7 @@ function SuperSurvivorsInit()
 	SurvivorTogglePVP();
 
 	if (IsoPlayer.getCoopPVP() == true
-			or Option_ForcePVP == true) then
+			or IsPVPEnabled == true) then
 		SurvivorTogglePVP()
 	end
 
@@ -639,12 +639,12 @@ function SuperSurvivorsNewSurvivorManager()
 	end
 
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
-	local FinalChanceToBeHostile = ChanceToBeHostileNPC + math.floor(hoursSurvived / 48);
+	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
 
-	if (FinalChanceToBeHostile > MaxChanceToBeHostileNPC)
-		and (ChanceToBeHostileNPC < MaxChanceToBeHostileNPC)
+	if (FinalChanceToBeHostile > HostileSpawnRateMax)
+		and (HostileSpawnRateBase < HostileSpawnRateMax)
 	then
-		FinalChanceToBeHostile = MaxChanceToBeHostileNPC;
+		FinalChanceToBeHostile = HostileSpawnRateMax;
 	end
 
 	if (getSpecificPlayer(0) == nil) then return false end
@@ -714,6 +714,7 @@ function SuperSurvivorsNewSurvivorManager()
 	if (success) and (spawnSquare) then
 		-- ALT SPAWNING SECTION --
 		-- SURVIVOR, NON RAIDER SPAWNING
+		-- WIP - Cows: Then the hell are survivors called Raiders? Need to rename those for context...
 		local RaiderGroup = SSGM:newGroup()
 		local GroupSize = ZombRand(1, AltSpawnGroupSize)
 
@@ -763,82 +764,11 @@ function SuperSurvivorsNewSurvivorManager()
 end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFivePercent()
-	if (AlternativeSpawning == 2) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenTenPercent()
-	if (AlternativeSpawning == 3) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenTwentyPercent()
-	if (AlternativeSpawning == 4) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenThirtyPercent()
-	if (AlternativeSpawning == 5) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFourtyPercent()
-	if (AlternativeSpawning == 6) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurSurvivorSpawnGenFiftyPercent()
-	if (AlternativeSpawning == 7) then
-		SuperSurvivorsNewSurvivorManager()
-	else
-		return false
-	end
-end
-
--- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
 	local RealAlternativeSpawning = AlternativeSpawning - 1;
-	-- WIP - Cows: Wtf is going on here? Each of those conditional block calls the same function "SuperSurvivorsNewSurvivorManager()"...
+
 	for i = RealAlternativeSpawning, 1, -1 do
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 2) then
-			SuperSurSurvivorSpawnGenFivePercent();
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 3) then
-			SuperSurSurvivorSpawnGenTenPercent();
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 4) then
-			SuperSurSurvivorSpawnGenTwentyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 5) then
-			SuperSurSurvivorSpawnGenThirtyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 6) then
-			SuperSurSurvivorSpawnGenFourtyPercent()
-		end
-		if (AltSpawnPercent > ZombRand(100)) and (AlternativeSpawning == 7) then
-			SuperSurSurvivorSpawnGenFiftyPercent()
-		end
+		SuperSurvivorsNewSurvivorManager();
 	end
 end
 
@@ -858,17 +788,17 @@ function SuperSurvivorsRaiderManager()
 	end
 
 	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then 
-		getSpecificPlayer(0):getModData().LastRaidTime = (RaidsStartAfterThisManyHours + 2) 
+		getSpecificPlayer(0):getModData().LastRaidTime = (RaidersStartAfterHours + 2);
 	end
 
 	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
 
 	local mySS = SSM:Get(0);
 	local hours = math.floor(getGameTime():getWorldAgeHours());
-	local spawnChanceVal = RaidChanceForEveryTenMinutes;
+	local spawnChanceVal = RaidersSpawnChance;
 
-	local RaidersStartTimePassed = (hours >= RaidsStartAfterThisManyHours);
-	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidsAtLeastEveryThisManyHours);
+	local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
+	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
 	local RaiderResult = (spawnChanceVal > ZombRand(100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
 	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then

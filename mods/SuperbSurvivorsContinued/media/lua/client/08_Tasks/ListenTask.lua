@@ -74,7 +74,7 @@ function ListenTask:update()
 			elseif (self.parent.player:isLocalPlayer() == false) then
 				if (ZombRand(2) == 0) and
 					(self.parent:isSpeaking() == false) and
-					(self.SSAite:isSpeaking() == false) and (not NoIdleChatter) then
+					(self.SSAite:isSpeaking() == false) and (not CanIdleChat) then
 					self.parent:Speak(GetDialogueSpeech("IdleChatter"))
 				end
 			end
