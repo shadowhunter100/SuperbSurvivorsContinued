@@ -24,6 +24,7 @@ local isLocalLoggingEnabled = false;
 	7 - fifty percent
 --]]
 AlternativeSpawning = 2; -- WIP - Cows: Confusing spawning mechanics... needs another look...
+AltSpawnGroupSize = 1;
 --[[
 	SpawnRate
 	0 - Off
