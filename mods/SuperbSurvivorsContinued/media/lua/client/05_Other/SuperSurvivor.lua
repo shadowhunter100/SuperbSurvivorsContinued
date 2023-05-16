@@ -459,7 +459,7 @@ end
 
 function SuperSurvivor:setHostile(toValue) -- Moved up, to find easier
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setHostile() called");
-	if (IsDisplayingHostileColor) then -- SuperSurvivorsMod.lua
+	if (IsDisplayingHostileColor) then
 		if (toValue) then
 			self.userName:setDefaultColors(128, 128, 128, 255);
 			self.userName:setOutlineColors(180, 0, 0, 255);
@@ -2719,10 +2719,11 @@ end
 function SuperSurvivor:update()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:update() called");
 	if (self:isDead()) then
-		return false
+		-- WIP - Cows: Add a clean up operation here if the survivor is dead...
+		return false;
 	end
 
-	self:DoVision()
+	self:DoVision();
 
 	--check for frozen animation?? then fix
 	if ((self:isInAction() == false) and        -- no current timedaction in Q, nor have we set bWalking true so AI is not trying to move character
@@ -2767,8 +2768,11 @@ function SuperSurvivor:update()
 	end
 
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	if (getDistanceBetween(getSpecificPlayer(0), self.player) > 15) and (ZombRand(20) == 0) and (self:isOnScreen() == false) then -- don't wanna be seen healing
-		self.player:getBodyDamage():RestoreToFullHealth()                                                                      -- to prevent a 'bleed' stutter bug
+	if (getDistanceBetween(getSpecificPlayer(0), self.player) > 15)
+		and (ZombRand(20) == 0)
+		and (self:isOnScreen() == false)            -- don't wanna be seen healing
+	then
+		self.player:getBodyDamage():RestoreToFullHealth() -- to prevent a 'bleed' stutter bug
 	end
 
 	if (self.player:isOnFire()) then
