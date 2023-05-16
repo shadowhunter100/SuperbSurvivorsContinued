@@ -512,15 +512,15 @@ function SuperSurvivorKeyBindAction(keyNum)
 	if (playerSurvivor) then
 		-- playerSurvivor:Say(tostring(keyNum));
 
-		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the 6 key
+		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the NumPad enter key
 			local ss = SuperSurvivorRandomSpawn(playerSurvivor:getCurrentSquare());
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
-			if (GFollowDistance ~= 50) then
+			if (GFollowDistance < 50) then
 				GFollowDistance = GFollowDistance + 1;
 			end
 			playerSurvivor:Say("Spread out more(" .. tostring(GFollowDistance) .. ")");
 		elseif (keyNum == getCore():getKey("Lower Follow Distance")) then
-			if (GFollowDistance ~= 0) then
+			if (GFollowDistance > 0) then
 				GFollowDistance = GFollowDistance - 1;
 			end
 			playerSurvivor:Say("Stay closer(" .. tostring(GFollowDistance) .. ")");
