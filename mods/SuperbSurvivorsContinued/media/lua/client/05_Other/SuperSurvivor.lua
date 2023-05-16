@@ -536,7 +536,7 @@ function SuperSurvivor:WearThis(ClothingItemName) -- should already be in invent
 	if instanceof(ClothingItem, "InventoryContainer") and ClothingItem:canBeEquipped() ~= "" then
 		--self.player:setWornItem(ClothingItem:canBeEquipped(), ClothingItem);
 		self.player:setClothingItem_Back(ClothingItem)
-		getPlayerData(self.player:getPlayerNum()).playerInventory:refreshBackpacks()
+		getSpecificPlayer(self.player:getPlayerNum()).playerInventory:refreshBackpacks()
 		--self.player:initSpritePartsEmpty();
 	elseif ClothingItem:getCategory() == "Clothing" then
 		if ClothingItem:getBodyLocation() ~= "" then

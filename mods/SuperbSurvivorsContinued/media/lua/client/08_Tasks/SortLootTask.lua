@@ -164,7 +164,7 @@ function SortLootTask:update()
 					end -- end of if (distance > 2.0) then
 				end --end of if item ~- nil
 			end
-			--getPlayerData(self.player:getPlayerNum()).playerInventory:refreshBackpacks();
+			--getSpecificPlayer(self.player:getPlayerNum()).playerInventory:refreshBackpacks();
 			self.parent.player:initSpritePartsEmpty();
 		end
 		if (inv ~= bag) then

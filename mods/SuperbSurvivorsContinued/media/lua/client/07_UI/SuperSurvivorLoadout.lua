@@ -74,7 +74,7 @@ function InventoryRow:on_click_transfer(direction)
     else
         if instanceof(self.item, "InventoryContainer") and self.item:canBeEquipped() ~= "" then
             member.player:setClothingItem_Back(self.item)
-            getPlayerData(member.player:getPlayerNum()).playerInventory:refreshBackpacks()
+            getSpecificPlayer(member.player:getPlayerNum()).playerInventory:refreshBackpacks()
         elseif self.item:getCategory() == "Weapon" then
             if self.item:getAmmoType() ~= nil then
                 member:setGunWep(self.item)

@@ -50,7 +50,7 @@ function SuperSurvivorManager:switchPlayer(newID)
 	self.MainPlayer = newID
 
 	getSpecificPlayer(0):initSpritePartsEmpty();
-	getPlayerData(0).playerInventory:refreshBackpacks();
+	getSpecificPlayer(0).playerInventory:refreshBackpacks();
 end
 
 function SuperSurvivorManager:LoadSurvivor(ID, square)

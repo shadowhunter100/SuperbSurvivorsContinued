@@ -157,7 +157,7 @@ function CleanInvTask:update()
 						end
 					end
 				end
-				--getPlayerData(self.player:getPlayerNum()).playerInventory:refreshBackpacks();
+				--getSpecificPlayer(self.player:getPlayerNum()).playerInventory:refreshBackpacks();
 				self.parent.player:initSpritePartsEmpty();
 			end
 			if (inv ~= bag) then
