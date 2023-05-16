@@ -153,14 +153,17 @@ function SuperSurvivorManager:OnDeath(ID)
 	self.SuperSurvivors[ID] = nil
 end
 
-function SuperSurvivorManager:update()
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:update() called");
+function SuperSurvivorManager:UpdateSurvivorsRoutine()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:UpdateSurvivorsRoutine() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
-			if (self.SuperSurvivors[i].TargetSquare ~= nil and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ() and getGameSpeed() > 1) then
-				self.SuperSurvivors[i].TargetSquare = nil
-				self.SuperSurvivors[i]:StopWalk()
-				self.SuperSurvivors[i]:Wait(10)
+			if (self.SuperSurvivors[i].TargetSquare ~= nil
+					and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ()
+					and getGameSpeed() > 1)
+			then
+				self.SuperSurvivors[i].TargetSquare = nil;
+				self.SuperSurvivors[i]:StopWalk();
+				self.SuperSurvivors[i]:Wait(10);
 			end
 		end
 
@@ -169,7 +172,7 @@ function SuperSurvivorManager:update()
 			and (not self.SuperSurvivors[i].player:isAsleep())
 			and (self.SuperSurvivors[i]:isInCell())
 		then
-			self.SuperSurvivors[i]:update()
+			self.SuperSurvivors[i]:update();
 		end
 	end
 end

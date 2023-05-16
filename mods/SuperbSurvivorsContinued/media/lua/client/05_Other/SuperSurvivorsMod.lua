@@ -5,28 +5,41 @@ require "05_Other/SuperSurvivorManager";
 
 -- WIP - Cows: ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
-TicksCounter = 0;
 local isLocalLoggingEnabled = false;
 
+-- Check if SSM is loaded and game speed isn't on pause before updating the Survivors routines.
 function SuperSurvivorsOnTick()
-	local isLocalFunctionLoggingEnabled = false;
 	if SSM ~= nil and getGameSpeed() ~= 0 then
-		SSM:update();
-		TicksCounter = TicksCounter + 1;
-
-		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsOnTick() called");
-		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Current Tick: " .. tostring(TicksCounter));
-
-		if (TicksCounter % 1000 == 0) then
-			CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
-			SSGM:Save();
-			SaveSurvivorMap();
-			TicksCounter = 0; -- Cows: Reset the counter, which should reduce the memory usage.
-		end
+		SSM:UpdateSurvivorsRoutine();
 	end
 end
 
 Events.OnRenderTick.Add(SuperSurvivorsOnTick);
+
+-- WIP - Cows: Ticks are calculated very inconsistently... 1 in-game minute is about 2 seconds IRL time
+-- The data is also saved when the user presses the "Esc" key under SuperSurvivorKeyBindAction()... so is this even needed?
+function SuperSurvivorsSaveData()
+	local isLocalFunctionLoggingEnabled = true;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsOnTick() called");
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
+	SSM:SaveAll();
+	SSGM:Save();
+	SaveSurvivorMap();
+	local isSaveFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+		"Groups Count: " .. tostring(SSGM.GroupCount));
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
+	LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
+		"Survivors Count:" .. tostring(SSM.SurvivorCount));
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
+	LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
+end
+
+Events.OnPostSave.Add(SuperSurvivorsSaveData);
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorRandomSpawn(square)
@@ -524,22 +537,6 @@ function SuperSurvivorKeyBindAction(keyNum)
 					CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "no group for player found");
 				end
 			end
-		elseif (keyNum == 1) then -- esc key
-			local isSaveFunctionLoggingEnabled = false;
-			SSM:SaveAll();
-			SSGM:Save();
-			SaveSurvivorMap();
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
-				"Groups Count: " .. tostring(SSGM.GroupCount));
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
-			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
-				"Survivors Count:" .. tostring(SSM.SurvivorCount));
-			CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
-			LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key, Order "Follow"
 			superSurvivorsHotKeyOrder(6);
 		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key, Order "Stop"
