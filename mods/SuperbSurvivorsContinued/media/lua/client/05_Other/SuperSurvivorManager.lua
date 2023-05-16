@@ -36,23 +36,6 @@ function SuperSurvivorManager:setPlayer(player, ID)
 	return self.SuperSurvivors[ID];
 end
 
-function SuperSurvivorManager:switchPlayer(newID)
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:switchPlayer() called");
-	self.SuperSurvivors[newID].player:setBlockMovement(false)
-	self.SuperSurvivors[newID].player:setNPC(false)
-
-	self.SuperSurvivors[self.MainPlayer].player:setBlockMovement(true)
-	self.SuperSurvivors[self.MainPlayer].player:setNPC(true)
-
-	IsoPlayer.setInstance(self.SuperSurvivors[newID].player)
-	IsoPlayer.setLocalPlayer(0, self.SuperSurvivors[newID].player)
-
-	self.MainPlayer = newID
-
-	getSpecificPlayer(0):initSpritePartsEmpty();
-	getSpecificPlayer(0).playerInventory:refreshBackpacks();
-end
-
 function SuperSurvivorManager:LoadSurvivor(ID, square)
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:LoadSurvivor() called");
 	if (not checkSaveFileExists("Survivor" .. tostring(ID))) then return false end
