@@ -488,7 +488,7 @@ end
 
 function create_button_reload_menu()
     button_reload_menu = ButtonReloadMenu:new(getCore():getScreenWidth() - (100 + 25 + 8), getCore():getScreenHeight() -
-    50, 25, 25, "!", nil, function() dssw.dbug() end)
+        50, 25, 25, "!", nil, function() dssw.dbug() end)
     button_reload_menu.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     button_reload_menu:setVisible(true)
     button_reload_menu:setEnable(true)
@@ -501,13 +501,15 @@ end
 function on_click_base_show(group_id, area_name)
     base_area_visibility[area_name].group_id = group_id
     if base_area_visibility[area_name].area_shown then
-        base_area_visibility[area_name].area_shown = false
-        base_area_visibility[area_name].button_title = "show"
+        base_area_visibility[area_name].area_shown = false;
+        base_area_visibility[area_name].button_title = "show";
+        Events.OnRenderTick.Remove(base_area_visibility.event_update_area_highlight);
     else
-        base_area_visibility[area_name].area_shown = true
-        base_area_visibility[area_name].button_title = "hide"
+        base_area_visibility[area_name].area_shown = true;
+        base_area_visibility[area_name].button_title = "hide";
+        Events.OnRenderTick.Add(base_area_visibility.event_update_area_highlight);
     end
-    SurvivorPanels[2]:dupdate()
+    SurvivorPanels[2]:dupdate();
 end
 
 function on_click_tab(target_headers, target_panel)
@@ -627,23 +629,30 @@ end
 LuaEventManager.AddEvent("on_update_group_role")
 
 function base_area_visibility.event_update_area_highlight()
+    local isLocalFunctionLoggingEnabled = false;
+    CreateLogLine("SuperSurvivorWindow", isLocalFunctionLoggingEnabled,
+        "function: base_area_visibility.event_update_area_highlight() called");
     for area_name, _ in pairs(base_area_visibility) do
         if tostring(area_name) ~= "event_update_area_highlight" then
-            if base_area_visibility[tostring(area_name)].area_shown and base_area_visibility[tostring(area_name)].group_id ~= nil then
-                local group_id = base_area_visibility[tostring(area_name)].group_id
-                local group = SSGM:Get(group_id)
-                local coords = (tostring(area_name) == "Bounds") and group.Bounds or group.GroupAreas[area_name]
-                local x1 = coords[1]
-                local x2 = coords[2]
-                local y1 = coords[3]
-                local y2 = coords[4]
+            if base_area_visibility[tostring(area_name)].area_shown
+                and base_area_visibility[tostring(area_name)].group_id ~= nil
+            then
+                local group_id = base_area_visibility[tostring(area_name)].group_id;
+                local group = SSGM:Get(group_id);
+                local coords = (tostring(area_name) == "Bounds") and group.Bounds or group.GroupAreas[area_name];
+                local x1 = coords[1];
+                local x2 = coords[2];
+                local y1 = coords[3];
+                local y2 = coords[4];
                 for i = x1, x2 do
                     for j = y1, y2 do
-                        local cell = getCell():getGridSquare(i, j, getSpecificPlayer(0):getZ())
+                        local cell = getCell():getGridSquare(i, j, getSpecificPlayer(0):getZ());
                         if cell and cell:getFloor() then
-                            cell:getFloor():setHighlightColor(AreaColors[area_name].r, AreaColors[area_name].g,
-                                AreaColors[area_name].b, AreaColors[area_name].a)
-                            cell:getFloor():setHighlighted(true)
+                            cell:getFloor():setHighlightColor(
+                                AreaColors[area_name].r, AreaColors[area_name].g,
+                                AreaColors[area_name].b, AreaColors[area_name].a
+                            );
+                            cell:getFloor():setHighlighted(true);
                         end
                     end
                 end
@@ -651,8 +660,6 @@ function base_area_visibility.event_update_area_highlight()
         end
     end
 end
-
-Events.OnRenderTick.Add(base_area_visibility.event_update_area_highlight)
 
 function wrap_set_group_role(func)
     return function(...)
