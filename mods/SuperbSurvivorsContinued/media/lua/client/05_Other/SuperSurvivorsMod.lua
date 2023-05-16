@@ -5,72 +5,28 @@ require "05_Other/SuperSurvivorManager";
 
 -- WIP - Cows: ... what was the plan for this "OnTickTicks"? and what "other mods" may call it?
 -- To-Do: Change OnTickTicks to NPC_SSM_OnTicks , reason is , I don't know if other mods may try to call that variable.
-OnTickTicks = 0;
-SuperSurvivorSelectAnArea = false;
-SuperSurvivorMouseDownTicks = 0;
-
+TicksCounter = 0;
 local isLocalLoggingEnabled = false;
 
 function SuperSurvivorsOnTick()
-	if (SuperSurvivorSelectAnArea) then
-		if (Mouse.isLeftDown()) then
-			SuperSurvivorMouseDownTicks = SuperSurvivorMouseDownTicks + 1
-		else
-			SuperSurvivorMouseDownTicks = 0
-			SuperSurvivorSelectingArea = 0
-		end
-
-		if (SuperSurvivorMouseDownTicks > 15) then -- 10 acts instant, so a left click would reset the select area finalization.
-			if (Highlightcenter == nil) or (not SuperSurvivorSelectingArea) then
-				Highlightcenter = GetMouseSquare()
-				HighlightX1 = GetMouseSquareX()
-				HighlightX2 = GetMouseSquareX()
-				HighlightY1 = GetMouseSquareY()
-				HighlightY2 = GetMouseSquareY()
-			end
-
-			SuperSurvivorSelectingArea = true
-
-			if (HighlightX1 == nil) or (HighlightX1 > GetMouseSquareX()) then HighlightX1 = GetMouseSquareX() end
-			if (HighlightX2 == nil) or (HighlightX2 <= GetMouseSquareX()) then HighlightX2 = GetMouseSquareX() end
-			if (HighlightY1 == nil) or (HighlightY1 > GetMouseSquareY()) then HighlightY1 = GetMouseSquareY() end
-			if (HighlightY2 == nil) or (HighlightY2 <= GetMouseSquareY()) then HighlightY2 = GetMouseSquareY() end
-		elseif (SuperSurvivorSelectingArea) then
-			SuperSurvivorSelectingArea = false
-		end
-
-		if (Mouse.isLeftPressed()) then
-			SuperSurvivorSelectAreaHOLD = false -- I did a folder scan, this var doesn't do anything?
-			SuperSurvivorSelectingArea = false -- new
-		end
-
-		if (HighlightX1) and (HighlightX2) then
-			local x1 = HighlightX1
-			local x2 = HighlightX2
-			local y1 = HighlightY1
-			local y2 = HighlightY2
-
-			for xx = x1, x2 do
-				for yy = y1, y2 do
-					local sq = getCell():getGridSquare(xx, yy, getSpecificPlayer(0):getZ())
-					if (sq) and (sq:getFloor()) then sq:getFloor():setHighlighted(true) end
-				end
-			end
-		end
-	end
-
+	local isLocalFunctionLoggingEnabled = false;
 	if SSM ~= nil and getGameSpeed() ~= 0 then
-		SSM:update()
-		OnTickTicks = OnTickTicks + 1
+		SSM:update();
+		TicksCounter = TicksCounter + 1;
 
-		if (OnTickTicks % 1000 == 0) then
-			SSGM:Save()
-			SaveSurvivorMap()
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsOnTick() called");
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Current Tick: " .. tostring(TicksCounter));
+
+		if (TicksCounter % 1000 == 0) then
+			CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
+			SSGM:Save();
+			SaveSurvivorMap();
+			TicksCounter = 0; -- Cows: Reset the counter, which should reduce the memory usage.
 		end
 	end
 end
 
-Events.OnRenderTick.Add(SuperSurvivorsOnTick)
+Events.OnRenderTick.Add(SuperSurvivorsOnTick);
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorRandomSpawn(square)
@@ -85,15 +41,15 @@ function SuperSurvivorRandomSpawn(square)
 	end
 
 	if (ASuperSurvivor ~= nil) then
-		if (ZombRand(100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
+		if (ZombRand(0, 100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
-		elseif (ZombRand(100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
+		elseif (ZombRand(0, 100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
 		end
-		if (ZombRand(100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
+		if (ZombRand(0, 100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
 	end
 
 	-- clear the immediate area
@@ -166,8 +122,8 @@ function SuperSurvivorsLoadGridsquare(square)
 			square:getModData().SurvivorSquareLoaded = true
 			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 
-			if (BaseNpcSpawnRate ~= 0)
-				and (ZombRand(BaseNpcSpawnRate + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
+			if (BaseNpcSpawnChance ~= 0)
+				and (ZombRand(BaseNpcSpawnChance + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
 				and (square:getZoneType() == "TownZone")
 				and (not square:isSolid())
 			then
@@ -294,7 +250,7 @@ Events.OnWeaponSwing.Add(SuperSurvivorsOnSwing)
 
 -- WIP - Cows: getContextMenuText() is a globl function... should consider updating the casing to reflect that.
 function getContextMenuText(text)
-    return getText("ContextMenu_SS_" .. text)
+	return getText("ContextMenu_SS_" .. text)
 end
 
 --[[
@@ -633,11 +589,6 @@ Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
 -- ALT SPAWNING
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorsNewSurvivorManager()
-	-- To make sure if the player has chosen not to use Alt spawning
-	if (AlternativeSpawning == 1) or (getSpecificPlayer(0):isAsleep()) then
-		return false
-	end
-
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
 	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
 
@@ -714,7 +665,7 @@ function SuperSurvivorsNewSurvivorManager()
 	if (success) and (spawnSquare) then
 		-- ALT SPAWNING SECTION --
 		-- SURVIVOR, NON RAIDER SPAWNING
-		-- WIP - Cows: Then the hell are survivors called Raiders? Need to rename those for context...
+		-- WIP - Cows: Then why the hell are survivors called Raiders? Need to rename those for context...
 		local RaiderGroup = SSGM:newGroup()
 		local GroupSize = ZombRand(1, AltSpawnGroupSize)
 
@@ -730,7 +681,7 @@ function SuperSurvivorsNewSurvivorManager()
 			--else RaiderGroup:addMember(raider,"Guard") end
 
 			-- Updated so alt spawns can decide to be hostile or not.
-			if (ZombRand(100) < FinalChanceToBeHostile) then
+			if (ZombRand(0, 100) < FinalChanceToBeHostile) then
 				raider:setHostile(true)
 			else
 				raider:setHostile(false)
@@ -765,9 +716,14 @@ end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorDoRandomSpawns()
-	local RealAlternativeSpawning = AlternativeSpawning - 1;
+	if (getSpecificPlayer(0) == nil) then return false end
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorDoRandomSpawns() called");
+	local spawnChanceVal = AlternativeSpawnChance;
+	local isSpawning = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
-	for i = RealAlternativeSpawning, 1, -1 do
+	if (isSpawning) then
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "spawning npc survivor...");
 		SuperSurvivorsNewSurvivorManager();
 	end
 end
@@ -777,6 +733,7 @@ Events.EveryHours.Add(SuperSurvivorDoRandomSpawns);
 -- Do not be confused, the naming scheme means nothing here.
 
 function SuperSurvivorsRaiderManager()
+	local isLocalFunctionLoggingEnabled = false;
 	if (getSpecificPlayer(0) == nil) then return false end
 	--this unrelated to raiders but need this to run every once in a while
 	getSpecificPlayer(0):getModData().hitByCharacter = false
@@ -787,7 +744,7 @@ function SuperSurvivorsRaiderManager()
 		SSM:AsleepHealAll()
 	end
 
-	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then 
+	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then
 		getSpecificPlayer(0):getModData().LastRaidTime = (RaidersStartAfterHours + 2);
 	end
 
@@ -799,9 +756,10 @@ function SuperSurvivorsRaiderManager()
 
 	local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
 	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
-	local RaiderResult = (spawnChanceVal > ZombRand(100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
+	local RaiderResult = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
 	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "spawning raiders...");
 		local hisGroup = mySS:getGroup()
 
 		if (hisGroup == nil) then return false end
