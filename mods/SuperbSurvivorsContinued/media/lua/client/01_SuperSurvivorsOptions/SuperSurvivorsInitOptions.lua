@@ -23,7 +23,8 @@ local isLocalLoggingEnabled = false;
 	6 - fourty percent
 	7 - fifty percent
 --]]
-AlternativeSpawning = 2; -- WIP - Cows: Confusing spawning mechanics... needs another look...
+-- Cows: AlternativeSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
+AlternativeSpawnChance = 5; -- WIP - Cows: Confusing spawning mechanics... needs another look...
 AltSpawnGroupSize = 1;
 --[[
 	SpawnRate
@@ -40,7 +41,8 @@ AltSpawnGroupSize = 1;
 	1000 - "Extremely High"
 	400 - "Ultra High"
 --]]
-BaseNpcSpawnRate = 0;     -- WIP - Cows: Default to Off by default.
+-- Cows: BaseNpcSpawnChance (formerly "SpawnRate") is used when the player enters an unvisited map area
+BaseNpcSpawnChance = 0;     -- WIP - Cows: Default to Off by default.
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 17; -- Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value
 NoPresetSpawn = true;     -- Cows: true to disable preset spawns.

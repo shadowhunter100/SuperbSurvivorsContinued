@@ -36,23 +36,6 @@ function SuperSurvivorManager:setPlayer(player, ID)
 	return self.SuperSurvivors[ID];
 end
 
-function SuperSurvivorManager:switchPlayer(newID)
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:switchPlayer() called");
-	self.SuperSurvivors[newID].player:setBlockMovement(false)
-	self.SuperSurvivors[newID].player:setNPC(false)
-
-	self.SuperSurvivors[self.MainPlayer].player:setBlockMovement(true)
-	self.SuperSurvivors[self.MainPlayer].player:setNPC(true)
-
-	IsoPlayer.setInstance(self.SuperSurvivors[newID].player)
-	IsoPlayer.setLocalPlayer(0, self.SuperSurvivors[newID].player)
-
-	self.MainPlayer = newID
-
-	getSpecificPlayer(0):initSpritePartsEmpty();
-	getPlayerData(0).playerInventory:refreshBackpacks();
-end
-
 function SuperSurvivorManager:LoadSurvivor(ID, square)
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:LoadSurvivor() called");
 	if (not checkSaveFileExists("Survivor" .. tostring(ID))) then return false end
@@ -170,14 +153,17 @@ function SuperSurvivorManager:OnDeath(ID)
 	self.SuperSurvivors[ID] = nil
 end
 
-function SuperSurvivorManager:update()
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:update() called");
+function SuperSurvivorManager:UpdateSurvivorsRoutine()
+	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:UpdateSurvivorsRoutine() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
-			if (self.SuperSurvivors[i].TargetSquare ~= nil and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ() and getGameSpeed() > 1) then
-				self.SuperSurvivors[i].TargetSquare = nil
-				self.SuperSurvivors[i]:StopWalk()
-				self.SuperSurvivors[i]:Wait(10)
+			if (self.SuperSurvivors[i].TargetSquare ~= nil
+					and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ()
+					and getGameSpeed() > 1)
+			then
+				self.SuperSurvivors[i].TargetSquare = nil;
+				self.SuperSurvivors[i]:StopWalk();
+				self.SuperSurvivors[i]:Wait(10);
 			end
 		end
 
@@ -186,7 +172,7 @@ function SuperSurvivorManager:update()
 			and (not self.SuperSurvivors[i].player:isAsleep())
 			and (self.SuperSurvivors[i]:isInCell())
 		then
-			self.SuperSurvivors[i]:update()
+			self.SuperSurvivors[i]:update();
 		end
 	end
 end

@@ -17,6 +17,7 @@
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getModFileWriter(java.lang.String,java.lang.String,boolean,boolean)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getMouseX()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getMouseY()
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getPlayer()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSpecificPlayer(int)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getSoundManager()
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getText(java.lang.String)
@@ -63,6 +64,7 @@
         "getModFileWriter",
         "getMouseX",
         "getMouseY",
+        "getPlayer",
         "getSpecificPlayer",
         "getSoundManager",
         "getText",

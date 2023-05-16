@@ -31,27 +31,29 @@ end
     Log the key-value pairs of a table to a specified file.
 -- ]]
 function LogTableKVPairs(fileName, isEnabled, table)
-    for key, value in pairs(table) do
-        CreateLogLine(fileName, isEnabled, "key:" .. tostring(key) .. " | value: " .. tostring(value));
+    if (isEnabled) then
+        for key, value in pairs(table) do
+            CreateLogLine(fileName, isEnabled, "key:" .. tostring(key) .. " | value: " .. tostring(value));
 
-        if (pairs(value)) then
-            for key1, val1 in pairs(value) do
-                CreateLogLine(fileName, isEnabled,
-                    "key1: " .. tostring(key1) ..
-                    " | val1: " .. tostring(val1)
-                );
+            if (pairs(value)) then
+                for key1, val1 in pairs(value) do
+                    CreateLogLine(fileName, isEnabled,
+                        "key1: " .. tostring(key1) ..
+                        " | val1: " .. tostring(val1)
+                    );
 
-                if (key1 == "Members") then
-                    CreateLogLine(fileName, isEnabled, "--- BEGIN GROUP MEMBERS LINE BREAK ---");
-                    if (pairs(val1)) then
-                        for memberNo, survivorId in pairs(val1) do
-                            CreateLogLine(fileName, isEnabled,
-                                "memberNo: " .. tostring(memberNo) ..
-                                " | survivorId: " .. tostring(survivorId)
-                            );
+                    if (key1 == "Members") then
+                        CreateLogLine(fileName, isEnabled, "--- BEGIN GROUP MEMBERS LINE BREAK ---");
+                        if (pairs(val1)) then
+                            for memberNo, survivorId in pairs(val1) do
+                                CreateLogLine(fileName, isEnabled,
+                                    "memberNo: " .. tostring(memberNo) ..
+                                    " | survivorId: " .. tostring(survivorId)
+                                );
+                            end
                         end
+                        CreateLogLine(fileName, isEnabled, "--- END GROUP MEMBERS LINE BREAK ---");
                     end
-                    CreateLogLine(fileName, isEnabled, "--- END GROUP MEMBERS LINE BREAK ---");
                 end
             end
         end

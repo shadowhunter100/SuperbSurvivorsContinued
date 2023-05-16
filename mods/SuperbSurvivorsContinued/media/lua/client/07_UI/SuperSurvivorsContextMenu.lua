@@ -211,7 +211,6 @@ function AskToDrop(test, SS)
 	SS:Speak("!!")
 end
 
-
 function OfferArmor(test, SS, item)
 	local player = SS:Get()
 	getSpecificPlayer(0):Say(getActionText("TakeArmor"))
@@ -308,6 +307,21 @@ function CallSurvivor(test, player)
 	local SS = SSM:Get(player:getModData().ID)
 
 	SS:getTaskManager():AddToTop(ListenTask:new(SS, getSpecificPlayer(0), false))
+end
+
+local function contextMenuOnSetName(test, button, SS)
+	if button.internal == "OK" then
+		if button.parent.entry:getText() and button.parent.entry:getText() ~= "" then
+			SS:setName(button.parent.entry:getText())
+		end
+	end
+end
+
+local function contextMenuSetName(test, SS)
+	local name = SS:getName()
+	local modal = ISTextBox:new(0, 0, 280, 180, getContextMenuText("SetName"), name, nil, contextMenuOnSetName, 0, SS)
+	modal:initialise()
+	modal:addToUIManager()
 end
 
 local function survivorMenu(context, o)
@@ -413,7 +427,7 @@ local function survivorMenu(context, o)
 						getContextMenuText("UseGunDesc"))
 				end
 
-				local SetNameOption = submenu:addOption(getContextMenuText("SetName"), nil, SetName, SS, true)
+				local SetNameOption = submenu:addOption(getContextMenuText("SetName"), nil, contextMenuSetName, SS, true)
 			end
 
 			if (SSM:Get(0):hasFood()) then
@@ -481,77 +495,32 @@ function SurvivorsSquareContextHandle(square, context)
 	end
 end
 
-function StartSelectingArea(test, area)
-	for k, v in pairs(SuperSurvivorSelectArea) do
-		SuperSurvivorSelectArea[k] = false
+function SetRulesOfEngagement(test, value)
+	getSpecificPlayer(0):getModData().ROE = value;
+
+	local SS = SSM:Get(0)
+	local group = SS:getGroup()
+	if (group) then
+		group:setROE(value)
+		getSpecificPlayer(0):Say(getContextMenuText("ROESet"));
 	end
+end
 
-	SuperSurvivorSelectArea[area] = true
-	SuperSurvivorSelectAnArea = true
-
+function SetMeleOrGun(test, value)
 	local mySS = SSM:Get(0)
-	local gid = mySS:getGroupID()
-	if (not gid) then return false end
-	local group = SSGM:Get(gid)
-	if (not group) then return false end
-
-	if (area == "BaseArea") then
-		local baseBounds = group:getBounds(baseBounds)
-		HighlightX1 = baseBounds[1]
-		HighlightX2 = baseBounds[2]
-		HighlightY1 = baseBounds[3]
-		HighlightY2 = baseBounds[4]
-		HighlightZ = baseBounds[5]
-	else
-		local bounds = group:getGroupArea(area)
-		HighlightX1 = bounds[1]
-		HighlightX2 = bounds[2]
-		HighlightY1 = bounds[3]
-		HighlightY2 = bounds[4]
-		HighlightZ = bounds[5]
+	if (mySS:getGroupID() ~= nil) then
+		local myGroup = SSGM:Get(mySS:getGroupID())
+		if (myGroup) then
+			if (value == "gun") then
+				mySS:Get():Say(getContextMenuText("EveryOneUseGun"))
+			else
+				mySS:Get():Say(getContextMenuText("EveryOneUseMele"))
+			end
+			myGroup:UseWeaponType(value)
+		end
 	end
 end
 
-function SelectingArea(test, area, value)
-	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "function: SelectingArea() called");
-	-- value 0 means cancel, -1 is clear, 1 is set
-	if (value ~= 0) then
-		if (value == -1) then
-			HighlightX1 = 0
-			HighlightX2 = 0
-			HighlightY1 = 0
-			HighlightY2 = 0
-		end
-
-		local mySS = SSM:Get(0)
-		local gid = mySS:getGroupID()
-		if (not gid) then return false end
-		local group = SSGM:Get(gid)
-		if (not group) then return false end
-
-		if (area == "BaseArea") then
-			local baseBounds = {
-				math.floor(HighlightX1),
-				math.floor(HighlightX2),
-				math.floor(HighlightY1),
-				math.floor(HighlightY2),
-				math.floor(getSpecificPlayer(0):getZ())
-			}
-			group:setBounds(baseBounds);
-			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "set base bounds:" ..
-				tostring(HighlightX1) .. "," ..
-				tostring(HighlightX2) .. " : " .. tostring(HighlightY1) .. "," .. tostring(HighlightY2));
-		else
-			group:setGroupArea(area, math.floor(HighlightX1), math.floor(HighlightX2), math.floor(HighlightY1),
-				math.floor(HighlightY2), getSpecificPlayer(0):getZ())
-		end
-	end
-
-	SuperSurvivorSelectArea[area] = false
-	SuperSurvivorSelectAnArea = false
-end
-
-SuperSurvivorSelectArea = {}
 function SuperSurvivorsAreaSelect(context, area, Display)
 	local selectOption = context:addOption(Display, worldobjects, nil);
 	local submenu = context:getNew(context);
@@ -592,7 +561,6 @@ function SurvivorsFillWorldObjectContextMenu(player, context, worldobjects, test
 	SuperSurvivorsAreaSelect(submenu, "GuardArea", getContextMenuText("GuardArea"))
 
 	context:addSubMenu(selectOption, submenu);
-
 
 	local square = GetMouseSquare();
 
@@ -647,47 +615,6 @@ function SurvivorsFillWorldObjectContextMenu(player, context, worldobjects, test
 	submenu:addSubMenu(MeleOrGunOption, subsubmenu);
 
 	context:addSubMenu(SurvivorOptions, submenu); --Add ">"
-end
-
-function SetRulesOfEngagement(test, value)
-	getSpecificPlayer(0):getModData().ROE = value;
-
-	local SS = SSM:Get(0)
-	local group = SS:getGroup()
-	if (group) then
-		group:setROE(value)
-		getSpecificPlayer(0):Say(getContextMenuText("ROESet"));
-	end
-end
-
-function SetMeleOrGun(test, value)
-	local mySS = SSM:Get(0)
-	if (mySS:getGroupID() ~= nil) then
-		local myGroup = SSGM:Get(mySS:getGroupID())
-		if (myGroup) then
-			if (value == "gun") then
-				mySS:Get():Say(getContextMenuText("EveryOneUseGun"))
-			else
-				mySS:Get():Say(getContextMenuText("EveryOneUseMele"))
-			end
-			myGroup:UseWeaponType(value)
-		end
-	end
-end
-
-function OnSetName(test, button, SS)
-	if button.internal == "OK" then
-		if button.parent.entry:getText() and button.parent.entry:getText() ~= "" then
-			SS:setName(button.parent.entry:getText())
-		end
-	end
-end
-
-function SetName(test, SS)
-	local name = SS:getName()
-	local modal = ISTextBox:new(0, 0, 280, 180, getContextMenuText("SetName"), name, nil, OnSetName, 0, SS)
-	modal:initialise()
-	modal:addToUIManager()
 end
 
 Events.OnFillWorldObjectContextMenu.Add(SurvivorsFillWorldObjectContextMenu);
