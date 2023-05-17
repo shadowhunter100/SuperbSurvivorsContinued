@@ -19,8 +19,8 @@ Events.OnRenderTick.Add(SuperSurvivorsOnTick);
 -- WIP - Cows: Ticks are calculated very inconsistently... 1 in-game minute is about 2 seconds IRL time
 -- The data is also saved when the user presses the "Esc" key under SuperSurvivorKeyBindAction()... so is this even needed?
 function SuperSurvivorsSaveData()
-	local isLocalFunctionLoggingEnabled = true;
-	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsOnTick() called");
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsSaveData() called");
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
 	SSM:SaveAll();
 	SSGM:Save();
@@ -55,12 +55,12 @@ function SuperSurvivorRandomSpawn(square)
 
 	if (ASuperSurvivor ~= nil) then
 		if (ZombRand(0, 100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
+			ASuperSurvivor:giveWeapon(SS_RangeWeapons[ZombRand(1, #SS_RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 		elseif (ZombRand(0, 100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
+			ASuperSurvivor:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)], true)
 		end
 		if (ZombRand(0, 100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
 	end
@@ -89,29 +89,16 @@ function SuperSurvivorsLoadGridsquare(square)
 		local key = x .. y .. z
 
 		if (SurvivorMap == nil) then
-			SSM:init()
-			SSGM:Load()
-
-			-- I don't think we need this now? But Further testing is needed
-			-- WIP - Cows: IS IT SAFE TO REMOVE? AND WHICH ARE NOT SAFE TO REMOVE?
-			local gameVersion = getCore():getGameVersion()
-			IsDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() > 50 and gameVersion:getMinor() < 53)
-			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
-
-			if IsDamageBroken then
-				HostileSpawnRateMax = 0
-			end
-			if IsDamageBroken then
-				RaidersStartAfterHours = 9999999
-			end
+			SSM:init();
+			SSGM:Load();
 
 			if (DoesFileExist("SurvivorLocX")) then
 				SurvivorMap = LoadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
 			else
-				SurvivorMap = {}
-				SurvivorLocX = {}
-				SurvivorLocY = {}
-				SurvivorLocZ = {}
+				SurvivorMap = {};
+				SurvivorLocX = {};
+				SurvivorLocY = {};
+				SurvivorLocZ = {};
 			end
 		end
 
@@ -171,7 +158,7 @@ function SuperSurvivorsLoadGridsquare(square)
 						end
 
 						if (raider:hasWeapon() == false) then
-							raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]);
+							raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
 						end
 					end
 				else
@@ -291,16 +278,19 @@ function SurvivorOrder(player, order, orderParam)
 		TaskMangerIn:setTaskUpdateLimit(0)
 
 		ASuperSurvivor:setWalkingPermitted(true)
+		TaskMangerIn:clear();
 
 		local followtask = TaskMangerIn:getTaskFromName("Follow") --giving an outright order should remove follow so that "needToFollow" function will not detect a follow task and calc followdistance >
-		if (followtask) then followtask:ForceComplete() end
+
+		if (followtask) then
+			followtask:ForceComplete();
+		end
 
 		if (order == "Loot Room") and (orderParam ~= nil) then
 			TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding(), orderParam, 0))
 		elseif (order == "Follow") then
 			ASuperSurvivor:setAIMode("Follow")
 			ASuperSurvivor:setGroupRole("Follow")
-			TaskMangerIn:clear()
 			ASuperSurvivor:setGroupRole(GetJobText("Companion"))
 			TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
 			ASuperSurvivor:setAIMode("Follow")
@@ -333,7 +323,6 @@ function SurvivorOrder(player, order, orderParam)
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end -- To prevent follower companion tasks overwrite
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(ReturnToBaseTask:new(ASuperSurvivor))
 		elseif (order == "Explore") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
@@ -344,18 +333,15 @@ function SurvivorOrder(player, order, orderParam)
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() ~= nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding()))
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() == nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, nil))
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
 		elseif (order == "Barricade") then
@@ -545,6 +531,8 @@ function SuperSurvivorKeyBindAction(keyNum)
 			superSurvivorsHotKeyOrder(19);
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key, Order "Barricade"
 			superSurvivorsHotKeyOrder(1);
+		elseif (keyNum == getCore():getKey("NumPad_5")) then
+			LogSSDebugInfo();
 		end
 	end
 end
@@ -690,7 +678,7 @@ function SuperSurvivorsNewSurvivorManager()
 			-- raider:setName("Raider "..name)
 			raider:setName("Survivor " .. name)
 			raider:getTaskManager():AddToTop(WanderTask:new(raider))
-			if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+			if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
 
 			local food, bag
 			bag = raider:getBag()
@@ -832,7 +820,7 @@ function SuperSurvivorsRaiderManager()
 				local name = raider:getName()
 				raider:setName("Raider " .. name)
 				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()))
-				if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+				if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
 
 				local food, bag
 				bag = raider:getBag()

@@ -29,7 +29,7 @@ function SuperSurvivorPlayerInit(player)
 
 		local wife
 		if (player:getModData().WifeID == nil)
-			and (WifeSpawn == true)
+			and (IsWifeSpawn)
 		then
 			player:getModData().WifeID = 0;
 
@@ -195,7 +195,7 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 			SSM:PublicExecution(SSW, SSV)
 		end
 
-		if IsNpcDamageBroken and instanceof(victim, "IsoPlayer") and instanceof(wielder, "IsoPlayer") and not (victim:isLocalPlayer()) then
+		if instanceof(victim, "IsoPlayer") and instanceof(wielder, "IsoPlayer") and not (victim:isLocalPlayer()) then
 			if weapon:getType() == "BareHands" then
 				return
 			end

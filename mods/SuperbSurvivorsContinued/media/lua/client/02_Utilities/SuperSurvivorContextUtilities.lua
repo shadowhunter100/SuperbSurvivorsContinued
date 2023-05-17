@@ -264,7 +264,8 @@ function GetCenterSquareFromArea(x1, x2, y1, y2, z)
 
 	local result = getCell():getGridSquare(x1 + math.floor(xdiff / 2), y1 + math.floor(ydiff / 2), z)
 
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetCenterSquareFromArea() End ---");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"--- function: GetCenterSquareFromArea() End ---");
 	return result
 end
 
@@ -410,14 +411,14 @@ function GetUnlockedDoor(building, character)
 	local bdef = building:getDef()
 
 	for x = bdef:getX() - 1, (bdef:getX() + bdef:getW() + 1) do
-
 		for y = bdef:getY() - 1, (bdef:getY() + bdef:getH() + 1) do
 			local sq = getCell():getGridSquare(x, y, character:getZ())
 
 			if (sq) then
 				local Objs = sq:getObjects();
 				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
-				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "Objects size: " .. tostring(Objs:size() - 1));
+				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+					"Objects size: " .. tostring(Objs:size() - 1));
 
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
@@ -426,7 +427,6 @@ function GetUnlockedDoor(building, character)
 						if (instanceof(Object, "IsoDoor"))
 							and (Object:isExteriorDoor(character))
 							and (distance < closestSoFar) then
-
 							if (not Object:isLocked()) then
 								closestSoFar = distance;
 								DoorOut = Object;
@@ -477,7 +477,8 @@ function NumberOfZombiesInOrAroundBuilding(building)
 		end
 	end
 
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: NumberOfZombiesInOrAroundBuilding() END ---");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"--- function: NumberOfZombiesInOrAroundBuilding() END ---");
 	return count
 end
 
@@ -495,11 +496,13 @@ function GetRandomBuildingSquare(building)
 		return sq
 	end
 
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomBuildingSquare() END ---");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"--- function: GetRandomBuildingSquare() END ---");
 	return nil
 end
 
 --- gets a random and free square inside of a building (it tries 100 of times until it finds so be careful using it)
+--- WIP - Cows: There must be a better way to handle it rather than try-spamming multiple times...
 ---@param building any
 ---@return any returns a random square inside of the building
 function GetRandomFreeBuildingSquare(building)
@@ -521,7 +524,8 @@ function GetRandomFreeBuildingSquare(building)
 		end
 	end
 
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "--- function: GetRandomFreeBuildingSquare() END ---");
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
+		"--- function: GetRandomFreeBuildingSquare() END ---");
 	return nil
 end
 

@@ -1,294 +1,328 @@
 require "05_Other/SuperSurvivorManager";
 require "04_Group/SuperSurvivorGroupManager";
 
+local isLocalLoggingEnabled = false;
+
 SuperSurvivor = {}
 SuperSurvivor.__index = SuperSurvivor
 
-SurvivorVisionCone = 0.90
+--- Cows: The SuperSurvivor:new(), :newLoad(), newSet() shared about 50 identical properties... there was no reason to duplicate all that.
+---@return table
+function SuperSurvivor:CreateBaseSurvivorObject()
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "CreateBaseSurvivorObject:new() called");
+	local survivorObject = {};
+	setmetatable(survivorObject, self)
+	self.__index = self;
 
-local isLocalLoggingEnabled = false;
+	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
+	survivorObject.AttackRange = 0.5;
+	survivorObject.UsingFullAuto = false;
+	survivorObject.UpdateDelayTicks = 20;
+	survivorObject.NumberOfBuildingsLooted = 0;
+	survivorObject.GroupBraveryBonus = 0;
+	survivorObject.GroupBraveryUpdatedTicks = 0;
+	survivorObject.WaitTicks = 0;
+	survivorObject.AtkTicks = 2;
+	survivorObject.TriggerHeldDown = false;
 
-function SetSurvivorDress(mapKey)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorDress() called");
-	local dress = "RandomBasic"
-	local dressTable = {
-		[1] = "Preset_MarinesCamo",
-		[2] = "Preset_ArmyCamo",
-		[3] = "Preset_Army",
-		[4] = "Preset_Guard"
-	}
+	survivorObject.AmmoTypes = {};
+	survivorObject.AmmoBoxTypes = {};
+	survivorObject.LastGunUsed = nil;
+	survivorObject.LastMeleUsed = nil;
+	survivorObject.roundChambered = nil;
+	survivorObject.TicksSinceSpoke = 0;
+	survivorObject.JustSpoke = false;
+	survivorObject.SayLine1 = "";
 
-	if (dressTable[mapKey]) then
-		dress = dressTable[mapKey]
-	end
+	survivorObject.LastSurvivorSeen = nil;
+	survivorObject.LastMemberSeen = nil;
+	survivorObject.TicksAtLastDetectNoFood = 0;
+	survivorObject.NoFoodNear = false;
+	survivorObject.TicksAtLastDetectNoWater = 0;
+	survivorObject.NoWaterNear = false;
+	survivorObject.GroupRole = "";
+	survivorObject.seenCount = 0;
+	survivorObject.dangerSeenCount = 0;
+	survivorObject.LastEnemeySeen = false;
+	survivorObject.Reducer = ZombRand(1, 100);
+	survivorObject.Container = false;
+	survivorObject.Room = false;
+	survivorObject.Building = false;
+	survivorObject.WalkingPermitted = true;
+	survivorObject.TargetBuilding = nil;
+	survivorObject.TargetSquare = nil;
+	survivorObject.Tree = false;
+	survivorObject.LastSquare = nil;
+	survivorObject.TicksSinceSquareChanged = 0;
+	survivorObject.StuckDoorTicks = 0;
+	survivorObject.StuckCount = 0;
+	survivorObject.EnemiesOnMe = 0;
+	survivorObject.BaseBuilding = nil;
 
-	return dress
+	survivorObject.GoFindThisCounter = 0;
+	survivorObject.PathingCounter = 0;
+	survivorObject.SpokeToRecently = {};
+	survivorObject.SquareWalkToAttempts = {};
+	survivorObject.SquaresExplored = {};
+	survivorObject.SquareContainerSquareLooteds = {};
+
+	return survivorObject;
 end
 
-function SetSurvivorWeapon(mapKey)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorWeapon() called");
-	local weapon = "Base.Pistol3";
-	local weaponTableDefault = {
-		[1] = "Base.AssaultRifle",
-		[2] = "Base.AssaultRifle",
-		[3] = "Base.AssaultRifle"
-	};
-
-	if (weaponTableDefault[mapKey]) then
-		weapon = weaponTableDefault[mapKey];
+function SuperSurvivor:spawnPlayer(square, isFemale)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
+	local BuddyDesc
+	-- defaults to creating a female survivor if isFemale is nil.
+	if (isFemale == nil) then
+		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true)
+	else
+		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale)
 	end
 
-	return weapon;
+	SurvivorFactory.randomName(BuddyDesc);
+
+	local Z = 0
+	if (square:isSolidFloor()) then
+		Z = square:getZ()
+	end
+
+	local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), Z)
+
+	Buddy:setSceneCulled(false)
+	Buddy:setBlockMovement(true)
+	Buddy:setNPC(true);
+
+	-- required perks ------------
+	for i = 0, 4 do
+		Buddy:LevelPerk(Perks.FromString("Strength"));
+	end
+
+	for i = 0, 2 do
+		Buddy:LevelPerk(Perks.FromString("Sneak"));
+	end
+
+	for i = 0, 3 do
+		Buddy:LevelPerk(Perks.FromString("Lightfoot"));
+	end
+	-- random perks -------------------
+	local level = ZombRand(9, 14);
+	local count = 0;
+
+	while (count < level) do
+		local aperk = Perks.FromString(GetAPerk())
+		if (aperk ~= nil) and (tostring(aperk) ~= "MAX") then
+			Buddy:LevelPerk(aperk)
+		end
+		count = count + 1;
+	end
+
+	local traits = Buddy:getTraits()
+
+	Buddy:getTraits():add("Inconspicuous")
+	Buddy:getTraits():add("Outdoorsman")
+	Buddy:getTraits():add("LightEater")
+	Buddy:getTraits():add("LowThirst")
+	Buddy:getTraits():add("FastHealer")
+	Buddy:getTraits():add("Graceful")
+	Buddy:getTraits():add("IronGut")
+	Buddy:getTraits():add("Lucky")
+	Buddy:getTraits():add("KeenHearing")
+
+	Buddy:getModData().bWalking = false
+	Buddy:getModData().isHostile = false
+	Buddy:getModData().RWP = SurvivorFriendliness;
+	Buddy:getModData().AIMode = "Random Solo"
+
+	ISTimedActionQueue.clear(Buddy)
+	-- Note todo: Option to hide display names
+	local namePrefix = ""
+	local namePrefixAfter = ""
+
+	if (Buddy:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
+		namePrefix = getName("DoctorPrefix_Before")
+		namePrefixAfter = getName("DoctorPrefix_After")
+	end
+
+	if (Buddy:getPerkLevel(Perks.FromString("Aiming")) >= 5) then
+		namePrefix = getName("SD_VeteranPrefix_Before")
+		namePrefixAfter = getName("VeteranPrefix_After")
+	end
+
+	if (Buddy:getPerkLevel(Perks.FromString("Farming")) >= 3) then
+		namePrefix = getName("FarmerPrefix_Before")
+		namePrefixAfter = getName("FarmerPrefix_After")
+	end
+
+	local nameToSet
+	if (Buddy:getModData().Name == nil) then
+		if Buddy:isFemale() then
+			nameToSet = GetRandomName("GirlNames")
+		else
+			nameToSet = GetRandomName("BoyNames")
+		end
+	else
+		nameToSet = Buddy:getModData().Name
+	end
+
+	nameToSet = namePrefix .. nameToSet .. namePrefixAfter
+
+	Buddy:setForname(nameToSet);
+	Buddy:setDisplayName(nameToSet);
+
+	Buddy:getStats():setHunger((ZombRand(10) / 100))
+	Buddy:getStats():setThirst((ZombRand(10) / 100))
+
+	Buddy:getModData().Name = nameToSet
+	Buddy:getModData().NameRaw = nameToSet
+
+	local desc = Buddy:getDescriptor()
+	desc:setForename(nameToSet)
+	desc:setSurname("")
+
+	return Buddy
 end
 
+---comment
+---@param isFemale any
+---@param square any
+---@return table
 function SuperSurvivor:new(isFemale, square)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:new() called");
-	local survivorObject = {}
+	local survivorObject = SuperSurvivor:CreateBaseSurvivorObject();
 	setmetatable(survivorObject, self)
-	self.__index = self
-	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
-	survivorObject.UpdateDelayTicks = 20
-	survivorObject.NumberOfBuildingsLooted = 0
-	survivorObject.AttackRange = 0.5
-	survivorObject.UsingFullAuto = false
-	survivorObject.GroupBraveryBonus = 0
-	survivorObject.GroupBraveryUpdatedTicks = 0
-	survivorObject.WaitTicks = 0
-	survivorObject.AtkTicks = 2
-	survivorObject.TriggerHeldDown = false
-	survivorObject.player = survivorObject:spawnPlayer(square, isFemale)
-	survivorObject.userName = TextDrawObject.new()
+	self.__index = self;
+
+	survivorObject.BravePoints = 0;
+	survivorObject.Shirt = nil;
+	survivorObject.Pants = nil;
+	survivorObject.WasOnScreen = false;
+
+	survivorObject.NoResultActions = {};
+	survivorObject.YesResultActions = {};
+	survivorObject.ContinueResultActions = {};
+	survivorObject.TriggerName = "";
+
+	survivorObject.player = survivorObject:spawnPlayer(square, isFemale);
+	survivorObject.userName = TextDrawObject.new();
 	survivorObject.userName:setAllowAnyImage(true);
 	survivorObject.userName:setDefaultFont(UIFont.Small);
 	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
-	survivorObject.userName:ReadString(survivorObject.player:getForname())
+	survivorObject.userName:ReadString(survivorObject.player:getForname());
 
-	survivorObject.NoResultActions = {}
-	survivorObject.YesResultActions = {}
-	survivorObject.ContinueResultActions = {}
-	survivorObject.TriggerName = ""
+	survivorObject.MyTaskManager = TaskManager:new(survivorObject);
 
-	survivorObject.AmmoTypes = {}
-	survivorObject.AmmoBoxTypes = {}
-	survivorObject.LastGunUsed = nil
-	survivorObject.LastMeleUsed = nil
-	survivorObject.roundChambered = nil
-	survivorObject.TicksSinceSpoke = 0
-	survivorObject.JustSpoke = false
-	survivorObject.SayLine1 = ""
-
-	survivorObject.LastSurvivorSeen = nil
-	survivorObject.LastMemberSeen = nil
-	survivorObject.TicksAtLastDetectNoFood = 0
-	survivorObject.NoFoodNear = false
-	survivorObject.TicksAtLastDetectNoWater = 0
-	survivorObject.NoWaterNear = false
-	survivorObject.GroupRole = ""
-	survivorObject.seenCount = 0
-	survivorObject.dangerSeenCount = 0
-	survivorObject.MyTaskManager = TaskManager:new(survivorObject)
-	survivorObject.LastEnemeySeen = false
-	survivorObject.Reducer = ZombRand(1, 100)
-	survivorObject.Container = false
-	survivorObject.Room = false
-	survivorObject.Building = false
-	survivorObject.WalkingPermitted = true
-	survivorObject.TargetBuilding = nil
-	survivorObject.TargetSquare = nil
-	survivorObject.Tree = false
-	survivorObject.LastSquare = nil
-	survivorObject.TicksSinceSquareChanged = 0
-	survivorObject.StuckDoorTicks = 0
-	survivorObject.StuckCount = 0
-	survivorObject.EnemiesOnMe = 0
-	survivorObject.BaseBuilding = nil
-	survivorObject.BravePoints = 0
-	survivorObject.Shirt = nil
-	survivorObject.Pants = nil
-	survivorObject.WasOnScreen = false
-
-	survivorObject.PathingCounter = 0
-	survivorObject.GoFindThisCounter = 0
-	survivorObject.SpokeToRecently = {}
-	survivorObject.SquareWalkToAttempts = {}
-	survivorObject.SquaresExplored = {}
-	survivorObject.SquareContainerSquareLooteds = {}
-
-	for i = 1, #LootTypes do
-		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {}
-	end
-
-	survivorObject:setBravePoints(SuperSurvivorBravery)
-	local Dress = "RandomBasic"
-
-	-- Dress according to the Aiming skill level
-	if (survivorObject.player:getPerkLevel(Perks.FromString("Aiming")) >= 3) then
-		local mapKey = ZombRand(1, 6)
-		Dress = SetSurvivorDress(mapKey)
-		survivorObject:giveWeapon(SetSurvivorWeapon(mapKey))
-		-- else assumes "Aiming" is less than 3
-	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
-		Dress = "Preset_Doctor"
-		survivorObject:giveWeapon(SetSurvivorWeapon(4))
-	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Cooking")) >= 3) then
-		Dress = "Preset_Chef"
-		survivorObject:giveWeapon(SetSurvivorWeapon(4))
-	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Farming")) >= 3) then
-		Dress = "Preset_Farmer"
-		survivorObject:giveWeapon(SetSurvivorWeapon(4))
-	end
-
-	survivorObject:SuitUp(Dress)
-
-	return survivorObject
-end
-
-function SuperSurvivor:newLoad(ID, square)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newLoad() called");
-	local survivorObject = {}
-	setmetatable(survivorObject, self)
-	self.__index = self
-
-	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
-	survivorObject.AttackRange = 0.5
-	survivorObject.UsingFullAuto = false
-	survivorObject.UpdateDelayTicks = 20
-	survivorObject.GroupBraveryBonus = 0
-	survivorObject.GroupBraveryUpdatedTicks = 0
-	survivorObject.NumberOfBuildingsLooted = 0
-	survivorObject.WaitTicks = 0
-	survivorObject.AtkTicks = 2
-	survivorObject.TriggerHeldDown = false
-	survivorObject.player = survivorObject:loadPlayer(square, ID)
-
-	survivorObject.userName = TextDrawObject.new()
-	survivorObject.userName:setAllowAnyImage(true);
-	survivorObject.userName:setDefaultFont(UIFont.Small);
-	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
-	survivorObject.userName:ReadString(survivorObject.player:getForname())
-
-	survivorObject.NoResultActions = {}
-	survivorObject.YesResultActions = {}
-	survivorObject.ContinueResultActions = {}
-	survivorObject.TriggerName = ""
-
-	survivorObject.AmmoTypes = {}
-	survivorObject.AmmoBoxTypes = {}
-	survivorObject.LastGunUsed = nil
-	survivorObject.LastMeleUsed = nil
-	survivorObject.roundChambered = nil
-	survivorObject.TicksSinceSpoke = 0
-	survivorObject.JustSpoke = false
-	survivorObject.SayLine1 = ""
-
-	survivorObject.LastSurvivorSeen = nil
-	survivorObject.LastMemberSeen = nil
-	survivorObject.TicksAtLastDetectNoFood = 0
-	survivorObject.NoFoodNear = false
-	survivorObject.TicksAtLastDetectNoWater = 0
-	survivorObject.NoWaterNear = false
-	survivorObject.GroupRole = ""
-	survivorObject.seenCount = 0
-	survivorObject.dangerSeenCount = 0
-	survivorObject.MyTaskManager = TaskManager:new(survivorObject)
-	survivorObject.LastEnemeySeen = false
-	survivorObject.Reducer = ZombRand(1, 100)
-	survivorObject.Container = false
-	survivorObject.Room = false
-	survivorObject.Building = false
-	survivorObject.WalkingPermitted = true
-	survivorObject.TargetBuilding = nil
-	survivorObject.TargetSquare = nil
-	survivorObject.Tree = false
-	survivorObject.LastSquare = nil
-	survivorObject.TicksSinceSquareChanged = 0
-	survivorObject.StuckDoorTicks = 0
-	survivorObject.StuckCount = 0
-	survivorObject.EnemiesOnMe = 0
-	survivorObject.BaseBuilding = nil
-	survivorObject.BravePoints = 0
-	survivorObject.Shirt = nil
-	survivorObject.Pants = nil
-	survivorObject.WasOnScreen = false
-
-	survivorObject.GoFindThisCounter = 0
-	survivorObject.PathingCounter = 0
-	survivorObject.SpokeToRecently = {}
-	survivorObject.SquareWalkToAttempts = {}
-	survivorObject.SquaresExplored = {}
-	survivorObject.SquareContainerSquareLooteds = {}
-	for i = 1, #LootTypes do
-		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {}
-	end
-	survivorObject:setBravePoints(SuperSurvivorBravery)
-
-	return survivorObject
-end
-
-function SuperSurvivor:newSet(player)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newSet() called");
-	local survivorObject = {}
-	setmetatable(survivorObject, self)
-	self.__index = self
-
-	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
-	survivorObject.AttackRange = 0.5
-	survivorObject.UsingFullAuto = false
-	survivorObject.UpdateDelayTicks = 20
-	survivorObject.NumberOfBuildingsLooted = 0
-	survivorObject.GroupBraveryBonus = 0
-	survivorObject.GroupBraveryUpdatedTicks = 0
-	survivorObject.AmmoTypes = {}
-	survivorObject.AmmoBoxTypes = {}
-	survivorObject.LastGunUsed = nil
-	survivorObject.LastMeleUsed = nil
-	survivorObject.roundChambered = nil
-	survivorObject.TriggerHeldDown = false
-	survivorObject.TicksSinceSpoke = 0
-	survivorObject.JustSpoke = false
-	survivorObject.SayLine1 = ""
-
-	survivorObject.GoFindThisCounter = 0
-	survivorObject.PathingCounter = 0
-	survivorObject.player = player
-	survivorObject.WaitTicks = 0
-	survivorObject.AtkTicks = 2
-	survivorObject.LastSurvivorSeen = nil
-	survivorObject.LastMemberSeen = nil
-	survivorObject.TicksAtLastDetectNoFood = 0
-	survivorObject.NoFoodNear = false
-	survivorObject.TicksAtLastDetectNoWater = 0
-	survivorObject.NoWaterNear = false
-	survivorObject.GroupRole = ""
-	survivorObject.seenCount = 0
-	survivorObject.dangerSeenCount = 0
-	survivorObject.MyTaskManager = TaskManager:new(survivorObject)
-	survivorObject.LastEnemeySeen = false
-	survivorObject.Reducer = ZombRand(1, 100)
-	survivorObject.Container = false
-	survivorObject.Room = false
-	survivorObject.Building = false
-	survivorObject.WalkingPermitted = true
-	survivorObject.TargetBuilding = nil
-	survivorObject.TargetSquare = nil
-	survivorObject.Tree = false
-	survivorObject.LastSquare = nil
-	survivorObject.TicksSinceSquareChanged = 0
-	survivorObject.StuckDoorTicks = 0
-	survivorObject.StuckCount = 0
-	survivorObject.EnemiesOnMe = 0
-	survivorObject.BaseBuilding = nil
-	survivorObject.SquareWalkToAttempts = {}
-	survivorObject.SquaresExplored = {}
-	survivorObject.SpokeToRecently = {}
-	survivorObject.SquareContainerSquareLooteds = {}
 	for i = 1, #LootTypes do
 		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
 	end
 
-	survivorObject:setBravePoints(SuperSurvivorBravery)
+	survivorObject:setBravePoints(SuperSurvivorBravery);
+	local Dress = "RandomBasic";
 
-	return survivorObject
+	-- Dress according to the Aiming skill level
+	if (survivorObject.player:getPerkLevel(Perks.FromString("Aiming")) >= 3) then
+		local mapKey = ZombRand(1, 6);
+		Dress = SetSurvivorDress(mapKey);
+		survivorObject:giveWeapon(SetSurvivorWeapon(mapKey));
+		-- else assumes "Aiming" is less than 3
+	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
+		Dress = "Preset_Doctor";
+		survivorObject:giveWeapon(SetSurvivorWeapon(4))
+	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Cooking")) >= 3) then
+		Dress = "Preset_Chef";
+		survivorObject:giveWeapon(SetSurvivorWeapon(4));
+	elseif (survivorObject.player:getPerkLevel(Perks.FromString("Farming")) >= 3) then
+		Dress = "Preset_Farmer";
+		survivorObject:giveWeapon(SetSurvivorWeapon(4));
+	end
+
+	survivorObject:SuitUp(Dress);
+
+	return survivorObject;
+end
+
+---comment
+---@param square any
+---@param ID any
+---@return any
+function SuperSurvivor:loadPlayer(square, ID)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:loadPlayer() called");
+	-- load from file if save file exists
+	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
+		local BuddyDesc = SurvivorFactory.CreateSurvivor();
+		local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), square:getZ());
+		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
+
+		Buddy:getInventory():emptyIt();
+		Buddy:load(filename);
+		Buddy:setX(square:getX());
+		Buddy:setY(square:getY());
+		Buddy:setZ(square:getZ());
+		Buddy:getModData().ID = ID;
+		Buddy:setNPC(true);
+		Buddy:setBlockMovement(true);
+		Buddy:setSceneCulled(false);
+
+		return Buddy;
+	end
+end
+
+---comment
+---@param ID any
+---@param square any
+---@return table
+function SuperSurvivor:newLoad(ID, square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newLoad() called");
+	local survivorObject = SuperSurvivor:CreateBaseSurvivorObject();
+	setmetatable(survivorObject, self);
+	self.__index = self;
+
+	survivorObject.BravePoints = 0;
+	survivorObject.Shirt = nil;
+	survivorObject.Pants = nil;
+	survivorObject.WasOnScreen = false;
+
+	survivorObject.NoResultActions = {};
+	survivorObject.YesResultActions = {};
+	survivorObject.ContinueResultActions = {};
+	survivorObject.TriggerName = "";
+
+	survivorObject.player = survivorObject:loadPlayer(square, ID);
+	survivorObject.userName = TextDrawObject.new();
+	survivorObject.userName:setAllowAnyImage(true);
+	survivorObject.userName:setDefaultFont(UIFont.Small);
+	survivorObject.userName:setDefaultColors(255, 255, 255, 255);
+	survivorObject.userName:ReadString(survivorObject.player:getForname());
+
+	survivorObject.MyTaskManager = TaskManager:new(survivorObject);
+
+	for i = 1, #LootTypes do
+		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
+	end
+
+	survivorObject:setBravePoints(SuperSurvivorBravery);
+
+	return survivorObject;
+end
+
+---comment
+---@param player any
+---@return table
+function SuperSurvivor:newSet(player)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newSet() called");
+	local survivorObject = SuperSurvivor:CreateBaseSurvivorObject();
+	setmetatable(survivorObject, self);
+	self.__index = self;
+
+	survivorObject.player = player;
+	survivorObject.MyTaskManager = TaskManager:new(survivorObject);
+
+	for i = 1, #LootTypes do
+		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
+	end
+
+	survivorObject:setBravePoints(SuperSurvivorBravery);
+
+	return survivorObject;
 end
 
 function SuperSurvivor:Wait(ticks)
@@ -322,24 +356,6 @@ function SuperSurvivor:getBaseCenter()
 	return nil
 end
 
-function SuperSurvivor:getGroupBraveryBonus()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGroupBraveryBonus() called");
-	if (self.GroupBraveryUpdatedTicks % 5 == 0) then
-		if (self:getGroupID() == nil) then return 0 end
-		local group = SSGM:Get(self:getGroupID())
-		if (group) then
-			self.GroupBraveryBonus = group:getMembersThisCloseCount(12, self:Get())
-		else
-			self.GroupBraveryBonus = 0
-		end
-	else
-		self.GroupBraveryUpdatedTicks = self.GroupBraveryUpdatedTicks + 1
-	end
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "GroupBraveryBonus: " .. tostring(self.GroupBraveryBonus));
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGroupBraveryBonus() end ---");
-	return self.GroupBraveryBonus
-end
-
 function SuperSurvivor:isInGroup(thisGuy)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isInGroup() called");
 	if (self:getGroupID() == nil) then
@@ -350,15 +366,6 @@ function SuperSurvivor:isInGroup(thisGuy)
 		return true
 	else
 		return false
-	end
-end
-
-function SuperSurvivor:isGroupless(thisGuy)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isGroupless() called");
-	if (thisGuy:getModData().Group == nil) then
-		return false
-	else
-		return true
 	end
 end
 
@@ -490,37 +497,6 @@ function SuperSurvivor:getSpokeTo(playerID)
 	end
 end
 
-function SuperSurvivor:reload()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:reload() called");
-	local cs = self.player:getCurrentSquare()
-	local id = self:getID()
-	self:deleteSurvivor()
-	self.player = self:spawnPlayer(cs, nil)
-	self:loadPlayer(cs, id)
-end
-
-function SuperSurvivor:loadPlayer(square, ID)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:loadPlayer() called");
-	-- load from file if save file exists
-	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
-		local BuddyDesc = SurvivorFactory.CreateSurvivor();
-		local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), square:getZ());
-		local filename = GetModSaveDir() .. "Survivor" .. tostring(ID);
-
-		Buddy:getInventory():emptyIt();
-		Buddy:load(filename);
-		Buddy:setX(square:getX())
-		Buddy:setY(square:getY())
-		Buddy:setZ(square:getZ())
-		Buddy:getModData().ID = ID
-		Buddy:setNPC(true);
-		Buddy:setBlockMovement(true)
-		Buddy:setSceneCulled(false)
-
-		return Buddy
-	end
-end
-
 function SuperSurvivor:WearThis(ClothingItemName) -- should already be in inventory
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:WearThis() called");
 	local ClothingItem
@@ -549,119 +525,6 @@ function SuperSurvivor:WearThis(ClothingItemName) -- should already be in invent
 
 	self.player:initSpritePartsEmpty();
 	triggerEvent("OnClothingUpdated", self.player)
-end
-
-function SuperSurvivor:spawnPlayer(square, isFemale)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
-	local BuddyDesc
-	-- defaults to creating a female survivor if isFemale is nil.
-	if (isFemale == nil) then
-		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true)
-	else
-		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale)
-	end
-
-	SurvivorFactory.randomName(BuddyDesc);
-
-	local Z = 0
-	if (square:isSolidFloor()) then
-		Z = square:getZ()
-	end
-
-	local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), Z)
-
-	Buddy:setSceneCulled(false)
-	Buddy:setBlockMovement(true)
-	Buddy:setNPC(true);
-
-	-- required perks ------------
-	for i = 0, 4 do
-		Buddy:LevelPerk(Perks.FromString("Strength"));
-	end
-
-	for i = 0, 2 do
-		Buddy:LevelPerk(Perks.FromString("Sneak"));
-	end
-
-	for i = 0, 3 do
-		Buddy:LevelPerk(Perks.FromString("Lightfoot"));
-	end
-	-- random perks -------------------
-	local level = ZombRand(9, 14);
-	local count = 0;
-
-	while (count < level) do
-		local aperk = Perks.FromString(GetAPerk())
-		if (aperk ~= nil) and (tostring(aperk) ~= "MAX") then
-			Buddy:LevelPerk(aperk)
-		end
-		count = count + 1;
-	end
-
-	local traits = Buddy:getTraits()
-
-	Buddy:getTraits():add("Inconspicuous")
-	Buddy:getTraits():add("Outdoorsman")
-	Buddy:getTraits():add("LightEater")
-	Buddy:getTraits():add("LowThirst")
-	Buddy:getTraits():add("FastHealer")
-	Buddy:getTraits():add("Graceful")
-	Buddy:getTraits():add("IronGut")
-	Buddy:getTraits():add("Lucky")
-	Buddy:getTraits():add("KeenHearing")
-
-	Buddy:getModData().bWalking = false
-	Buddy:getModData().isHostile = false
-	Buddy:getModData().RWP = SurvivorFriendliness;
-	Buddy:getModData().AIMode = "Random Solo"
-
-	ISTimedActionQueue.clear(Buddy)
-	-- Note todo: Option to hide display names
-	local namePrefix = ""
-	local namePrefixAfter = ""
-
-	if (Buddy:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
-		namePrefix = getName("DoctorPrefix_Before")
-		namePrefixAfter = getName("DoctorPrefix_After")
-	end
-
-	if (Buddy:getPerkLevel(Perks.FromString("Aiming")) >= 5) then
-		namePrefix = getName("SD_VeteranPrefix_Before")
-		namePrefixAfter = getName("VeteranPrefix_After")
-	end
-
-	if (Buddy:getPerkLevel(Perks.FromString("Farming")) >= 3) then
-		namePrefix = getName("FarmerPrefix_Before")
-		namePrefixAfter = getName("FarmerPrefix_After")
-	end
-
-	local nameToSet
-	if (Buddy:getModData().Name == nil) then
-		if Buddy:isFemale() then
-			nameToSet = GetRandomName("GirlNames")
-		else
-			nameToSet = GetRandomName("BoyNames")
-		end
-	else
-		nameToSet = Buddy:getModData().Name
-	end
-
-	nameToSet = namePrefix .. nameToSet .. namePrefixAfter
-
-	Buddy:setForname(nameToSet);
-	Buddy:setDisplayName(nameToSet);
-
-	Buddy:getStats():setHunger((ZombRand(10) / 100))
-	Buddy:getStats():setThirst((ZombRand(10) / 100))
-
-	Buddy:getModData().Name = nameToSet
-	Buddy:getModData().NameRaw = nameToSet
-
-	local desc = Buddy:getDescriptor()
-	desc:setForename(nameToSet)
-	desc:setSurname("")
-
-	return Buddy
 end
 
 function SuperSurvivor:setBravePoints(toValue)
@@ -773,18 +636,7 @@ end
 
 -- WIP - Cows: Completely removed the old messy logic; survivors are never scared to fight... for now.
 function SuperSurvivor:isTooScaredToFight()
-	return false
-end
-
-function SuperSurvivor:usingWeapon()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:usingWeapon() called");
-	local handItem = self.player:getPrimaryHandItem()
-
-	if (handItem ~= nil) and (instanceof(handItem, "HandWeapon")) then
-		return true
-	end
-
-	return false
+	return false;
 end
 
 function SuperSurvivor:usingGun()
@@ -1057,19 +909,6 @@ function SuperSurvivor:isTargetBuildingClaimed(building)
 	return false
 end
 
-function SuperSurvivor:isTargetBuildingDangerous()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:isTargetBuildingDangerous() called");
-	if self:isTargetBuildingClaimed(self.TargetBuilding) then return true end
-
-	local result = NumberOfZombiesInOrAroundBuilding(self.TargetBuilding)
-
-	if (result >= 10) and (self:isTooScaredToFight()) then
-		return true
-	end
-
-	return false
-end
-
 function SuperSurvivor:MarkBuildingExplored(building)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:MarkBuildingExplored() called");
 	if (not building) then
@@ -1121,7 +960,7 @@ end
 
 function SuperSurvivor:Speak(text)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Speak() called");
-	if (SpeakEnabled) then
+	if (IsSpeakEnabled) then
 		self.SayLine1 = text
 		self.JustSpoke = true
 		self.TicksSinceSpoke = 0
@@ -1567,7 +1406,7 @@ function SuperSurvivor:RealCanSee(character)
 
 	if (character:isZombie()) then return (self.player:CanSee(character)) end -- normal vision for zombies (they are not quiet or sneaky)
 
-	local visioncone = SurvivorVisionCone
+	local visioncone = 0.90;
 
 	if (character:isSneaking()) then
 		visioncone = visioncone - 0.15
@@ -1576,6 +1415,7 @@ function SuperSurvivor:RealCanSee(character)
 	return (self.player:CanSee(character) and (self.player:getDotWithForwardDirection(character:getX(), character:getY()) + visioncone) >= 1.0)
 end
 
+-- WIP - Cows: DoVision() likely has issues with threat assessment... hence the npcs keep running around like idiots when indoors.
 function SuperSurvivor:DoVision()
 	local isFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:DoVision() called");
@@ -1839,17 +1679,6 @@ function SuperSurvivor:inFrontOfLockedDoorAndIsInside()
 	local door = self:inFrontOfDoor()
 
 	if (door ~= nil) and (door:isLocked() or door:isLockedByKey() or door:isBarricaded()) and (not self.player:isOutside()) then
-		return true
-	else
-		return false
-	end
-end
-
-function SuperSurvivor:inFrontOfBarricadedDoor()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfBarricadedDoor() called");
-	local door = self:inFrontOfDoor()
-
-	if (door ~= nil) and (door:isBarricaded()) then
 		return true
 	else
 		return false
@@ -2122,63 +1951,6 @@ end
 
 function SuperSurvivor:Task_IsNotFleeOrFleeFromSpot()
 	if (not (self:getTaskManager():getCurrentTask() == "Flee")) and (not (self:getTaskManager():getCurrentTask() == "Flee From Spot")) then
-		return true
-	end
-end
-
--- Test Functions
-function SuperSurvivor:TMI_CTOneVar_IsNot(Var1)
-	if (self:getTaskManager():getCurrentTask() ~= Var1) then
-		return true
-	end
-end
-
--- NPC:TMI_CTFourVars_IsNot("Surender", "Flee", "Flee From Spot", "Clean Inventory")
-function SuperSurvivor:TMI_CTFourVars_IsNot(Var1, Var2, Var3, Var4)
-	if (self:getTaskManager():getCurrentTask() ~= Var1)
-		and (self:getTaskManager():getCurrentTask() ~= Var2)
-		and (self:getTaskManager():getCurrentTask() ~= Var3)
-		and (self:getTaskManager():getCurrentTask() ~= Var4)
-	then
-		return true
-	end
-end
-
--- Specialized AIManager Task conditions - SC standing for 'specializied conditions'
-function SuperSurvivor:NPC_NPCsEnemyHasGun()
-	if (self.LastEnemeySeen ~= nil) then
-		local EnemyIsSurvivor = (instanceof(self.LastEnemeySeen, "IsoPlayer"))
-		local EnemySuperSurvivor = nil
-		local LastSuperSurvivor = nil
-		local EnemyIsSurvivorHasGun = false -- this is the one you want to have set true
-		local LastSurvivorHasGun = false
-
-		if (EnemyIsSurvivor) then
-			local id = self.LastEnemeySeen:getModData().ID
-
-			EnemySuperSurvivor = SSM:Get(id)
-			if (EnemySuperSurvivor) then
-				EnemyIsSurvivorHasGun = EnemySuperSurvivor:hasGun()
-				return true
-			end
-		end
-		if (self.LastSurvivorSeen) then
-			local lsid = self.LastSurvivorSeen:getModData().ID
-
-			LastSuperSurvivor = SSM:Get(lsid)
-
-			if (LastSuperSurvivor) then
-				LastSurvivorHasGun = LastSuperSurvivor:hasGun()
-			end
-		end
-	else
-		return false
-	end
-end
-
--- This function isn't being used currently here. It was grabbed from AI manager
-function SuperSurvivor:NPC_IsNPCsEnemyHuman()
-	if (instanceof(self.LastEnemeySeen, "IsoPlayer")) then
 		return true
 	end
 end
@@ -2709,7 +2481,6 @@ function SuperSurvivor:CheckForIfStuck() -- This code was taken out of update() 
 			local yoff = self.player:getY() + ZombRand(-3, 3)
 			self:StopWalk()
 			self:WalkToPoint(xoff, yoff, self.player:getZ())
-			--	self:Wait(2)
 			self:Wait(1)
 		end
 	end
@@ -3418,7 +3189,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 
 	local ammotypes = GetAmmoBullets(weapon);
 	if (ammotypes) then
-		local bwep = self.player:getInventory():AddItem(MeleWeapons[ZombRand(1, #MeleWeapons)]) -- give a beackup mele wepaon if using ammo gun
+		local bwep = self.player:getInventory():AddItem(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) -- give a beackup mele wepaon if using ammo gun
 		if (bwep) then
 			self.player:getModData().weaponmele = bwep:getType()
 			self:setMeleWep(bwep)

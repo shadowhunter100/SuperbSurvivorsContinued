@@ -60,5 +60,65 @@ function LogTableKVPairs(fileName, isEnabled, table)
     end
 end
 
+function LogSSDebugInfo()
+    local playerSurvivor = getSpecificPlayer(0);
+    local isLoggingDebugInfo = true;
+    playerSurvivor:Say("Logging Debug info...");
+
+    local GroupWithActualMembers = 0;
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Groups Data");
+    -- Get the total number of groups
+    for i = 0, SSGM.GroupCount + 1 do
+        if (SSGM.Groups[i] ~= nil and SSM.MainPlayer ~= i) then
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group ID: " .. tostring(i));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Leader ID: " .. tostring(SSGM.Groups[i]:getLeader()));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Total Members: " .. tostring(SSGM.Groups[i]:getMemberCount()));
+
+            if (SSGM.Groups[i]:getMemberCount() > 0) then
+                GroupWithActualMembers = GroupWithActualMembers + 1;
+            end
+        end
+    end
+
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivor Groups: " .. tostring(SSGM.GroupCount));
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+        "Actual Active Groups: " .. tostring(GroupWithActualMembers));
+
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+
+    local actualLivingSurvivors = 0;
+
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Survivors Data");
+    -- Get the total number of survivors
+    for i = 0, SSM.SurvivorCount + 1 do
+        if (SSM.SuperSurvivors[i] ~= nil and SSM.MainPlayer ~= i) then
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Survivor ID: " .. tostring(i));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Survivor Name: " .. tostring(SSM.SuperSurvivors[i]:getName()));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Survivor in Group ID: " .. tostring(SSM.SuperSurvivors[i]:getGroupID()));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Group Role: " .. tostring(SSM.SuperSurvivors[i]:getGroupRole()));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Current Task: " .. tostring(SSM.SuperSurvivors[i]:getCurrentTask()));
+            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                "Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
+            if (not SSM.SuperSurvivors[i]:isDead()) then
+                actualLivingSurvivors = actualLivingSurvivors + 1;
+            end
+        end
+    end
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+        "Actual Living NPCs: " .. tostring(actualLivingSurvivors));
+    playerSurvivor:Say("Logging Debug info complete...");
+end
+
 -- Example usage:
-CreateLogLine("Debugger", isLocalLoggingEnabled, "Start...");
+CreateLogLine("SS_Debugger", isLocalLoggingEnabled, "Start...");

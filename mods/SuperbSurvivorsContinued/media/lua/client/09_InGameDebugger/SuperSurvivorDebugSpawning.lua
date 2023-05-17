@@ -22,7 +22,7 @@ function SuperSurvivorSoldierSpawnMelee(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
+	ASuperSurvivor:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -49,7 +49,7 @@ function SuperSurvivorSoldierSpawnMeleeHostile(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
+	ASuperSurvivor:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
