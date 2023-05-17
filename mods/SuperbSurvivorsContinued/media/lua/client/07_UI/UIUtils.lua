@@ -124,7 +124,7 @@ function UIUtil_GetMemberInfo(member_index)
 end
 
 function UIUtil_GiveOrder(order_index, member_index)
-    local isLoggingSurvivorOrder = true;
+    local isLoggingSurvivorOrder = false;
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "function: UIUtil_GiveOrder() called");
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "order_index: " .. tostring(order_index));
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "member_index: " .. tostring(member_index));

@@ -263,12 +263,12 @@ end
 
 --- Cows: "SurvivorOrder" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
 --- Cows: This also seems to be redundant ... given the player can also order their group members from the SuperSurvivorWindow much faster and simpler.
----@param test any
+---@param test any -- Cows: Even if it is unused this is apparently required for the function to work... otherwise the function simply returns nil.
 ---@param player any
 ---@param order any
 ---@param orderParam any
 function SurvivorOrder(test, player, order, orderParam)
-	local isLoggingSurvivorOrder = true;
+	local isLoggingSurvivorOrder = false;
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "function: SurvivorOrder() called");
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "player: " .. tostring(player));
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "order: " .. tostring(order));
