@@ -527,7 +527,6 @@ function SuperSurvivor:WearThis(ClothingItemName) -- should already be in invent
 	triggerEvent("OnClothingUpdated", self.player)
 end
 
-
 function SuperSurvivor:setBravePoints(toValue)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:setBravePoints() called");
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "BravePoints set to: " .. tostring(toValue));
@@ -1407,7 +1406,7 @@ function SuperSurvivor:RealCanSee(character)
 
 	if (character:isZombie()) then return (self.player:CanSee(character)) end -- normal vision for zombies (they are not quiet or sneaky)
 
-	local visioncone =  0.90;
+	local visioncone = 0.90;
 
 	if (character:isSneaking()) then
 		visioncone = visioncone - 0.15
@@ -1416,6 +1415,7 @@ function SuperSurvivor:RealCanSee(character)
 	return (self.player:CanSee(character) and (self.player:getDotWithForwardDirection(character:getX(), character:getY()) + visioncone) >= 1.0)
 end
 
+-- WIP - Cows: DoVision() likely has issues with threat assessment... hence the npcs keep running around like idiots when indoors.
 function SuperSurvivor:DoVision()
 	local isFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:DoVision() called");
