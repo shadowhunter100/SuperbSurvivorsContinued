@@ -183,3 +183,42 @@ function IsItemArray(t)
 		return false
 	end
 end
+
+---comment
+---@param mapKey any
+---@return string
+function SetSurvivorDress(mapKey)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorDress() called");
+	local dress = "RandomBasic"
+	local dressTable = {
+		[1] = "Preset_MarinesCamo",
+		[2] = "Preset_ArmyCamo",
+		[3] = "Preset_Army",
+		[4] = "Preset_Guard"
+	}
+
+	if (dressTable[mapKey]) then
+		dress = dressTable[mapKey];
+	end
+
+	return dress;
+end
+
+---comment
+---@param mapKey any
+---@return string
+function SetSurvivorWeapon(mapKey)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorWeapon() called");
+	local weapon = "Base.Pistol3";
+	local weaponTableDefault = {
+		[1] = "Base.AssaultRifle",
+		[2] = "Base.AssaultRifle",
+		[3] = "Base.AssaultRifle"
+	};
+
+	if (weaponTableDefault[mapKey]) then
+		weapon = weaponTableDefault[mapKey];
+	end
+
+	return weapon;
+end

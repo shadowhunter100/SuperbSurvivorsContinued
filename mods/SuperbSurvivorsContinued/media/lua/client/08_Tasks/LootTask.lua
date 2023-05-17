@@ -82,7 +82,6 @@ end
 -- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function LootCategoryTask:update()
 	CreateLogLine("LootTask", isLocalLoggingEnabled, "function: LootCategoryTask:update() called");
-	-- added isTargetBuildingDangerousAlt so that it can check if the npc is in the player's base or not
 	if (not self:isValid()) or self.parent:isTooScaredToFight() then
 		self.Complete = true
 		return false
