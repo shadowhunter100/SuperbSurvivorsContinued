@@ -13,6 +13,9 @@ local function insertKeyBinding()
 	local index = nil -- index will be the position we want to insert into the table
 
 	for i, b in ipairs(keyBinding) do
+		CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "index: " .. tostring(i));
+		CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "key: " .. tostring(b.key));
+		CreateLogLine("SuperSurvivorsKeyBindings", isLocalLoggingEnabled, "value: " .. tostring(b.value));
 		-- "Shout" is the NPC interaction section in key.ini
 		if b.value == "Shout" then
 			index = i -- found the index, set it and break from the loop
@@ -34,6 +37,7 @@ local function insertKeyBinding()
 		table.insert(keyBinding, index + 9, { value = "SSHotkey_2", key = 208 });
 		table.insert(keyBinding, index + 10, { value = "SSHotkey_3", key = 203 });
 		table.insert(keyBinding, index + 11, { value = "SSHotkey_4", key = 205 });
+		table.insert(keyBinding, index + 12, { value = "NumPad_5", key = 76 });
 	end
 end
 
