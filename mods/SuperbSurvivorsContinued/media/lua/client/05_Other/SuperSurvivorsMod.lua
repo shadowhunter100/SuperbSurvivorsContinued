@@ -19,8 +19,8 @@ Events.OnRenderTick.Add(SuperSurvivorsOnTick);
 -- WIP - Cows: Ticks are calculated very inconsistently... 1 in-game minute is about 2 seconds IRL time
 -- The data is also saved when the user presses the "Esc" key under SuperSurvivorKeyBindAction()... so is this even needed?
 function SuperSurvivorsSaveData()
-	local isLocalFunctionLoggingEnabled = true;
-	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsOnTick() called");
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsSaveData() called");
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
 	SSM:SaveAll();
 	SSGM:Save();
