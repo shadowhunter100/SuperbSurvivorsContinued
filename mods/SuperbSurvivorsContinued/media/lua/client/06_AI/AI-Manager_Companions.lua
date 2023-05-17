@@ -185,7 +185,6 @@ function AIManager_Companion(TMI)
 				and (TMI:getCurrentTask() ~= "Doctor")
 				and (TMI:getCurrentTask() ~= "Pursue")
 
-				and (TMI:getCurrentTask() ~= "Hold Still")
 			then
 				TMI:AddToTop(FirstAideTask:new(NPC)) -- If general healing
 			end

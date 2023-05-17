@@ -261,12 +261,14 @@ function GetJobText(text)
 	return getContextMenuText("Job_" .. text)
 end
 
---[[
-	"SurvivorOrder" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
-	and specifications are clearly defined and set.
---]]
-function SurvivorOrder(player, order, orderParam)
-	local isLoggingSurvivorOrder = false;
+--- Cows: "SurvivorOrder" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
+--- Cows: This also seems to be redundant ... given the player can also order their group members from the SuperSurvivorWindow much faster and simpler.
+---@param test any
+---@param player any
+---@param order any
+---@param orderParam any
+function SurvivorOrder(test, player, order, orderParam)
+	local isLoggingSurvivorOrder = true;
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "function: SurvivorOrder() called");
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "player: " .. tostring(player));
 	CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "order: " .. tostring(order));
@@ -364,11 +366,6 @@ function SurvivorOrder(player, order, orderParam)
 		elseif (order == "Chop Wood") then
 			TaskMangerIn:AddToTop(ChopWoodTask:new(ASuperSurvivor))
 			ASuperSurvivor:setGroupRole(GetJobText("Timberjack"))
-		elseif (order == "Hold Still") then
-			TaskMangerIn:AddToTop(HoldStillTask:new(ASuperSurvivor, true))
-			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Guard"))
-			end
 		elseif (order == "Gather Wood") then
 			ASuperSurvivor:setGroupRole(GetJobText("Hauler"))
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
@@ -432,7 +429,7 @@ function SurvivorOrder(player, order, orderParam)
 		end
 
 		ASuperSurvivor:Speak(GetDialogueSpeech("Roger"))
-		CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "orderParam: " .. tostring(OrderDisplayName));
+		CreateLogLine("SuperSurvivorsMod", isLoggingSurvivorOrder, "Order Name: " .. tostring(OrderDisplayName[order]));
 		getSpecificPlayer(0):Say(
 			tostring(ASuperSurvivor:getName()) ..
 			", " .. OrderDisplayName[order]
@@ -454,7 +451,7 @@ local function superSurvivorsHotKeyOrder(index)
 	if (myGroup) then
 		local myMembers = myGroup:getMembersInRange(SSM:Get(0):Get(), 25, isListening)
 		for i = 1, #myMembers do
-			SurvivorOrder(myMembers[i].player, order, nil)
+			SurvivorOrder(nil, myMembers[i].player, order, nil)
 		end
 	end
 end

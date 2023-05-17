@@ -128,37 +128,12 @@ function DoctorTask:update()
 					end
 				end
 			end
-
-			if (foundbodypartneedingtreatment == false) then
-				self.parent:Speak(getActionText("SD_DoctorDone"))
-				self.parent:Get():StopAllActionQueue()
-				if (self.Patient ~= nil) then
-					local ID = self.Patient:getModData().ID
-					if (ID ~= nil) then
-						local SS = SSM:Get(ID)
-						local TM = SS:getTaskManager()
-						local Task = TM:getTask()
-						if Task ~= nil and Task.Name == "Hold Still" then Task:setComplete() end
-					end
-					self.Patient = nil
-				end
-			end
-		else
-			self.parent:Speak(getActionText("SD_HoldStill"))
-			self.parent:walkTo(self.Patient:getCurrentSquare())
 		end
 	else
 		self.Patient = self:FindPatient()
 
 		if (self.Patient == nil) and (self.parent:Get():getCurrentSquare() ~= self.ReturnSquare) then
-			self.parent:walkToDirect(self.ReturnSquare)
-		elseif (self.Patient ~= nil) and (self.Patient ~= self.parent:Get()) then
-			local ID = self.Patient:getModData().ID
-			if (ID ~= nil) and (ID ~= 0) then
-				local SS = SSM:Get(ID)
-				local TM = SS:getTaskManager()
-				local Task = TM:AddToTop(HoldStillTask:new(SS, false))
-			end
+			self.parent:walkToDirect(self.ReturnSquare);
 		end
 	end
 end

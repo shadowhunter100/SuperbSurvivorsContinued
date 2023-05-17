@@ -352,7 +352,6 @@ function AIManager(TaskMangerIn)
 			if (TaskMangerIn:getCurrentTask() ~= "First Aide")
 				and (TaskMangerIn:getCurrentTask() ~= "Flee")
 				and (TaskMangerIn:getCurrentTask() ~= "Doctor")
-				and (TaskMangerIn:getCurrentTask() ~= "Hold Still")
 				and ((NPC:getSeenCount() >= 1) and (Distance_AnyEnemy <= 6)) -- This line doesn't make sense, what if the npc needs to heal outside of hostiles?
 			then
 				TaskMangerIn:AddToTop(FirstAideTask:new(ASuperSurvivor))     -- If general healing
