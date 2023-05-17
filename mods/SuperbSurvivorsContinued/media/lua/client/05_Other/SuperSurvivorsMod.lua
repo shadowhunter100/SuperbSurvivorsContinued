@@ -532,59 +532,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key, Order "Barricade"
 			superSurvivorsHotKeyOrder(1);
 		elseif (keyNum == getCore():getKey("NumPad_5")) then
-			local isLoggingDebugInfo = true;
-			playerSurvivor:Say("Logging Debug info...");
-			local GroupWithActualMembers = 0;
-
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Begin Groups Data");
-			for i = 0, SSGM.GroupCount + 1 do
-				if (SSGM.Groups[i] ~= nil and SSM.MainPlayer ~= i) then
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Group ID: " .. tostring(i));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Leader ID: " .. tostring(SSGM.Groups[i]:getLeader()));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Total Members: " .. tostring(SSGM.Groups[i]:getMemberCount()));
-
-					if (SSGM.Groups[i]:getMemberCount() > 0) then
-						GroupWithActualMembers = GroupWithActualMembers + 1;
-					end
-				end
-			end
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Total Survivor Groups: " .. tostring(SSGM.GroupCount));
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-				"Actual Active Groups: " .. tostring(GroupWithActualMembers));
-
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "--- LINE BREAK ---");
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
-
-			local actualLivingSurvivors = 0;
-
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Begin Survivors Data");
-			for i = 0, SSM.SurvivorCount + 1 do
-				if (SSM.SuperSurvivors[i] ~= nil and SSM.MainPlayer ~= i) then
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Survivor ID: " .. tostring(i));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Survivor Name: " .. tostring(SSM.SuperSurvivors[i]:getName()));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Survivor in Group ID: " .. tostring(SSM.SuperSurvivors[i]:getGroupID()));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Group Role: " .. tostring(SSM.SuperSurvivors[i]:getGroupRole()));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Current Task: " .. tostring(SSM.SuperSurvivors[i]:getCurrentTask()));
-					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-						"Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
-					if (not SSM.SuperSurvivors[i]:isDead()) then
-						actualLivingSurvivors = actualLivingSurvivors + 1;
-					end
-				end
-			end
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
-			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
-				"Actual Living NPCs: " .. tostring(actualLivingSurvivors));
-			playerSurvivor:Say("Logging Debug info complete...");
+			LogSSDebugInfo();
 		end
 	end
 end
