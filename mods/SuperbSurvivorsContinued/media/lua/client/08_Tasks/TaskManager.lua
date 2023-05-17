@@ -69,7 +69,9 @@ end
 
 function TaskManager:clear()
 	for i = 1, self.TaskCount - 1 do -- before clearing run the force complete task of any task that has one
-		if (self.Tasks[i] ~= nil) and (self.Tasks[i].ForceComplete ~= nil) then return self.Tasks[i]:ForceComplete() end
+		if (self.Tasks[i] ~= nil) and (self.Tasks[i].ForceComplete ~= nil) then
+			return self.Tasks[i]:ForceComplete()
+		end
 	end
 
 	self.TaskCount = 0
