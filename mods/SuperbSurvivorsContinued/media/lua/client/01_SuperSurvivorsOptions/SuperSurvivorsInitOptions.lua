@@ -27,6 +27,7 @@ CanNpcsCreateBase = false;    -- WIP - Cows: Allow npcs to create bases on their
 IsInfiniteAmmoEnabled = true; -- Cows: Npc Survivors has infinite ammo if true.
 IsRoleplayEnabled = false;    -- WIP - Cows: I don't even think roleplay is actually working... disabling it for now.
 IsSpeakEnabled = true;        -- WIP - Cows: Need to determine how this differs from CanIdleChat..
+SleepGeneralHealRate = 5;	  -- WIP - Cows: NPCs heal while the player is asleep... higher value = more healing
 WepSpawnRateGun = 50;         -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
 WepSpawnRateMelee = 100;      -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
 

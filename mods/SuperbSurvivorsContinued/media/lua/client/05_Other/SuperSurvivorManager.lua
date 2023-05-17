@@ -181,7 +181,7 @@ function SuperSurvivorManager:AsleepHealAll()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:AsleepHealAll() called");
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.MainPlayer ~= i) and (self.SuperSurvivors[i].player) then
-			self.SuperSurvivors[i].player:getBodyDamage():AddGeneralHealth(10)
+			self.SuperSurvivors[i].player:getBodyDamage():AddGeneralHealth(SleepGeneralHealRate);
 		end
 	end
 end
