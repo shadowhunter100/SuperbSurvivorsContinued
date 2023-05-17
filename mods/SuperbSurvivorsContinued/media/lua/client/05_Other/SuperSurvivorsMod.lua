@@ -278,16 +278,19 @@ function SurvivorOrder(player, order, orderParam)
 		TaskMangerIn:setTaskUpdateLimit(0)
 
 		ASuperSurvivor:setWalkingPermitted(true)
+		TaskMangerIn:clear();
 
 		local followtask = TaskMangerIn:getTaskFromName("Follow") --giving an outright order should remove follow so that "needToFollow" function will not detect a follow task and calc followdistance >
-		if (followtask) then followtask:ForceComplete() end
+
+		if (followtask) then
+			followtask:ForceComplete();
+		end
 
 		if (order == "Loot Room") and (orderParam ~= nil) then
 			TaskMangerIn:AddToTop(LootCategoryTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding(), orderParam, 0))
 		elseif (order == "Follow") then
 			ASuperSurvivor:setAIMode("Follow")
 			ASuperSurvivor:setGroupRole("Follow")
-			TaskMangerIn:clear()
 			ASuperSurvivor:setGroupRole(GetJobText("Companion"))
 			TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
 			ASuperSurvivor:setAIMode("Follow")
@@ -320,7 +323,6 @@ function SurvivorOrder(player, order, orderParam)
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end -- To prevent follower companion tasks overwrite
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(ReturnToBaseTask:new(ASuperSurvivor))
 		elseif (order == "Explore") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
@@ -331,18 +333,15 @@ function SurvivorOrder(player, order, orderParam)
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() ~= nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding()))
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() == nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
 				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
 			end
-			TaskMangerIn:clear()
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, nil))
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
 		elseif (order == "Barricade") then
@@ -532,6 +531,60 @@ function SuperSurvivorKeyBindAction(keyNum)
 			superSurvivorsHotKeyOrder(19);
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key, Order "Barricade"
 			superSurvivorsHotKeyOrder(1);
+		elseif (keyNum == getCore():getKey("NumPad_5")) then
+			local isLoggingDebugInfo = true;
+			playerSurvivor:Say("Logging Debug info...");
+			local GroupWithActualMembers = 0;
+
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Begin Groups Data");
+			for i = 0, SSGM.GroupCount + 1 do
+				if (SSGM.Groups[i] ~= nil and SSM.MainPlayer ~= i) then
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Group ID: " .. tostring(i));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Leader ID: " .. tostring(SSGM.Groups[i]:getLeader()));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Total Members: " .. tostring(SSGM.Groups[i]:getMemberCount()));
+
+					if (SSGM.Groups[i]:getMemberCount() > 0) then
+						GroupWithActualMembers = GroupWithActualMembers + 1;
+					end
+				end
+			end
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Total Survivor Groups: " .. tostring(SSGM.GroupCount));
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+				"Actual Active Groups: " .. tostring(GroupWithActualMembers));
+
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "--- LINE BREAK ---");
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
+
+			local actualLivingSurvivors = 0;
+
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Begin Survivors Data");
+			for i = 0, SSM.SurvivorCount + 1 do
+				if (SSM.SuperSurvivors[i] ~= nil and SSM.MainPlayer ~= i) then
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Survivor ID: " .. tostring(i));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Survivor Name: " .. tostring(SSM.SuperSurvivors[i]:getName()));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Survivor in Group ID: " .. tostring(SSM.SuperSurvivors[i]:getGroupID()));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Group Role: " .. tostring(SSM.SuperSurvivors[i]:getGroupRole()));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Current Task: " .. tostring(SSM.SuperSurvivors[i]:getCurrentTask()));
+					CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+						"Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
+					if (not SSM.SuperSurvivors[i]:isDead()) then
+						actualLivingSurvivors = actualLivingSurvivors + 1;
+					end
+				end
+			end
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "");
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
+			CreateLogLine("SuperSurvivorsMod", isLoggingDebugInfo,
+				"Actual Living NPCs: " .. tostring(actualLivingSurvivors));
+			playerSurvivor:Say("Logging Debug info complete...");
 		end
 	end
 end
