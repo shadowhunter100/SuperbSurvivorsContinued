@@ -29,7 +29,7 @@ function SuperSurvivorPlayerInit(player)
 
 		local wife
 		if (player:getModData().WifeID == nil)
-			and (WifeSpawn == true)
+			and (IsWifeSpawn)
 		then
 			player:getModData().WifeID = 0;
 
