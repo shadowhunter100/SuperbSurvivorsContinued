@@ -89,29 +89,16 @@ function SuperSurvivorsLoadGridsquare(square)
 		local key = x .. y .. z
 
 		if (SurvivorMap == nil) then
-			SSM:init()
-			SSGM:Load()
-
-			-- I don't think we need this now? But Further testing is needed
-			-- WIP - Cows: IS IT SAFE TO REMOVE? AND WHICH ARE NOT SAFE TO REMOVE?
-			local gameVersion = getCore():getGameVersion()
-			IsDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() > 50 and gameVersion:getMinor() < 53)
-			IsNpcDamageBroken = (gameVersion:getMajor() >= 41 and gameVersion:getMinor() >= 53)
-
-			if IsDamageBroken then
-				HostileSpawnRateMax = 0
-			end
-			if IsDamageBroken then
-				RaidersStartAfterHours = 9999999
-			end
+			SSM:init();
+			SSGM:Load();
 
 			if (DoesFileExist("SurvivorLocX")) then
 				SurvivorMap = LoadSurvivorMap() -- matrix grid containing info on location of all survivors for re-spawning purposes
 			else
-				SurvivorMap = {}
-				SurvivorLocX = {}
-				SurvivorLocY = {}
-				SurvivorLocZ = {}
+				SurvivorMap = {};
+				SurvivorLocX = {};
+				SurvivorLocY = {};
+				SurvivorLocZ = {};
 			end
 		end
 
