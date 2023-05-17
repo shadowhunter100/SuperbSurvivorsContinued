@@ -94,69 +94,6 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 	end
 end
 
-function OfferFood(test, player)
-	local SS = SSM:Get(player:getModData().ID)
-
-	local RSS = SSM:Get(0)
-	local realPlayer = RSS:Get()
-	realPlayer:Say(getActionText("WantSomeFood"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
-
-	local food = RSS:getFood()
-	local foodcontainer = food:getContainer()
-	local gift = RSS:getFacingSquare():AddWorldInventoryItem(food, 0.5, 0.5, 0)
-
-	if (foodcontainer ~= nil) then foodcontainer:DoRemoveItem(food) end
-
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
-	SS:PlusRelationshipWP(2.0)
-end
-
-function OfferWater(test, player)
-	local SS = SSM:Get(player:getModData().ID)
-	getSpecificPlayer(0):Say(getActionText("YouWantWater"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
-
-	local food = SSM:Get(0):getWater()
-	local foodcontainer = food:getContainer()
-	local gift = SSM:Get(0):getFacingSquare():AddWorldInventoryItem(food, 0.5, 0.5, 0)
-
-	if (foodcontainer ~= nil) then foodcontainer:DoRemoveItem(food) end
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
-	SS:PlusRelationshipWP(1.0)
-end
-
-function OfferAmmo(test, player, ammo)
-	local SS = SSM:Get(player:getModData().ID)
-	getSpecificPlayer(0):Say(getActionText("YouWantAmmo"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
-
-	local container = ammo:getContainer()
-	local gift = SSM:Get(0):getFacingSquare():AddWorldInventoryItem(ammo, 0.5, 0.5, 0)
-
-	if (container ~= nil) then container:DoRemoveItem(ammo) end
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
-	SS:PlusRelationshipWP(1.0)
-end
-
-function OfferWeapon(test, player)
-	local SS = SSM:Get(player:getModData().ID)
-	getSpecificPlayer(0):Say(getActionText("TakeMyWeapon"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
-
-	local wep = getSpecificPlayer(0):getPrimaryHandItem()
-	local gift = SSM:Get(0):getFacingSquare():AddWorldInventoryItem(wep, 0.5, 0.5, 0)
-	getSpecificPlayer(0):setPrimaryHandItem(nil)
-	getSpecificPlayer(0):getInventory():DoRemoveItem(wep)
-
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
-	SS:PlusRelationshipWP(3.0)
-end
-
 function AskToLeave(test, SS)
 	local isFleeCallLogged = false;
 	CreateLogLine("SuperSurvivorsContextMenu", isFleeCallLogged, "function: AskToLeave() called");
@@ -211,69 +148,6 @@ function AskToDrop(test, SS)
 	SS:Speak("!!")
 end
 
-function OfferArmor(test, SS, item)
-	local player = SS:Get()
-	getSpecificPlayer(0):Say(getActionText("TakeArmor"))
-	local task = SS:getTaskManager():getTaskFromName("Listen")
-	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
-
-	local gift = SSM:Get(0):getFacingSquare():AddWorldInventoryItem(item, 0.5, 0.5, 0)
-
-	getSpecificPlayer(0):getInventory():DoRemoveItem(item)
-
-	SS:getTaskManager():AddToTop(TakeGiftTask:new(SS, gift))
-	SS:PlusRelationshipWP(1.5)
-end
-
-function SwapWeaponsSurvivor(test, SS, Type)
-	local player = SS:Get()
-	local PP = getSpecificPlayer(0):getPrimaryHandItem();
-	local PS = getSpecificPlayer(0):getSecondaryHandItem();
-
-	local toPlayer
-
-	if (Type == "Gun") then
-		toPlayer = SS.LastGunUsed
-		SS:setGunWep(PP)
-	else
-		toPlayer = SS.LastMeleUsed
-		SS:setMeleWep(PP)
-	end
-
-	local PNW;
-	if (toPlayer) then PNW = getSpecificPlayer(0):getInventory():AddItem(toPlayer); end
-	getSpecificPlayer(0):setPrimaryHandItem(PNW);
-	if (PNW) and (PNW:isTwoHandWeapon()) then getSpecificPlayer(0):setSecondaryHandItem(PNW); end
-	if (toPlayer) then
-		player:getInventory():Remove(toPlayer)
-		if (SS:getBag():contains(toPlayer)) then SS:getBag():Remove(toPlayer) end
-	end
-
-	if (PP == PS) then getSpecificPlayer(0):setSecondaryHandItem(nil); end
-	local SNW = player:getInventory():AddItem(PP);
-
-	player:setPrimaryHandItem(SNW)
-	if (SNW:isTwoHandWeapon()) then player:setSecondaryHandItem(SNW) end
-	if (player:getSecondaryHandItem() == toPlayer) then
-		player:setSecondaryHandItem(nil)
-		player:removeFromHands(nil)
-	end
-	getSpecificPlayer(0):getInventory():Remove(PP);
-
-	if SNW and SNW:getBodyLocation() ~= "" then
-		player:removeFromHands(nil)
-		player:setWornItem(item:getBodyLocation(), SNW);
-	end
-	triggerEvent("OnClothingUpdated", player)
-	player:initSpritePartsEmpty();
-
-	if PNW and PNW:getBodyLocation() ~= "" then
-		getSpecificPlayer(0):removeFromHands(nil)
-		getSpecificPlayer(0):setWornItem(item:getBodyLocation(), PNW);
-	end
-	triggerEvent("OnClothingUpdated", getSpecificPlayer(0))
-	getSpecificPlayer(0):initSpritePartsEmpty();
-end
 
 function ForceWeaponType(test, SS, useMele)
 	if (not useMele) then
@@ -353,9 +227,6 @@ local function survivorMenu(context, o)
 				if ((SS:getGroup() ~= nil) and (SS:getGroupID() ~= SSM:Get(0):getGroupID())) --[[and (o:getModData().NoParty ~= true)]] then
 					submenu:addOption(getContextMenuText("AskToJoin"), nil, AskToJoin, o, nil);
 				end
-				if ((o:getPrimaryHandItem() == nil) and (getSpecificPlayer(0):getPrimaryHandItem() ~= nil)) then
-					submenu:addOption(getContextMenuText("OfferWeapon"), nil, OfferWeapon, o, nil);
-				end
 			elseif ((SS:getGroupID() == SSM:Get(0):getGroupID()) and SS:getGroupID() ~= nil) then
 				---orders
 				local i = 1;
@@ -381,37 +252,6 @@ local function survivorMenu(context, o)
 				end
 				submenu:addSubMenu(orderOption, subsubmenu)
 
-				if (getSpecificPlayer(0):getPrimaryHandItem() ~= nil) and (instanceof(getSpecificPlayer(0):getPrimaryHandItem(), "HandWeapon")) then
-					local OfferWeapon = getSpecificPlayer(0):getPrimaryHandItem()
-					local Type = "Gun"
-					local Label = ""
-					local SurvivorWeaponName = getActionText("Nothing")
-					if (o:getPrimaryHandItem() ~= nil) then SurvivorWeaponName = o:getPrimaryHandItem():getDisplayName() end
-					if (not OfferWeapon:isAimedFirearm()) then Type = "Mele" end
-					local swapweaponsOption, tooltipText
-					if (Type == "Gun") then
-						if SS.LastGunUsed == nil then
-							Label = getContextMenuText("GiveGun")
-							--tooltipText = "Give your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName() .. " to this Survivor to be his Gun type Weapon"
-						else
-							Label = getContextMenuText("SwapGuns")
-							--tooltipText = "Trade your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName().." with ".. o:getForname().."\'s ".. SurvivorWeaponName						
-						end
-						swapweaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Gun");
-					else
-						if SS.LastMeleUsed == nil then
-							Label = getContextMenuText("GiveWeapon")
-							--tooltipText = "Give your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName() .. " to this Survivor to be his Mele type Weapon"
-						else
-							Label = getContextMenuText("SwapWeapons")
-							--tooltipText = "Trade your "..getSpecificPlayer(0):getPrimaryHandItem():getDisplayName().." with ".. o:getForname().."\'s ".. SurvivorWeaponName
-						end
-						swapweaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Mele");
-					end
-					--local tooltip = MakeToolTip(swapweaponsOption,Label,tooltipText);
-				end
-
-
 				if (o:getPrimaryHandItem() ~= SS.LastMeleUsed) and (SS.LastMeleUsed ~= nil) then
 					local ForceMeleOption = submenu:addOption(getContextMenuText("UseMele"), nil, ForceWeaponType, SS,
 						false)
@@ -429,56 +269,11 @@ local function survivorMenu(context, o)
 
 				local SetNameOption = submenu:addOption(getContextMenuText("SetName"), nil, contextMenuSetName, SS, true)
 			end
-
-			if (SSM:Get(0):hasFood()) then
-				submenu:addOption(getContextMenuText("OfferFood"), nil, OfferFood, o, nil);
-			end
-			if (SSM:Get(0):hasWater()) then
-				submenu:addOption(getContextMenuText("OfferWater"), nil, OfferWater, o, nil);
-			end
-
-
-			local armors = SSM:Get(0):getUnEquipedArmors()
-			if (armors) then
-				--getSpecificPlayer(0):Say("hereiam2")
-				local selectOption = submenu:addOption(getContextMenuText("OfferArmor"), worldobjects, nil);
-				local armormenu = submenu:getNew(submenu);
-
-				for i = 1, #armors do
-					--getSpecificPlayer(0):Say("hereiam2" .. armors[i]:getDisplayName())
-					armormenu:addOption(armors[i]:getDisplayName(), nil, OfferArmor, SS, armors[i])
-				end
-
-				submenu:addSubMenu(selectOption, armormenu);
-			end
-
-
-			local ammoBox
-			for i = 1, #SS.AmmoBoxTypes do
-				ammoBox = SSM:Get(0):FindAndReturn(SS.AmmoBoxTypes[i])
-				if (ammoBox) then break end
-			end
-
-			if (ammoBox ~= nil) then
-				submenu:addOption(getContextMenuText("OfferAmmoBox"), nil, OfferAmmo, o, ammoBox);
-			end
-
-			local ammoRound
-			for i = 1, #SS.AmmoTypes do
-				ammoRound = SSM:Get(0):FindAndReturn(SS.AmmoTypes[i])
-				if (ammoRound) then break end
-			end
-
-			if (ammoRound ~= nil) then
-				submenu:addOption(getContextMenuText("OfferAmmoRound"), nil, OfferAmmo, o, ammoRound);
-			end
 		end
 		if (o:getModData().isHostile ~= true) and (SS:getDangerSeenCount() == 0) and (SS:getTaskManager():getCurrentTask() ~= "Listen") then
 			local selectOption = submenu:addOption(getContextMenuText("CallOver"), nil, CallSurvivor, o, nil);
 			local toolTip = MakeToolTip(selectOption, getContextMenuText("CallOver"), getContextMenuText("CallOverDesc"));
 		end
-
-
 
 		context:addSubMenu(survivorOption, submenu);
 	end
