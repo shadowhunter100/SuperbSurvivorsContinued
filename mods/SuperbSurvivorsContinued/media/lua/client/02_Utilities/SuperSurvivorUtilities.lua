@@ -1,48 +1,5 @@
 local isLocalLoggingEnabled = false;
 
----@alias color
----| "White"
----| "Grey"
----| "Blond"
----| "Sand"
----| "Hazel"
----| "Brown"
----| "Red" 	
----| "Pink"
----| "Purple"
----| "Blue"
----| "Black"
-
---- gets a preset color value
----@param color color
-function GetPresetColor(color)
-	if color == "White" then
-		return ImmutableColor.new(0.75, 0.74, 0.72)
-	elseif color == "Grey" then
-		return ImmutableColor.new(0.48, 0.47, 0.44)
-	elseif color == "Blond" then
-		return ImmutableColor.new(0.82, 0.82, 0.39)
-	elseif color == "Sand" then
-		return ImmutableColor.new(0.86, 0.78, 0.66)
-	elseif color == "Hazel" then
-		return ImmutableColor.new(0.61, 0.50, 0.34)
-	elseif color == "Brown" then
-		return ImmutableColor.new(0.62, 0.42, 0.17)
-	elseif color == "Red" then
-		return ImmutableColor.new(0.58, 0.25, 0.25)
-	elseif color == "Pink" then
-		return ImmutableColor.new(0.59, 0.39, 0.55)
-	elseif color == "Purple" then
-		return ImmutableColor.new(0.47, 0.43, 0.59)
-	elseif color == "Blue" then
-		return ImmutableColor.new(0.39, 0.47, 0.59)
-	elseif color == "Black" then
-		return ImmutableColor.new(0.10, 0.08, 0.09)
-	else
-		return ImmutableColor.new(0.99, 0.99, 0.99)
-	end
-end
-
 SurvivorPerks = {
 	"Aiming",
 	"Axe",

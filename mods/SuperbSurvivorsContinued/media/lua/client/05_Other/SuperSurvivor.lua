@@ -960,7 +960,7 @@ end
 
 function SuperSurvivor:Speak(text)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Speak() called");
-	if (SpeakEnabled) then
+	if (IsSpeakEnabled) then
 		self.SayLine1 = text
 		self.JustSpoke = true
 		self.TicksSinceSpoke = 0
@@ -3189,7 +3189,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 
 	local ammotypes = GetAmmoBullets(weapon);
 	if (ammotypes) then
-		local bwep = self.player:getInventory():AddItem(MeleWeapons[ZombRand(1, #MeleWeapons)]) -- give a beackup mele wepaon if using ammo gun
+		local bwep = self.player:getInventory():AddItem(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) -- give a beackup mele wepaon if using ammo gun
 		if (bwep) then
 			self.player:getModData().weaponmele = bwep:getType()
 			self:setMeleWep(bwep)

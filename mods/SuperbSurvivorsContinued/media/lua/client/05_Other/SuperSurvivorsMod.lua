@@ -55,12 +55,12 @@ function SuperSurvivorRandomSpawn(square)
 
 	if (ASuperSurvivor ~= nil) then
 		if (ZombRand(0, 100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true);
+			ASuperSurvivor:giveWeapon(SS_RangeWeapons[ZombRand(1, #SS_RangeWeapons)], true);
 			-- make sure they have at least some ability to use the gun
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 			ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 		elseif (ZombRand(0, 100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
-			ASuperSurvivor:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)], true)
+			ASuperSurvivor:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)], true)
 		end
 		if (ZombRand(0, 100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
 	end
@@ -158,7 +158,7 @@ function SuperSurvivorsLoadGridsquare(square)
 						end
 
 						if (raider:hasWeapon() == false) then
-							raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]);
+							raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
 						end
 					end
 				else
@@ -678,7 +678,7 @@ function SuperSurvivorsNewSurvivorManager()
 			-- raider:setName("Raider "..name)
 			raider:setName("Survivor " .. name)
 			raider:getTaskManager():AddToTop(WanderTask:new(raider))
-			if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+			if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
 
 			local food, bag
 			bag = raider:getBag()
@@ -820,7 +820,7 @@ function SuperSurvivorsRaiderManager()
 				local name = raider:getName()
 				raider:setName("Raider " .. name)
 				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()))
-				if (raider:hasWeapon() == false) then raider:giveWeapon(MeleWeapons[ZombRand(1, #MeleWeapons)]) end
+				if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
 
 				local food, bag
 				bag = raider:getBag()

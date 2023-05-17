@@ -6,10 +6,6 @@
 -- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
 local isLocalLoggingEnabled = false;
 
--- ----------------------- --
--- Options Menu controller --
--- ----------------------- --
-
 -- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
 -- Cows: There were no documentation on what the hell the AlternativeSpawning and spawnrate meant... but there were multiple possible values in ascending order.
@@ -42,6 +38,12 @@ AltSpawnGroupSize = 1;
 	400 - "Ultra High"
 --]]
 -- Cows: BaseNpcSpawnChance (formerly "SpawnRate") is used when the player enters an unvisited map area
+Limit_Npc_Groups = 4;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
+Limit_Raiders_Groups = 2; -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
+Limit_Npcs_Spawn = 12;    -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
+Limit_Raiders_Spawn = 8;  -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
+Max_Group_Size = 8;       -- WIP - PlaceHolder - Cows: Max number of members in a group
+Min_Group_Size = 1;       -- WIP - PlaceHolder - Cows: Min number of members in a group
 BaseNpcSpawnChance = 0;   -- WIP - Cows: Default to Off by default.
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 17; -- Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value
@@ -52,9 +54,9 @@ WifeSpawn = true;         -- Cows: true to spawn wife / 1st follower, false to n
 CanNpcsCreateBase = false;    -- WIP - Cows: Allow npcs to create bases on their own... this has a huge performance impact.
 IsInfiniteAmmoEnabled = true; -- Cows: Npc Survivors has infinite ammo if true.
 IsRoleplayEnabled = false;    -- WIP - Cows: I don't even think roleplay is actually working... disabling it for now.
+IsSpeakEnabled = true;          -- WIP - Cows: Need to determine how this differs from CanIdleChat..
 WepSpawnRateGun = 50;         -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
 WepSpawnRateMelee = 100;      -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
-
 
 -- NPC Behaviors
 CanIdleChat = false;            -- Cows: true to allow npcs to speak while idle
@@ -87,3 +89,7 @@ IsPVPEnabled = true;
 -- UI Related
 IsDisplayingNpcName = true;
 IsDisplayingHostileColor = true;
+
+GFollowDistance = 5;      -- Update: Don't try to turn gfollowdistance into a variable from what it equals to. I made followtask add what it needs to add on its own.
+
+SuperSurvivorBravery = 6; -- WIP - Cows: Bravery needs to be reworked... because it is literally useless at the moment.

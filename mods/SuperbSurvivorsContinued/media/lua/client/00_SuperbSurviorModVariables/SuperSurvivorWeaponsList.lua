@@ -5,7 +5,7 @@ EnabledTranslations["EN"] = true;
 EnabledTranslations["JP"] = true;
 
 --weapon tables:
-MeleWeapons = {
+SS_MeleeWeapons = {
     "Base.Hammer", "Base.BallPeenHammer", "Base.WoodenMallet", "Base.Wrench", "Base.PipeWrench",
     "Base.Shovel", "Base.Shovel2", "Base.Rake",
     "Base.Plank", "Base.Plank", "Base.Plank", "Base.Plank", "Base.PlankNail", "Base.PlankNail", "Base.PlankNail",
@@ -20,6 +20,6 @@ MeleWeapons = {
     "Base.KitchenKnife", "Base.HuntingKnife", "Base.Machete"
 };
 
-RangeWeapons = { "Base.Pistol2", "Base.Revolver_Short", "Base.Revolver", "Base.Pistol", "Base.Revolver_Long",
+SS_RangeWeapons = { "Base.Pistol2", "Base.Revolver_Short", "Base.Revolver", "Base.Pistol", "Base.Revolver_Long",
     "Base.VarmintRifle", "Base.HuntingRifle", "Base.Pistol", "Base.Shotgun", "Base.ShotgunSawnoff", "Base.Pistol",
     "Base.Shotgun" };
