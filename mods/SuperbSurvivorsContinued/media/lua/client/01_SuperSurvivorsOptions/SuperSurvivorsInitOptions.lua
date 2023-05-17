@@ -42,7 +42,7 @@ AltSpawnGroupSize = 1;
 	400 - "Ultra High"
 --]]
 -- Cows: BaseNpcSpawnChance (formerly "SpawnRate") is used when the player enters an unvisited map area
-BaseNpcSpawnChance = 0;     -- WIP - Cows: Default to Off by default.
+BaseNpcSpawnChance = 0;   -- WIP - Cows: Default to Off by default.
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 17; -- Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value
 NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
