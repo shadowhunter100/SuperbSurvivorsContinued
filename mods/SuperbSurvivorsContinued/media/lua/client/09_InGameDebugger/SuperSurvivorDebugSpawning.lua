@@ -9,7 +9,7 @@ function SuperSurvivorSoldierSpawn(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
+	ASuperSurvivor:giveWeapon(SS_RangeWeapons[ZombRand(1, #SS_RangeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
@@ -35,7 +35,7 @@ function SuperSurvivorSoldierSpawnHostile(square)
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
 	ASuperSurvivor:SuitUp("Preset_MarinesCamo")
 
-	ASuperSurvivor:giveWeapon(RangeWeapons[ZombRand(1, #RangeWeapons)], true)
+	ASuperSurvivor:giveWeapon(SS_RangeWeapons[ZombRand(1, #SS_RangeWeapons)], true)
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));
 	ASuperSurvivor.player:LevelPerk(Perks.FromString("Aiming"));

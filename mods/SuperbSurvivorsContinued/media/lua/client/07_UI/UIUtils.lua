@@ -124,10 +124,11 @@ function UIUtil_GetMemberInfo(member_index)
 end
 
 function UIUtil_GiveOrder(order_index, member_index)
-    local isLoggingSurvivorOrder = false;
+    local isLoggingSurvivorOrder = true;
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "function: UIUtil_GiveOrder() called");
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "order_index: " .. tostring(order_index));
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "member_index: " .. tostring(member_index));
+    CreateLogLine("UIUtils", isLoggingSurvivorOrder, "Order: " .. tostring(Orders[order_index]));
 
     local group_id = SSM:Get(0):getGroupID()
     local group_members = SSGM:Get(group_id):getMembers()
@@ -135,7 +136,7 @@ function UIUtil_GiveOrder(order_index, member_index)
     if member then
         getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
-        SurvivorOrder(member.player, Orders[order_index], nil)
+        SurvivorOrder(nil, member.player, Orders[order_index], nil)
     end
 end
 
