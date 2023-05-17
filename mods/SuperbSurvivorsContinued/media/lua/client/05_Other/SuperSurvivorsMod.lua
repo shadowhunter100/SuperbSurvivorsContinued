@@ -248,19 +248,6 @@ end
 
 Events.OnWeaponSwing.Add(SuperSurvivorsOnSwing)
 
--- WIP - Cows: getContextMenuText() is a globl function... should consider updating the casing to reflect that.
-function getContextMenuText(text)
-	return getText("ContextMenu_SS_" .. text)
-end
-
---[[
-	"GetJobText" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
-	and specifications are clearly defined and set.
---]]
-function GetJobText(text)
-	return getContextMenuText("Job_" .. text)
-end
-
 --- Cows: "SurvivorOrder" was cut-pasted here from "SuperSurvivorsContextMenu.lua" to address a load order issue...
 --- Cows: This also seems to be redundant ... given the player can also order their group members from the SuperSurvivorWindow much faster and simpler.
 ---@param test any -- Cows: Even if it is unused this is apparently required for the function to work... otherwise the function simply returns nil.
