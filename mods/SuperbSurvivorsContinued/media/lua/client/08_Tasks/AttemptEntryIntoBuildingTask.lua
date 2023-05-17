@@ -74,7 +74,9 @@ function AttemptEntryIntoBuildingTask:update()
 		self:giveUpOnBuilding()
 	end
 	if (self.parent:isInAction() == false) then
-		if (self.TargetSquare == nil) then self.TargetSquare = GetRandomFreeBuildingSquare(self.parent.TargetBuilding) end
+		if (self.TargetSquare == nil) then
+			self.TargetSquare = GetRandomFreeBuildingSquare(self.parent.TargetBuilding);
+		end
 		if (self.TargetSquare ~= nil) then
 			local door = self.parent:inFrontOfDoor()
 
