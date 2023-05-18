@@ -1,17 +1,6 @@
 -- this file has methods related to npc combat
 local isLocalLoggingEnabled = false;
 
-SuperSurvivorsAmmoBoxes = { -- for the loot stores that are spawned with preset spawns.
-	"Base.223Box",
-	"Base.308Box",
-	"Base.Bullets9mm",
-	"Base.Bullets9mm",
-	"Base.Bullets9mm",
-	"Base.ShotgunShellsBox",
-	"Base.ShotgunShellsBox",
-	"Base.ShotgunShellsBox",
-}
-
 --- Gets a ammo box of an ammo typ
 ---@param bullets string any ammo type
 ---@return string returns the ammo box name

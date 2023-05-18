@@ -34,28 +34,6 @@ function LogTableKVPairs(fileName, isEnabled, table)
     if (isEnabled) then
         for key, value in pairs(table) do
             CreateLogLine(fileName, isEnabled, "key:" .. tostring(key) .. " | value: " .. tostring(value));
-
-            if (pairs(value)) then
-                for key1, val1 in pairs(value) do
-                    CreateLogLine(fileName, isEnabled,
-                        "key1: " .. tostring(key1) ..
-                        " | val1: " .. tostring(val1)
-                    );
-
-                    if (key1 == "Members") then
-                        CreateLogLine(fileName, isEnabled, "--- BEGIN GROUP MEMBERS LINE BREAK ---");
-                        if (pairs(val1)) then
-                            for memberNo, survivorId in pairs(val1) do
-                                CreateLogLine(fileName, isEnabled,
-                                    "memberNo: " .. tostring(memberNo) ..
-                                    " | survivorId: " .. tostring(survivorId)
-                                );
-                            end
-                        end
-                        CreateLogLine(fileName, isEnabled, "--- END GROUP MEMBERS LINE BREAK ---");
-                    end
-                end
-            end
         end
     end
 end
@@ -63,10 +41,12 @@ end
 function LogSSDebugInfo()
     local playerSurvivor = getSpecificPlayer(0);
     local isLoggingDebugInfo = true;
+    local groupsWithActualMembers = 1; -- Starting at 1, because player group is 0...
     playerSurvivor:Say("Logging Debug info...");
-
-    local GroupWithActualMembers = 0;
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Groups Data");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group ID: " .. tostring(0));
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Leader ID: " .. tostring(SSGM.Groups[0]:getLeader()));
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Members: " .. tostring(SSGM.Groups[0]:getMemberCount()));
     -- Get the total number of groups
     for i = 0, SSGM.GroupCount + 1 do
         if (SSGM.Groups[i] ~= nil and SSM.MainPlayer ~= i) then
@@ -77,7 +57,7 @@ function LogSSDebugInfo()
                 "Total Members: " .. tostring(SSGM.Groups[i]:getMemberCount()));
 
             if (SSGM.Groups[i]:getMemberCount() > 0) then
-                GroupWithActualMembers = GroupWithActualMembers + 1;
+                groupsWithActualMembers = groupsWithActualMembers + 1;
             end
         end
     end
@@ -117,6 +97,7 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
         "Actual Living NPCs: " .. tostring(actualLivingSurvivors));
+
     playerSurvivor:Say("Logging Debug info complete...");
 end
 

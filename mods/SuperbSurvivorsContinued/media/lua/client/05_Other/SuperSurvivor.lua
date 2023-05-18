@@ -3643,18 +3643,19 @@ end
 ---@param victim any
 ---@return number represents the chance of a hit
 function SuperSurvivor:getGunHitChance(weapon, victim)
-	CreateLogLine("SuperSurvivor", true, "SuperSurvivor:getGunHitChance() called");
-	local aimingLevel = self.player:getPerkLevel(Perks.FromString("Aiming"))
-	local aimingPerkModifier = weapon:getAimingPerkHitChanceModifier()
-	local weaponHitChance = weapon:getHitChance()
-	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel)
+	local isLocalFunctionLoggingEnabled = true;
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:getGunHitChance() called");
+	local aimingLevel = self.player:getPerkLevel(Perks.FromString("Aiming"));
+	local aimingPerkModifier = weapon:getAimingPerkHitChanceModifier();
+	local weaponHitChance = weapon:getHitChance();
+	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel);
 
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	local distance = getDistanceBetween(self.player, victim); -- WIP - Cows: Should distance even be a factor?
 	local gunHitChance = hitChance - distance;
 
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "Gun Hit Chance: " .. tostring(gunHitChance));
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGunHitChance() end ---");
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "Gun Hit Chance: " .. tostring(gunHitChance));
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "--- SuperSurvivor:getGunHitChance() end ---");
 	return gunHitChance;
 end
 

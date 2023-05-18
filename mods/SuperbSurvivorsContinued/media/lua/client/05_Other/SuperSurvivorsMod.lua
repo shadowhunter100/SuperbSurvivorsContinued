@@ -109,7 +109,7 @@ function SuperSurvivorsLoadGridsquare(square)
 		then
 			SurvivorMap[key] = {};
 			square:getModData().SurvivorSquareLoaded = true;
-			Events.LoadGridsquare.Remove(SuperSurvivorsLoadGridsquare);
+			-- Events.LoadGridsquare.Remove(SuperSurvivorsLoadGridsquare); -- WIP - Cows: Can't remove the LoadGridsquare right away... Need a better solution
 		end
 	end
 end
