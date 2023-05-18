@@ -52,7 +52,7 @@ function AIManager(TaskMangerIn)
 	if (Bravery >= 10) then
 		CanTollerateEnemiesOnMe = 2
 	end --need to by pass some hard coded values to give players option to have more fearless fighters
-	if (SuperSurvivorBravery >= 20) then
+	if (SurvivorBravery >= 20) then
 		CanTollerateEnemiesOnMe = 20
 	end
 
