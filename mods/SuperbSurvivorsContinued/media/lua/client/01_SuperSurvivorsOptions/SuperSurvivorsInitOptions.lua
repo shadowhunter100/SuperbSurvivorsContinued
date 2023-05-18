@@ -8,25 +8,24 @@ local isLocalLoggingEnabled = false;
 
 -- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
-NpcSpawnChance = 5; -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
-AltSpawnGroupSize = 1;
-HostileSpawnRateBase = 1;   -- Cows: Chance that NPCs will be hostile initially on spawn
-HostileSpawnRateMax = 17;   -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
-IsWifeSpawn = true;         -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
-NoPresetSpawn = true;       -- Cows: true to disable preset spawns.
-Limit_Npc_Groups = 4;       -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
-Limit_Raiders_Groups = 2;   -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
-Limit_Npcs_Spawn = 12;      -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
-Limit_Raiders_Spawn = 8;    -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
-Max_Group_Size = 8;         -- WIP - PlaceHolder - Cows: Max number of members in a group
-Min_Group_Size = 1;         -- WIP - PlaceHolder - Cows: Min number of members in a group
+NpcSpawnChance = 5;       -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
+HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
+HostileSpawnRateMax = 17; -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
+IsWifeSpawn = true;       -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
+NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
+Limit_Npc_Groups = 4;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
+Limit_Raiders_Groups = 4; -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
+Limit_Npcs_Spawn = 12;    -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
+Limit_Raiders_Spawn = 8;  -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
+Max_Group_Size = 4;       -- WIP - PlaceHolder - Cows: Max number of members in a group
+Min_Group_Size = 1;       -- WIP - PlaceHolder - Cows: Min number of members in a group
 
 -- NPC Configuration
 CanNpcsCreateBase = false;    -- WIP - Cows: Allow npcs to create bases on their own... this has a huge performance impact.
 IsInfiniteAmmoEnabled = true; -- Cows: Npc Survivors has infinite ammo if true.
 IsRoleplayEnabled = false;    -- WIP - Cows: I don't even think roleplay is actually working... disabling it for now.
 IsSpeakEnabled = true;        -- WIP - Cows: Need to determine how this differs from CanIdleChat..
-SleepGeneralHealRate = 5;	  -- WIP - Cows: NPCs heal while the player is asleep... higher value = more healing
+SleepGeneralHealRate = 5;     -- WIP - Cows: NPCs heal while the player is asleep... higher value = more healing
 WepSpawnRateGun = 50;         -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
 WepSpawnRateMelee = 100;      -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
 
