@@ -65,7 +65,7 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivor Groups: " .. tostring(SSGM.GroupCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
-        "Actual Active Groups: " .. tostring(GroupWithActualMembers));
+        "Actual Active Groups: " .. tostring(groupsWithActualMembers));
 
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
