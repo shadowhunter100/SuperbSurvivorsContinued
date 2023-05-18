@@ -225,11 +225,11 @@ function SurvivorOrder(test, player, order, orderParam)
 		elseif (order == "Follow") then
 			ASuperSurvivor:setAIMode("Follow")
 			ASuperSurvivor:setGroupRole("Follow")
-			ASuperSurvivor:setGroupRole(GetJobText("Companion"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Companion"))
 			TaskMangerIn:AddToTop(FollowTask:new(ASuperSurvivor, getSpecificPlayer(0)))
 			ASuperSurvivor:setAIMode("Follow")
 		elseif (order == "Pile Corpses") then
-			ASuperSurvivor:setGroupRole(GetJobText("Dustman"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Dustman"))
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
 			local storagearea = ASuperSurvivor:getGroup():getGroupArea("CorpseStorageArea")
 			if (storagearea[1] ~= 0) then
@@ -238,10 +238,10 @@ function SurvivorOrder(test, player, order, orderParam)
 			end
 			TaskMangerIn:AddToTop(PileCorpsesTask:new(ASuperSurvivor, dropSquare))
 		elseif (order == "Guard") then
-			ASuperSurvivor:setGroupRole(GetJobText("Guard"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Guard"))
 			local area = ASuperSurvivor:getGroup():getGroupArea("GuardArea")
 			if (area) then
-				ASuperSurvivor:Speak(getContextMenuText("IGoGuard"))
+				ASuperSurvivor:Speak(Get_SS_ContextMenuText("IGoGuard"))
 				TaskMangerIn:AddToTop(WanderInAreaTask:new(ASuperSurvivor, area))
 				TaskMangerIn:setTaskUpdateLimit(300) -- WIP - Cows: the value used to be "AutoWorkTaskTimeLimit", which was undefined locally... found "AutoWorkTaskTimeLimit" in AI-Manager.lua, defaults to 300... so 300 will be assigned here
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, GetRandomAreaSquare(area)))
@@ -250,56 +250,56 @@ function SurvivorOrder(test, player, order, orderParam)
 				TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, getSpecificPlayer(0):getCurrentSquare()))
 			end
 		elseif (order == "Patrol") then
-			ASuperSurvivor:setGroupRole(GetJobText("Sheriff"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Sheriff"))
 			TaskMangerIn:AddToTop(PatrolTask:new(ASuperSurvivor, getSpecificPlayer(0):getCurrentSquare(),
 				ASuperSurvivor:Get():getCurrentSquare()))
 		elseif (order == "Return To Base") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end -- To prevent follower companion tasks overwrite
 			TaskMangerIn:AddToTop(ReturnToBaseTask:new(ASuperSurvivor))
 		elseif (order == "Explore") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(WanderTask:new(ASuperSurvivor))
 		elseif (order == "Stop") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() ~= nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, ASuperSurvivor:getBuilding()))
 		elseif (order == "Relax") and (ASuperSurvivor:getBuilding() == nil) then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(WanderInBuildingTask:new(ASuperSurvivor, nil))
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
 		elseif (order == "Barricade") then
 			TaskMangerIn:AddToTop(BarricadeBuildingTask:new(ASuperSurvivor))
-			ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 		elseif (order == "Stand Ground") then
-			ASuperSurvivor:setGroupRole(GetJobText("Guard"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Guard"))
 			TaskMangerIn:AddToTop(GuardTask:new(ASuperSurvivor, getSpecificPlayer(0):getCurrentSquare()))
 			ASuperSurvivor:setWalkingPermitted(false)
 		elseif (order == "Forage") then
 			TaskMangerIn:AddToTop(ForageTask:new(ASuperSurvivor))
-			ASuperSurvivor:setGroupRole(GetJobText("Junkman"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Junkman"))
 		elseif (order == "Farming") then
 			if (true) then --if(ASuperSurvivor:Get():getPerkLevel(Perks.FromString("Farming")) >= 3) then
 				TaskMangerIn:AddToTop(FarmingTask:new(ASuperSurvivor))
-				ASuperSurvivor:setGroupRole(GetJobText("Farmer"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Farmer"))
 			else
-				ASuperSurvivor:Speak(getActionText("IDontKnowHowFarming"))
+				ASuperSurvivor:Speak(Get_SS_UIActionText("IDontKnowHowFarming"))
 			end
 		elseif (order == "Chop Wood") then
 			TaskMangerIn:AddToTop(ChopWoodTask:new(ASuperSurvivor))
-			ASuperSurvivor:setGroupRole(GetJobText("Timberjack"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Timberjack"))
 		elseif (order == "Gather Wood") then
-			ASuperSurvivor:setGroupRole(GetJobText("Hauler"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Hauler"))
 			local dropSquare = getSpecificPlayer(0):getCurrentSquare()
 			local woodstoragearea = ASuperSurvivor:getGroup():getGroupArea("WoodStorageArea")
 			if (woodstoragearea[1] ~= 0) then
@@ -327,22 +327,22 @@ function SurvivorOrder(test, player, order, orderParam)
 			end
 		elseif (order == "Go Find Food") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Food", "Category", 1))
 		elseif (order == "Go Find Weapon") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Weapon", "Category", 1))
 		elseif (order == "Go Find Water") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			TaskMangerIn:AddToTop(FindThisTask:new(ASuperSurvivor, "Water", "Category", 1))
 		elseif (order == "Clean Up Inventory") then
 			if (ASuperSurvivor:getGroupRole() == "Companion") then
-				ASuperSurvivor:setGroupRole(GetJobText("Worker"))
+				ASuperSurvivor:setGroupRole(Get_SS_JobText("Worker"))
 			end
 			local group = ASuperSurvivor:getGroup()
 			if (group) then
@@ -355,7 +355,7 @@ function SurvivorOrder(test, player, order, orderParam)
 				or ASuperSurvivor:Get():getPerkLevel(Perks.FromString("First Aid")) >= 1)
 		then
 			TaskMangerIn:AddToTop(DoctorTask:new(ASuperSurvivor))
-			ASuperSurvivor:setGroupRole(GetJobText("Doctor"))
+			ASuperSurvivor:setGroupRole(Get_SS_JobText("Doctor"))
 		elseif (order == "Doctor") then
 			ASuperSurvivor:Speak(GetDialogueSpeech("IDontKnowHowDoctor"))
 		end
@@ -425,8 +425,8 @@ function SuperSurvivorKeyBindAction(keyNum)
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
 					if (member) then
-						mySS:Get():Say(getActionText("ComeWithMe_Before") ..
-							member:Get():getForname() .. getActionText("ComeWithMe_After"))
+						mySS:Get():Say(Get_SS_UIActionText("ComeWithMe_Before") ..
+							member:Get():getForname() .. Get_SS_UIActionText("ComeWithMe_After"))
 						member:getTaskManager():clear()
 						member:getTaskManager():AddToTop(FollowTask:new(member, mySS:Get()))
 					else
@@ -773,7 +773,7 @@ function SuperSurvivorsRaiderManager()
 
 				local number = ZombRand(1, 3);
 				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number));
-				local currentRaiderDistanceFromPlayer = getDistanceBetween(raider, mySS);
+				local currentRaiderDistanceFromPlayer = GetDistanceBetween(raider, mySS);
 
 				if (nearestRaiderDistance > currentRaiderDistanceFromPlayer) then
 					nearestRaiderDistance = currentRaiderDistanceFromPlayer;

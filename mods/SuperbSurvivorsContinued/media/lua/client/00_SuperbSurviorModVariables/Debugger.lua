@@ -45,49 +45,43 @@ function LogSSDebugInfo()
     local mySS = SSM:Get(0);
 
     playerSurvivor:Say("Logging Debug info...");
-
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Player Data");
     if (mySS) then
         local mySS_squareX = mySS:getCurrentSquare():getX();
         local mySS_squareY = mySS:getCurrentSquare():getY();
         local mySS_squareZ = mySS:getCurrentSquare():getZ();
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Player Data");
         CreateLogLine("SS_Debugger", isLoggingDebugInfo, "SurvivorName: " .. tostring(mySS:getName()));
         CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group ID: " .. tostring(mySS:getGroupID()));
         CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group Role: " .. tostring(mySS:getGroupRole())); -- Cows: This should be "Leader", as 0 should be the player...
-        
+
         CreateLogLine("SS_Debugger", isLoggingDebugInfo,
-        "Survivor Square: " ..
-        tostring("locationX: " .. mySS_squareX .. " | locationY: " .. mySS_squareY .. " | locationZ: " .. mySS_squareZ));
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+            "Survivor Square: " ..
+            tostring("locationX: " ..
+                mySS_squareX .. " | locationY: " .. mySS_squareY .. " | locationZ: " .. mySS_squareZ));
     else
         CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Failed to get player data...");
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
-        CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     end
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Groups Data");
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group ID: " .. tostring(0));
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Leader ID: " .. tostring(SSGM.Groups[0]:getLeader()));
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Members: " .. tostring(SSGM.Groups[0]:getMemberCount()));
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     -- Get the total number of groups
     for i = 0, SSGM.GroupCount + 1 do
-        if (SSGM.Groups[i] ~= nil and SSM.MainPlayer ~= i) then
+        if (SSGM.Groups[i] ~= nil) then
             CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Group ID: " .. tostring(i));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Leader ID: " .. tostring(SSGM.Groups[i]:getLeader()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Total Members: " .. tostring(SSGM.Groups[i]:getMemberCount()));
-
             CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+            --
             if (SSGM.Groups[i]:getMemberCount() > 0) then
                 groupsWithActualMembers = groupsWithActualMembers + 1;
             end
         end
     end
 
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivor Groups: " .. tostring(SSGM.GroupCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
         "Actual Active Groups: " .. tostring(groupsWithActualMembers));
@@ -101,31 +95,40 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Survivors Data");
     -- Get the total number of survivors
     for i = 0, SSM.SurvivorCount + 1 do
-        if (SSM.SuperSurvivors[i] ~= nil and SSM.MainPlayer ~= i) then
-            local ss_squareX = SSM.SuperSurvivors[i]:getCurrentSquare():getX();
-            local ss_squareY = SSM.SuperSurvivors[i]:getCurrentSquare():getY();
-            local ss_squareZ = SSM.SuperSurvivors[i]:getCurrentSquare():getZ();
+        -- Cows: SurvivorCount is horribly inaccurate ... when npcs are dead and removed from the game the count doesn't decrease.
+        -- But the npcs IDs are based on the SurvivorCount index... so there is a lot of wasted cycle here.
+        -- A better npc management system needs to be created to deal with this issue.
+        if (SSM.SuperSurvivors[i] ~= nil) then
             CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Survivor ID: " .. tostring(i));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Survivor Name: " .. tostring(SSM.SuperSurvivors[i]:getName()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
-                "Survivor Square: " ..
-                tostring("locationX: " .. ss_squareX .. " | locationY: " .. ss_squareY .. " | locationZ: " .. ss_squareZ));
+                "Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
+            -- 
+            if (SSM.SuperSurvivors[i]:getCurrentSquare()) then
+                local ss_squareX = SSM.SuperSurvivors[i]:getCurrentSquare():getX();
+                local ss_squareY = SSM.SuperSurvivors[i]:getCurrentSquare():getY();
+                local ss_squareZ = SSM.SuperSurvivors[i]:getCurrentSquare():getZ();
+                CreateLogLine("SS_Debugger", isLoggingDebugInfo,
+                    "Survivor Square: " ..
+                    tostring("locationX: " ..
+                        ss_squareX .. " | locationY: " .. ss_squareY .. " | locationZ: " .. ss_squareZ));
+            else
+                CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Survivor Square: nil");
+            end
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Survivor in Group ID: " .. tostring(SSM.SuperSurvivors[i]:getGroupID()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Group Role: " .. tostring(SSM.SuperSurvivors[i]:getGroupRole()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Current Task: " .. tostring(SSM.SuperSurvivors[i]:getCurrentTask()));
-            CreateLogLine("SS_Debugger", isLoggingDebugInfo,
-                "Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+            --
             if (not SSM.SuperSurvivors[i]:isDead()) then
                 actualLivingSurvivors = actualLivingSurvivors + 1;
             end
         end
     end
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
         "Actual Living NPCs: " .. tostring(actualLivingSurvivors));

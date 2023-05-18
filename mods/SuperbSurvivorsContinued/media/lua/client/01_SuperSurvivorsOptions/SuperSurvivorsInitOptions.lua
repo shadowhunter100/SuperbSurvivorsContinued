@@ -3,10 +3,12 @@
 	I just tweaked it to use my own key bindings! and added support for settings too ~Nolan
 	Cows: I've added the Fenris_Wolf in the github credits.
 --]]
--- WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
+--[[
+	WIP - Cows: This file is replacing the old "SuperSurvivorSettings.lua" file and "SuperSurvivorOptions" variables...
+	WIP - Cows: Need to review for issues, and separating the functions into smaller blocks for readability and easier maintenance.
+--]]
 local isLocalLoggingEnabled = false;
 
--- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
 NpcSpawnChance = 50;       -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
