@@ -335,7 +335,7 @@ function SuperSurvivor:isInBase()
 	if (self:getGroupID() == nil) then
 		return false
 	else
-		local group = SSGM:Get(self:getGroupID())
+		local group = SSGM:GetGroupById(self:getGroupID())
 		if (group) then
 			return group:IsInBounds(self:Get())
 		end
@@ -348,7 +348,7 @@ function SuperSurvivor:getBaseCenter()
 	if (self:getGroupID() == nil) then
 		return false
 	else
-		local group = SSGM:Get(self:getGroupID())
+		local group = SSGM:GetGroupById(self:getGroupID())
 		if (group) then
 			return group:getBaseCenter()
 		end
@@ -618,7 +618,7 @@ function SuperSurvivor:getGroup()
 	local gid = self:getGroupID()
 
 	if (gid ~= nil) then
-		return SSGM:Get(gid)
+		return SSGM:GetGroupById(gid)
 	end
 	return nil
 end
@@ -3651,12 +3651,9 @@ function SuperSurvivor:getGunHitChance(weapon, victim)
 	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel);
 
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	local distance = getDistanceBetween(self.player, victim); -- WIP - Cows: Should distance even be a factor?
-	local gunHitChance = hitChance - distance;
-
-	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "Gun Hit Chance: " .. tostring(gunHitChance));
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "Gun Hit Chance: " .. tostring(hitChance));
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "--- SuperSurvivor:getGunHitChance() end ---");
-	return gunHitChance;
+	return hitChance;
 end
 
 function SuperSurvivor:UnStuckFrozenAnim()

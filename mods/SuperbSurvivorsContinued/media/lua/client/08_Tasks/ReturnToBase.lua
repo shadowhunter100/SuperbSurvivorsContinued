@@ -18,7 +18,7 @@ function ReturnToBaseTask:new(superSurvivor)
 		CreateLogLine("ReturnToBase", isLocalLoggingEnabled, tostring(o.Name) .. "no group id");
 		return nil
 	end
-	o.Group = SSGM:Get(o.GroupID)
+	o.Group = SSGM:GetGroupById(o.GroupID)
 	o.BaseCoords = o.Group:getBaseCenterCoords()
 
 	return o

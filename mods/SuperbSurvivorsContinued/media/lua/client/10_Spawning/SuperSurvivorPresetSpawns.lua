@@ -1789,7 +1789,7 @@ function SuperSurvivorPresetSpawnThis(PresetSpawn)
 		if (PresetSpawn.GroupID ~= nil) then
 			local Role = PresetSpawn.Role
 			if not Role then Role = "Worker" end
-			local tempGroup = SSGM:Get(PresetSpawn.GroupID)
+			local tempGroup = SSGM:GetGroupById(PresetSpawn.GroupID)
 
 			tempGroup:addMember(SuperSurvivor, Role)
 		end

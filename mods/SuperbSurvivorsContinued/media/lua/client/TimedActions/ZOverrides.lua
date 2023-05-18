@@ -15,7 +15,7 @@ function ISInventoryTransferAction:perform()
 		local TakerGroupId = self.character:getModData().Group
 			if(OwnerGroupId ~= -1) and (self.item:getModData().FreeToTake == nil)  and (TakerGroupId ~= OwnerGroupId) and (self.character:getModData().ID ~= self.item:getModData().LastOwner) then
 				print("ga stealing detected!")
-				SSGM:Get(OwnerGroupId):stealingDetected(self.character)
+				SSGM:GetGroupById(OwnerGroupId):stealingDetected(self.character)
 			end
 		end
 	end
@@ -42,7 +42,7 @@ function ISGrabItemAction:perform()
 			local TakerGroupId = self.character:getModData().Group
 			if(OwnerGroupId ~= -1) and (self.item:getModData().FreeToTake == nil) and  (TakerGroupId ~= OwnerGroupId) then
 				print("ga stealing detected!")
-				SSGM:Get(OwnerGroupId):stealingDetected(self.character)
+				SSGM:GetGroupById(OwnerGroupId):stealingDetected(self.character)
 			end
 		end
 	end

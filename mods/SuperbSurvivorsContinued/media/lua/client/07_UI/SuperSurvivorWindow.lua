@@ -532,7 +532,7 @@ end
 
 function on_click_companion_call(member_index)
     local group_id = SSM:Get(0):getGroupID()
-    local group_members = SSGM:Get(group_id):getMembers()
+    local group_members = SSGM:GetGroupById(group_id):getMembers()
     local member = group_members[member_index]
     if member then
         getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))
@@ -571,8 +571,8 @@ end
 context_options.show_context_menu_role = function(member_index)
     if member_index == 1 then return end
     local group_id = SSM:Get(0):getGroupID()
-    local group = SSGM:Get(group_id)
-    local group_members = SSGM:Get(group_id):getMembers()
+    local group = SSGM:GetGroupById(group_id)
+    local group_members = SSGM:GetGroupById(group_id):getMembers()
     local member = group_members[member_index]
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
     context_menu:addOption("Call", nil, function() on_click_companion_call(member_index) end)
@@ -610,7 +610,7 @@ end
 
 context_options.show_context_menu_member = function(member_index)
     if member_index == 1 then return end
-    local member = SSGM:Get(SSM:Get(0):getGroupID()):getMembers()[member_index]
+    local member = SSGM:GetGroupById(SSM:Get(0):getGroupID()):getMembers()[member_index]
     local context_menu = ISContextMenu.get(0, getMouseX(), getMouseY(), 1, 1)
     context_menu:addOption("Information", nil, function() ShowSurvivorInfo(member_index) end)
     context_menu:addOption("Inventory", nil, function() create_panel_inventory_transfer(member_index) end)
@@ -636,7 +636,7 @@ function base_area_visibility.event_update_area_highlight()
                 and base_area_visibility[tostring(area_name)].group_id ~= nil
             then
                 local group_id = base_area_visibility[tostring(area_name)].group_id;
-                local group = SSGM:Get(group_id);
+                local group = SSGM:GetGroupById(group_id);
                 local coords = (tostring(area_name) == "Bounds") and group.Bounds or group.GroupAreas[area_name];
                 local x1 = coords[1];
                 local x2 = coords[2];

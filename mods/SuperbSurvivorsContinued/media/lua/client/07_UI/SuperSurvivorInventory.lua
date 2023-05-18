@@ -68,7 +68,7 @@ function InventoryRow:on_click_transfer(direction)
     -- > player to member
     -- < member to player
     local item_id = self.item:getID()
-    local member = SSGM:Get(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
+    local member = SSGM:GetGroupById(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
     local member_inventory = member.player:getInventory()
     local player_inventory = getPlayerInventory(0).inventory
     if direction == ">" then
@@ -187,7 +187,7 @@ function PanelMemberInventory:dupdate()
     self:clearChildren()
     local dy = 0
     local switch = 0
-    local member = SSGM:Get(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
+    local member = SSGM:GetGroupById(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
     local items = member.player:getInventory():getItems()
     local scroll_height = 0
     for i=0, items:size()-1 do
@@ -295,7 +295,7 @@ end
 
 function PanelInventoryTransfer:createChildren()
     self:clearChildren()
-    local member = SSGM:Get(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
+    local member = SSGM:GetGroupById(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
     local member_inventory = member.player:getInventory()
     local player_inventory = getPlayerInventory(0).inventory
     self.header_player = TitleBar:new(

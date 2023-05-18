@@ -58,7 +58,7 @@ function SuperSurvivorPlayerInit(player)
 				Group:addMember(SSM:Get(0), "Leader")
 			else
 				GID = SSM:Get(0):getGroupID()
-				Group = SSGM:Get(GID)
+				Group = SSGM:GetGroupById(GID)
 			end
 
 			Group:addMember(wife, "Worker")
@@ -165,7 +165,7 @@ function SuperSurvivorPVPHandle(wielder, victim, weapon, damage)
 	if instanceof(victim, "IsoPlayer") then
 		local GroupID = SSV:getGroupID()
 		if (GroupID ~= nil) then
-			local group = SSGM:Get(GroupID)
+			local group = SSGM:GetGroupById(GroupID)
 			if (group) then
 				group:PVPAlert(wielder)
 			end

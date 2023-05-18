@@ -67,7 +67,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 			Group:addMember(SSM:Get(0), GetJobText("Leader"))
 		else
 			GID = SSM:Get(0):getGroupID()
-			Group = SSGM:Get(GID)
+			Group = SSGM:GetGroupById(GID)
 		end
 
 		if (Group) then
@@ -111,7 +111,7 @@ function AskToLeave(test, SS)
 
 	local GroupID = SS:getGroupID()
 	if (GroupID ~= nil) then
-		local group = SSGM:Get(GroupID)
+		local group = SSGM:GetGroupById(GroupID)
 
 		if (group) then
 			group:PVPAlert(getSpecificPlayer(0))
@@ -137,7 +137,7 @@ function AskToDrop(test, SS)
 
 	local GroupID = SS:getGroupID()
 	if (GroupID ~= nil) then
-		local group = SSGM:Get(GroupID)
+		local group = SSGM:GetGroupById(GroupID)
 		if (group) then
 			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "pvp alert being robbed");
 			group:PVPAlert(getSpecificPlayer(0))
@@ -304,7 +304,7 @@ end
 function SetMeleOrGun(test, value)
 	local mySS = SSM:Get(0)
 	if (mySS:getGroupID() ~= nil) then
-		local myGroup = SSGM:Get(mySS:getGroupID())
+		local myGroup = SSGM:GetGroupById(mySS:getGroupID())
 		if (myGroup) then
 			if (value == "gun") then
 				mySS:Get():Say(getContextMenuText("EveryOneUseGun"))

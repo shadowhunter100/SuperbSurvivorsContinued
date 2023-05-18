@@ -462,7 +462,7 @@ function AIManager(TaskMangerIn)
 		ASuperSurvivor:setAIMode("Random Solo")
 
 		if (ASuperSurvivor:getGroupID() ~= nil) then
-			local group = SSGM:Get(ASuperSurvivor:getGroupID())
+			local group = SSGM:GetGroupById(ASuperSurvivor:getGroupID())
 			group:removeMember(ASuperSurvivor:getID())
 		end
 		ASuperSurvivor:getTaskManager():clear()
@@ -951,7 +951,7 @@ function AIManager(TaskMangerIn)
 					(def:getY() + def:getH() + 1), 0 }
 				nGroup:setBounds(bounds)
 			elseif ((SSM:Get(0) == nil) or (GroupId ~= SSM:Get(0):getGroupID())) then
-				local OwnerGroup = SSGM:Get(GroupId)
+				local OwnerGroup = SSGM:GetGroupById(GroupId)
 				local LeaderID = OwnerGroup:getLeader()
 				if (LeaderID ~= 0) then
 					OwnerGroup:addMember(ASuperSurvivor, "Worker")
@@ -973,7 +973,7 @@ function AIManager(TaskMangerIn)
 			-- random survivor in base is starving - reset so he goes back out looking for food and re base there
 			ASuperSurvivor:setAIMode("Random Solo")
 			if (ASuperSurvivor:getGroupID() ~= nil) then
-				local group = SSGM:Get(ASuperSurvivor:getGroupID())
+				local group = SSGM:GetGroupById(ASuperSurvivor:getGroupID())
 				group:removeMember(ASuperSurvivor:getID())
 			end
 			ASuperSurvivor:getTaskManager():clear()

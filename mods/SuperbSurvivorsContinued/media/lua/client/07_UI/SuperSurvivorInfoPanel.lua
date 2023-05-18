@@ -77,7 +77,7 @@ end
 
 function PanelSurvivorInfo:on_click_call()
     local group_id = SSM:Get(0):getGroupID()
-    local group_members = SSGM:Get(group_id):getMembers()
+    local group_members = SSGM:GetGroupById(group_id):getMembers()
     local member = group_members[self.member_index]
     if (member) then
         getSpecificPlayer(0):Say(getText("ContextMenu_SS_CallName_Before") ..

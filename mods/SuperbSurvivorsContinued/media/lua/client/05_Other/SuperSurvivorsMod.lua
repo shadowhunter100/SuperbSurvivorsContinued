@@ -313,7 +313,7 @@ function SurvivorOrder(test, player, order, orderParam)
 			TaskMangerIn:AddToTop(SortLootTask:new(ASuperSurvivor, false))
 		elseif (order == "Dismiss") then
 			ASuperSurvivor:setAIMode("Random Solo")
-			local group = SSGM:Get(ASuperSurvivor:getGroupID())
+			local group = SSGM:GetGroupById(ASuperSurvivor:getGroupID())
 			if (group) then
 				group:removeMember(ASuperSurvivor:getID())
 			end
@@ -421,7 +421,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 		elseif (keyNum == getCore():getKey("Ask Closest Group Member to Follow")) then
 			local mySS = SSM:Get(0)
 			if (mySS:getGroupID() ~= nil) then
-				local myGroup = SSGM:Get(mySS:getGroupID())
+				local myGroup = SSGM:GetGroupById(mySS:getGroupID())
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
 					if (member) then
@@ -439,7 +439,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 		elseif (keyNum == getCore():getKey("Call Closest Group Member")) then -- t key
 			local mySS = SSM:Get(0)
 			if (mySS:getGroupID() ~= nil) then
-				local myGroup = SSGM:Get(mySS:getGroupID())
+				local myGroup = SSGM:GetGroupById(mySS:getGroupID())
 				if (myGroup ~= nil) then
 					local member = myGroup:getClosestMember(nil, mySS:Get())
 					if (member) then
@@ -647,15 +647,19 @@ function SuperSurvivorsNewSurvivorManager()
 	local spawnSquare = setSpawnSquare(hisGroup, center);
 
 	-- WIP - Cows: Need to rework the spawning functions and logic...
+	-- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
 	if (spawnSquare ~= nil) then
-		local npcSurvivorGroup = SSGM:newGroup();
-		local GroupSize = ZombRand(1, AltSpawnGroupSize);
-
-		if (GroupSize > AltSpawnGroupSize) then
-			GroupSize = AltSpawnGroupSize;
-		elseif (GroupSize < Min_Group_Size) then
-			GroupSize = Min_Group_Size;
+		local npcSurvivorGroup;
+		if (SSGM.GroupCount < Limit_Npc_Groups) then
+			npcSurvivorGroup = SSGM:newGroup();
+		else
+			-- something ... repopulate the previous groups?
+			local rng = ZombRand(1, Limit_Npc_Groups);
+			CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorDoRandomSpawns() rng");
+			npcSurvivorGroup = SSGM:Get(rng);
 		end
+
+		local GroupSize = ZombRand(1, Max_Group_Size);
 
 		for i = 1, GroupSize do
 			local npcSurvivor = SuperSurvivorSpawnNpc(spawnSquare);
@@ -668,6 +672,15 @@ function SuperSurvivorsNewSurvivorManager()
 				npcSurvivor:setHostile(false);
 			end
 
+			local mySS = SSM:Get(0);
+			local isPlayerSurvivorGroup = SuperSurvivorGroup:isMember(mySS);
+
+			if (i == 1 and not isPlayerSurvivorGroup) then
+				npcSurvivorGroup:addMember(npcSurvivor, "Leader");
+			else
+				npcSurvivorGroup:addMember(npcSurvivor, "Guard");
+			end
+
 			npcSurvivor.player:getModData().isRobber = false;
 			npcSurvivor:setName("Survivor " .. name);
 			npcSurvivor:getTaskManager():AddToTop(WanderTask:new(npcSurvivor));
@@ -675,7 +688,7 @@ function SuperSurvivorsNewSurvivorManager()
 			equipRandomNpc(npcSurvivor, false);
 			GetRandomSurvivorSuit(npcSurvivor) -- WIP: Cows - Consider creating a preset outfit for raiders?
 		end
-		npcSurvivorGroup:AllSpokeTo();
+		-- npcSurvivorGroup:AllSpokeTo(); -- Cows: seems useless?
 	end
 end
 
@@ -726,32 +739,30 @@ function SuperSurvivorsRaiderManager()
 		local spawnSquare = setSpawnSquare(hisGroup, center);
 
 		-- WIP - Cows: Need to rework the spawning functions and logic...
+		-- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
 		if (spawnSquare ~= nil) then
-			getSpecificPlayer(0):getModData().LastRaidTime = hours
-			if (getSpecificPlayer(0):isAsleep()) then
-				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"));
-				getSpecificPlayer(0):forceAwake();
-			else
-				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
-			end
 			-- RAIDER GROUPS
-			local RaiderGroup = SSGM:newGroup();
-			local GroupSize = ZombRand(1, hisGroup:getMemberCount()) + math.floor(hours / (24 * 30));
+			local raiderGroup;
 
-			if (GroupSize > 10) then
-				GroupSize = 10;
-			elseif (GroupSize < 2) then
-				GroupSize = 2;
+			if (SSGM.GroupCount < Limit_Raiders_Groups) then
+				raiderGroup = SSGM:newGroup();
+			else
+				-- something ... repopulate the previous groups?
+				local rng = ZombRand(1, Limit_Raiders_Groups);
+				raiderGroup = SSGM:GetGroupById(rng);
 			end
+
+			local GroupSize = ZombRand(1, Max_Group_Size);
+			local nearestRaiderDistance = 30;
 
 			for i = 1, GroupSize do
 				local raider = SuperSurvivorSpawnNpc(spawnSquare);
 				local name = raider:getName();
 
 				if (i == 1) then
-					RaiderGroup:addMember(raider, "Leader");
+					raiderGroup:addMember(raider, "Leader");
 				else
-					RaiderGroup:addMember(raider, "Guard");
+					raiderGroup:addMember(raider, "Guard");
 				end
 				raider:setHostile(true);
 				raider.player:getModData().isRobber = true;
@@ -762,14 +773,27 @@ function SuperSurvivorsRaiderManager()
 
 				local number = ZombRand(1, 3);
 				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number));
+				local currentRaiderDistanceFromPlayer = getDistanceBetween(raider, mySS);
+
+				if (nearestRaiderDistance > currentRaiderDistanceFromPlayer) then
+					nearestRaiderDistance = currentRaiderDistanceFromPlayer;
+				end
 			end
 
-			RaiderGroup:AllSpokeTo();
+			getSpecificPlayer(0):getModData().LastRaidTime = hours;
+			if (getSpecificPlayer(0):isAsleep() and nearestRaiderDistance < 15) then
+				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"));
+				getSpecificPlayer(0):forceAwake();
+			else
+				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
+			end
+
+			-- RaiderGroup:AllSpokeTo(); -- Cows: seems useless?
 		end
 	end
 end
 
-Events.EveryTenMinutes.Add(SuperSurvivorsRaiderManager);
+Events.EveryHours.Add(SuperSurvivorsRaiderManager);
 NumberOfLocalPlayers = 0;
 
 function SSCreatePlayerHandle(newplayerID)

@@ -54,7 +54,7 @@ AreaColors = {
 --****************************************************
 function UIUtil_GetGroup()
     local group_id = SSM:Get(0):getGroupID()
-    local group = SSGM:Get(group_id)
+    local group = SSGM:GetGroupById(group_id)
     if group == nil then
         group = SSGM:newGroup()
         group:addMember(SSM:Get(0), getContextMenuText("Job_Leader"))
@@ -71,7 +71,7 @@ end
 
 function UIUtil_GetMemberInfo(member_index)
     local group_id = SSM:Get(0):getGroupID()
-    local group = SSGM:Get(group_id)
+    local group = SSGM:GetGroupById(group_id)
     if group == nil then
         group = SSGM:newGroup()
         group:addMember(SSM:Get(0), getContextMenuText("Job_Leader"))
@@ -131,7 +131,7 @@ function UIUtil_GiveOrder(order_index, member_index)
     CreateLogLine("UIUtils", isLoggingSurvivorOrder, "Order: " .. tostring(Orders[order_index]));
 
     local group_id = SSM:Get(0):getGroupID()
-    local group_members = SSGM:Get(group_id):getMembers()
+    local group_members = SSGM:GetGroupById(group_id):getMembers()
     local member = group_members[member_index]
     if member then
         getSpecificPlayer(0):Say(getActionText("CallName_Before") .. member:getName() .. getActionText("CallName_After"))

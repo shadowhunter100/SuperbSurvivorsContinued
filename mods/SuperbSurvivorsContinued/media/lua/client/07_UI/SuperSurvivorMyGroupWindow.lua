@@ -11,7 +11,7 @@ end
 local function SSItemClickHandle()
 	CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "SSItemClickHandle() called");
 	local GID = SSM:Get(0):getGroupID()
-	local members = SSGM:Get(GID):getMembers()
+	local members = SSGM:GetGroupById(GID):getMembers()
 	local selected = tonumber(MyGroupWindow:getSelected())
 	local member = members[selected]
 
@@ -71,7 +71,7 @@ function GroupWindow:Update()
 	self.HomeWindow:clear()
 
 	local GID = SSM:Get(0):getGroupID()
-	local Group = SSGM:Get(GID)
+	local Group = SSGM:GetGroupById(GID)
 
 	if (Group == nil) then
 		CreateLogLine("SuperSurvivorMyGroupWindow", isLocalLoggingEnabled, "Fixing player has no group...");

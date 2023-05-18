@@ -69,7 +69,7 @@ function StartSelectingArea(test, area)
     local mySS = SSM:Get(0)
     local gid = mySS:getGroupID()
     if (not gid) then return false end
-    local group = SSGM:Get(gid)
+    local group = SSGM:GetGroupById(gid)
     if (not group) then return false end
 
     if (area == "BaseArea") then
@@ -105,7 +105,7 @@ function SelectingArea(test, area, value)
         local mySS = SSM:Get(0)
         local gid = mySS:getGroupID()
         if (not gid) then return false end
-        local group = SSGM:Get(gid)
+        local group = SSGM:GetGroupById(gid)
         if (not group) then return false end
 
         if (area == "BaseArea") then
