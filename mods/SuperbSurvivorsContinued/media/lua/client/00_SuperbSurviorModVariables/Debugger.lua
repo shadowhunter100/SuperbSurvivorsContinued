@@ -38,14 +38,48 @@ function LogTableKVPairs(fileName, isEnabled, table)
     end
 end
 
-function LogSSDebugInfo()
-    local playerSurvivor = getSpecificPlayer(0);
-    local isLoggingDebugInfo = true;
-    local groupsWithActualMembers = 1; -- Starting at 1, because player group is 0...
-    local mySS = SSM:Get(0);
+local function log_SS_SandboxOptions()
+    CreateLogLine("SS_OptionsValues", true, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
+    CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
+    CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
+    CreateLogLine("SS_OptionsValues", true, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
+    CreateLogLine("SS_OptionsValues", true, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
+    CreateLogLine("SS_OptionsValues", true, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
+    CreateLogLine("SS_OptionsValues", true, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
+    CreateLogLine("SS_OptionsValues", true, "Max_Group_Size: " .. tostring(Max_Group_Size));
+    CreateLogLine("SS_OptionsValues", true, "");
+    CreateLogLine("SS_OptionsValues", true, "Limit_Raiders_Groups: " .. tostring(Limit_Raiders_Groups));
+    CreateLogLine("SS_OptionsValues", true, "Limit_Raiders_Spawn: " .. tostring(Limit_Raiders_Spawn));
+    CreateLogLine("SS_OptionsValues", true, "RaidersSpawnFrequencyByHours: " .. tostring(RaidersSpawnFrequencyByHours));
+    CreateLogLine("SS_OptionsValues", true, "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));
+    CreateLogLine("SS_OptionsValues", true, "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
+    CreateLogLine("SS_OptionsValues", true, "");
+    CreateLogLine("SS_OptionsValues", true, "CanNpcsCreateBase: " .. tostring(CanNpcsCreateBase));
+    CreateLogLine("SS_OptionsValues", true, "IsInfiniteAmmoEnabled: " .. tostring(IsInfiniteAmmoEnabled));
+    CreateLogLine("SS_OptionsValues", true, "IsRoleplayEnabled: " .. tostring(IsRoleplayEnabled));
+    CreateLogLine("SS_OptionsValues", true, "IsSpeakEnabled: " .. tostring(IsSpeakEnabled));
+    CreateLogLine("SS_OptionsValues", true, "SleepGeneralHealRate: " .. tostring(SleepGeneralHealRate));
+    CreateLogLine("SS_OptionsValues", true, "WepSpawnRateGun: " .. tostring(WepSpawnRateGun));
+    CreateLogLine("SS_OptionsValues", true, "WepSpawnRateMelee: " .. tostring(WepSpawnRateMelee));
+    CreateLogLine("SS_OptionsValues", true, "");
+    CreateLogLine("SS_OptionsValues", true, "CanIdleChat: " .. tostring(CanIdleChat));
+    CreateLogLine("SS_OptionsValues", true, "GFollowDistance: " .. tostring(GFollowDistance));
+    CreateLogLine("SS_OptionsValues", true, "PanicDistance: " .. tostring(PanicDistance));
+    CreateLogLine("SS_OptionsValues", true, "SurvivorBravery: " .. tostring(SurvivorBravery));
+    CreateLogLine("SS_OptionsValues", true, "SurvivorCanFindWork: " .. tostring(SurvivorCanFindWork));
+    CreateLogLine("SS_OptionsValues", true, "SurvivorNeedsFoodWater: " .. tostring(SurvivorNeedsFoodWater));
+    CreateLogLine("SS_OptionsValues", true, "SurvivorFriendliness: " .. tostring(SurvivorFriendliness));
+    CreateLogLine("SS_OptionsValues", true, "");
+    CreateLogLine("SS_OptionsValues", true, "IsPlayerBaseSafe: " .. tostring(IsPlayerBaseSafe));
+    CreateLogLine("SS_OptionsValues", true, "IsPVPEnabled: " .. tostring(IsPVPEnabled));
+    CreateLogLine("SS_OptionsValues", true, "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
+    CreateLogLine("SS_OptionsValues", true, "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
+end
 
-    playerSurvivor:Say("Logging Debug info...");
-    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Player Data");
+local function log_SS_PlayerInfo()
+    local isLoggingDebugInfo = true;
+    local mySS = SSM:Get(0);
+    CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Player Data");
     if (mySS) then
         local mySS_squareX = mySS:getCurrentSquare():getX();
         local mySS_squareY = mySS:getCurrentSquare():getY();
@@ -64,6 +98,11 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+end
+
+local function log_SS_GroupsInfo()
+    local isLoggingDebugInfo = true;
+    local groupsWithActualMembers = 0;
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Groups Data");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     -- Get the total number of groups
@@ -89,7 +128,10 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "--- LINE BREAK ---");
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "");
+end
 
+local function log_SS_SurvivorsInfo()
+    local isLoggingDebugInfo = true;
     local actualLivingSurvivors = 0;
 
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Begin Survivors Data");
@@ -104,7 +146,7 @@ function LogSSDebugInfo()
                 "Survivor Name: " .. tostring(SSM.SuperSurvivors[i]:getName()));
             CreateLogLine("SS_Debugger", isLoggingDebugInfo,
                 "Is Dead? " .. tostring(SSM.SuperSurvivors[i]:isDead()));
-            -- 
+            --
             if (SSM.SuperSurvivors[i]:getCurrentSquare()) then
                 local ss_squareX = SSM.SuperSurvivors[i]:getCurrentSquare():getX();
                 local ss_squareY = SSM.SuperSurvivors[i]:getCurrentSquare():getY();
@@ -132,7 +174,15 @@ function LogSSDebugInfo()
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
         "Actual Living NPCs: " .. tostring(actualLivingSurvivors));
+end
 
+function LogSSDebugInfo()
+    local playerSurvivor = getSpecificPlayer(0);
+    playerSurvivor:Say("Logging Debug info...");
+    log_SS_SandboxOptions();
+    log_SS_PlayerInfo();
+    log_SS_GroupsInfo();
+    log_SS_SurvivorsInfo();
     playerSurvivor:Say("Logging Debug info complete...");
 end
 
