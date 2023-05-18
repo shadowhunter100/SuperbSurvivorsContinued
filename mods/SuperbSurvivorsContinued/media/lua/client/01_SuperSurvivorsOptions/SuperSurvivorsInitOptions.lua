@@ -8,9 +8,8 @@ local isLocalLoggingEnabled = false;
 
 -- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
-AlternativeSpawnChance = 5; -- WIP - Cows: AlternativeSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
+NpcSpawnChance = 5; -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
 AltSpawnGroupSize = 1;
-BaseNpcSpawnChance = 0;     -- WIP - Cows: Default to Off. BaseNpcSpawnChance (formerly "SpawnRate") is used when the player enters an unvisited map area
 HostileSpawnRateBase = 1;   -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 17;   -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
 IsWifeSpawn = true;         -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower

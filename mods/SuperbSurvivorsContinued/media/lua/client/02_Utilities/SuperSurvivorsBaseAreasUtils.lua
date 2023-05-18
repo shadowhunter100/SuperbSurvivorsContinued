@@ -57,7 +57,7 @@ end
 
 --
 function StartSelectingArea(test, area)
-    local isLocalFunctionLoggingEnabled = true;
+    local isLocalFunctionLoggingEnabled = false;
     for k, v in pairs(SuperSurvivorSelectArea) do
         SuperSurvivorSelectArea[k] = false
     end

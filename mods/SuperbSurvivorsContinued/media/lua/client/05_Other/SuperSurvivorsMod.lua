@@ -34,7 +34,7 @@ Events.OnPostSave.Add(SuperSurvivorsSaveData);
 ---@param square any
 ---@return unknown|nil
 function SuperSurvivorSpawnNpc(square)
-	local isLocalFunctionLoggingEnabled = true;
+	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpc() called");
 	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
 	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
@@ -584,7 +584,7 @@ local function setSpawnSquare(hisGroup, center)
 end
 
 local function equipRandomNpc(npc, isRaider)
-	local isLocalFunctionLoggingEnabled = true;
+	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: equipRandomNpc() called");
 
 	if (npc:hasWeapon() == false) then
@@ -622,10 +622,10 @@ local function equipRandomNpc(npc, isRaider)
 end
 
 --- WIP - Cows: Need to rework the spawning functions and logic...
---- SuperSurvivorsNewSurvivorManager() is called once every in-game hour and uses AlternativeSpawnChance.
+--- SuperSurvivorsNewSurvivorManager() is called once every in-game hour and uses NpcSpawnChance.
 ---@return any
 function SuperSurvivorsNewSurvivorManager()
-	local isLocalFunctionLoggingEnabled = true;
+	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: equipRandomNpc() called");
 	local mySS = SSM:Get(0);
 	local hisGroup = mySS:getGroup();
@@ -684,7 +684,7 @@ function SuperSurvivorDoRandomSpawns()
 	if (getSpecificPlayer(0) == nil) then return false end
 	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorDoRandomSpawns() called");
-	local spawnChanceVal = AlternativeSpawnChance;
+	local spawnChanceVal = NpcSpawnChance;
 	local isSpawning = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
 	if (isSpawning) then
