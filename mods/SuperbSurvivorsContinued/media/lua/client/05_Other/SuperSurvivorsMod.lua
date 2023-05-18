@@ -16,42 +16,28 @@ end
 
 Events.OnRenderTick.Add(SuperSurvivorsOnTick);
 
--- WIP - Cows: Ticks are calculated very inconsistently... 1 in-game minute is about 2 seconds IRL time
--- The data is also saved when the user presses the "Esc" key under SuperSurvivorKeyBindAction()... so is this even needed?
+--- WIP - Cows: Saves all the relevant mod data... it works, but I think it can be better.
 function SuperSurvivorsSaveData()
-	local isLocalFunctionLoggingEnabled = false;
-	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsSaveData() called");
-	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Saving...");
+	local isSaveFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "function: SuperSurvivorsSaveData() called");
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Saving...");
 	SSM:SaveAll();
 	SSGM:Save();
 	SaveSurvivorMap();
-	local isSaveFunctionLoggingEnabled = false;
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging groups...");
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
-		"Groups Count: " .. tostring(SSGM.GroupCount));
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, tostring(SSGM.Groups));
-	LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSGM.Groups);
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- LINE BREAK ---");
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Logging Survivors...");
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled,
-		"Survivors Count:" .. tostring(SSM.SurvivorCount));
-	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "Survivors:" .. tostring(SSM.SuperSurvivors));
-	LogTableKVPairs("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, SSM.SuperSurvivors);
+	CreateLogLine("SuperSurvivorsMod", isSaveFunctionLoggingEnabled, "--- SuperSurvivorsSaveData() end ---");
 end
 
 Events.OnPostSave.Add(SuperSurvivorsSaveData);
 
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurvivorRandomSpawn(square)
-	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
-	local ASuperSurvivor = SSM:spawnSurvivor(nil, square)
-
-	-- WIP - Cows: Why was chance to be hostile called and calculated twice...? and why divide by 48?
-	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
-
-	if (FinalChanceToBeHostile > HostileSpawnRateMax) and (HostileSpawnRateBase < HostileSpawnRateMax) then
-		FinalChanceToBeHostile = HostileSpawnRateMax;
-	end
+--- WIP - Cows: Need to rework the spawning functions and logic...
+--- Cows: formerly "SuperSurvivorRandomSpawn()"... which had no randomness or chance in itself - it simply spawned an npc at the specified square on call.
+---@param square any
+---@return unknown|nil
+function SuperSurvivorSpawnNpc(square)
+	local isLocalFunctionLoggingEnabled = true;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpc() called");
+	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
+	local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 
 	if (ASuperSurvivor ~= nil) then
 		if (ZombRand(0, 100) < (WepSpawnRateGun + math.floor(hoursSurvived / 48))) then
@@ -62,12 +48,13 @@ function SuperSurvivorRandomSpawn(square)
 		elseif (ZombRand(0, 100) < (WepSpawnRateMelee + math.floor(hoursSurvived / 48))) then
 			ASuperSurvivor:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)], true)
 		end
-		if (ZombRand(0, 100) < FinalChanceToBeHostile) then ASuperSurvivor:setHostile(true) end
 	end
 
 	-- clear the immediate area
 	local zlist = getCell():getZombieList();
 	if (zlist ~= nil) then
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Z List Size" .. tostring(zlist:size()));
+		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Clearing Zs from cell...");
 		for i = zlist:size() - 1, 0, -1 do
 			local z = zlist:get(i);
 
@@ -77,11 +64,13 @@ function SuperSurvivorRandomSpawn(square)
 		end
 	end
 
+	CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpc() end ---");
 	return ASuperSurvivor;
 end
 
 -- WIP - Cows: Need to rework the spawning functions and logic...
 function SuperSurvivorsLoadGridsquare(square)
+
 	if (square ~= nil) then
 		local x = square:getX()
 		local y = square:getY()
@@ -118,58 +107,14 @@ function SuperSurvivorsLoadGridsquare(square)
 			and (square:getZ() == 0 or square:isOutside() == false)
 			and (not SuperSurvivorPresetSpawn(square))
 		then
-			SurvivorMap[key] = {}
-			square:getModData().SurvivorSquareLoaded = true
-			local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
-
-			if (BaseNpcSpawnChance ~= 0)
-				and (ZombRand(BaseNpcSpawnChance + hoursSurvived) == 0) -- WIP - Cows: How does this work? Random number between spawnrate plus hours survived?
-				and (square:getZoneType() == "TownZone")
-				and (not square:isSolid())
-			then
-				-- NON ALT SPAWNING GROUPS
-				if (ZombRand(15) == 0) then -- spawn group
-					local hours = getGameTime():getWorldAgeHours()
-					local RaiderGroup = SSGM:newGroup()
-
-					if (RaiderGroup:getID() == getSpecificPlayer(0):getModData().Group) then
-						RaiderGroup = SSGM:newGroup()
-					end
-
-					local GroupSize = ZombRand(2, 5) + math.floor(hours / (24 * 30))
-					if (GroupSize > Max_Group_Size) then
-						GroupSize = Max_Group_Size
-					elseif (GroupSize < Min_Group_Size) then
-						GroupSize = Min_Group_Size
-					end
-					local groupHostility
-					local Leader
-
-					for i = 1, GroupSize do
-						local raider = SuperSurvivorRandomSpawn(square);
-						if (i == 1) then
-							RaiderGroup:addMember(raider, "Leader")
-							groupHostility = raider.player:getModData().isHostile
-							Leader = raider
-						else
-							RaiderGroup:addMember(raider, "Guard")
-							raider:setHostile(groupHostility)
-							raider:getTaskManager():AddToTop(FollowTask:new(raider, Leader:Get()))
-						end
-
-						if (raider:hasWeapon() == false) then
-							raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
-						end
-					end
-				else
-					SuperSurvivorRandomSpawn(square)
-				end
-			end
+			SurvivorMap[key] = {};
+			square:getModData().SurvivorSquareLoaded = true;
+			Events.LoadGridsquare.Remove(SuperSurvivorsLoadGridsquare);
 		end
 	end
 end
 
-Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare);
+Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare); --- This is a potential performance killer... because it scans through all the known map squares.
 
 function SuperSurvivorsInit()
 	GroupWindowCreate();
@@ -452,7 +397,7 @@ function SuperSurvivorKeyBindAction(keyNum)
 		-- playerSurvivor:Say(tostring(keyNum));
 
 		if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the NumPad enter key
-			local ss = SuperSurvivorRandomSpawn(playerSurvivor:getCurrentSquare());
+			local ss = SuperSurvivorSpawnNpc(playerSurvivor:getCurrentSquare());
 		elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
 			if (GFollowDistance < 50) then
 				GFollowDistance = GFollowDistance + 1;
@@ -510,9 +455,9 @@ function SuperSurvivorKeyBindAction(keyNum)
 		elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key, Order "Follow"
 			superSurvivorsHotKeyOrder(6);
 		elseif (keyNum == getCore():getKey("SSHotkey_2")) then -- Down key, Order "Stop"
-			superSurvivorsHotKeyOrder(20);
-		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key, Order "Stand Ground"
 			superSurvivorsHotKeyOrder(19);
+		elseif (keyNum == getCore():getKey("SSHotkey_3")) then -- Left key, Order "Stand Ground"
+			superSurvivorsHotKeyOrder(18);
 		elseif (keyNum == getCore():getKey("SSHotkey_4")) then -- Right key, Order "Barricade"
 			superSurvivorsHotKeyOrder(1);
 		elseif (keyNum == getCore():getKey("NumPad_5")) then
@@ -555,44 +500,51 @@ end
 
 Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
 
--- ALT SPAWNING
--- WIP - Cows: Need to rework the spawning functions and logic...
-function SuperSurvivorsNewSurvivorManager()
-	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours())
-	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
-
-	if (FinalChanceToBeHostile > HostileSpawnRateMax)
-		and (HostileSpawnRateBase < HostileSpawnRateMax)
-	then
-		FinalChanceToBeHostile = HostileSpawnRateMax;
-	end
-
-	if (getSpecificPlayer(0) == nil) then return false end
+---
+--[[
+	Merged identical code block from SuperSurvivorsNewSurvivorManager() and SuperSurvivorDoRandomSpawns()
+	Cows: Apparently for whatever reason those functions needs to be run regularly...
+	The sleep call I can understand because npcs can heal while the player sleeps.
+	No clue if this affects infection status or injuries...
+--]]
+local function refreshNpcStatus()
 	--this unrelated to raiders but need this to run every once in a while
 	-- WIP - Cows: WHY DOES THIS NEED TO RUN?
-	getSpecificPlayer(0):getModData().hitByCharacter = false
-	getSpecificPlayer(0):getModData().semiHostile = false
-	getSpecificPlayer(0):getModData().dealBreaker = nil
+	getSpecificPlayer(0):getModData().hitByCharacter = false;
+	getSpecificPlayer(0):getModData().semiHostile = false;
+	getSpecificPlayer(0):getModData().dealBreaker = nil;
 
 	if (getSpecificPlayer(0):isAsleep()) then
 		SSM:AsleepHealAll()
 	end
+end
 
-	local mySS = SSM:Get(0)
-	local hisGroup = mySS:getGroup()
+--- Merged identical code block from SuperSurvivorsNewSurvivorManager() and SuperSurvivorDoRandomSpawns()
+---@param playerGroup any
+---@return any
+local function getPlayerGroupBoundsCenter(playerGroup)
+	local bounds = playerGroup:getBounds();
+	local center;
 
-	if (hisGroup == nil) then return false end
+	if (bounds) then
+		center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]);
+	end
 
-	local bounds = hisGroup:getBounds()
-	local center
-	if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
-	if not center then center = getSpecificPlayer(0):getCurrentSquare() end
+	if (not center) then
+		center = getSpecificPlayer(0):getCurrentSquare();
+	end
 
-	local spawnSquare
+	return center;
+end
 
-	local success = false
-	local range = 45
-	local drange = range * 2
+--- Merged identical code block from SuperSurvivorsNewSurvivorManager() and SuperSurvivorDoRandomSpawns()
+---@param hisGroup any
+---@param center any
+---@return unknown
+local function setSpawnSquare(hisGroup, center)
+	local spawnSquare;
+	local range = 45;
+	local drange = range * 2;
 
 	for i = 1, 10 do
 		local spawnLocation = ZombRand(4);
@@ -615,7 +567,7 @@ function SuperSurvivorsNewSurvivorManager()
 			y = center:getY() + (ZombRand(drange) - range);
 		end
 
-		spawnSquare = getCell():getGridSquare(x, y, 0)
+		spawnSquare = getCell():getGridSquare(x, y, 0);
 
 		if (spawnSquare ~= nil)
 			and (not hisGroup:IsInBounds(spawnSquare))
@@ -624,62 +576,106 @@ function SuperSurvivorsNewSurvivorManager()
 			and (not spawnSquare:isSolid())
 			and (spawnSquare:isSolidFloor())
 		then
-			success = true
-			break
+			break;
 		end
 	end
 
+	return spawnSquare;
+end
+
+local function equipRandomNpc(npc, isRaider)
+	local isLocalFunctionLoggingEnabled = true;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: equipRandomNpc() called");
+
+	if (npc:hasWeapon() == false) then
+		npc:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
+	end
+
+	local bag = npc:getBag();
+	local food;
+	local count = ZombRand(0, 3);
+
+	if (isRaider) then
+		for i = 1, count do
+			food = "Base.CannedCorn";
+			bag:AddItem(food);
+		end
+		local rCount = ZombRand(0, 3);
+		for i = 1, rCount do
+			food = "Base.Apple";
+			bag:AddItem(food);
+		end
+	else
+		for i = 1, count do
+			food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]);
+			bag:AddItem(food);
+		end
+
+		local rCount = ZombRand(0, 3);
+		for i = 1, rCount do
+			food = "Base.TinnedBeans";
+			bag:AddItem(food);
+		end
+	end
+
+	return npc;
+end
+
+--- WIP - Cows: Need to rework the spawning functions and logic...
+--- SuperSurvivorsNewSurvivorManager() is called once every in-game hour and uses AlternativeSpawnChance.
+---@return any
+function SuperSurvivorsNewSurvivorManager()
+	local isLocalFunctionLoggingEnabled = true;
+	CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: equipRandomNpc() called");
+	local mySS = SSM:Get(0);
+	local hisGroup = mySS:getGroup();
+
+	if (getSpecificPlayer(0) == nil or hisGroup == nil) then
+		return false;
+	end
+
+	local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
+	local FinalChanceToBeHostile = HostileSpawnRateBase + math.floor(hoursSurvived / 48);
+
+	if (FinalChanceToBeHostile > HostileSpawnRateMax)
+		and (HostileSpawnRateBase < HostileSpawnRateMax)
+	then
+		FinalChanceToBeHostile = HostileSpawnRateMax;
+	end
+
+	local center = getPlayerGroupBoundsCenter(hisGroup);
+	local spawnSquare = setSpawnSquare(hisGroup, center);
 
 	-- WIP - Cows: Need to rework the spawning functions and logic...
-	if (success) and (spawnSquare) then
-		-- ALT SPAWNING SECTION --
-		-- SURVIVOR, NON RAIDER SPAWNING
-		-- WIP - Cows: Then why the hell are survivors called Raiders? Need to rename those for context...
-		local RaiderGroup = SSGM:newGroup()
-		local GroupSize = ZombRand(1, AltSpawnGroupSize)
+	if (spawnSquare ~= nil) then
+		local npcSurvivorGroup = SSGM:newGroup();
+		local GroupSize = ZombRand(1, AltSpawnGroupSize);
 
 		if (GroupSize > AltSpawnGroupSize) then
-			GroupSize = AltSpawnGroupSize
+			GroupSize = AltSpawnGroupSize;
 		elseif (GroupSize < Min_Group_Size) then
-			GroupSize = Min_Group_Size
+			GroupSize = Min_Group_Size;
 		end
 
 		for i = 1, GroupSize do
-			local raider = SuperSurvivorRandomSpawn(spawnSquare)
-			--if(i == 1) then RaiderGroup:addMember(raider,"Leader")
-			--else RaiderGroup:addMember(raider,"Guard") end
+			local npcSurvivor = SuperSurvivorSpawnNpc(spawnSquare);
+			local name = npcSurvivor:getName();
 
 			-- Updated so alt spawns can decide to be hostile or not.
-			if (ZombRand(0, 100) < FinalChanceToBeHostile) then
-				raider:setHostile(true)
+			if (FinalChanceToBeHostile > ZombRand(0, 100)) then
+				npcSurvivor:setHostile(true);
 			else
-				raider:setHostile(false)
+				npcSurvivor:setHostile(false);
 			end
 
-			-- raider:setHostile(false)
-			raider.player:getModData().isRobber = false
-			local name = raider:getName()
-			-- raider:setName("Raider "..name)
-			raider:setName("Survivor " .. name)
-			raider:getTaskManager():AddToTop(WanderTask:new(raider))
-			if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
+			npcSurvivor.player:getModData().isRobber = false;
+			npcSurvivor:setName("Survivor " .. name);
+			npcSurvivor:getTaskManager():AddToTop(WanderTask:new(npcSurvivor));
 
-			local food, bag
-			bag = raider:getBag()
-			local count = ZombRand(0, 3)
-			for i = 1, count do
-				food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1])
-				bag:AddItem(food)
-			end
-			local count = ZombRand(0, 3)
-			for i = 1, count do
-				food = "Base.TinnedBeans"
-				bag:AddItem(food)
-			end
-
-			GetRandomSurvivorSuit(raider) -- WIP: Cows - Consider creating a preset outfit for raiders?
+			equipRandomNpc(npcSurvivor, false);
+			GetRandomSurvivorSuit(npcSurvivor) -- WIP: Cows - Consider creating a preset outfit for raiders?
 		end
-		RaiderGroup:AllSpokeTo()
+		npcSurvivorGroup:AllSpokeTo();
 	end
 end
 
@@ -698,132 +694,77 @@ function SuperSurvivorDoRandomSpawns()
 end
 
 Events.EveryHours.Add(SuperSurvivorDoRandomSpawns);
--- Yes the variables have 'percent' in the name, that's because before this version, I had made alt spawning work different.
--- Do not be confused, the naming scheme means nothing here.
+Events.EveryHours.Add(refreshNpcStatus);
 
+-- WIP - Cows: Need to rework the spawning functions and logic...
+---@return any
 function SuperSurvivorsRaiderManager()
 	local isLocalFunctionLoggingEnabled = false;
-	if (getSpecificPlayer(0) == nil) then return false end
-	--this unrelated to raiders but need this to run every once in a while
-	getSpecificPlayer(0):getModData().hitByCharacter = false
-	getSpecificPlayer(0):getModData().semiHostile = false
-	getSpecificPlayer(0):getModData().dealBreaker = nil
+	local mySS = SSM:Get(0);
+	local hisGroup = mySS:getGroup();
 
-	if (getSpecificPlayer(0):isAsleep()) then
-		SSM:AsleepHealAll()
+	if (getSpecificPlayer(0) == nil or hisGroup == nil) then
+		return false;
 	end
 
 	if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then
 		getSpecificPlayer(0):getModData().LastRaidTime = (RaidersStartAfterHours + 2);
 	end
 
-	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
-
-	local mySS = SSM:Get(0);
 	local hours = math.floor(getGameTime():getWorldAgeHours());
+	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
 	local spawnChanceVal = RaidersSpawnChance;
 
 	local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
 	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
 	local RaiderResult = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
 
-	if RaidersStartTimePassed and (RaiderResult or RaiderAtLeastTimedExceeded) and mySS ~= nil then
+	if RaidersStartTimePassed and (RaiderAtLeastTimedExceeded or RaiderResult) then
 		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "spawning raiders...");
-		local hisGroup = mySS:getGroup()
 
-		if (hisGroup == nil) then return false end
-
-		local bounds = hisGroup:getBounds()
-		local center
-		if (bounds) then center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]) end
-		if not center then center = getSpecificPlayer(0):getCurrentSquare() end
-
-		local spawnSquare
-
-		local success = false
-		local range = 45
-		local drange = range * 2
-
-		for i = 1, 10 do
-			local spawnLocation = ZombRand(4);
-			local x, y;
-			if (spawnLocation == 0) then
-				--mySS:Speak("spawn from north")
-				x = center:getX() + (ZombRand(drange) - range);
-				y = center:getY() - range;
-			elseif (spawnLocation == 1) then
-				--mySS:Speak("spawn from east")
-				x = center:getX() + range;
-				y = center:getY() + (ZombRand(drange) - range);
-			elseif (spawnLocation == 2) then
-				--mySS:Speak("spawn from south")
-				x = center:getX() + (ZombRand(drange) - range);
-				y = center:getY() + range;
-			elseif (spawnLocation == 3) then
-				--mySS:Speak("spawn from west")
-				x = center:getX() - range;
-				y = center:getY() + (ZombRand(drange) - range);
-			end
-
-			spawnSquare = getCell():getGridSquare(x, y, 0)
-
-			if (spawnSquare ~= nil) and (not hisGroup:IsInBounds(spawnSquare)) and spawnSquare:isOutside() and (not spawnSquare:IsOnScreen()) and (not spawnSquare:isSolid()) and (spawnSquare:isSolidFloor()) then
-				success = true
-				break
-			end
-		end
+		local center = getPlayerGroupBoundsCenter(hisGroup);
+		local spawnSquare = setSpawnSquare(hisGroup, center);
 
 		-- WIP - Cows: Need to rework the spawning functions and logic...
-		if (success) and (spawnSquare) then
+		if (spawnSquare ~= nil) then
 			getSpecificPlayer(0):getModData().LastRaidTime = hours
 			if (getSpecificPlayer(0):isAsleep()) then
-				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"))
-				getSpecificPlayer(0):forceAwake()
+				getSpecificPlayer(0):Say(GetDialogue("IGotABadFeeling"));
+				getSpecificPlayer(0):forceAwake();
 			else
 				getSpecificPlayer(0):Say(GetDialogue("WhatWasThatSound"));
 			end
 			-- RAIDER GROUPS
-			local RaiderGroup = SSGM:newGroup()
-			local GroupSize = ZombRand(1, hisGroup:getMemberCount()) + math.floor(hours / (24 * 30))
+			local RaiderGroup = SSGM:newGroup();
+			local GroupSize = ZombRand(1, hisGroup:getMemberCount()) + math.floor(hours / (24 * 30));
+
 			if (GroupSize > 10) then
-				GroupSize = 10
+				GroupSize = 10;
 			elseif (GroupSize < 2) then
-				GroupSize = 2
+				GroupSize = 2;
 			end
 
 			for i = 1, GroupSize do
-				-- WIP - Cows: why is "raider" a global variable? it wasn't even initiated previously...
-				local raider = SuperSurvivorRandomSpawn(spawnSquare)
+				local raider = SuperSurvivorSpawnNpc(spawnSquare);
+				local name = raider:getName();
+
 				if (i == 1) then
-					RaiderGroup:addMember(raider, "Leader")
+					RaiderGroup:addMember(raider, "Leader");
 				else
-					RaiderGroup:addMember(raider, "Guard")
+					RaiderGroup:addMember(raider, "Guard");
 				end
-				raider:setHostile(true)
-				raider.player:getModData().isRobber = true
-				local name = raider:getName()
-				raider:setName("Raider " .. name)
-				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()))
-				if (raider:hasWeapon() == false) then raider:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]) end
+				raider:setHostile(true);
+				raider.player:getModData().isRobber = true;
+				raider:setName("Raider " .. name);
+				raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()));
 
-				local food, bag
-				bag = raider:getBag()
-				local count = ZombRand(0, 3)
-				for i = 1, count do
-					food = "Base.CannedCorn"
-					bag:AddItem(food)
-				end
-				local count = ZombRand(0, 3)
-				for i = 1, count do
-					food = "Base.Apple"
-					bag:AddItem(food)
-				end
+				equipRandomNpc(raider, true);
 
-				local number = ZombRand(1, 3)
-				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number))
+				local number = ZombRand(1, 3);
+				SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number));
 			end
 
-			RaiderGroup:AllSpokeTo()
+			RaiderGroup:AllSpokeTo();
 		end
 	end
 end
@@ -832,18 +773,18 @@ Events.EveryTenMinutes.Add(SuperSurvivorsRaiderManager);
 NumberOfLocalPlayers = 0;
 
 function SSCreatePlayerHandle(newplayerID)
-	local newplayer = getSpecificPlayer(newplayerID)
-	local MD = newplayer:getModData()
+	local newplayer = getSpecificPlayer(newplayerID);
+	local MD = newplayer:getModData();
 
 	if (not MD.ID) and (newplayer:isLocalPlayer()) then
 		SuperSurvivorPlayerInit(newplayer)
 
 		if (getSpecificPlayer(0) and (not getSpecificPlayer(0):isDead()) and (getSpecificPlayer(0) ~= newplayer)) then
 			local MainSS = SSM:Get(0);
-			local MainSSGroup = MainSS:getGroup()
-			NumberOfLocalPlayers = NumberOfLocalPlayers + 1
-			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers)
-			newSS:setID(NumberOfLocalPlayers)
+			local MainSSGroup = MainSS:getGroup();
+			NumberOfLocalPlayers = NumberOfLocalPlayers + 1;
+			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers);
+			newSS:setID(NumberOfLocalPlayers);
 			MainSSGroup:addMember(newSS, "Guard");
 		end
 	end
