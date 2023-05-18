@@ -656,7 +656,7 @@ function SuperSurvivorsNewSurvivorManager()
 			-- something ... repopulate the previous groups?
 			local rng = ZombRand(1, Limit_Npc_Groups);
 			CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorDoRandomSpawns() rng");
-			npcSurvivorGroup = SSGM:Get(rng);
+			npcSurvivorGroup = SSGM:GetGroupById(rng);
 		end
 
 		local GroupSize = ZombRand(1, Max_Group_Size);

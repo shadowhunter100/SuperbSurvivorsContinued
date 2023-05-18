@@ -8,17 +8,22 @@ local isLocalLoggingEnabled = false;
 
 -- WIP - Cows: SuperSurvivorOptions variables...
 -- NPC Spawning
-NpcSpawnChance = 5;       -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
+NpcSpawnChance = 50;       -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 17; -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
 IsWifeSpawn = true;       -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
 NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
 Limit_Npc_Groups = 4;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
-Limit_Raiders_Groups = 4; -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
 Limit_Npcs_Spawn = 12;    -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
-Limit_Raiders_Spawn = 8;  -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
 Max_Group_Size = 4;       -- WIP - PlaceHolder - Cows: Max number of members in a group
 Min_Group_Size = 1;       -- WIP - PlaceHolder - Cows: Min number of members in a group
+
+-- Raiders, Always hostile
+Limit_Raiders_Groups = 4; -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
+Limit_Raiders_Spawn = 8;  -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
+RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
+RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
+RaidersSpawnChance = 50;           -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
 
 -- NPC Configuration
 CanNpcsCreateBase = false;    -- WIP - Cows: Allow npcs to create bases on their own... this has a huge performance impact.
@@ -50,10 +55,6 @@ SurvivorNeedsFoodWater = false; -- Cows: true to activate npc survivor's hunger 
 --]]
 SurvivorFriendliness = 10;
 
--- Raiders, Always hostile
-RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
-RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
-RaidersSpawnChance = 10;           -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
 
 -- Player Related
 IsPlayerBaseSafe = true; -- WIP - Cows: true to prevent NPCs from claiming or visiting the player base... this needs to be tested and verified.
