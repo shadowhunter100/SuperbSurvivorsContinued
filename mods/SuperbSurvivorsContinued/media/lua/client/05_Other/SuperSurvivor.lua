@@ -244,7 +244,7 @@ end
 ---@param square any
 ---@param ID any
 ---@return any
-function SuperSurvivor:loadPlayer(square, ID)
+function SuperSurvivor:loadPlayer(ID, square)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:loadPlayer() called");
 	-- load from file if save file exists
 	if (ID ~= nil) and (checkSaveFileExists("Survivor" .. tostring(ID))) then
@@ -286,7 +286,7 @@ function SuperSurvivor:newLoad(ID, square)
 	survivorObject.ContinueResultActions = {};
 	survivorObject.TriggerName = "";
 
-	survivorObject.player = survivorObject:loadPlayer(square, ID);
+	survivorObject.player = survivorObject:loadPlayer(ID, square);
 	survivorObject.userName = TextDrawObject.new();
 	survivorObject.userName:setAllowAnyImage(true);
 	survivorObject.userName:setDefaultFont(UIFont.Small);
@@ -3638,22 +3638,24 @@ function SuperSurvivor:getWeaponDamage(weapon, distance)
 	return damage
 end
 
---- Gets the change of a shoot based on aiming skill, weapon, victim's distance and cover
+--- Gets the change of a shoot based on aiming skill, weapon, victim's distance
 ---@param weapon any
 ---@param victim any
 ---@return number represents the chance of a hit
-function SuperSurvivor:getGunHitChange(weapon, victim)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getGunHitChange() called");
+function SuperSurvivor:getGunHitChance(weapon, victim)
+	CreateLogLine("SuperSurvivor", true, "SuperSurvivor:getGunHitChance() called");
 	local aimingLevel = self.player:getPerkLevel(Perks.FromString("Aiming"))
 	local aimingPerkModifier = weapon:getAimingPerkHitChanceModifier()
 	local weaponHitChance = weapon:getHitChance()
 	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel)
 
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	local distance = getDistanceBetween(self.player, victim)
+	local distance = getDistanceBetween(self.player, victim); -- WIP - Cows: Should distance even be a factor?
+	local gunHitChance = hitChance - distance;
 
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGunHitChange() end ---");
-	return hitChance - distance; -- TODO: change formula when coverValue != 0
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "Gun Hit Chance: " .. tostring(gunHitChance));
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:getGunHitChance() end ---");
+	return gunHitChance;
 end
 
 function SuperSurvivor:UnStuckFrozenAnim()
@@ -3701,18 +3703,17 @@ function SuperSurvivor:NPC_Attack(victim) -- New Function
 
 	self.SwipeStateTicks = 0; -- this value is tracked to see if player stuck in attack state/animation. so reset to 0 if we are TRYING/WANTING to attack
 
-	-- Why distance and real distance? distance uses a subtraction while 'real' doesn't
-	-- local distance = getDistanceBetween(self.player, victim) - 0.1  -- WIP - Commented out, unused variable
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	local RealDistance = getDistanceBetween(self.player, victim)
-	local minrange = self:getMinWeaponRange()
+	local RealDistance = getDistanceBetween(self.player, victim);
+	local minrange = self:getMinWeaponRange();
 	local weapon = self.player:getPrimaryHandItem();
-	local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen)
-	local damage = 1
+	local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen);
+	local damage = 1;
 
 	-- Make sure the entity the NPC is hitting exists
-	if not (instanceof(victim, "IsoPlayer") or instanceof(victim, "IsoZombie")) then return false end
-
+	if not (instanceof(victim, "IsoPlayer") or instanceof(victim, "IsoZombie")) then
+		return false;
+	end
 	-- Makes sure if the npc has their weapon out first
 	if (self:WeaponReady()) then
 		self:StopWalk()
@@ -3744,8 +3745,8 @@ function SuperSurvivor:Attack(victim)
 	-- Create the attack cooldown. (once 0, the npc will do the 'attack' then set the time back up by 1, so anti-attack spam method)
 	-- note: don't use self:CanAttackAlt() in this if statement. it's already being done in this function. (Update: It works long as it's set to true)
 	if (self:IsNOT_AtkTicksZero()) and (self:CanAttackAlt() == true) then
-		self:AtkTicks_Countdown()
-		return false
+		self:AtkTicks_Countdown();
+		return false;
 	end
 
 	--if(self.player:getCurrentState() == SwipeStatePlayer.instance()) then return false end -- already attacking wait
@@ -3753,7 +3754,10 @@ function SuperSurvivor:Attack(victim)
 
 	self.SwipeStateTicks = 0;                                 -- this value is tracked to see if player stuck in attack state/animation. so reset to 0 if we are TRYING/WANTING to attack
 
-	if not (instanceof(victim, "IsoPlayer") or instanceof(victim, "IsoZombie")) then return false end
+	if not (instanceof(victim, "IsoPlayer") or instanceof(victim, "IsoZombie")) then
+		return false;
+	end
+
 	if (self:WeaponReady()) then
 		if (instanceof(victim, "IsoPlayer") and IsoPlayer.getCoopPVP() == false) then
 			ForcePVPOn = true;
@@ -3762,18 +3766,15 @@ function SuperSurvivor:Attack(victim)
 		self:StopWalk()
 		self.player:faceThisObject(victim);
 
-		if (self.UsingFullAuto) then self.TriggerHeldDown = true end
+		if (self.UsingFullAuto) then
+			self.TriggerHeldDown = true;
+		end
 		if (self.player ~= nil) then
 			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 			local distance = getDistanceBetween(self.player, victim)
 			local minrange = self:getMinWeaponRange() + 0.1
-			local GunHitChance = 11 -- ZombRand(0,5)	If you want random chance, remove the number and put the ZombRand in.
 			local weapon = self.player:getPrimaryHandItem();
-
-			-- local damage = self:getWeaponDamage(weapon,distance)
-			-- For now disabling rng shooting, I just can't get it working
-			-- But at least the 'RealCanSee' works
-			damage = weapon:getMaxDamage();
+			local damage = weapon:getMaxDamage();
 
 			self.player:NPCSetAiming(true)
 			self.player:NPCSetAttack(true)
@@ -3783,22 +3784,19 @@ function SuperSurvivor:Attack(victim)
 			else
 				if (self.AtkTicks <= 0) then                  -- First to make sure it's okay to attack
 					if (self:hasGun()) then
-						local hitChance = self:getGunHitChange(weapon, victim)
-						local dice = ZombRand(0, 100)
+						local hitChance = self:getGunHitChance(weapon, victim);
+						local dice = ZombRand(0, 100);
 
 						-- Added RealCanSee to see if it works | and (damage > 0)
 						if (hitChance >= dice) and (damage > 0) and (self:RealCanSee(victim)) then
-							victim:Hit(weapon, self.player, damage, false, 1.0, false)
-							self.AtkTicks = 1
-						else
-							self.AtkTicks = 1
+							victim:Hit(weapon, self.player, damage, false, 1.0, false);
 						end
 					else
 						victim:Hit(weapon, self.player, damage, false, 1.0, false)
 						CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
 							"MELEE STRIKE! For some reason... I shouldn't be using this Attack function! Modder, fix this!")
-						self.AtkTicks = 1
 					end
+					self.AtkTicks = 1;
 				end
 			end
 		end
@@ -3914,11 +3912,10 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 	local sq, itemtoReturn;
 	local range = 30
 	local closestSoFar = 999;
+	local zhigh = 0;
 
 	if (self.player:getZ() > 0) or (getCell():getGridSquare(self.player:getX(), self.player:getY(), self.player:getZ() + 1) ~= nil) then
-		zhigh = self.player:getZ() + 1
-	else
-		zhigh = 0
+		zhigh = self.player:getZ() + 1;
 	end
 
 	for z = 0, zhigh do
