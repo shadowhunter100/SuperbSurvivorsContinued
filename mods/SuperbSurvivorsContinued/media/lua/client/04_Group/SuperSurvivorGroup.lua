@@ -243,10 +243,10 @@ end
 function SuperSurvivorGroup:setLeader(newLeader)
 	if self.Leader ~= -1 then
 		local SS = SSM:Get(self.Leader)
-		if (SS) then SS:setGroupRole(getActionText("Job_Worker")) end -- old leader gets demoted to worker if exists
+		if (SS) then SS:setGroupRole(Get_SS_UIActionText("Job_Worker")) end -- old leader gets demoted to worker if exists
 	end
 	self.Leader = newLeader
-	SSM:Get(self.Leader):setGroupRole(getActionText("Job_Leader"))
+	SSM:Get(self.Leader):setGroupRole(Get_SS_UIActionText("Job_Leader"))
 end
 
 function SuperSurvivorGroup:getLeader()
@@ -256,7 +256,7 @@ end
 function SuperSurvivorGroup:hasLeader()
 	if self.Leader ~= -1 then
 		local SS = SSM:Get(self.Leader)
-		if (SS) and SS:getGroupRole() == getActionText("Job_Leader") then return true end
+		if (SS) and SS:getGroupRole() == Get_SS_UIActionText("Job_Leader") then return true end
 	end
 	return false
 end
@@ -273,7 +273,7 @@ function SuperSurvivorGroup:getClosestIdleMember(ofThisRole, referencePoint)
 		local workingID = self.Members[i]
 
 		if (workingID ~= nil) then
-			distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
+			distance = GetDistanceBetween(SSM:Get(workingID):Get(), referencePoint)
 
 			if (SSM:Get(workingID):isInAction() == false)
 				and (distance ~= 0)
@@ -308,7 +308,7 @@ function SuperSurvivorGroup:getClosestMember(ofThisRole, referencePoint)
 		if (workingID ~= nil) then
 			local workingSS = SSM:Get(workingID)
 			if (workingSS ~= nil) then
-				distance = getDistanceBetween(workingSS:Get(), referencePoint)
+				distance = GetDistanceBetween(workingSS:Get(), referencePoint)
 				
 				if (distance ~= 0) and (distance < closestSoFar)
 					and ((ofThisRole == nil)
@@ -361,7 +361,7 @@ function SuperSurvivorGroup:getMembersInRange(referencePoint, range, isListening
 		local workingID = self.Members[i]
 
 		if ((workingID ~= nil)) and (SSM:Get(workingID) ~= nil) then
-			local distance = getDistanceBetween(SSM:Get(workingID):Get(), referencePoint);
+			local distance = GetDistanceBetween(SSM:Get(workingID):Get(), referencePoint);
 			
 			if (distance <= range)
 				and ((not isListening)
@@ -404,7 +404,7 @@ function SuperSurvivorGroup:getMembersThisCloseCount(range, referencePoint)
 		local workingID = self.Members[i];
 
 		if (workingID ~= nil) and (SSM:Get(workingID)) then
-			local distance = getDistanceBetween(referencePoint, SSM:Get(workingID):Get())
+			local distance = GetDistanceBetween(referencePoint, SSM:Get(workingID):Get())
 
 			if (distance <= range) then
 				count = count + 1;
@@ -461,7 +461,7 @@ function SuperSurvivorGroup:addMember(newSurvivor, Role)
 		newSurvivor:setGroupRole(Role)
 		newSurvivor:setGroupID(self.ID)
 
-		if (Role == getActionText("Job_Leader")) then
+		if (Role == Get_SS_UIActionText("Job_Leader")) then
 			self:setLeader(newSurvivor:getID())
 		end
 		return self.Members[#self.Members]

@@ -5,7 +5,7 @@ local function getGirlNames()
 
   local names = {}
   for i = 1, girlNamesCount, 1 do
-    names[i] = getName("Names" .. tostring(i))
+    names[i] = Get_SS_Name("Names" .. tostring(i))
   end
 
   return names
@@ -16,7 +16,7 @@ local function getBoyNames()
 
   local names = {}
   for i = 1, boyNamesCount, 1 do
-    names[i] = getName("Names" .. tostring(i))
+    names[i] = Get_SS_Name("Names" .. tostring(i))
   end
 
   return names

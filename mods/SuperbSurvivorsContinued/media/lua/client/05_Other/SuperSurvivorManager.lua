@@ -193,7 +193,7 @@ function SuperSurvivorManager:PublicExecution(SSW, SSV)
 
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
+			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
 			if (distance < maxdistance) and (self.SuperSurvivors[i]:Get():CanSee(SSV:Get())) then
 				if (not self.SuperSurvivors[i]:isInGroup(SSW:Get()) and not self.SuperSurvivors[i]:isInGroup(SSV:Get())) then
 					if (self.SuperSurvivors[i]:usingGun()) and (ZombRand(2) == 1) then
@@ -223,7 +223,7 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 	local range = weapon:getSoundRadius();
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
+			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
 
 			if (self.SuperSurvivors[i].player:getModData().surender)
 				and (distance < maxdistance)
@@ -242,7 +242,7 @@ function SuperSurvivorManager:GunShotHandle(SSW)
 				and self.SuperSurvivors[i]:getTaskManager():getCurrentTask() ~= "Surender"
 				and not self.SuperSurvivors[i].player:isDead()
 				and not self.SuperSurvivors[i]:RealCanSee(getSpecificPlayer(0))
-				and (getDistanceBetween(getSpecificPlayer(0), self.SuperSurvivors[i].player) <= range)
+				and (GetDistanceBetween(getSpecificPlayer(0), self.SuperSurvivors[i].player) <= range)
 			then
 				self.SuperSurvivors[i]:getTaskManager():AddToTop(GoCheckItOutTask:new(self.SuperSurvivors[i],
 					getSpecificPlayer(0):getCurrentSquare()))
@@ -258,7 +258,7 @@ function SuperSurvivorManager:GetClosest()
 
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
+			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
 			if (distance < closestSoFar) then
 				closestID = i
 				closestSoFar = distance
@@ -279,7 +279,7 @@ function SuperSurvivorManager:GetClosestNonParty()
 	local closestID = 0
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = getDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
+			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
 			if (distance < closestSoFar) and (self.SuperSurvivors[i]:getGroupID() == nil) then
 				closestID = i
 				closestSoFar = distance

@@ -139,18 +139,18 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	local namePrefixAfter = ""
 
 	if (Buddy:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
-		namePrefix = getName("DoctorPrefix_Before")
-		namePrefixAfter = getName("DoctorPrefix_After")
+		namePrefix = Get_SS_Name("DoctorPrefix_Before")
+		namePrefixAfter = Get_SS_Name("DoctorPrefix_After")
 	end
 
 	if (Buddy:getPerkLevel(Perks.FromString("Aiming")) >= 5) then
-		namePrefix = getName("SD_VeteranPrefix_Before")
-		namePrefixAfter = getName("VeteranPrefix_After")
+		namePrefix = Get_SS_Name("SD_VeteranPrefix_Before")
+		namePrefixAfter = Get_SS_Name("VeteranPrefix_After")
 	end
 
 	if (Buddy:getPerkLevel(Perks.FromString("Farming")) >= 3) then
-		namePrefix = getName("FarmerPrefix_Before")
-		namePrefixAfter = getName("FarmerPrefix_After")
+		namePrefix = Get_SS_Name("FarmerPrefix_Before")
+		namePrefixAfter = Get_SS_Name("FarmerPrefix_After")
 	end
 
 	local nameToSet
@@ -1207,8 +1207,8 @@ function SuperSurvivor:getUnBarricadedWindow(building)
 				for j = 0, Objs:size() - 1 do
 					local Object = Objs:get(j)
 					local objectSquare = Object:getSquare()
-					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-					local distance = getDistanceBetween(objectSquare, self.player) -- WIP - literally spammed inside the nested for loops...
+					CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+					local distance = GetDistanceBetween(objectSquare, self.player) -- WIP - literally spammed inside the nested for loops...
 
 					if (instanceof(Object, "IsoWindow"))
 						and (self:getWalkToAttempt(objectSquare) < 8)
@@ -1450,8 +1450,8 @@ function SuperSurvivor:DoVision()
 					or instanceof(character, "IsoPlayer"))
 			then
 				if (character:isDead() == false) then
-					CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-					tempdistance = tonumber(getDistanceBetween(character, self.player))
+					CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+					tempdistance = tonumber(GetDistanceBetween(character, self.player))
 
 					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
 						local CanSee = self:RealCanSee(character)
@@ -1791,9 +1791,9 @@ end
 -- This needed 'not a companion' check to keep the NPC in question not to run away when they're following main player.
 function SuperSurvivor:NPC_FleeWhileReadyingGun()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_FleeWhileReadyingGun() called");
-	-- local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player) -- WIP - Commented out, unused variable
-	local Distance_MainPlayer = getDistanceBetween(getSpecificPlayer(0), self.player)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
+	-- local Distance_AnyEnemy = GetDistanceBetween(self.LastEnemeySeen, self.player) -- WIP - Commented out, unused variable
+	local Distance_MainPlayer = GetDistanceBetween(getSpecificPlayer(0), self.player)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
 	-- local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer")) -- WIP - Commented out, unused variable
 	local Enemy_Is_a_Zombie = (instanceof(self.LastEnemeySeen, "IsoZombie"))
 	local Weapon_HandGun = self.player:getPrimaryHandItem()
@@ -1987,8 +1987,8 @@ function SuperSurvivor:NPC_CheckPursueScore()
 			return zRangeToPursue
 		end
 
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local Distance_AnyEnemy = GetDistanceBetween(self.LastEnemeySeen, self.player)
 
 		-- To make enemies stop chasing after their target cause too far away.
 		-- Unless you have a real reason, you wouldn't pursue a target forever.
@@ -2001,14 +2001,14 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		--  Companion: They should always be cautious of their surroundings
 		-- -------------------------------------- --
 		if ((self:getGroupRole() == "Companion") and (self:isEnemyInRange(self.LastEnemeySeen))) then
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-			if getDistanceBetween(getSpecificPlayer(0), self.player) < 10 then
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+			if GetDistanceBetween(getSpecificPlayer(0), self.player) < 10 then
 				zRangeToPursue = 5
 				return zRangeToPursue
 			end
 
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-			if getDistanceBetween(getSpecificPlayer(0), self.player) >= 10 then
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+			if GetDistanceBetween(getSpecificPlayer(0), self.player) >= 10 then
 				zRangeToPursue = 0
 				return zRangeToPursue
 			end
@@ -2077,8 +2077,8 @@ end
 function SuperSurvivor:Task_IsPursue_SC()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 	if (self.LastEnemeySeen ~= nil) and (self.player ~= nil) then
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local Distance_AnyEnemy = getDistanceBetween(self.LastEnemeySeen, self.player)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local Distance_AnyEnemy = GetDistanceBetween(self.LastEnemeySeen, self.player)
 		local zNPC_AttackRange  = self:isEnemyInRange(self.LastEnemeySeen)
 
 		if (self:NPC_CheckPursueScore() > Distance_AnyEnemy) then -- Task priority checker
@@ -2173,8 +2173,8 @@ end
 function SuperSurvivor:Task_IsThreaten_Verify() -- You want this function to return 'true'
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
 	if (self.LastEnemeySeen ~= nil) then
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local distance = GetDistanceBetween(self.player, self.LastEnemeySeen)
 
 		if (self:Task_IsThreaten() == true) and (distance > 1)
 			and ((self:NPC_TargetIsOutside()) and (self:NPC_IsOutside()))
@@ -2538,8 +2538,8 @@ function SuperSurvivor:update()
 		self.player:getBodyDamage():setWetness(self.player:getBodyDamage():getWetness() - 0.1);
 	end
 
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	if (getDistanceBetween(getSpecificPlayer(0), self.player) > 15)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+	if (GetDistanceBetween(getSpecificPlayer(0), self.player) > 15)
 		and (ZombRand(20) == 0)
 		and (self:isOnScreen() == false)            -- don't wanna be seen healing
 	then
@@ -2800,8 +2800,8 @@ function SuperSurvivor:ManageXP()
 					display_perk = getText("IGUI_perks_Blunt") .. " " .. display_perk
 				end
 
-				self:RoleplaySpeak(getActionText("PerkLeveledUp_Before") ..
-					tostring(display_perk) .. getActionText("PerkLeveledUp_After"))
+				self:RoleplaySpeak(Get_SS_UIActionText("PerkLeveledUp_Before") ..
+					tostring(display_perk) .. Get_SS_UIActionText("PerkLeveledUp_After"))
 			end
 		end
 	end
@@ -3317,7 +3317,7 @@ function SuperSurvivor:openBoxForGun()
 			inv:AddItem(modl .. ammotype)
 		end
 
-		self:RoleplaySpeak(getActionText("Opens_Before") .. ammoBox:getDisplayName() .. getActionText("Opens_After"))
+		self:RoleplaySpeak(Get_SS_UIActionText("Opens_Before") .. ammoBox:getDisplayName() .. Get_SS_UIActionText("Opens_After"))
 		ammoBox:getContainer():Remove(ammoBox)
 		return self.player:getInventory():FindAndReturn(ammotype);
 	end
@@ -3474,10 +3474,10 @@ end
 function SuperSurvivor:NPC_ShouldRunOrWalk()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ShouldRunOrWalk() called");
 	if (self.LastEnemeySeen ~= nil) then
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local distanceAlt = getDistanceBetween(self.player, getSpecificPlayer(0)) -- To prevent running into the player
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local distance = GetDistanceBetween(self.player, self.LastEnemeySeen)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local distanceAlt = GetDistanceBetween(self.player, getSpecificPlayer(0)) -- To prevent running into the player
 		-- local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen) -- WIP - Commented out, unused variable
 
 		if (not (self:Task_IsNotFleeOrFleeFromSpot() == true)) or (distanceAlt <= 1) or (distance and self:Task_IsAttack()) or (distance and self:Task_IsThreaten() or (distance and self:Task_IsPursue())) then
@@ -3494,8 +3494,8 @@ end
 function SuperSurvivor:NPC_EnforceWalkNearMainPlayer()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_EnforceWalkNearMainPlayer() called");
 	-- Emergency failsafe to prevent NPCs from running into player
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	if (getDistanceBetween(self.player, getSpecificPlayer(0)) < 1) then
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+	if (GetDistanceBetween(self.player, getSpecificPlayer(0)) < 1) then
 		self:setRunning(false)
 	end
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_EnforceWalkNearMainPlayer() end ---");
@@ -3505,8 +3505,8 @@ end
 function SuperSurvivor:NPC_ERW_AroundMainPlayer(VarDist)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ERW_AroundMainPlayer() called");
 	-- Emergency failsafe to prevent NPCs from running into player
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	if (getDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+	if (GetDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
 		if (self:isInAction() == true) then
 			self:setRunning(true)
 		end
@@ -3522,8 +3522,8 @@ end
 function SuperSurvivor:NPC_ERW_AroundMainPlayerReverse(VarDist)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_ERW_AroundMainPlayerReverse() called");
 	-- Emergency failsafe to prevent NPCs from running into player	
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	if (getDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+	if (GetDistanceBetween(self.player, getSpecificPlayer(0)) > VarDist) then
 		if (self:isInAction() == true) then
 			self:setRunning(false)
 		end
@@ -3564,8 +3564,8 @@ function SuperSurvivor:NPC_MovementManagement()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_MovementManagement() called");
 	if (self:isWalkingPermitted()) and (not self:hasGun()) then
 		local cs = self.LastEnemeySeen:getCurrentSquare()
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-		local distance = getDistanceBetween(self.player, self.LastEnemeySeen)
+		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+		local distance = GetDistanceBetween(self.player, self.LastEnemeySeen)
 		local minrange = self:getMinWeaponRange()
 
 		if (distance > minrange + 0.1) then
@@ -3650,7 +3650,6 @@ function SuperSurvivor:getGunHitChance(weapon, victim)
 	local weaponHitChance = weapon:getHitChance();
 	local hitChance = weaponHitChance + (aimingPerkModifier * aimingLevel);
 
-	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "Gun Hit Chance: " .. tostring(hitChance));
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "--- SuperSurvivor:getGunHitChance() end ---");
 	return hitChance;
@@ -3701,8 +3700,8 @@ function SuperSurvivor:NPC_Attack(victim) -- New Function
 
 	self.SwipeStateTicks = 0; -- this value is tracked to see if player stuck in attack state/animation. so reset to 0 if we are TRYING/WANTING to attack
 
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-	local RealDistance = getDistanceBetween(self.player, victim);
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+	local RealDistance = GetDistanceBetween(self.player, victim);
 	local minrange = self:getMinWeaponRange();
 	local weapon = self.player:getPrimaryHandItem();
 	local zNPC_AttackRange = self:isEnemyInRange(self.LastEnemeySeen);
@@ -3768,8 +3767,8 @@ function SuperSurvivor:Attack(victim)
 			self.TriggerHeldDown = true;
 		end
 		if (self.player ~= nil) then
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-			local distance = getDistanceBetween(self.player, victim)
+			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+			local distance = GetDistanceBetween(self.player, victim)
 			local minrange = self:getMinWeaponRange() + 0.1
 			local weapon = self.player:getPrimaryHandItem();
 			local damage = weapon:getMaxDamage();
@@ -3844,7 +3843,7 @@ end
 
 function SuperSurvivor:DrinkFromObject(waterObject)
 	local playerObj = self.player
-	self:Speak(getActionText("Drinking"))
+	self:Speak(Get_SS_UIActionText("Drinking"))
 	if not waterObject:getSquare() or not luautils.walkAdj(playerObj, waterObject:getSquare()) then
 		return
 	end
@@ -3869,8 +3868,8 @@ function SuperSurvivor:findNearestSheetRopeSquare(down)
 		for y = miny, maxy do
 			sq = getCell():getGridSquare(x, y, self.player:getZ());
 			if (sq ~= nil) then
-				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getDistanceBetween() called");
-				local distance = getDistanceBetween(sq, self.player) -- WIP - literally spammed inside the nested for loops...
+				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+				local distance = GetDistanceBetween(sq, self.player) -- WIP - literally spammed inside the nested for loops...
 
 				if down and (distance < closestSoFar) and self.player:canClimbDownSheetRope(sq) then
 					closestSoFar = distance
@@ -3926,7 +3925,7 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 			sq = getCell():getGridSquare(x, y, z);
 
 			if (sq ~= nil) then
-				local tempDistance = 0 --getDistanceBetween(sq,self.player)
+				local tempDistance = 0 --GetDistanceBetween(sq,self.player)
 				if (self.player:getZ() ~= z) then tempDistance = tempDistance + 10 end
 				local items = sq:getObjects()
 				-- check containers in square

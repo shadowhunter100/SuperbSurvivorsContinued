@@ -162,15 +162,14 @@ function GetCoordsFromID(id)
 	return 0
 end
 
--- WIP - Cows: getDistanceBetween() should have been capitalized as a global function...
 -- WIP - Cows: this function is literally spammed between all active instances, slowing down the game performance drastically.
 -- WIP - Cows: in about 30 seconds, this function was called over 11,000 times.
 --- gets the distance between 2 things (objects, zombies, npcs or players)
 ---@param z1 any instance one
 ---@param z2 any instance two
 ---@return number the distance between the 2 instances
-function getDistanceBetween(z1, z2)
-	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: getDistanceBetween() called");
+function GetDistanceBetween(z1, z2)
+	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled, "function: GetDistanceBetween() called");
 	CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 		"z1: " .. tostring(z1) ..
 		" | z2: " .. tostring(z2)
@@ -322,7 +321,7 @@ local function getSquaresWindow(cs)
 	return nil
 end
 
--- WIP - Cows: GetSquaresNearWindow() is the second most frequently called function after getDistanceBetween().
+-- WIP - Cows: GetSquaresNearWindow() is the second most frequently called function after GetDistanceBetween().
 --- gets the nearest adjacent window square of 'cs'
 ---@param cs any a square
 ---@return any the adjacent square next to window if found or nil
@@ -416,7 +415,7 @@ function GetUnlockedDoor(building, character)
 
 			if (sq) then
 				local Objs = sq:getObjects();
-				local distance = getDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
+				local distance = GetDistanceBetween(sq, character) -- WIP - literally spammed inside the nested for loops...
 				CreateLogLine("SuperSurvivorContextUtilities", isLocalLoggingEnabled,
 					"Objects size: " .. tostring(Objs:size() - 1));
 

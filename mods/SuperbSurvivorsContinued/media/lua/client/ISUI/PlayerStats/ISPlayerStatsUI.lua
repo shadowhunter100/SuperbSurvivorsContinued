@@ -619,7 +619,7 @@ ISPlayerStatsUI.loadTraits = function(self)
             textImage:setVisible(false);
             self.mainPanel:addChild(textImage);
             table.insert(self.traits, textImage);
-            local newButton = ISButton:new(self.buttonOffset, self.height - 30, self.buttonWidth, self.buttonHeight, getContextMenuText("Remove"), self, self.onRemoveTrait);
+            local newButton = ISButton:new(self.buttonOffset, self.height - 30, self.buttonWidth, self.buttonHeight, Get_SS_ContextMenuText("Remove"), self, self.onRemoveTrait);
             newButton.internal = trait:getType();
             newButton:initialise();
             newButton:instantiate();
