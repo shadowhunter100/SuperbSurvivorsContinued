@@ -14,7 +14,7 @@ function SuperSurvivorGroupManager:new()
 	return o
 end
 
-function SuperSurvivorGroupManager:Get(thisID)
+function SuperSurvivorGroupManager:GetGroupById(thisID)
 	return self.Groups[thisID]
 end
 

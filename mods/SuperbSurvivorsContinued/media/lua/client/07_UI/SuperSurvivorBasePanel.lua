@@ -71,7 +71,7 @@ function PanelBaseInfo:initialise()
 end
 
 function PanelBaseInfo:dupdate()
-    self.group = SSGM:Get(SSM:Get(0):getGroupID())
+    self.group = SSGM:GetGroupById(SSM:Get(0):getGroupID())
     self.set_state = is_area_set(self.area_name)
     if self.set_state then
         self.button_select_area.enable = false
@@ -133,7 +133,7 @@ function PanelBaseInfo:on_click_cancel()
 end
 
 function PanelBaseInfo:on_click_save()
-    self.group = SSGM:Get(SSM:Get(0):getGroupID())
+    self.group = SSGM:GetGroupById(SSM:Get(0):getGroupID())
     if self.area_name == "Bounds" then
         self.group.Bounds[1] = tonumber(self.textbox_x1:getText());
         self.group.Bounds[2] = tonumber(self.textbox_y1:getText());
@@ -152,7 +152,7 @@ function PanelBaseInfo:on_click_save()
 end
 
 function PanelBaseInfo:on_click_clear()
-    self.group = SSGM:Get(SSM:Get(0):getGroupID());
+    self.group = SSGM:GetGroupById(SSM:Get(0):getGroupID());
     if self.area_name == "Bounds" then
         self.group.Bounds[1] = 0;
         self.group.Bounds[2] = 0;
@@ -219,7 +219,7 @@ function PanelBaseInfo:on_click_manual()
         self.panel_manual_edit:addChild(self.textbox_z)
         self.panel_manual_edit:addChild(self.button_save)
         self:addChild(self.panel_manual_edit)
-        self.group = SSGM:Get(SSM:Get(0):getGroupID())
+        self.group = SSGM:GetGroupById(SSM:Get(0):getGroupID())
         if self.area_name == "Bounds" then
             self.textbox_x1:setText(tostring(self.group.Bounds[1]))
             self.textbox_y1:setText(tostring(self.group.Bounds[2]))

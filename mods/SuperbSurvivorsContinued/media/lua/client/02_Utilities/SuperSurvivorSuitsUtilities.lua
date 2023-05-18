@@ -1,4 +1,4 @@
-require "02_Utilities/SuperSurvivorSuitsList"
+require "00_SuperbSurviorModVariables/SuperSurvivorsSuitsList"
 -- this file has the functions for survivor's suits
 
 local isLocalLoggingEnabled = false;

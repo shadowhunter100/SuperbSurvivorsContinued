@@ -144,7 +144,7 @@ function FindThisTask:update()
 				if (self.BagToPutIn:contains(self.TargetItem) == false) then
 					if (self.TargetItem:getWorldItem() ~= nil) then
 						if (self.TargetItem:getWorldItem():getSquare() ~= nil) and (self.TargetItem:getWorldItem():getSquare():getModData().Group ~= nil) and (self.TargetItem:getWorldItem():getSquare():getModData().Group ~= self.parent:getGroupID()) then
-							SSGM:Get(self.TargetItem:getWorldItem():getSquare():getModData().Group):stealingDetected(
+							SSGM:GetGroupById(self.TargetItem:getWorldItem():getSquare():getModData().Group):stealingDetected(
 								self.parent.player)
 						end
 

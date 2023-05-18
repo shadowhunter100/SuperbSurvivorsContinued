@@ -1,29 +1,5 @@
 local isLocalLoggingEnabled = false;
 
-SurvivorPerks = {
-	"Aiming",
-	"Axe",
-	"Combat",
-	"SmallBlade",
-	"LongBlade",
-	"SmallBlunt",
-	"Blunt",
-	"Maintenance",
-	"Spear",
-	"Doctor",
-	"Farming",
-	"Firearm",
-	"Reloading",
-	"Fitness",
-	"Lightfoot",
-	"Nimble",
-	"PlantScavenging",
-	"Reloading",
-	"Sneak",
-	"Strength",
-	"Survivalist"
-}
-
 --- gets the size of a table
 ---@param a table
 ---@return integer returns the size of the table

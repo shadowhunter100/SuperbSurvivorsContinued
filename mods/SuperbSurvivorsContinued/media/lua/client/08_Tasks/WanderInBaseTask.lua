@@ -35,7 +35,7 @@ end
 function WanderInBaseTask:update()
 	CreateLogLine("WanderInBaseTask", isLocalLoggingEnabled, "function: WanderInBaseTask:update() called");
 	if self.parent:getGroupID() ~= nil then
-		self.Group = SSGM:Get(self.parent:getGroupID())
+		self.Group = SSGM:GetGroupById(self.parent:getGroupID())
 	end
 
 	if (not self:isValid()) then return false end

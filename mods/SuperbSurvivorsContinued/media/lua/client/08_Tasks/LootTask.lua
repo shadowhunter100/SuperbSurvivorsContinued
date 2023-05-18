@@ -249,7 +249,7 @@ function LootCategoryTask:update()
 							local OwnerGroupId = SSGM:GetGroupIdFromSquare(ssquare)
 							local TakerGroupId = self.parent.player:getModData().Group
 							if (OwnerGroupId ~= -1) and (TakerGroupId ~= OwnerGroupId) then
-								SSGM:Get(OwnerGroupId):stealingDetected(self.parent.player)
+								SSGM:GetGroupById(OwnerGroupId):stealingDetected(self.parent.player)
 							end
 						end
 					end

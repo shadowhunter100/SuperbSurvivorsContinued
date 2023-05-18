@@ -26,6 +26,10 @@ end
 ---| "GirlNames"
 ---| "BoyNames"
 
+SurvivorNameTable = {};
+SurvivorNameTable["GirlNames"] = getGirlNames();
+SurvivorNameTable["BoyNames"] = getBoyNames();
+
 --- gets a random survivor name based on gender
 ---@param key gender key of the name
 ---@return string a random survivor name
@@ -37,10 +41,3 @@ function GetRandomName(key)
   local result = ZombRand(1, #SurvivorNameTable[key]);
   return tostring(SurvivorNameTable[key][result]);
 end
-
-if not SurvivorNameTable then
-  SurvivorNameTable = {}
-end
-
-SurvivorNameTable["GirlNames"] = getGirlNames()
-SurvivorNameTable["BoyNames"] = getBoyNames()

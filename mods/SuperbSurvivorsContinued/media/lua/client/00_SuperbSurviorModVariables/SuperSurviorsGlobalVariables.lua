@@ -10,6 +10,3 @@ IsGlobalLoggingEnabled = true;
 
 -- Cows: Global String
 StringTest = "This is a Global String Test";
-
--- Cows: Moved out of SuperSurvivorsContextMenu.lua
-LootTypes = { "Food", "Weapon", "Item", "Clothing", "Container", "Literature" };
