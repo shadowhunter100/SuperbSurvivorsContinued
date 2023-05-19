@@ -395,7 +395,6 @@ function WindowSuperSurvivors:createChildren()
     self.headers_base_area.onMouseDown = function() return end
     self.headers_base_status.onMouseDown = function() return end
     self.headers_base_show.onMouseDown = function() return end
-    self.headers_base_modify.onMouseDown = function() return end
     self.headers_base_area.backgroundColorMouseOver = self.headers_base_area.backgroundColor
     self.headers_base_status.backgroundColorMouseOver = self.headers_base_status.backgroundColor
     self.headers_base_show.backgroundColorMouseOver = self.headers_base_show.backgroundColor
@@ -476,7 +475,6 @@ end
 -- ButtonSuperSurvivors
 --****************************************************
 local ButtonSuperSurvivors = ISButton:derive("ButtonSuperSurvivors")
-local ButtonReloadMenu = ISButton:derive("ButtonReloadMenu")
 
 function remove_button_super_survivors()
     button_super_survivors:removeFromUIManager()
@@ -489,19 +487,6 @@ function create_button_super_survivors()
     button_super_survivors:setVisible(true)
     button_super_survivors:setEnable(true)
     button_super_survivors:addToUIManager()
-end
-
-function remove_button_reload_menu()
-    button_reload_menu:removeFromUIManager()
-end
-
-function create_button_reload_menu()
-    button_reload_menu = ButtonReloadMenu:new(getCore():getScreenWidth() - (100 + 25 + 8), getCore():getScreenHeight() -
-        50, 25, 25, "!", nil, function() dssw.dbug() end)
-    button_reload_menu.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
-    button_reload_menu:setVisible(true)
-    button_reload_menu:setEnable(true)
-    button_reload_menu:addToUIManager()
 end
 
 --****************************************************
@@ -718,9 +703,6 @@ Events.EveryOneMinute.Add(event_every_minute)
 function super_survivor_window_entry_point()
     create_window_super_survivors()
     create_button_super_survivors()
-    create_button_reload_menu()
-    --SuperSurvivor.setGroupRole = wrap_set_group_role(SuperSurvivor.setGroupRole)
-    --SurvivorOrder = wrap_survivor_order(SurvivorOrder)
 end
 
 Events.OnGameStart.Add(super_survivor_window_entry_point)
