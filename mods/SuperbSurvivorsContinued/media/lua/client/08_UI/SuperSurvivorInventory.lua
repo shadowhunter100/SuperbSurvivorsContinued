@@ -130,13 +130,14 @@ end
 function InventoryRow:createChildren()
     local cat_icon = ISButton:new(0, 0, 25, 25, "", nil, nil)
     local cat_item = ISButton:new(25, 0, 250, 25, tostring(self.item:getName()), nil, nil)
-    local cat_type = ISButton:new(25+250, 0, 150, 25, tostring(self.item:getCategory()), nil, nil)
-    local cat_transfer = ISButton:new(25+250+150, 0, 50, 25, self.direction, nil, function() self:on_click_transfer(self.direction) end)
+    local cat_type = ISButton:new(25 + 250, 0, 150, 25, tostring(self.item:getCategory()), nil, nil)
+    local cat_transfer = ISButton:new(25 + 250 + 150, 0, 50, 25, self.direction, nil,
+        function() self:on_click_transfer(self.direction) end)
     cat_icon:setImage(self.item:getTex())
     cat_icon:forceImageSize(25, 25)
-    cat_icon.onMouseDown = function() return  end
-    cat_item.onMouseDown = function() return  end
-    cat_type.onMouseDown = function() return  end
+    cat_icon.onMouseDown = function() return end
+    cat_item.onMouseDown = function() return end
+    cat_type.onMouseDown = function() return end
     cat_icon.borderColor = { r = 0, g = 0, b = 0, a = 0 }
     cat_item.borderColor = { r = 0, g = 0, b = 0, a = 0 }
     cat_type.borderColor = { r = 0, g = 0, b = 0, a = 0 }
@@ -180,7 +181,7 @@ end
 --****************************************************
 -- PanelMemberInventory
 --****************************************************
-local PanelMemberInventory = ISPanel:new(475, 25+2, 475, ((25*10)+(8*7))-(50+8*2))
+local PanelMemberInventory = ISPanel:new(475, 25 + 2, 475, ((25 * 10) + (8 * 7)) - (50 + 8 * 2))
 table.insert(panels, 1, PanelMemberInventory)
 
 function PanelMemberInventory:dupdate()
@@ -190,27 +191,29 @@ function PanelMemberInventory:dupdate()
     local member = SSGM:GetGroupById(SSM:Get(0):getGroupID()):getMembers()[self.member_index]
     local items = member.player:getInventory():getItems()
     local scroll_height = 0
-    for i=0, items:size()-1 do
+    for i = 0, items:size() - 1 do
         local item = items:get(i)
         local inventory_row = InventoryRow:new(dy, self.width, 25, item, "<", switch)
         switch = (switch == 0) and 1 or 0
         self:addChild(inventory_row)
-        dy = dy+25
-        scroll_height = scroll_height+1
+        dy = dy + 25
+        scroll_height = scroll_height + 1
     end
     self:addScrollBars()
     self:setScrollWithParent(false)
     self:setScrollChildren(true)
-    self:setScrollHeight((25*scroll_height)+4)
+    self:setScrollHeight((25 * scroll_height) + 4)
 end
 
 function PanelMemberInventory:prerender()
     self:setStencilRect(0, 0, self.width, self.height)
     if self.background then
-        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r, self.backgroundColor.g, self.backgroundColor.b)
+        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r,
+            self.backgroundColor.g, self.backgroundColor.b)
     end
     if self.border then
-        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r, self.borderColor.g, self.borderColor.b)
+        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r,
+            self.borderColor.g, self.borderColor.b)
     end
 end
 
@@ -219,9 +222,9 @@ function PanelMemberInventory:render()
 end
 
 function PanelMemberInventory:onMouseWheel(dir)
-    dir = dir*-1
-    dir = (self:getScrollHeight()/50)*dir
-    dir = self:getYScroll()+dir
+    dir = dir * -1
+    dir = (self:getScrollHeight() / 50) * dir
+    dir = self:getYScroll() + dir
     self:setYScroll(dir)
     return true
 end
@@ -229,36 +232,39 @@ end
 --****************************************************
 -- PanelOwnInventory
 --****************************************************
-local PanelOwnInventory = ISPanel:new(0, 25+2, 475, ((25*10)+(8*7))-(50+8*2))
+local PanelOwnInventory = ISPanel:new(0, 25 + 2, 475, ((25 * 10) + (8 * 7)) - (50 + 8 * 2))
 table.insert(panels, 1, PanelOwnInventory)
 
 function PanelOwnInventory:dupdate()
-    self:clearChildren()
-    local dy = 0
+    -- Cows: There should be a better way.. because if an inventory has over > 100 items, that means > 100 new items are being re-rendered every time...
+    self:clearChildren()    local dy = 0
     local switch = 0
     local items = getPlayerInventory(0).inventory:getItems()
     local scroll_height = 0
-    for i=0, items:size()-1 do
+    -- Cows: There should be a better way.. because if an inventory has over > 100 items, that means > 100 new items are being re-rendered every time...
+    for i = 0, items:size() - 1 do
         local item = items:get(i)
         local inventory_row = InventoryRow:new(dy, self.width, 25, item, ">", switch)
         switch = (switch == 0) and 1 or 0
         self:addChild(inventory_row)
-        dy = dy+25
-        scroll_height = scroll_height+1
+        dy = dy + 25
+        scroll_height = scroll_height + 1
     end
     self:addScrollBars()
     self:setScrollWithParent(false)
     self:setScrollChildren(true)
-    self:setScrollHeight((25*scroll_height)+4)
+    self:setScrollHeight((25 * scroll_height) + 4)
 end
 
 function PanelOwnInventory:prerender()
     self:setStencilRect(0, 0, self.width, self.height)
     if self.background then
-        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r, self.backgroundColor.g, self.backgroundColor.b)
+        self:drawRectStatic(0, 0, self.width, self.height, self.backgroundColor.a, self.backgroundColor.r,
+            self.backgroundColor.g, self.backgroundColor.b)
     end
     if self.border then
-        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r, self.borderColor.g, self.borderColor.b)
+        self:drawRectBorderStatic(0, 0, self.width, self.height, self.borderColor.a, self.borderColor.r,
+            self.borderColor.g, self.borderColor.b)
     end
 end
 
@@ -267,9 +273,9 @@ function PanelOwnInventory:render()
 end
 
 function PanelOwnInventory:onMouseWheel(dir)
-    dir = dir*-1
-    dir = (self:getScrollHeight()/50)*dir
-    dir = self:getYScroll()+dir
+    dir = dir * -1
+    dir = (self:getScrollHeight() / 50) * dir
+    dir = self:getYScroll() + dir
     self:setYScroll(dir)
     return true
 end
@@ -284,7 +290,8 @@ function create_panel_inventory_transfer(member_index)
         panel_inventory_transfer:removeFromUIManager()
         panel_inventory_transfer = nil
     end
-    panel_inventory_transfer = PanelInventoryTransfer:new(window_super_survivors.x, window_super_survivors.y+window_super_survivors.height+8, 475*2, (25*10)+(8*5), member_index)
+    panel_inventory_transfer = PanelInventoryTransfer:new(window_super_survivors.x,
+        window_super_survivors.y + window_super_survivors.height + 8, 475 * 2, (25 * 10) + (8 * 5), member_index)
     panel_inventory_transfer:addToUIManager()
     panel_inventory_transfer:setVisible(true)
 end
@@ -299,18 +306,25 @@ function PanelInventoryTransfer:createChildren()
     local member_inventory = member.player:getInventory()
     local player_inventory = getPlayerInventory(0).inventory
     self.header_player = TitleBar:new(
-            0,
-            self.width/2,
-            tostring(getPlayer():getDisplayName()).."    ["..string.format("%.2f", player_inventory:getCapacityWeight()).." / "..string.format("%.2f", player_inventory:getContentsWeight()).."]",
-            self
+        0,
+        self.width / 2,
+        tostring(getPlayer():getDisplayName()) ..
+        "    [" ..
+        string.format("%.2f", player_inventory:getCapacityWeight()) ..
+        " / " .. string.format("%.2f", player_inventory:getContentsWeight()) .. "]",
+        self
     )
     self.header_member = TitleBar:new(
-            self.width/2,
-            self.width/2,
-            tostring(member:getName()).."    ["..string.format("%.2f", member_inventory:getCapacityWeight()).." / "..string.format("%.2f", member_inventory:getContentsWeight()).."]",
-            self
+        self.width / 2,
+        self.width / 2,
+        tostring(member:getName()) ..
+        "    [" ..
+        string.format("%.2f", member_inventory:getCapacityWeight()) ..
+        " / " .. string.format("%.2f", member_inventory:getContentsWeight()) .. "]",
+        self
     )
-    local button_close = ISButton:new(0, self.height-25, self.width, 25, "close", nil, function() self:removeFromUIManager() end)
+    local button_close = ISButton:new(0, self.height - 25, self.width, 25, "close", nil,
+        function() self:removeFromUIManager() end)
     InventoryRow.member_index = self.member_index
     PanelOwnInventory.member_index = self.member_index
     PanelMemberInventory.member_index = self.member_index
@@ -326,8 +340,8 @@ end
 function PanelInventoryTransfer:onMouseMove(dx, dy)
     self.mouseOver = true
     if self.moving then
-        self:setX(self.x+dx)
-        self:setY(self.y+dy)
+        self:setX(self.x + dx)
+        self:setY(self.y + dy)
         self:bringToTop()
     end
 end
@@ -335,8 +349,8 @@ end
 function PanelInventoryTransfer:onMouseMoveOutside(dx, dy)
     self.mouseOver = false
     if self.moving then
-        self:setX(self.x+dx)
-        self:setY(self.y+dy)
+        self:setX(self.x + dx)
+        self:setY(self.y + dy)
         self:bringToTop()
     end
 end

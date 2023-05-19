@@ -14,7 +14,6 @@ local function SSItemClickHandle()
 	local members = SSGM:GetGroupById(GID):getMembers()
 	local selected = tonumber(MyGroupWindow:getSelected())
 	local member = members[selected]
-
 end
 
 function GroupWindow:new(x, y, width, height)
