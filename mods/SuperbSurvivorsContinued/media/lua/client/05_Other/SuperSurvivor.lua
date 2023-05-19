@@ -215,7 +215,7 @@ function SuperSurvivor:new(isFemale, square)
 		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
 	end
 
-	survivorObject:setBravePoints(SuperSurvivorBravery);
+	survivorObject:setBravePoints(SurvivorBravery);
 	local Dress = "RandomBasic";
 
 	-- Dress according to the Aiming skill level
@@ -299,7 +299,7 @@ function SuperSurvivor:newLoad(ID, square)
 		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
 	end
 
-	survivorObject:setBravePoints(SuperSurvivorBravery);
+	survivorObject:setBravePoints(SurvivorBravery);
 
 	return survivorObject;
 end
@@ -320,7 +320,7 @@ function SuperSurvivor:newSet(player)
 		survivorObject.SquareContainerSquareLooteds[LootTypes[i]] = {};
 	end
 
-	survivorObject:setBravePoints(SuperSurvivorBravery);
+	survivorObject:setBravePoints(SurvivorBravery);
 
 	return survivorObject;
 end
@@ -3199,7 +3199,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 		if (ammo) then
 			local ammobox = GetAmmoBox(ammo)
 			if (ammobox ~= nil) then
-				local randomammo = ZombRand(4, 10);
+				local randomammo = ZombRand(1, 4);
 
 				for i = 0, randomammo do
 					self.player:getInventory():AddItem(ammobox);
@@ -3317,7 +3317,8 @@ function SuperSurvivor:openBoxForGun()
 			inv:AddItem(modl .. ammotype)
 		end
 
-		self:RoleplaySpeak(Get_SS_UIActionText("Opens_Before") .. ammoBox:getDisplayName() .. Get_SS_UIActionText("Opens_After"))
+		self:RoleplaySpeak(Get_SS_UIActionText("Opens_Before") ..
+		ammoBox:getDisplayName() .. Get_SS_UIActionText("Opens_After"))
 		ammoBox:getContainer():Remove(ammoBox)
 		return self.player:getInventory():FindAndReturn(ammotype);
 	end

@@ -37,6 +37,7 @@
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.html
 // https://www.projectzomboid.com/modding/zombie/characters/skills/PerkFactory.Perks.html
 // https://projectzomboid.com/modding/zombie/iso/objects/RainManager.html
+// https://projectzomboid.com/modding/zombie/SandboxOptions.html#initSandboxVars()
 // https://www.projectzomboid.com/modding/zombie/characters/SurvivorFactory.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#triggerEvent(java.lang.String)
 // https://projectzomboid.com/modding/zombie/ui/TextDrawObject.html
@@ -84,6 +85,7 @@
         "PerkFactory",
         "Perks",
         "RainManager",
+        "SandboxVars",
         "SurvivorFactory",
         "TextDrawObject",
         "TraitFactory",
