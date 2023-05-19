@@ -62,7 +62,7 @@ function StartSelectingArea(test, area)
         SuperSurvivorSelectArea[k] = false
     end
 
-    CreateLogLine("SuperSurvivorsBaseAreasUtils", isLocalFunctionLoggingEnabled, "starting selectBaseArea()...");
+    CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "starting selectBaseArea()...");
     SuperSurvivorSelectArea[area] = true;
     SuperSurvivorSelectAnArea = true;
     Events.OnRenderTick.Add(selectBaseArea);
@@ -92,7 +92,7 @@ end
 --
 function SelectingArea(test, area, value)
     local isLocalFunctionLoggingEnabled = true;
-    CreateLogLine("SuperSurvivorsBaseAreasUtils", isLocalFunctionLoggingEnabled, "function: SelectingArea() called");
+    CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "function: SelectingArea() called");
     -- value 0 means cancel, -1 is clear, 1 is set
     if (value ~= 0) then
         if (value == -1) then
@@ -117,7 +117,7 @@ function SelectingArea(test, area, value)
                 math.floor(getSpecificPlayer(0):getZ())
             }
             group:setBounds(baseBounds);
-            CreateLogLine("SuperSurvivorsBaseAreasUtils", isLocalFunctionLoggingEnabled, "set base bounds:" ..
+            CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "set base bounds:" ..
                 tostring(HighlightX1) .. "," ..
                 tostring(HighlightX2) .. " : " .. tostring(HighlightY1) .. "," .. tostring(HighlightY2));
         else
@@ -126,9 +126,9 @@ function SelectingArea(test, area, value)
         end
     end
 
-    CreateLogLine("SuperSurvivorsBaseAreasUtils", isLocalFunctionLoggingEnabled, "stopping SelectBaseArea()...");
+    CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "stopping SelectBaseArea()...");
     SuperSurvivorSelectArea[area] = false;
     SuperSurvivorSelectAnArea = false;
     Events.OnRenderTick.Remove(selectBaseArea);
-    CreateLogLine("SuperSurvivorsBaseAreasUtils", isLocalFunctionLoggingEnabled, "--- function: SelectingArea() end ---");
+    CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "--- function: SelectingArea() end ---");
 end

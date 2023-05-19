@@ -1,5 +1,5 @@
 require "00_SuperbSurviorModVariables/SuperSurvivorsOrders";
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 --****************************************************
 -- RGB functions

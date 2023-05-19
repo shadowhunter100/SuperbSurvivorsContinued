@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 -- IDEA: If zombies near companion while reloading or something particular, run to player if player is further out
 -- Bug: companions are pursing a target without they returning to the player when out of range
@@ -468,7 +468,7 @@ function AIManager(TaskMangerIn)
 		ASuperSurvivor:getTaskManager():clear()
 		if (ASuperSurvivor:Get():getStats():getHunger() > 0.40) then ASuperSurvivor:Get():getStats():setHunger(0.40) end
 		if (ASuperSurvivor:Get():getStats():getThirst() > 0.40) then ASuperSurvivor:Get():getStats():setThirst(0.40) end
-		ASuperSurvivor:Speak(GetDialogue("LeaveGroupHungry"))
+		ASuperSurvivor:Speak(Get_SS_Dialogue("LeaveGroupHungry"))
 	elseif (TaskMangerIn:getCurrentTask() ~= "Enter New Building") and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory") and (IsInAction == false) and (TaskMangerIn:getCurrentTask() ~= "Eat Food") and (TaskMangerIn:getCurrentTask() ~= "Find This") and (TaskMangerIn:getCurrentTask() ~= "First Aide") and (TaskMangerIn:getCurrentTask() ~= "Listen") and (((ASuperSurvivor:isHungry()) and (IsInBase)) or ASuperSurvivor:isVHungry()) and (ASuperSurvivor:getDangerSeenCount() == 0) then
 		if (not ASuperSurvivor:hasFood()) and (ASuperSurvivor:getNoFoodNearBy() == false) and ((getSpecificPlayer(0) == nil) or (not getSpecificPlayer(0):isAsleep())) then
 			if (HisGroup) then
@@ -516,7 +516,7 @@ function AIManager(TaskMangerIn)
 		and (ASuperSurvivor:getDangerSeenCount() == 0) and (TaskMangerIn:getCurrentTask() ~= "First Aide")
 		and (ASuperSurvivor:Get():CanSee(ASuperSurvivor.LastSurvivorSeen))
 	then
-		ASuperSurvivor:Speak(GetDialogue("HeyYou"))
+		ASuperSurvivor:Speak(Get_SS_Dialogue("HeyYou"))
 		ASuperSurvivor:SpokeTo(ASuperSurvivor.LastSurvivorSeen:getModData().ID)
 		TaskMangerIn:AddToTop(ListenTask:new(ASuperSurvivor, ASuperSurvivor.LastSurvivorSeen, true))
 	end

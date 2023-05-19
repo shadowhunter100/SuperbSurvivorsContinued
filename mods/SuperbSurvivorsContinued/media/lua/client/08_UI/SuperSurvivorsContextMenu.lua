@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 -- the job 'companion' has alot of embedding put into it to keep it from breaking away from main player
 -- So if you add new commands for the npcs through here, make sure you keep in mind about companions
@@ -27,13 +27,13 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 		CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "joining group: " .. tostring(SS:getGroupID()));
 
 		if (group) then
-			SS:Speak(GetDialogueSpeech("Roger"));
+			SS:Speak(Get_SS_DialogueSpeech("Roger"));
 
 			if (MySS:getGroup() ~= nil) then
 				local members = MySS:getGroup():getMembers()
 				for x = 1, #members do
 					if (members[x] and members[x].player ~= nil) then
-						members[x]:Speak(GetDialogueSpeech("Roger"));
+						members[x]:Speak(Get_SS_DialogueSpeech("Roger"));
 						group:addMember(members[x], Get_SS_JobText("Partner"))
 					end
 				end
@@ -42,7 +42,7 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 			end
 		end
 	else
-		SS:Speak(GetDialogueSpeech("No"))
+		SS:Speak(Get_SS_DialogueSpeech("No"))
 	end
 	CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "--- function: AskToJoin() END ---");
 end
@@ -60,7 +60,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 	if (task ~= nil) and (task.Name == "Listen") then task:Talked() end
 
 	if (result) then
-		SS:Speak(GetDialogueSpeech("Roger"))
+		SS:Speak(Get_SS_DialogueSpeech("Roger"))
 		local GID, Group
 		if (SSM:Get(0):getGroupID() == nil) then
 			Group = SSGM:newGroup()
@@ -89,7 +89,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 
 		SS:setGroupRole("Companion") -- Newly added
 	else
-		SS:Speak(GetDialogueSpeech("No"))
+		SS:Speak(Get_SS_DialogueSpeech("No"))
 		SS:PlusRelationshipWP(-2.0) -- changed to -2 from -1
 	end
 end
@@ -157,16 +157,16 @@ function ForceWeaponType(test, SS, useMele)
 end
 
 function TalkToSurvivor(test, SS)
-	getSpecificPlayer(0):Say(GetDialogueSpeech("HelloThere"))
+	getSpecificPlayer(0):Say(Get_SS_DialogueSpeech("HelloThere"))
 
 	if SS:Get():CanSee(getSpecificPlayer(0)) then
 		if (SS:Get():getModData().Greeting ~= nil) then
 			SS:Speak(SS:Get():getModData().Greeting)
 		else
-			SS:Speak(GetDialogueSpeech("IdleChatter"))
+			SS:Speak(Get_SS_DialogueSpeech("IdleChatter"))
 		end
 	else
-		SS:Speak(GetDialogue("WhoSaidThat"));
+		SS:Speak(Get_SS_Dialogue("WhoSaidThat"));
 	end
 end
 
@@ -174,7 +174,7 @@ function CallSurvivor(test, player)
 	if (GetDistanceBetween(getSpecificPlayer(0), player) > 3) then
 		getSpecificPlayer(0):Say(Get_SS_UIActionText("OverHere"))
 	else
-		getSpecificPlayer(0):Say(GetDialogue("HelloThere"))
+		getSpecificPlayer(0):Say(Get_SS_Dialogue("HelloThere"))
 	end
 
 	local SS = SSM:Get(player:getModData().ID)

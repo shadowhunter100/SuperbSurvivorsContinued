@@ -117,7 +117,7 @@ function IsItemArray(t)
 	end
 end
 
----comment
+--- WIP - Cows: We actually have a full set of base suits and presets now in the global variables... this can use another look.
 ---@param mapKey any
 ---@return string
 function SetSurvivorDress(mapKey)
@@ -137,15 +137,15 @@ function SetSurvivorDress(mapKey)
 	return dress;
 end
 
----comment
+--- WIP - Cows: We actually have a full set of base weapons list now in the global variables... this can use another look.
 ---@param mapKey any
 ---@return string
 function SetSurvivorWeapon(mapKey)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorWeapon() called");
 	local weapon = "Base.Pistol3";
 	local weaponTableDefault = {
-		[1] = "Base.AssaultRifle",
-		[2] = "Base.AssaultRifle",
+		[1] = "Base.Shotgun",
+		[2] = "Base.VarmintRifle",
 		[3] = "Base.AssaultRifle"
 	};
 

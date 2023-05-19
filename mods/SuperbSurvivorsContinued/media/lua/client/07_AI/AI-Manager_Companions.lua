@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 -- WIP - Cows: Not fully ready yet used in the game... Need to figure out what is and isn't working.
 -- This isn't fully ready yet.

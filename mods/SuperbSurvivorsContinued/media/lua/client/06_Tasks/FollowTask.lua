@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 FollowTask = {}
 FollowTask.__index = FollowTask
@@ -107,13 +107,13 @@ function FollowTask:update()
 
 	-- they keep talking
 	if (ZombRand(70) == 0) and (not CanIdleChat) then
-		self.parent:Speak(GetDialogueSpeech("IdleChatter"))
+		self.parent:Speak(Get_SS_DialogueSpeech("IdleChatter"))
 	end
 
 	if (true) then -- self.parent:isInAction() == false) then -- for some reason this is true when they doing nothing sometimes...
 		if (self.InBaseAtStart == true) and (not self.parent:isInBase()) then
 			if (ZombRand(2) == 0) then
-				self.parent:Speak(GetDialogue("WeLooting"))
+				self.parent:Speak(Get_SS_Dialogue("WeLooting"))
 			end
 			self.InBaseAtStart = false
 		end
