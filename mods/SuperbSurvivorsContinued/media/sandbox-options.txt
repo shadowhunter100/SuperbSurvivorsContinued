@@ -1,0 +1,315 @@
+VERSION = 1,
+option SuperbSurvivorsContinued.Max_Group_Size
+{
+	type = integer,
+	min = 1,
+	max = 8,
+	default = 4,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Max_Group_Size,
+}
+
+option SuperbSurvivorsContinued.Limit_Npc_Groups
+{
+	type = integer,
+	min = 1,
+	max = 10,
+	default = 4,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Limit_Npc_Groups,
+}
+
+option SuperbSurvivorsContinued.Limit_Npcs_Spawn
+{
+	type = integer,
+	min = 1,
+	max = 50,
+	default = 12,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
+}
+
+option SuperbSurvivorsContinued.IsWifeSpawn
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsWifeSpawn,
+}
+
+option SuperbSurvivorsContinued.NoPresetSpawn
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_NoPresetSpawn,
+}
+
+option SuperbSurvivorsContinued.NpcSpawnChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_NpcSpawnChance,
+}
+
+option SuperbSurvivorsContinued.HostileSpawnRateBase
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 5,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_HostileSpawnRateBase,
+}
+
+option SuperbSurvivorsContinued.HostileSpawnRateMax
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_HostileSpawnRateMax,
+}
+
+option SuperbSurvivorsContinued.Limit_Raiders_Groups
+{
+	type = integer,
+	min = 0,
+	max = 10,
+	default = 4,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Limit_Raiders_Groups,
+}
+
+option SuperbSurvivorsContinued.Limit_Raiders_Spawn
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Limit_Raiders_Spawn,
+}
+
+option SuperbSurvivorsContinued.RaidersSpawnChance
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_RaidersSpawnChance,
+}
+
+option SuperbSurvivorsContinued.RaidersSpawnFrequencyByHours
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours,
+}
+
+option SuperbSurvivorsContinued.RaidersStartAfterHours
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 72,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_RaidersStartAfterHours,
+}
+
+option SuperbSurvivorsContinued.CanIdleChat
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_CanIdleChat,
+}
+
+option SuperbSurvivorsContinued.CanNpcsCreateBase
+{
+	type = boolean,
+	default = false,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_CanNpcsCreateBase,
+}
+
+option SuperbSurvivorsContinued.IsInfiniteAmmoEnabled
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsInfiniteAmmoEnabled
+}
+
+option SuperbSurvivorsContinued.IsRoleplayEnabled
+{
+	type = boolean,
+	default = false,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsRoleplayEnabled,
+}
+
+option SuperbSurvivorsContinued.IsSpeakEnabled
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsSpeakEnabled,
+}
+
+option SuperbSurvivorsContinued.SurvivorCanFindWork
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_SurvivorCanFindWork,
+}
+
+option SuperbSurvivorsContinued.SurvivorNeedsFoodWater
+{
+	type = boolean,
+	default = false,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_SurvivorNeedsFoodWater,
+}
+
+option SuperbSurvivorsContinued.SurvivorBravery
+{
+	type = integer,
+	min = 0,
+	max = 50,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_SurvivorBravery,
+}
+
+option SuperbSurvivorsContinued.SurvivorFriendliness
+{
+	type = integer,
+	min = 0,
+	max = 10,
+	default = 10,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_SurvivorFriendliness,
+}
+
+option SuperbSurvivorsContinued.SleepGeneralHealRate
+{
+	type = integer,
+	min = 1,
+	max = 50,
+	default = 5,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_SleepGeneralHealRate,
+}
+
+option SuperbSurvivorsContinued.GFollowDistance
+{
+	type = integer,
+	min = 1,
+	max = 50,
+	default = 5,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_GFollowDistance,
+}
+
+option SuperbSurvivorsContinued.PanicDistance
+{
+	type = integer,
+	min = 0,
+	max = 50,
+	default = 21,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_PanicDistance,
+}
+
+option SuperbSurvivorsContinued.WepSpawnRateGun
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 50,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_WepSpawnRateGun,
+}
+
+option SuperbSurvivorsContinued.WepSpawnRateMelee
+{
+	type = integer,
+	min = 0,
+	max = 100,
+	default = 100,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_WepSpawnRateMelee,
+}
+
+option SuperbSurvivorsContinued.IsPlayerBaseSafe
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsPlayerBaseSafe,
+}
+
+option SuperbSurvivorsContinued.IsPVPEnabled
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsPVPEnabled,
+}
+
+option SuperbSurvivorsContinued.IsDisplayingNpcName
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsDisplayingNpcName,
+}
+
+option SuperbSurvivorsContinued.IsDisplayingHostileColor
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsDisplayingHostileColor,
+}

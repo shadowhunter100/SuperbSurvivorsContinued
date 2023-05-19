@@ -1,0 +1,96 @@
+Sandbox_EN = {
+	Sandbox_SuperbSurvivorsContinued = "SuperbSurvivorsContinued",
+
+	Sandbox_SuperbSurvivorsContinued_Max_Group_Size = "Max Group Size",
+	Sandbox_SuperbSurvivorsContinued_Max_Group_Size_tooltip = "Maximum number of members per group. WIP - This is incomplete",
+
+	Sandbox_SuperbSurvivorsContinued_Limit_Npc_Groups = "Limit NPC Groups",
+	Sandbox_SuperbSurvivorsContinued_Limit_Npc_Groups_tooltip = "Stops spawning new groups after set numbers. WIP - This is incomplete",
+	
+	Sandbox_SuperbSurvivorsContinued_Limit_Npcs_Spawn = "Limit NPC Spawns",
+	Sandbox_SuperbSurvivorsContinued_Limit_Npcs_Spawn_tooltip = "Maximum number of NPCs that can be active in-game. WIP - This is incomplete",
+
+	Sandbox_SuperbSurvivorsContinued_IsWifeSpawn = "Spawn Wife",
+	Sandbox_SuperbSurvivorsContinued_IsWifeSpawn_tooltip = "Spawns a wife follower at the start of the game in your group.",
+	
+	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn = "No Preset Spawns",
+	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn_tooltip = "Uncheck to allow preset npcs to spawn. WIP - THIS IS A LEGACY FEATURE, TERRIBLE FOR GAME PERFORMANCE",
+
+	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance = "Npc Spawn Chance",
+	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance_tooltip = "At each in-game hour, NPCs have a chance to spawn.",
+
+	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateBase = "Hostile NPC Base Chance",
+	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateBase_tooltip = "NPCs has a chance to spawn as hostile to player. WIP - This is incomplete",
+
+	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateMax = "Hostile NPC Chance Cap",
+	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateMax_tooltip = "NPCs grow more hostile to player over time, capped at this value. WIP - This is incomplete.",
+	
+	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Groups = "Limit Raiders Groups",
+	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Groups_tooltip = "Stops spawning new groups after set numbers. WIP - This is incomplete",
+
+	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Spawn = "Limit Raiders Spawn",
+	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Spawn_tooltip = " "Maximum number of Raiders that can be active in-game. WIP - This is incomplete.",
+
+	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance = "Raiders Spawn Chance",
+	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance_tooltip = "At each in-game hour, Raiders have a chance to spawn.",
+	
+	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours = "Guaranteed Raiders Spawn",
+	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours_tooltip = "Guaranteed raiders spawn once every set hours.",
+	
+	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours = "Raiders Start Time",
+	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours_tooltip = "Raiders can start appearing after set hours in-game.",
+	
+	Sandbox_SuperbSurvivorsContinued_CanIdleChat = "Idle Chat Enabled",
+	Sandbox_SuperbSurvivorsContinued_CanIdleChat_tooltip = "On to enable Idle chat. WIP - Seems to overlap with Speech and Roleplay...",
+
+	Sandbox_SuperbSurvivorsContinued_CanNpcsCreateBase = "NPCs can Claim Base Areas",
+	Sandbox_SuperbSurvivorsContinued_CanNpcsCreateBase_tooltip = "On to enable NPCs to create their own base areas. WIP - Discouraged because it affects game performance.",
+
+	Sandbox_SuperbSurvivorsContinued_IsInfiniteAmmoEnabled = "NPCs have Infinite Ammo",
+	Sandbox_SuperbSurvivorsContinued_IsInfiniteAmmoEnabled_tooltip = "On to have NPCs have infinite ammo.",
+	
+	Sandbox_SuperbSurvivorsContinued_IsRoleplayEnabled = "Roleplay Enabled",
+	Sandbox_SuperbSurvivorsContinued_IsRoleplayEnabled_tooltip = "On to enable Role Base Speech. WIP - Seems to overlap with idleChat and Speech and generally broken...",
+
+	Sandbox_SuperbSurvivorsContinued_IsSpeakEnabled = "Speech Enabled",
+	Sandbox_SuperbSurvivorsContinued_IsSpeakEnabled_tooltip = "On to enable speech. WIP - Seems to overlap with idleChat and Roleplay...",
+
+	Sandbox_SuperbSurvivorsContinued_SurvivorCanFindWork = "NPCs Proactive",
+	Sandbox_SuperbSurvivorsContinued_SurvivorCanFindWork_tooltip = "On to have NPCs find work if idling at base. WIP - Needs testing and NPC AIs are generally wonky.",
+	
+	Sandbox_SuperbSurvivorsContinued_SurvivorNeedsFoodWater = "Survivor Needs",
+	Sandbox_SuperbSurvivorsContinued_SurvivorNeedsFoodWater_tooltip = "On for NPCs feel hunger and thirst. Off for no hunger nor thirst.",
+	
+	Sandbox_SuperbSurvivorsContinued_SurvivorBravery = "Survivor Bravery",
+	Sandbox_SuperbSurvivorsContinued_SurvivorBravery_tooltip = "How brave the NPCs are, applies to NPCs and raiders. WIP - This was the most broken thing and I want to remove it in future development.",
+	
+	Sandbox_SuperbSurvivorsContinued_SurvivorFriendliness = "Survivors Friendliness",
+	Sandbox_SuperbSurvivorsContinued_SurvivorFriendliness_tooltip = "How friendly NPCs are to the player. WIP - This is incomplete... and unsure if I want to continue it.",
+	
+	Sandbox_SuperbSurvivorsContinued_SleepGeneralHealRate = "Sleep Healing",
+	Sandbox_SuperbSurvivorsContinued_SleepGeneralHealRate_tooltip = "While the player sleeps, how much the NPCs heal their general health once per hour. WIP - Needs further testing on infections...",
+	
+	Sandbox_SuperbSurvivorsContinued_GFollowDistance = "Follower Distance",
+	Sandbox_SuperbSurvivorsContinued_GFollowDistance_tooltip = "How close the npcs follow the leader when following. This can be dynamically adjusted with numpad +-.",
+	
+	Sandbox_SuperbSurvivorsContinued_PanicDistance = "Panic Distance",
+	Sandbox_SuperbSurvivorsContinued_PanicDistance_tooltip = "This is used to calculate when survivors "flee" from danger. WIP - Incomplete, needs testing.",
+	
+	Sandbox_SuperbSurvivorsContinued_WepSpawnRateGun = "NPC Guns Chance",
+	Sandbox_SuperbSurvivorsContinued_WepSpawnRateGun_tooltip = "How likely NPCs spawn with a firearm, this applies to both npcs and raiders",
+
+	Sandbox_SuperbSurvivorsContinued_WepSpawnRateMelee = "NPC Melee Weapon Chance",
+	Sandbox_SuperbSurvivorsContinued_WepSpawnRateMelee_tooltip = "How likely NPCs spawn with a melee weapon, this applies to both npcs and raiders",
+
+	Sandbox_SuperbSurvivorsContinued_IsPlayerBaseSafe = "Player Base Haven",
+	Sandbox_SuperbSurvivorsContinued_IsPlayerBaseSafe_tooltip = "Player designated Home is safe from NPC entry. WIP - Needs further testing...",
+
+	Sandbox_SuperbSurvivorsContinued_IsPVPEnabled = "PVP Enabled",
+	Sandbox_SuperbSurvivorsContinued_IsPVPEnabled_tooltip = "Determines whether or not PVP is on at start, disabled by default to prevent early friendly fire.",
+	
+	Sandbox_SuperbSurvivorsContinued_IsDisplayingNpcName = "Display NPC Name",
+	Sandbox_SuperbSurvivorsContinued_IsDisplayingNpcName_tooltip = "Display NPC Name - WIP - Unsure why this is a thing...",
+	
+	Sandbox_SuperbSurvivorsContinued_IsDisplayingHostileColor = "Display Hostile NPC Colors",
+	Sandbox_SuperbSurvivorsContinued_IsDisplayingHostileColor_tooltip = "If On, hostile npcs will appear with their name and text in red.",
+}
