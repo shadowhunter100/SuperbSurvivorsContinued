@@ -148,7 +148,6 @@ function AskToDrop(test, SS)
 	SS:Speak("!!")
 end
 
-
 function ForceWeaponType(test, SS, useMele)
 	if (not useMele) then
 		SS:reEquipMele()
@@ -210,7 +209,8 @@ local function survivorMenu(context, o)
 		if (o:getModData().isHostile ~= true) then
 			local medicalOption = submenu:addOption(getText("ContextMenu_Medical_Check"), nil, MedicalCheckSurvivor, o,
 				nil);
-			local toolTip = MakeToolTip(medicalOption, Get_SS_ContextMenuText("AidCheck"), Get_SS_ContextMenuText("AidCheckDesc"));
+			local toolTip = MakeToolTip(medicalOption, Get_SS_ContextMenuText("AidCheck"),
+				Get_SS_ContextMenuText("AidCheckDesc"));
 		end
 		if (o:getModData().isHostile ~= true)
 			and ((SS:getTaskManager():getCurrentTask() == "Listen")
@@ -267,12 +267,14 @@ local function survivorMenu(context, o)
 						Get_SS_ContextMenuText("UseGunDesc"))
 				end
 
-				local SetNameOption = submenu:addOption(Get_SS_ContextMenuText("SetName"), nil, contextMenuSetName, SS, true)
+				local SetNameOption = submenu:addOption(Get_SS_ContextMenuText("SetName"), nil, contextMenuSetName, SS,
+					true)
 			end
 		end
 		if (o:getModData().isHostile ~= true) and (SS:getDangerSeenCount() == 0) and (SS:getTaskManager():getCurrentTask() ~= "Listen") then
 			local selectOption = submenu:addOption(Get_SS_ContextMenuText("CallOver"), nil, CallSurvivor, o, nil);
-			local toolTip = MakeToolTip(selectOption, Get_SS_ContextMenuText("CallOver"), Get_SS_ContextMenuText("CallOverDesc"));
+			local toolTip = MakeToolTip(selectOption, Get_SS_ContextMenuText("CallOver"),
+				Get_SS_ContextMenuText("CallOverDesc"));
 		end
 
 		context:addSubMenu(survivorOption, submenu);

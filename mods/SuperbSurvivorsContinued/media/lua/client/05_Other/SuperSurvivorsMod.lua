@@ -117,7 +117,6 @@ end
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare); --- This is a potential performance killer... because it scans through all the known map squares.
 
 function SuperSurvivorsInit()
-	GroupWindowCreate();
 	SurvivorsCreatePVPButton();
 	SurvivorTogglePVP();
 

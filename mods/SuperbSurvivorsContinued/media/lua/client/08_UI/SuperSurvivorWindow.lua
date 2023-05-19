@@ -1,11 +1,12 @@
 require "05_Other/SuperSurvivorManager";
 require "07_UI/UIUtils";
 
-local window_height = (30 * 10) + 20 + 44 + 2
-local window_width = 850
-local panel_height = 30 * 10
-local context_options = {}
-local survivor_headers = {}
+local windowHeaderHeight = 30;
+local window_height = (30 * 10) + (windowHeaderHeight * 3) - 4; -- Cows: 30 * 3 to cover the window header, panel header, and the tabs buttons. -4 to remove empty space.
+local window_width = 850;
+local panel_height = 30 * 10; -- 30 is about the height of each row.
+local context_options = {};
+local survivor_headers = {};
 local isLocalLoggingEnabled = false;
 
 SurvivorPanels = {}
@@ -29,7 +30,7 @@ base_area_visibility = {
 --****************************************************
 -- PanelGroup
 --****************************************************
-local PanelGroup = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
+local PanelGroup = ISPanel:new(0, 60, window_width, panel_height)
 table.insert(SurvivorPanels, 1, PanelGroup)
 
 function PanelGroup:dupdate()
@@ -112,7 +113,7 @@ end
 --****************************************************
 -- PanelBase
 --****************************************************
-local PanelBase = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
+local PanelBase = ISPanel:new(0, 60, window_width, panel_height)
 PanelBase:setVisible(false)
 table.insert(SurvivorPanels, 2, PanelBase)
 
@@ -249,7 +250,7 @@ end
 --****************************************************
 -- PanelCompanions
 --****************************************************
-local PanelCompanions = ISPanel:new(0, 14 + 1 + 25 + 3, window_width, panel_height)
+local PanelCompanions = ISPanel:new(0, 60, window_width, panel_height)
 PanelCompanions:setVisible(false)
 table.insert(SurvivorPanels, 3, PanelCompanions)
 
@@ -359,9 +360,9 @@ function WindowSuperSurvivors:initialize()
 end
 
 function WindowSuperSurvivors:createChildren()
-    self.y_pos = 14 + 3
-    self.tab_width = self.width / 3
-    self.tab_height = 20
+    self.y_pos = windowHeaderHeight;
+    self.tab_width = self.width / 3;
+    self.tab_height = 24;
     ISCollapsableWindow.createChildren(self)
     -- headers group
     self.headers_group = ISPanel:new(0, self.y_pos, self.width, 25)
@@ -394,7 +395,6 @@ function WindowSuperSurvivors:createChildren()
     self.headers_base_area.onMouseDown = function() return end
     self.headers_base_status.onMouseDown = function() return end
     self.headers_base_show.onMouseDown = function() return end
-    self.headers_base_modify.onMouseDown = function() return end
     self.headers_base_area.backgroundColorMouseOver = self.headers_base_area.backgroundColor
     self.headers_base_status.backgroundColorMouseOver = self.headers_base_status.backgroundColor
     self.headers_base_show.backgroundColorMouseOver = self.headers_base_show.backgroundColor
@@ -433,14 +433,22 @@ function WindowSuperSurvivors:createChildren()
     self:addChild(PanelGroup)
     self:addChild(PanelBase)
     self:addChild(PanelCompanions)
-    -- tabs
+    -- tabs, buttons for switching between the panels.
     self.tabs = ISPanel:new(0, self.height - 25 + 3, 846, self.tab_height)
-    self.tab_group = ISButton:new(0, 0, self.tab_width, self.tab_height, "Group", nil,
-        function() on_click_tab(self.headers_group, PanelGroup) end)
-    self.tab_base = ISButton:new(self.tab_width, 0, self.tab_width, self.tab_height, "Base", nil,
-        function() on_click_tab(self.headers_base, PanelBase) end)
-    self.tab_companions = ISButton:new(self.tab_width * 2, 0, self.tab_width, self.tab_height, "Companions", nil,
-        function() on_click_tab(self.headers_companions, PanelCompanions) end)
+    self.tab_group = ISButton:new(
+        0, 0, self.tab_width, self.tab_height, "Group", nil,
+        function() on_click_tab(self.headers_group, PanelGroup) end
+    );
+    self.tab_base = ISButton:new(
+        self.tab_width, 0, self.tab_width, self.tab_height, "Base", nil,
+        function() on_click_tab(self.headers_base, PanelBase) end
+    );
+    self.tab_companions = ISButton:new(
+        self.tab_width * 2, 0, self.tab_width, self.tab_height, "Companions", nil,
+        function()
+            on_click_tab(self.headers_companions, PanelCompanions)
+        end
+    );
     self.tab_group.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     self.tab_base.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
     self.tab_companions.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
@@ -451,23 +459,22 @@ function WindowSuperSurvivors:createChildren()
 end
 
 function WindowSuperSurvivors:new(x, y, width, height)
-    local o = {}
-    o = ISCollapsableWindow:new(x, y, width, height)
-    setmetatable(o, self)
-    self.__index = self
-    o.title = "Superb Survivors 3.2.4"
-    o.pin = false
-    o.resizable = false
-    o.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
-    o.backgroundColor = { r = 0, g = 0, b = 0, a = 0.7 }
-    return o
+    local o = {};
+    o = ISCollapsableWindow:new(x, y, width, height);
+    setmetatable(o, self);
+    self.__index = self;
+    o.title = "Superb Survivors Continued";
+    o.pin = false;
+    o.resizable = false;
+    o.borderColor = { r = 1, g = 1, b = 1, a = 0.2 };
+    o.backgroundColor = { r = 0, g = 0, b = 0, a = 0.7 };
+    return o;
 end
 
 --****************************************************
 -- ButtonSuperSurvivors
 --****************************************************
 local ButtonSuperSurvivors = ISButton:derive("ButtonSuperSurvivors")
-local ButtonReloadMenu = ISButton:derive("ButtonReloadMenu")
 
 function remove_button_super_survivors()
     button_super_survivors:removeFromUIManager()
@@ -480,19 +487,6 @@ function create_button_super_survivors()
     button_super_survivors:setVisible(true)
     button_super_survivors:setEnable(true)
     button_super_survivors:addToUIManager()
-end
-
-function remove_button_reload_menu()
-    button_reload_menu:removeFromUIManager()
-end
-
-function create_button_reload_menu()
-    button_reload_menu = ButtonReloadMenu:new(getCore():getScreenWidth() - (100 + 25 + 8), getCore():getScreenHeight() -
-        50, 25, 25, "!", nil, function() dssw.dbug() end)
-    button_reload_menu.borderColor = { r = 1, g = 1, b = 1, a = 0.2 }
-    button_reload_menu:setVisible(true)
-    button_reload_menu:setEnable(true)
-    button_reload_menu:addToUIManager()
 end
 
 --****************************************************
@@ -535,7 +529,8 @@ function on_click_companion_call(member_index)
     local group_members = SSGM:GetGroupById(group_id):getMembers()
     local member = group_members[member_index]
     if member then
-        getSpecificPlayer(0):Say(Get_SS_UIActionText("CallName_Before") .. member:getName() .. Get_SS_UIActionText("CallName_After"))
+        getSpecificPlayer(0):Say(Get_SS_UIActionText("CallName_Before") ..
+            member:getName() .. Get_SS_UIActionText("CallName_After"))
         member:getTaskManager():AddToTop(ListenTask:new(member, getSpecificPlayer(0), false))
     end
 end
@@ -703,31 +698,11 @@ end
 Events.EveryOneMinute.Add(event_every_minute)
 
 --****************************************************
--- Debugging
---****************************************************
-dssw = { file = "SuperSurvivorWindow.lua" }
-
-function dssw.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end
-
-function dssw.dbug()
-    remove_window_super_survivors()
-    create_window_super_survivors()
-end
-
---****************************************************
 -- SuperSurvivorWindow entry point
 --****************************************************
 function super_survivor_window_entry_point()
     create_window_super_survivors()
     create_button_super_survivors()
-    create_button_reload_menu()
-    --SuperSurvivor.setGroupRole = wrap_set_group_role(SuperSurvivor.setGroupRole)
-    --SurvivorOrder = wrap_survivor_order(SurvivorOrder)
 end
 
 Events.OnGameStart.Add(super_survivor_window_entry_point)

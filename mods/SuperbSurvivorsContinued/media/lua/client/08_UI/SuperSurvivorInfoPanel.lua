@@ -233,24 +233,6 @@ function ShowSurvivorInfo(member_index)
 end
 
 --****************************************************
--- Debugging
---****************************************************
-dssip = { file = "SuperSurvivorInfoPanel.lua" }
-
-function dssip.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end
-
-function dssip.dbug()
-    CreateLogLine("SuperSurvivorInfoPanel", isLocalLoggingEnabled, "dssip.dbug() called");
-    remove_panel_survivor_info()
-    create_panel_survivor_info()
-end
-
---****************************************************
 -- SuperSurvivorInfoPanel entry point
 --****************************************************
 function super_survivor_info_entry_point()

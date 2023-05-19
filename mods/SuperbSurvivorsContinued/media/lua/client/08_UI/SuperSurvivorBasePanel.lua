@@ -343,18 +343,6 @@ function PanelBaseInfo:new(x, y, width, height, area_name)
 end
 
 --****************************************************
--- Debugging
---****************************************************
-dssbp = { file = "SuperSurvivorBasePanel.lua" }
-
-function dssbp.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end
-
---****************************************************
 -- TODO: base editing
 --****************************************************
 -- Display cell grid in area selection.
