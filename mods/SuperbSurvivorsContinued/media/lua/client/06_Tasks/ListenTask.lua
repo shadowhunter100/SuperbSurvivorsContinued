@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 ListenTask = {}
 ListenTask.__index = ListenTask
@@ -21,7 +21,7 @@ function ListenTask:new(superSurvivor, TalkToMe, selfInitiated)
 	o.Spoke = false
 	o.IsNPConNPC = ((o.parent.player:isLocalPlayer() == false) and (TalkToMe:isLocalPlayer() == false))
 	o.parent:StopWalk()
-	superSurvivor:Speak(GetDialogueSpeech("Respond"))
+	superSurvivor:Speak(Get_SS_DialogueSpeech("Respond"))
 
 	return o
 end
@@ -29,7 +29,7 @@ end
 function ListenTask:isComplete()
 	if (self.TicksSinceLastExchange > 15) or (self.parent:getDangerSeenCount() > 0) or (self.parent:needToFollow()) then
 		if (not self.parent:isInGroup(self.Aite)) then
-			self.parent:Speak(GetDialogue("Bye1"))
+			self.parent:Speak(Get_SS_Dialogue("Bye1"))
 		end
 		return true
 	else
@@ -67,15 +67,15 @@ function ListenTask:update()
 				if (self.parent:Get():getModData().InitGreeting ~= nil) and (not self.IsNPConNPC) then
 					self.parent:Speak(self.parent:Get():getModData().InitGreeting)
 				elseif (self.WasSelfInit) then
-					self.parent:Speak(GetDialogue("HiThere"))
+					self.parent:Speak(Get_SS_Dialogue("HiThere"))
 				else
-					self.parent:Speak(GetDialogue("WhatYouWant"))
+					self.parent:Speak(Get_SS_Dialogue("WhatYouWant"))
 				end
 			elseif (self.parent.player:isLocalPlayer() == false) then
 				if (ZombRand(2) == 0) and
 					(self.parent:isSpeaking() == false) and
 					(self.SSAite:isSpeaking() == false) and (not CanIdleChat) then
-					self.parent:Speak(GetDialogueSpeech("IdleChatter"))
+					self.parent:Speak(Get_SS_DialogueSpeech("IdleChatter"))
 				end
 			end
 		end

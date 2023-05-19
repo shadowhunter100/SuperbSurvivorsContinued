@@ -80,7 +80,7 @@ function TakeGiftTask:update()
 				if (self.TheGift:getWorldItem() ~= nil) then self.TheGift:getWorldItem():removeFromSquare() end
 				self.TheGift:setWorldItem(nil)
 
-				self.parent:Speak(GetDialogueSpeech("Thanks"))
+				self.parent:Speak(Get_SS_DialogueSpeech("Thanks"))
 				self.Complete = true
 
 				local itemType = self.TheGift:getType()
@@ -102,7 +102,7 @@ function TakeGiftTask:update()
 					self.TheGift:getContainer(), self.parent:getBag(), 20))
 			end
 		elseif (self.DestContainer:contains(self.TheGift)) then
-			self.parent:Speak(GetDialogueSpeech("Thanks"))
+			self.parent:Speak(Get_SS_DialogueSpeech("Thanks"))
 			self.Complete = true
 
 			local itemType = self.TheGift:getType()

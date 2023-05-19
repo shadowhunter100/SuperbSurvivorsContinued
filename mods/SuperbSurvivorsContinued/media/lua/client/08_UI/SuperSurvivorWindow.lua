@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 require "07_UI/UIUtils";
 
 local windowHeaderHeight = 30;

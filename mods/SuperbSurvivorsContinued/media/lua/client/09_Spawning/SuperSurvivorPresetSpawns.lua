@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 require "04_Group/SuperSurvivorGroupManager"
 
 if (not PresetSpawns) then
@@ -1604,7 +1604,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1619,7 +1619,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1634,7 +1634,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1649,7 +1649,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1664,7 +1664,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false
@@ -1679,7 +1679,7 @@ PresetSpawns[#PresetSpawns + 1] = {
 	PerkLevel = 5,
 	isFemale = false,
 	Name = getText("ContextMenu_SD_DoctorPrefix_Before") ..
-		GetDialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
+		Get_SS_DialogueSpeech("BoyNames") .. getText("ContextMenu_SD_DoctorPrefix_After"),
 	Weapon = "Base.HuntingKnife",
 	Orders = "Doctor",
 	isHostile = false

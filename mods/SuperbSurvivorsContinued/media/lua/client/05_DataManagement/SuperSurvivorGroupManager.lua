@@ -1,5 +1,3 @@
-require "SuperSurvivorGroup";
-
 SuperSurvivorGroupManager = {}
 SuperSurvivorGroupManager.__index = SuperSurvivorGroupManager
 

@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 require "07_UI/UIUtils";
 
 local FONT_HGT_SMALL = getTextManager():getFontHeight(UIFont.Small)

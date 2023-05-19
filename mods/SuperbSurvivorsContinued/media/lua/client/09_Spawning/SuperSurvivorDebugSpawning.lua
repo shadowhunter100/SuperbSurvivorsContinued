@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 --[[
 	The functions here were cut-pasted here from "SuperSurvivorsMod.lua"; the spawning functions should only come after all configurations 

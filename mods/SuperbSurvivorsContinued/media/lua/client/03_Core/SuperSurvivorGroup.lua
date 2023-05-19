@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager"
+require "04_Group.SuperSurvivorManager"
 
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup
@@ -497,11 +497,11 @@ function SuperSurvivorGroup:stealingDetected(thief)
 		local workingSS = SSM:Get(workingID)
 		if (workingID ~= nil) and (thief ~= nil) and (thief:getModData().ID ~= nil) and (workingSS ~= nil) and (workingSS:getGroupID() == self.ID) then
 			if (self:getWarnPlayer(thief:getModData().ID)) and SSM:Get(workingID):Get():CanSee(thief) then
-				SSM:Get(workingID):Speak(GetDialogue("IAttackFoodThief"))
+				SSM:Get(workingID):Speak(Get_SS_Dialogue("IAttackFoodThief"))
 				thief:getModData().semiHostile = true
 				SSM:Get(workingID):Get():getModData().hitByCharacter = true
 			elseif (not self:getWarnPlayer(thief:getModData().ID)) and SSM:Get(workingID):Get():CanSee(thief) then
-				SSM:Get(workingID):Speak(GetDialogue("IWarnFoodThief"))
+				SSM:Get(workingID):Speak(Get_SS_Dialogue("IWarnFoodThief"))
 				self:WarnPlayer(thief:getModData().ID)
 			end
 		end

@@ -1,5 +1,6 @@
-require "05_Other/SuperSurvivorManager";
-require "04_Group/SuperSurvivorGroupManager";
+require "03_Core/SuperSurvivorNames";
+require "05_DataManagement/SuperSurvivorManager";
+require "05_DataManagement/SuperSurvivorGroupManager";
 
 local isLocalLoggingEnabled = false;
 
@@ -1960,17 +1961,15 @@ end
 -- Todo: add self:RealCanSee(self.LastEnemeySeen) senses
 function SuperSurvivor:NPC_CheckPursueScore()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_CheckPursueScore() called");
+	local zRangeToPursue = 2
 	if (self.LastEnemeySeen ~= nil) then
-		local zRangeToPursue = 2
-
 		-- ------------------------------------  --
 		-- Keep pursue from happening when 	
 		-- lots of enemies the npc sees --		
 		-- ------------------------------------  --		
 		if (not self:getGroupRole() == "Companion")
 			and (((self:getSeenCount() > 4)
-					and (self:isEnemyInRange())
-					and (Enemy_Is_a_Zombie))
+					and (self:isEnemyInRange()))
 				or (self:isTooScaredToFight()))
 		then
 			zRangeToPursue = 0
@@ -2400,13 +2399,12 @@ function SuperSurvivor:NPCcalculateWalkSpeed()
 
 	local wmin = math.min(1.0, wmax);
 	local bodydamage = self.player:getBodyDamage()
-
 	if (bodydamage) then
 		local thermo = bodydamage:getThermoregulator()
-	end
 
-	if (thermo) then
-		wmin = wmin * thermo:getMovementModifier();
+		if (thermo) then
+			wmin = wmin * thermo:getMovementModifier();
+		end
 	end
 
 	if (self.player:isAiming()) then
@@ -3318,7 +3316,7 @@ function SuperSurvivor:openBoxForGun()
 		end
 
 		self:RoleplaySpeak(Get_SS_UIActionText("Opens_Before") ..
-		ammoBox:getDisplayName() .. Get_SS_UIActionText("Opens_After"))
+			ammoBox:getDisplayName() .. Get_SS_UIActionText("Opens_After"))
 		ammoBox:getContainer():Remove(ammoBox)
 		return self.player:getInventory():FindAndReturn(ammotype);
 	end
@@ -3803,7 +3801,7 @@ function SuperSurvivor:Attack(victim)
 		local pwepContainer = pwep:getContainer()
 		if (pwepContainer) then pwepContainer:Remove(pwep) end -- remove temporarily so FindAndReturn("weapon") does not find this ammoless gun
 
-		self:Speak(GetDialogueSpeech("OutOfAmmo"));
+		self:Speak(Get_SS_DialogueSpeech("OutOfAmmo"));
 
 		for i = 1, #self.AmmoBoxTypes do
 			self:getTaskManager():AddToTop(FindThisTask:new(self, self.AmmoBoxTypes[i], "Type", 1))

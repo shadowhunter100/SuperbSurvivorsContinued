@@ -1,5 +1,3 @@
-require "05_Other/SuperSurvivorManager";
-
 local isLocalLoggingEnabled = false;
 
 function SuperSurvivorPlayerInit(player)
@@ -37,7 +35,7 @@ function SuperSurvivorPlayerInit(player)
 
 			local MData = wife:Get():getModData();
 
-			wife:Get():getModData().InitGreeting = GetDialogueSpeech("WifeIntro");
+			wife:Get():getModData().InitGreeting = Get_SS_DialogueSpeech("WifeIntro");
 			wife:Get():getModData().seenZombie = true;
 			local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
 			local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");

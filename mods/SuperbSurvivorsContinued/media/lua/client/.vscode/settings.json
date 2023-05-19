@@ -1,5 +1,8 @@
 // Defined under PZ modding documentation, sorted alphabetically
+// !!! IS<...> declared items have no online documentation but can be found in PZ game folder "media/lua/client". !!!
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#addSound(zombie.iso.IsoObject,int,int,int,int,int)
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.html#AdjacentFreeTileFinder(zombie.iso.IsoGridSquare,zombie.characters.IsoPlayer)
+// https://projectzomboid.com/modding/zombie/vehicles/PathFindBehavior2.BehaviorResult.html
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodBodyPartType.html
 // https://projectzomboid.com/modding/zombie/characterTextures/BloodClothingType.html
 // https://projectzomboid.com/modding/zombie/ui/UI_BodyPart.html#BodyPartType
@@ -26,6 +29,7 @@
 // https://www.projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#getWorld()
 // https://projectzomboid.com/modding/zombie/core/ImmutableColor.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#instanceItem(java.lang.String)
+// https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#isClient()
 // instanceof is a core java function... but also accessible as of build 41 - https://theindiestone.com/forums/index.php?/topic/23364-all-lua-functions-list/ 
 // https://projectzomboid.com/modding/zombie/iso/IsoCamera.html
 // https://www.projectzomboid.com/modding/zombie/characters/IsoPlayer.html
@@ -39,6 +43,7 @@
 // https://projectzomboid.com/modding/zombie/iso/objects/RainManager.html
 // https://projectzomboid.com/modding/zombie/SandboxOptions.html#initSandboxVars()
 // https://www.projectzomboid.com/modding/zombie/characters/SurvivorFactory.html
+// https://projectzomboid.com/modding/zombie/ai/states/SwipeStatePlayer.html
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#triggerEvent(java.lang.String)
 // https://projectzomboid.com/modding/zombie/ui/TextDrawObject.html
 // https://projectzomboid.com/modding/zombie/characters/traits/TraitFactory.html
@@ -46,7 +51,9 @@
 // https://projectzomboid.com/modding/zombie/Lua/LuaManager.GlobalObject.html#ZombRand(double)
 {
     "Lua.diagnostics.globals": [
+        "addSound",
         "AdjacentFreeTileFinder",
+        "BehaviorResult",
         "BloodBodyPartType",
         "BloodClothingType",
         "BodyPartType",
@@ -75,6 +82,7 @@
         "ImmutableColor",
         "instanceof",
         "instanceItem",
+        "isClient",
         "IsoCamera",
         "IsoPlayer",
         "IsoUtils",
@@ -87,10 +95,54 @@
         "RainManager",
         "SandboxVars",
         "SurvivorFactory",
+        "SwipeStatePlayer",
         "TextDrawObject",
         "TraitFactory",
         "triggerEvent",
         "UIFont",
         "ZombRand",
+        "ISWorldMap",
+        "ISButton",
+        "ISCollapsableWindow",
+        "ISPanel",
+        "ISWorldMap_instance",
+        "ISContextMenu",
+        "LuaEventManager",
+        "ISTextBox",
+        "ISMouseDrag",
+        "ISLabel",
+        "ISToolTipInv",
+        "ISUnequipAction",
+        "ISTimedActionQueue",
+        "ISTextEntryBox",
+        "ISRichTextPanel",
+        "ISGrabCorpseAction",
+        "ISInventoryTransferAction",
+        "ISChopTreeAction",
+        "ISSmashWindow",
+        "ISReloadWeaponAction",
+        "ISToolTip",
+        "ISEjectMagazine",
+        "ISInventoryPaneContextMenu",
+        "ISInsertMagazine",
+        "ISTakeWaterAction",
+        "ISClimbSheetRopeAction",
+        "ISWalkToTimedAction",
+        "ISClimbThroughWindow",
+        "ISSwitchVehicleSeat",
+        "ISExitVehicle",
+        "ISWashYourself",
+        "ISWashClothing",
+        "ISHarvestPlantAction",
+        "ISPlowAction",
+        "ISSeedAction",
+        "ISWaterPlantAction",
+        "ISStitch",
+        "ISRemoveGlass",
+        "ISRemoveBullet",
+        "ISSplint",
+    ],
+    "Lua.diagnostics.disable": [
+        "missing-return"
     ]
 }

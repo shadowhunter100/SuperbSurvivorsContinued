@@ -1,4 +1,4 @@
-require "05_Other/SuperSurvivorManager";
+require "04_Group.SuperSurvivorManager";
 
 PursueTask = {}
 PursueTask.__index = PursueTask
@@ -84,12 +84,12 @@ function PursueTask:update()
 
 		if (distancetoLastSpotSeen > 2.5) then
 			if (ZombRand(4) == 0) and (self.parent:isSpeaking() == false) then
-				self.parent:Speak(GetDialogueSpeech("SawHimThere"))
+				self.parent:Speak(Get_SS_DialogueSpeech("SawHimThere"))
 			end
 		else
 			self.parent:setRunning(false)
 			self.Complete = true
-			self.parent:Speak(GetDialogue("WhereHeGo"))
+			self.parent:Speak(Get_SS_Dialogue("WhereHeGo"))
 		end
 	else
 		local theDistance = GetDistanceBetween(self.Target, self.parent.player)
