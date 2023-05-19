@@ -703,23 +703,6 @@ end
 Events.EveryOneMinute.Add(event_every_minute)
 
 --****************************************************
--- Debugging
---****************************************************
-dssw = { file = "SuperSurvivorWindow.lua" }
-
-function dssw.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end
-
-function dssw.dbug()
-    remove_window_super_survivors()
-    create_window_super_survivors()
-end
-
---****************************************************
 -- SuperSurvivorWindow entry point
 --****************************************************
 function super_survivor_window_entry_point()

@@ -397,15 +397,3 @@ function PanelLoadout:new(x, y, width, height, member_index)
     o.member_index = member_index
     return o
 end
-
---****************************************************
--- Debugging
---****************************************************
-dssl = { file = "SuperSurvivorLoadout.lua" }
-
-function dssl.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end

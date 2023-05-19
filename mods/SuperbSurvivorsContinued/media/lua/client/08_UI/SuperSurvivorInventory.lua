@@ -377,15 +377,3 @@ function PanelInventoryTransfer:new(x, y, width, height, member_index)
     o.member_index = member_index
     return o
 end
-
---****************************************************
--- Debugging
---****************************************************
-dssi = { file = "SuperSurvivorInventory.lua" }
-
-function dssi.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end

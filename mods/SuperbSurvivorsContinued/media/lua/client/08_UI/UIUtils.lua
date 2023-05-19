@@ -140,13 +140,3 @@ function UIUtil_GiveOrder(order_index, member_index)
     end
 end
 
--- WIP - Cows: "dui" is apparently used for debugging...
-
-dui = { file = "UIUtils.lua" }
-
-function dui.dfile()
-    for _, _ in nil do
-        -- Triggers a break to automatically open
-        -- this file in the debug window.
-    end
-end
