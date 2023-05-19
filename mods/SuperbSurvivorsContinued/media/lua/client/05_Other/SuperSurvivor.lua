@@ -3199,7 +3199,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 		if (ammo) then
 			local ammobox = GetAmmoBox(ammo)
 			if (ammobox ~= nil) then
-				local randomammo = ZombRand(4, 10);
+				local randomammo = ZombRand(1, 4);
 
 				for i = 0, randomammo do
 					self.player:getInventory():AddItem(ammobox);
