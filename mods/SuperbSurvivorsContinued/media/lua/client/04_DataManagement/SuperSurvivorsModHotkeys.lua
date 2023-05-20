@@ -21,7 +21,7 @@ end
 
 -- WIP - Cows: Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
-    local isLocalFunctionLoggingEnabled = true;
+    local isLocalFunctionLoggingEnabled = false;
     CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
     local playerSurvivor = getSpecificPlayer(0);
 
