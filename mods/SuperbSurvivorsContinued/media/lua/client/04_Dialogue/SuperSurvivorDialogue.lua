@@ -1,18 +1,7 @@
 local isLocalLoggingEnabled = false;
 
---[[
-  WIP - Cows: Where are those "speeches" coming from? Are those from Conditional-Speech mod on the workshop?
-  https://steamcommunity.com/sharedfiles/filedetails/?id=2398253681
-  If yes, why was the mod not credited?
---]]
-function Get_SS_Dialogue(text)
-  CreateLogLine("SuperSurvivorDialogue", isLocalLoggingEnabled, "Get_SS_Dialogue() called");
-  return getText("GameSound_Dialogues_SS_" .. text)
-end
-
-
 if not SurvivorSpeechTable then
-  SurvivorSpeechTable = {}
+  SurvivorSpeechTable = {};
 end
 
 --- gets a random speech text of a dialogue list

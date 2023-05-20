@@ -26,3 +26,7 @@ end
 function Get_SS_JobText(text)
 	return Get_SS_ContextMenuText("Job_" .. text)
 end
+
+function Get_SS_Dialogue(text)
+  return getText("GameSound_Dialogues_SS_" .. text)
+end
