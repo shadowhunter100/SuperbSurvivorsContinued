@@ -1,83 +1,7 @@
 local isLocalLoggingEnabled = false;
 
-function SuperSurvivorPlayerInit(player)
-	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "function: SuperSurvivorPlayerInit() called");
-	player:getModData().isHostile = false
-	player:getModData().semiHostile = false
-	player:getModData().hitByCharacter = false
-	player:getModData().ID = 0
-	player:setBlockMovement(false)
-	player:setNPC(false)
-	CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
-		"initing player index " .. tostring(player:getPlayerNum()));
-
-	if (player:getPlayerNum() == 0) then
-		SSM:init()
-		MyGroup = SSGM:newGroup()
-		MyGroup:addMember(SSM:Get(0), "Leader")
-		local spawnBuilding = SSM:Get(0):getBuilding()
-		if (spawnBuilding) then -- spawn building is default group base
-			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "set building " .. tostring(MyGroup:getID()));
-			local def = spawnBuilding:getDef()
-			local bounds = { def:getX(), (def:getX() + def:getW()), def:getY(), (def:getY() + def:getH()), 0 }
-			MyGroup:setBounds(bounds)
-		else
-			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "Did not spawn in a building!");
-		end
-
-		local wife
-		if (player:getModData().WifeID == nil)
-			and (IsWifeSpawn)
-		then
-			player:getModData().WifeID = 0;
-
-			wife = SSM:spawnSurvivor(not player:isFemale(), player:getCurrentSquare());
-
-			local MData = wife:Get():getModData();
-
-			wife:Get():getModData().InitGreeting = Get_SS_DialogueSpeech("WifeIntro");
-			wife:Get():getModData().seenZombie = true;
-			local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
-			local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");
-
-			wife:Get():setPrimaryHandItem(baseballBat);
-			wife:Get():setSecondaryHandItem(baseballBat);
-			wife:setMeleWep(baseballBat);
-			wife:setGunWep(pistol);
-
-			MData.MetPlayer = true;
-			MData.isHostile = false;
-
-			local GID, Group
-
-			if (SSM:Get(0):getGroupID() == nil) then
-				Group = SSGM:newGroup()
-				GID = Group:getID()
-				Group:addMember(SSM:Get(0), "Leader")
-			else
-				GID = SSM:Get(0):getGroupID()
-				Group = SSGM:GetGroupById(GID)
-			end
-
-			Group:addMember(wife, "Worker")
-
-			local followtask = FollowTask:new(wife, getSpecificPlayer(0))
-			local tm = wife:getTaskManager()
-			wife:setAIMode("Follow")
-			tm:AddToTop(followtask)
-		end
-
-		local mydesc = getSpecificPlayer(0):getDescriptor();
-
-		if (SSM:Get(0)) then
-			SSM:Get(0):setName(mydesc:getForename());
-		end
-	else
-		CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled,
-			"finished initing player index " .. tostring(player:getPlayerNum()));
-	end
-end
-
+--- Cows: This seems redundant? The SuperSurvivor file and SSM already have OnDeath functions defined... will need another look.
+---@param player any
 function SuperSurvivorOnDeath(player)
 	if (player and player:getModData().ID ~= nil) then
 		local SS = SSM:Get(player:getModData().ID);
@@ -98,7 +22,7 @@ function SuperSurvivorGlobalUpdate(player)
 	end
 end
 
-function getGunShotWoundBP(player)
+local function getGunShotWoundBP(player)
 	if (not instanceof(player, "IsoPlayer")) then
 		return nil
 	end

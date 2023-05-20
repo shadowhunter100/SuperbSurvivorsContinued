@@ -67,43 +67,6 @@ end
 
 Events.LoadGridsquare.Add(SuperSurvivorsLoadGridsquare); --- This is a potential performance killer... because it scans through all the known map squares.
 
-function SuperSurvivorsInit()
-	SurvivorsCreatePVPButton();
-	SurvivorTogglePVP();
-
-	if (IsoPlayer.getCoopPVP() == true
-			or IsPVPEnabled == true) then
-		SurvivorTogglePVP()
-	end
-
-	local player = getSpecificPlayer(0)
-	player:getModData().isHostile = false
-	player:getModData().ID = 0
-
-	if (player:getX() >= 7679 and player:getX() <= 7680) and (player:getY() >= 11937 and player:getY() <= 11938) then -- if spawn in prizon
-		local keyid = player:getBuilding():getDef():getKeyId();
-
-		if (keyid) then
-			local key = player:getInventory():AddItem("Base.Key1");
-			key:setKeyId(keyid);
-			player:getCurrentSquare():getE():AddWorldInventoryItem(key, 0.5, 0.5, 0);
-			player:getInventory():Remove(key);
-		end
-
-		local DeadGuardSquare = getCell():getGridSquare(7685, 11937, 1);
-
-		if (DeadGuardSquare ~= nil) then
-			local SuperSurvivorDeadGuard = SSM:spawnSurvivor(false, DeadGuardSquare);
-			local DeadGuard = SuperSurvivorDeadGuard.player
-			SuperSurvivorDeadGuard:giveWeapon("Base.Pistol");
-
-			DeadGuard:Kill(nil);
-		end
-	end
-end
-
-Events.OnGameStart.Add(SuperSurvivorsInit)
-
 function SuperSurvivorsOnSwing(player, weapon)
 	local ID = player:getModData().ID
 	if (ID ~= nil) then
@@ -355,24 +318,3 @@ end
 
 Events.OnEquipPrimary.Add(SuperSurvivorsOnEquipPrimary);
 
-NumberOfLocalPlayers = 0;
-
-function SSCreatePlayerHandle(newplayerID)
-	local newplayer = getSpecificPlayer(newplayerID);
-	local MD = newplayer:getModData();
-
-	if (not MD.ID) and (newplayer:isLocalPlayer()) then
-		SuperSurvivorPlayerInit(newplayer)
-
-		if (getSpecificPlayer(0) and (not getSpecificPlayer(0):isDead()) and (getSpecificPlayer(0) ~= newplayer)) then
-			local MainSS = SSM:Get(0);
-			local MainSSGroup = MainSS:getGroup();
-			NumberOfLocalPlayers = NumberOfLocalPlayers + 1;
-			local newSS = SSM:setPlayer(newplayer, NumberOfLocalPlayers);
-			newSS:setID(NumberOfLocalPlayers);
-			MainSSGroup:addMember(newSS, "Guard");
-		end
-	end
-end
-
-Events.OnCreatePlayer.Add(SSCreatePlayerHandle)
