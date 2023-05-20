@@ -237,6 +237,8 @@ function SuperSurvivorPlayerInit(player)
 		MyGroup:addMember(SSM:Get(0), "Leader");
 		local spawnBuilding = SSM:Get(0):getBuilding();
 
+        SuperSurvivorSpawnWife(player);
+
 		if (spawnBuilding) then -- spawn building is default group base
 			CreateLogLine("SuperSurvivorUpdate", isLocalLoggingEnabled, "set building " .. tostring(MyGroup:getID()));
 			local def = spawnBuilding:getDef()
