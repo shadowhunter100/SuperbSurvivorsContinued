@@ -1,4 +1,4 @@
-require "04_Group.SuperSurvivorManager"
+require "04_Group.SuperSurvivorManager" -- Cows: TODO: Remove all dependencies on SSM.
 
 SuperSurvivorGroup = {}
 SuperSurvivorGroup.__index = SuperSurvivorGroup

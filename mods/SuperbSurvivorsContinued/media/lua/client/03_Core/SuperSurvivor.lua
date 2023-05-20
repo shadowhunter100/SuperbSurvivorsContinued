@@ -1,6 +1,8 @@
 require "03_Core/SuperSurvivorNames";
-require "04_DataManagementt.SuperSurvivorManager";
-require "04_DataManagementt.SuperSurvivorGroupManager";
+require "04_DataManagementt.SuperSurvivorManager";      -- Cows: TODO: Remove all dependencies on SSM.
+require "04_DataManagementt.SuperSurvivorGroupManager"; -- Cows: TODO: Remove all dependencies on SSGM.
+-- Cows: TODO: Remove and rework the TaskManager.
+-- Cows: TODO: A ton of the "NPC_<action>" is... actually also like a task... basically needs an overhaul.
 
 local isLocalLoggingEnabled = false;
 
