@@ -72,117 +72,113 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	return survivorObject;
 end
 
+--- Cows: Wrote this helper function to reduce the number of loops in spawnPlayer()
+---@param npc any -- SurvivorFactory.CreateSurvivor() object
+---@param perkName any -- string,
+---@param levels any -- integer / number
+---@return any
+local function setNpcPerkLevel(npc, perkName, levels)
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "setNpcPerkLevel() called");
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled,
+		"Setting: " .. tostring(perkName) .. " to level " .. tostring(levels));
+
+	for i = 0, levels do
+		npc:LevelPerk(Perks.FromString(perkName));
+	end
+	return npc;
+end
+
+---comment
+---@param square any
+---@param isFemale any
+---@return unknown
 function SuperSurvivor:spawnPlayer(square, isFemale)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
-	local BuddyDesc
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
+	local BuddyDesc;
 	-- defaults to creating a female survivor if isFemale is nil.
 	if (isFemale == nil) then
-		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true)
+		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true);
 	else
-		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale)
+		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale);
 	end
 
 	SurvivorFactory.randomName(BuddyDesc);
 
-	local Z = 0
+	local Z = 0;
+
 	if (square:isSolidFloor()) then
-		Z = square:getZ()
+		Z = square:getZ();
 	end
 
 	local Buddy = IsoPlayer.new(getWorld():getCell(), BuddyDesc, square:getX(), square:getY(), Z)
 
-	Buddy:setSceneCulled(false)
-	Buddy:setBlockMovement(true)
+	Buddy:setSceneCulled(false);
+	Buddy:setBlockMovement(true);
 	Buddy:setNPC(true);
 
 	-- required perks ------------
-	for i = 0, 4 do
-		Buddy:LevelPerk(Perks.FromString("Strength"));
-	end
+	Buddy = setNpcPerkLevel(Buddy, "Strength", 4);
+	Buddy = setNpcPerkLevel(Buddy, "Sneak", 2);
+	Buddy = setNpcPerkLevel(Buddy, "Lightfoot", 3);
 
-	for i = 0, 2 do
-		Buddy:LevelPerk(Perks.FromString("Sneak"));
-	end
-
-	for i = 0, 3 do
-		Buddy:LevelPerk(Perks.FromString("Lightfoot"));
-	end
 	-- random perks -------------------
+	-- Cows: WIP - What is this random perks about? Maxing a random survivor's perk?
 	local level = ZombRand(9, 14);
 	local count = 0;
 
 	while (count < level) do
 		local aperk = Perks.FromString(GetAPerk())
 		if (aperk ~= nil) and (tostring(aperk) ~= "MAX") then
-			Buddy:LevelPerk(aperk)
+			Buddy:LevelPerk(aperk);
 		end
 		count = count + 1;
 	end
 
-	local traits = Buddy:getTraits()
+	Buddy:getTraits():add("Inconspicuous");
+	Buddy:getTraits():add("Outdoorsman");
+	Buddy:getTraits():add("LightEater");
+	Buddy:getTraits():add("LowThirst");
+	Buddy:getTraits():add("FastHealer");
+	Buddy:getTraits():add("Graceful");
+	Buddy:getTraits():add("IronGut");
+	Buddy:getTraits():add("Lucky");
+	Buddy:getTraits():add("KeenHearing");
 
-	Buddy:getTraits():add("Inconspicuous")
-	Buddy:getTraits():add("Outdoorsman")
-	Buddy:getTraits():add("LightEater")
-	Buddy:getTraits():add("LowThirst")
-	Buddy:getTraits():add("FastHealer")
-	Buddy:getTraits():add("Graceful")
-	Buddy:getTraits():add("IronGut")
-	Buddy:getTraits():add("Lucky")
-	Buddy:getTraits():add("KeenHearing")
-
-	Buddy:getModData().bWalking = false
-	Buddy:getModData().isHostile = false
+	Buddy:getModData().bWalking = false;
+	Buddy:getModData().isHostile = false;
 	Buddy:getModData().RWP = SurvivorFriendliness;
-	Buddy:getModData().AIMode = "Random Solo"
+	Buddy:getModData().AIMode = "Random Solo"; -- Cows: Need to evaluate the AI code when possible...
 
-	ISTimedActionQueue.clear(Buddy)
-	-- Note todo: Option to hide display names
-	local namePrefix = ""
-	local namePrefixAfter = ""
+	ISTimedActionQueue.clear(Buddy);
 
-	if (Buddy:getPerkLevel(Perks.FromString("Doctor")) >= 3) then
-		namePrefix = Get_SS_Name("DoctorPrefix_Before")
-		namePrefixAfter = Get_SS_Name("DoctorPrefix_After")
-	end
+	local nameToSet = "";
 
-	if (Buddy:getPerkLevel(Perks.FromString("Aiming")) >= 5) then
-		namePrefix = Get_SS_Name("SD_VeteranPrefix_Before")
-		namePrefixAfter = Get_SS_Name("VeteranPrefix_After")
-	end
-
-	if (Buddy:getPerkLevel(Perks.FromString("Farming")) >= 3) then
-		namePrefix = Get_SS_Name("FarmerPrefix_Before")
-		namePrefixAfter = Get_SS_Name("FarmerPrefix_After")
-	end
-
-	local nameToSet
 	if (Buddy:getModData().Name == nil) then
 		if Buddy:isFemale() then
-			nameToSet = GetRandomName("GirlNames")
+			nameToSet = GetRandomName("GirlNames");
 		else
-			nameToSet = GetRandomName("BoyNames")
+			nameToSet = GetRandomName("BoyNames");
 		end
 	else
-		nameToSet = Buddy:getModData().Name
+		nameToSet = Buddy:getModData().Name;
 	end
-
-	nameToSet = namePrefix .. nameToSet .. namePrefixAfter
 
 	Buddy:setForname(nameToSet);
 	Buddy:setDisplayName(nameToSet);
 
-	Buddy:getStats():setHunger((ZombRand(10) / 100))
-	Buddy:getStats():setThirst((ZombRand(10) / 100))
+	Buddy:getStats():setHunger((ZombRand(10) / 100));
+	Buddy:getStats():setThirst((ZombRand(10) / 100));
 
-	Buddy:getModData().Name = nameToSet
-	Buddy:getModData().NameRaw = nameToSet
+	Buddy:getModData().Name = nameToSet;
+	Buddy:getModData().NameRaw = nameToSet;
 
-	local desc = Buddy:getDescriptor()
-	desc:setForename(nameToSet)
-	desc:setSurname("")
+	local desc = Buddy:getDescriptor();
+	desc:setForename(nameToSet);
+	desc:setSurname("");
 
-	return Buddy
+	return Buddy;
 end
 
 ---comment
@@ -3644,7 +3640,7 @@ end
 ---@param victim any
 ---@return number represents the chance of a hit
 function SuperSurvivor:getGunHitChance(weapon, victim)
-	local isLocalFunctionLoggingEnabled = true;
+	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:getGunHitChance() called");
 	local aimingLevel = self.player:getPerkLevel(Perks.FromString("Aiming"));
 	local aimingPerkModifier = weapon:getAimingPerkHitChanceModifier();
