@@ -1,6 +1,6 @@
 require "03_Core/SuperSurvivorNames";
-require "05_DataManagement/SuperSurvivorManager";
-require "05_DataManagement/SuperSurvivorGroupManager";
+require "04_DataManagementt.SuperSurvivorManager";
+require "04_DataManagementt.SuperSurvivorGroupManager";
 
 local isLocalLoggingEnabled = false;
 
