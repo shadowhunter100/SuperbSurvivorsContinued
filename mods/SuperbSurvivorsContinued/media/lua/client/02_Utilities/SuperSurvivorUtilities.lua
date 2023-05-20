@@ -155,3 +155,19 @@ function SetSurvivorWeapon(mapKey)
 
 	return weapon;
 end
+
+--- Cows: Count and return the number of non-dead NPCs
+---@return integer
+function Get_SS_Alive_Count()
+	local actualLivingSurvivors = 0;
+
+	for i = 0, SSM.SurvivorCount + 1 do
+		if (SSM.SuperSurvivors[i] ~= nil) then
+            if (not SSM.SuperSurvivors[i]:isDead()) then
+                actualLivingSurvivors = actualLivingSurvivors + 1;
+            end
+		end
+	end
+
+	return actualLivingSurvivors;
+end

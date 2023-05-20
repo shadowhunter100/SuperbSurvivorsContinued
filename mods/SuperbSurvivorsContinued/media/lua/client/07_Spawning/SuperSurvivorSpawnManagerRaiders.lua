@@ -18,11 +18,13 @@ function SuperSurvivorsRaiderManager()
 	local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
 	local spawnChanceVal = RaidersSpawnChance;
 
+	local activeNpcs = Get_SS_Alive_Count();
 	local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
 	local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
-	local RaiderResult = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
+	-- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
+   local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Raiders_Spawn);
 
-	if RaidersStartTimePassed and (RaiderAtLeastTimedExceeded or RaiderResult) then
+	if RaidersStartTimePassed and (RaiderAtLeastTimedExceeded or isSpawning) then
 		CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "spawning raiders...");
 
 		local center = Get_SS_PlayerGroupBoundsCenter(hisGroup);

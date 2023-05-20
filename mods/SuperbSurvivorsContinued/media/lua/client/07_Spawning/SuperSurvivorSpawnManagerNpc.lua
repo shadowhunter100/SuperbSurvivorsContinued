@@ -78,8 +78,10 @@ function SuperSurvivorDoRandomSpawns()
     if (getSpecificPlayer(0) == nil) then return false end
     local isLocalFunctionLoggingEnabled = false;
     CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorDoRandomSpawns() called");
+    local activeNpcs = Get_SS_Alive_Count();
     local spawnChanceVal = NpcSpawnChance;
-    local isSpawning = (spawnChanceVal > ZombRand(0, 100)); -- spawn if spawnChanceVal is greater than the random roll between 0 and 100.
+     -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
+    local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
 
     if (isSpawning) then
         CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "spawning npc survivor...");

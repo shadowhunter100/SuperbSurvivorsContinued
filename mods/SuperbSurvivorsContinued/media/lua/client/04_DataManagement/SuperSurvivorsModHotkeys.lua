@@ -21,14 +21,23 @@ end
 
 -- WIP - Cows: Renamed from "supersurvivortemp()" to "SuperSurvivorKeyBindAction()"
 function SuperSurvivorKeyBindAction(keyNum)
-    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
+    local isLocalFunctionLoggingEnabled = true;
+    CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "function: SuperSurvivorKeyBindAction called");
     local playerSurvivor = getSpecificPlayer(0);
 
     if (playerSurvivor) then
         -- playerSurvivor:Say(tostring(keyNum));
 
         if (keyNum == getCore():getKey("Spawn Wild Survivor")) then -- the NumPad enter key
-            local ss = SuperSurvivorSpawnNpc(playerSurvivor:getCurrentSquare());
+            local activeNpcs = Get_SS_Alive_Count();
+            if (activeNpcs < Limit_Npcs_Spawn) then
+                CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Spawning NPC");
+                CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs: " .. tostring(activeNpcs));
+                CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
+                local ss = SuperSurvivorSpawnNpc(playerSurvivor:getCurrentSquare());
+            else
+                CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs limit reached, no spawn.");
+            end
         elseif (keyNum == getCore():getKey("Raise Follow Distance")) then
             if (GFollowDistance < 50) then
                 GFollowDistance = GFollowDistance + 1;
@@ -61,10 +70,10 @@ function SuperSurvivorKeyBindAction(keyNum)
                         member:getTaskManager():clear()
                         member:getTaskManager():AddToTop(FollowTask:new(member, mySS:Get()))
                     else
-                        CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "getClosestMember returned nil");
+                        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "getClosestMember returned nil");
                     end
                 else
-                    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "no group for player found");
+                    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "no group for player found");
                 end
             end
         elseif (keyNum == getCore():getKey("Call Closest Group Member")) then -- t key
@@ -77,10 +86,10 @@ function SuperSurvivorKeyBindAction(keyNum)
                         mySS:Get():Say(member:Get():getForname() .. ", come here.")
                         member:getTaskManager():AddToTop(ListenTask:new(member, mySS:Get(), false))
                     else
-                        CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "getClosestMember returned nil");
+                        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "getClosestMember returned nil");
                     end
                 else
-                    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "no group for player found");
+                    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "no group for player found");
                 end
             end
         elseif (keyNum == getCore():getKey("SSHotkey_1")) then -- Up key, Order "Follow"
