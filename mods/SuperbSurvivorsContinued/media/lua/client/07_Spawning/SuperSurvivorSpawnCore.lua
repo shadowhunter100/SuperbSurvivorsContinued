@@ -130,9 +130,9 @@ end
 --- Cows: formerly "SuperSurvivorRandomSpawn()"... which had no randomness or chance in itself - it simply spawned an npc at the specified square on call.
 ---@param square any
 ---@return unknown|nil
-function SuperSurvivorSpawnNpc(square)
+function SuperSurvivorSpawnNpcAtSquare(square)
     local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpc() called");
+    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
     local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
     local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 
@@ -148,7 +148,7 @@ function SuperSurvivorSpawnNpc(square)
     end
 
     -- clear the immediate area
-    -- Cows: What exactly is happening here?... I don't think I ever seen the zombies get removed on an npx spawn...
+    -- Cows: What exactly is happening here?... I don't think I ever seen the zombies get removed on an npc spawn...
     local zlist = getCell():getZombieList();
     local zRemoved = 0;
     if (zlist ~= nil) then
@@ -169,7 +169,7 @@ function SuperSurvivorSpawnNpc(square)
         end
     end
 
-    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpc() end ---");
+    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
     return ASuperSurvivor;
 end
 

@@ -12,19 +12,20 @@ local function spawnNpcs(mySS, spawnSquare)
     -- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
     if (spawnSquare ~= nil) then
         local npcSurvivorGroup;
+        local actualLimit = Limit_Npc_Groups + 1; -- Cows: +1 because the player group was is part of the GroupCount total...
 
-        if (SSGM.GroupCount < Limit_Npc_Groups) then
+        if (SSGM.GroupCount < actualLimit) then
             npcSurvivorGroup = SSGM:newGroup();
         else
             -- something ... repopulate the previous groups?
-            local rng = ZombRand(1, Limit_Npc_Groups);
+            local rng = ZombRand(1, actualLimit);
             npcSurvivorGroup = SSGM:GetGroupById(rng);
         end
 
         local GroupSize = ZombRand(1, Max_Group_Size);
 
         for i = 1, GroupSize do
-            local npcSurvivor = SuperSurvivorSpawnNpc(spawnSquare);
+            local npcSurvivor = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
             if (npcSurvivor) then
                 local name = npcSurvivor:getName();
 
@@ -60,12 +61,9 @@ local function spawnRaiders(mySS, spawnSquare)
     end
 
     local hours = math.floor(getGameTime():getWorldAgeHours());
-    local LastRaidTime = getSpecificPlayer(0):getModData().LastRaidTime;
-
     local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
-    local RaiderAtLeastTimedExceeded = ((hours - LastRaidTime) >= RaidersSpawnFrequencyByHours);
 
-    if RaidersStartTimePassed and (RaiderAtLeastTimedExceeded) then
+    if (RaidersStartTimePassed) then
         -- WIP - Cows: Need to rework the spawning functions and logic...
         -- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
         if (spawnSquare ~= nil) then
@@ -83,7 +81,7 @@ local function spawnRaiders(mySS, spawnSquare)
             local nearestRaiderDistance = 30;
 
             for i = 1, GroupSize do
-                local raider = SuperSurvivorSpawnNpc(spawnSquare);
+                local raider = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
                 if (raider) then
                     local name = raider:getName();
 
@@ -133,19 +131,23 @@ function SuperSurvivorsRandomSpawn()
 
     local activeNpcs = Get_SS_Alive_Count();
     local spawnChanceVal = NpcSpawnChance;
-    -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
-    local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
-    local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));
 
-    if (getSpecificPlayer(0) == nil or hisGroup == nil) then
-        return false;
-    end
+    -- Cows: Spawn up to this many npc groups.
+    for i = 1, NpcGroupsSpawnsSize do
+        -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
+        local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
+        local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));
 
-    if (isSpawning) then
-        if (isSpawningRaiders) then
-            spawnRaiders(mySS, spawnSquare);
-        else
-            spawnNpcs(mySS, spawnSquare);
+        if (getSpecificPlayer(0) == nil or hisGroup == nil) then
+            return false;
+        end
+
+        if (isSpawning) then
+            if (isSpawningRaiders) then
+                spawnRaiders(mySS, spawnSquare);
+            else
+                spawnNpcs(mySS, spawnSquare);
+            end
         end
     end
 end

@@ -44,12 +44,12 @@ local function log_SS_SandboxOptions()
     CreateLogLine("SS_OptionsValues", true, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
     CreateLogLine("SS_OptionsValues", true, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
     CreateLogLine("SS_OptionsValues", true, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
+    CreateLogLine("SS_OptionsValues", true, "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
     CreateLogLine("SS_OptionsValues", true, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
     CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
     CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
     CreateLogLine("SS_OptionsValues", true, "");
     CreateLogLine("SS_OptionsValues", true, "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
-    CreateLogLine("SS_OptionsValues", true, "RaidersSpawnFrequencyByHours: " .. tostring(RaidersSpawnFrequencyByHours));
     CreateLogLine("SS_OptionsValues", true, "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));
     CreateLogLine("SS_OptionsValues", true, "");
     CreateLogLine("SS_OptionsValues", true, "CanIdleChat: " .. tostring(CanIdleChat));

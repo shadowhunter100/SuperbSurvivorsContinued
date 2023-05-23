@@ -16,6 +16,9 @@ Sandbox_EN = {
 	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn = "No Preset Spawns",
 	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn_tooltip = "Uncheck to allow preset npcs to spawn. WIP - THIS IS A LEGACY FEATURE, TERRIBLE FOR GAME PERFORMANCE",
 
+	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize = "Groups per Spawn",
+	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize_tooltip = "Up to this number of npc groups can spawn at every hour. Capped by Limit Npc Groups",
+
 	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance = "Npc Spawn Chance",
 	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance_tooltip = "At each in-game hour, NPCs have a chance to spawn.",
 
@@ -26,10 +29,7 @@ Sandbox_EN = {
 	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateMax_tooltip = "NPCs grow more hostile to player over time, capped at this value. WIP - This is incomplete.",
 
 	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance = "Raiders Spawn Chance",
-	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance_tooltip = "At each in-game hour, Raiders have a chance to spawn.",
-
-	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours = "Guaranteed Raiders Spawn",
-	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours_tooltip = "Guaranteed raiders spawn once every set hours.",
+	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance_tooltip = "Every time an npc spawns, this is the chance that it spawns as a raider.",
 
 	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours = "Raiders Start Time",
 	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours_tooltip = "Raiders can start appearing after set hours in-game.",
