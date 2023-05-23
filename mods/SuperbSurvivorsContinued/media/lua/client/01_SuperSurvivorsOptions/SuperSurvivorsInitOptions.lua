@@ -10,18 +10,18 @@ Max_Group_Size = 4; -- WIP - PlaceHolder - Cows: Max number of members in a grou
 Min_Group_Size = 1; -- WIP - PlaceHolder - Cows: Min number of members in a group
 
 -- NPC Spawning
-Limit_Npc_Groups = 8;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
-Limit_Npcs_Spawn = 12;    -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
+Limit_Npc_Groups = 8;     -- WIP - PlaceHolder - Cows: Max npc groups
+Limit_Npcs_Spawn = 22;    -- WIP - PlaceHolder - Cows: Max npc spwans
 IsWifeSpawn = true;       -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
 NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
+NPCGroupsSpawnsSize = 4; -- Cows: The max number of groups that can spawn every time.
 NpcSpawnChance = 50;      -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
 HostileSpawnRateMax = 10; -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
 
 -- Raiders, Always hostile
-RaidersSpawnChance = 50;           -- WIP - Cows: Raiders spawn based on this frequency every hour between it and regular npcs.
-RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
-RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
+RaidersSpawnChance = 50;    -- WIP - Cows: Chance that NPCs spawns as raiders.
+RaidersStartAfterHours = 0; -- WIP - Cows: Supposedly determines when raider can start spawning after set hours. 0 means raiders can spawn at start.
 
 -- NPC Configuration
 CanIdleChat = false;            -- Cows: true to allow npcs to speak while idle
@@ -38,17 +38,6 @@ GFollowDistance = 5;            -- WIP - Cows: need to verify the old comment in
 PanicDistance = 21;             -- WIP - Cows: Value is used in FleeFromHereTask()... but Fleeing needs to be reworked eventually...
 WepSpawnRateGun = 50;           -- Cows: Gun Weapon Spawn rate... should be set betwen 0 and 100.
 WepSpawnRateMelee = 100;        -- Cows: Melee Weapon Spawn rate... should be set betwen 0 and 100.
---[[
-	-- WIP - Cows: There were no documentation on SurvivorFriendliness ... but there were 6 possible "num" values in ascending order.
-	1 - "Desperate for Human Contact"
-	2 - "Very Friendly"
-	3 - "Friendly"
-	4 - "Normal"
-	5 - "Mean"
-	6 - "Very Mean"
-	Originally Calculated as such...  (10 - ((num - 1) * 2));
-	Assuming higher = friendlier, why even bother with the calculation?
---]]
 -- Player Related
 IsPlayerBaseSafe = true; -- WIP - Cows: true to prevent NPCs from claiming or visiting the player base... this needs to be tested and verified.
 IsPVPEnabled = true;
@@ -56,3 +45,37 @@ IsPVPEnabled = true;
 -- UI Related
 IsDisplayingNpcName = true;
 IsDisplayingHostileColor = true;
+
+local isDebuggingLogged = true;
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Max_Group_Size: " .. tostring(Max_Group_Size));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NPCGroupsSpawnsSize: " .. tostring(NPCGroupsSpawnsSize));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "");
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "");
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "CanIdleChat: " .. tostring(CanIdleChat));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "CanNpcsCreateBase: " .. tostring(CanNpcsCreateBase));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsInfiniteAmmoEnabled: " .. tostring(IsInfiniteAmmoEnabled));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsRoleplayEnabled: " .. tostring(IsRoleplayEnabled));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsSpeakEnabled: " .. tostring(IsSpeakEnabled));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "SurvivorCanFindWork: " .. tostring(SurvivorCanFindWork));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "SurvivorNeedsFoodWater: " .. tostring(SurvivorNeedsFoodWater));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "SurvivorBravery: " .. tostring(SurvivorBravery));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "SurvivorFriendliness: " .. tostring(SurvivorFriendliness));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "SleepGeneralHealRate: " .. tostring(SleepGeneralHealRate));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "GFollowDistance: " .. tostring(GFollowDistance));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "PanicDistance: " .. tostring(PanicDistance));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "WepSpawnRateGun: " .. tostring(WepSpawnRateGun));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "WepSpawnRateMelee: " .. tostring(WepSpawnRateMelee));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "");
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsPlayerBaseSafe: " .. tostring(IsPlayerBaseSafe));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsPVPEnabled: " .. tostring(IsPVPEnabled));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
+CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
