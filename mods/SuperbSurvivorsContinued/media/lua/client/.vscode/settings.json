@@ -141,6 +141,10 @@
         "ISRemoveGlass",
         "ISRemoveBullet",
         "ISSplint",
+        "ISBaseTimedAction",
+        "ISHealthPanel",
+        "ISInventoryPage",
+        "ISGrabItemAction"
     ],
     "Lua.diagnostics.disable": [
         "missing-return"
