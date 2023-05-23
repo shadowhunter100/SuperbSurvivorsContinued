@@ -126,7 +126,7 @@ end
 function SuperSurvivorManager:spawnSurvivor(isFemale, square)
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:spawnSurvivor() called");
 	if (square ~= nil) then
-		local newSurvivor = SuperSurvivor:new(isFemale, square)
+		local newSurvivor = SuperSurvivor:newSurvivor(isFemale, square)
 
 		if (newSurvivor ~= nil) then
 			self.SuperSurvivors[self.SurvivorCount + 1] = newSurvivor

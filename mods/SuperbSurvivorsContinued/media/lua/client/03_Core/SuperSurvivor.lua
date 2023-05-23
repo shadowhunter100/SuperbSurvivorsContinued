@@ -9,10 +9,10 @@ local isLocalLoggingEnabled = false;
 SuperSurvivor = {}
 SuperSurvivor.__index = SuperSurvivor
 
---- Cows: The SuperSurvivor:new(), :newLoad(), newSet() shared about 50 identical properties... there was no reason to duplicate all that.
+--- Cows: The SuperSurvivor:newSurvivor(), :newLoad(), newSet() shared about 50 identical properties... there was no reason to duplicate all that.
 ---@return table
 function SuperSurvivor:CreateBaseSurvivorObject()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "CreateBaseSurvivorObject:new() called");
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:CreateBaseSurvivorObject() called");
 	local survivorObject = {};
 	setmetatable(survivorObject, self)
 	self.__index = self;
@@ -97,9 +97,19 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	local isLocalFunctionLoggingEnabled = false;
 	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "SuperSurvivor:spawnPlayer() called");
 	local BuddyDesc;
-	-- defaults to creating a female survivor if isFemale is nil.
+
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "isFemale? " .. tostring(isFemale));
+	-- Cows: Added a random roll for gender when "isFemale" is nil.
 	if (isFemale == nil) then
-		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true);
+		local rngGender = ZombRand(1, 3);
+		CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "rngGender: " .. tostring(rngGender));
+		if (rngGender == 1) then
+			CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "spawning female npc");
+			BuddyDesc = SurvivorFactory.CreateSurvivor(nil, true);
+		else
+			CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "spawning male npc");
+			BuddyDesc = SurvivorFactory.CreateSurvivor(nil, false);
+		end
 	else
 		BuddyDesc = SurvivorFactory.CreateSurvivor(nil, isFemale);
 	end
@@ -185,8 +195,8 @@ end
 ---@param isFemale any
 ---@param square any
 ---@return table
-function SuperSurvivor:new(isFemale, square)
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:new() called");
+function SuperSurvivor:newSurvivor(isFemale, square)
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:newSurvivor() called");
 	local survivorObject = SuperSurvivor:CreateBaseSurvivorObject();
 	setmetatable(survivorObject, self)
 	self.__index = self;

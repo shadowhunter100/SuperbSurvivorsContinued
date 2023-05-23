@@ -43,7 +43,7 @@ end
 ---@return any
 function Equip_SS_RandomNpc(npc, isRaider)
     local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: Equip_SS_RandomNpc() called");
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: Equip_SS_RandomNpc() called");
 
     if (npc:hasWeapon() == false) then
         npc:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
@@ -131,8 +131,8 @@ end
 ---@param square any
 ---@return unknown|nil
 function SuperSurvivorSpawnNpcAtSquare(square)
-    local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
+    local isLocalFunctionLoggingEnabled = true;
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
     local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
     local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 
@@ -152,8 +152,8 @@ function SuperSurvivorSpawnNpcAtSquare(square)
     local zlist = getCell():getZombieList();
     local zRemoved = 0;
     if (zlist ~= nil) then
-        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Z List Size" .. tostring(zlist:size()));
-        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Clearing Zs from cell...");
+        CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "Z List Size: " .. tostring(zlist:size()));
+        CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "Clearing Zs from cell...");
         for i = zlist:size() - 1, 0, -1 do
             local z = zlist:get(i);
 
@@ -163,13 +163,14 @@ function SuperSurvivorSpawnNpcAtSquare(square)
                 and (math.abs(z:getY() - square:getY()) < 2)
                 and (z:getZ() == square:getZ())
             then
+                CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "zRemoved: " .. tostring(zRemoved));
                 zRemoved = zRemoved + 1;
                 z:removeFromWorld();
             end
         end
     end
 
-    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
     return ASuperSurvivor;
 end
 
