@@ -148,7 +148,7 @@ function SuperSurvivorSpawnNpcAtSquare(square)
     end
 
     -- clear the immediate area
-    -- Cows: What exactly is happening here?... I don't think I ever seen the zombies get removed on an npx spawn...
+    -- Cows: What exactly is happening here?... I don't think I ever seen the zombies get removed on an npc spawn...
     local zlist = getCell():getZombieList();
     local zRemoved = 0;
     if (zlist ~= nil) then
