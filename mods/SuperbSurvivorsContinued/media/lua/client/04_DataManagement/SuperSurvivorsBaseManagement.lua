@@ -91,7 +91,7 @@ end
 
 --
 function SelectingArea(test, area, value)
-    local isLocalFunctionLoggingEnabled = true;
+    local isLocalFunctionLoggingEnabled = false;
     CreateLogLine("SuperSurvivorsBaseManagement", isLocalFunctionLoggingEnabled, "function: SelectingArea() called");
     -- value 0 means cancel, -1 is clear, 1 is set
     if (value ~= 0) then
