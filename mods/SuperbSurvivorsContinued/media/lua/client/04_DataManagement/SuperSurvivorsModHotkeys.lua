@@ -34,7 +34,7 @@ function SuperSurvivorKeyBindAction(keyNum)
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Spawning NPC");
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs: " .. tostring(activeNpcs));
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
-                local ss = SuperSurvivorSpawnNpc(playerSurvivor:getCurrentSquare());
+                local ss = SuperSurvivorSpawnNpcAtSquare(playerSurvivor:getCurrentSquare());
                 local name = ss:getName();
                 ss.player:getModData().isRobber = false;
                 ss:setName("Spawned " .. name);

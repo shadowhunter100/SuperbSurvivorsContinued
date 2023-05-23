@@ -25,7 +25,7 @@ local function spawnNpcs(mySS, spawnSquare)
         local GroupSize = ZombRand(1, Max_Group_Size);
 
         for i = 1, GroupSize do
-            local npcSurvivor = SuperSurvivorSpawnNpc(spawnSquare);
+            local npcSurvivor = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
             if (npcSurvivor) then
                 local name = npcSurvivor:getName();
 
@@ -81,7 +81,7 @@ local function spawnRaiders(mySS, spawnSquare)
             local nearestRaiderDistance = 30;
 
             for i = 1, GroupSize do
-                local raider = SuperSurvivorSpawnNpc(spawnSquare);
+                local raider = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
                 if (raider) then
                     local name = raider:getName();
 
@@ -133,7 +133,7 @@ function SuperSurvivorsRandomSpawn()
     local spawnChanceVal = NpcSpawnChance;
 
     -- Cows: Spawn up to this many npc groups.
-    for i = 1, NPCGroupsSpawnsSize do
+    for i = 1, NpcGroupsSpawnsSize do
         -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
         local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
         local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));

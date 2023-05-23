@@ -13,8 +13,8 @@ option SuperbSurvivorsContinued.Max_Group_Size
 option SuperbSurvivorsContinued.Limit_Npc_Groups
 {
 	type = integer,
-	min = 1,
-	max = 10,
+	min = 4,
+	max = 12,
 	default = 4,
 
 	page = SuperbSurvivorsContinued,
@@ -48,6 +48,17 @@ option SuperbSurvivorsContinued.NoPresetSpawn
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_NoPresetSpawn,
+}
+
+option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
+{
+	type = integer,
+	min = 1,
+	max = 8,
+	default = 4,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_NpcGroupsSpawnsSize,
 }
 
 option SuperbSurvivorsContinued.NpcSpawnChance
@@ -94,17 +105,6 @@ option SuperbSurvivorsContinued.RaidersSpawnChance
 	translation = SuperbSurvivorsContinued_RaidersSpawnChance,
 }
 
-option SuperbSurvivorsContinued.RaidersSpawnFrequencyByHours
-{
-	type = integer,
-	min = 0,
-	max = 100,
-	default = 12,
-
-	page = SuperbSurvivorsContinued,
-	translation = SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours,
-}
-
 option SuperbSurvivorsContinued.RaidersStartAfterHours
 {
 	type = integer,
@@ -140,7 +140,7 @@ option SuperbSurvivorsContinued.IsInfiniteAmmoEnabled
 	default = true,
 
 	page = SuperbSurvivorsContinued,
-	translation = SuperbSurvivorsContinued_IsInfiniteAmmoEnabled
+	translation = SuperbSurvivorsContinued_IsInfiniteAmmoEnabled,
 }
 
 option SuperbSurvivorsContinued.IsRoleplayEnabled

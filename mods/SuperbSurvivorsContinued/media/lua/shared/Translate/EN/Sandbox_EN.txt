@@ -16,8 +16,8 @@ Sandbox_EN = {
 	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn = "No Preset Spawns",
 	Sandbox_SuperbSurvivorsContinued_NoPresetSpawn_tooltip = "Uncheck to allow preset npcs to spawn. WIP - THIS IS A LEGACY FEATURE, TERRIBLE FOR GAME PERFORMANCE",
 
-	Sandbox_SuperbSurvivorsContinued_NPCGroupsSpawnsSize = "Groups per Spawn",
-	Sandbox_SuperbSurvivorsContinued_NPCGroupsSpawnsSize_tooltip = "Up to this number of npc groups to spawn at every hour.",
+	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize = "Groups per Spawn",
+	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize_tooltip = "Up to this number of npc groups can spawn at every hour. Capped by Limit Npc Groups",
 
 	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance = "Npc Spawn Chance",
 	Sandbox_SuperbSurvivorsContinued_NpcSpawnChance_tooltip = "At each in-game hour, NPCs have a chance to spawn.",
