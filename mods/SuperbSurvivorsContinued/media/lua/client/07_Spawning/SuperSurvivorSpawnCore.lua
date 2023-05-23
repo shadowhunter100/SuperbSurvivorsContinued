@@ -64,8 +64,9 @@ function Equip_SS_RandomNpc(npc, isRaider)
             bag:AddItem(food);
         end
     else
+        -- Cows: Can't find anything related to "CannedFoods" on wiki nor TIS docs... but there is no error here so it stays.
         for i = 1, count do
-            food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]);
+            food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]); 
             bag:AddItem(food);
         end
 
