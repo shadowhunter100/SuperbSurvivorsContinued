@@ -187,7 +187,6 @@ function SortLootTask:update()
 						else
 							if (item:isBroken()) or (
 									(not item:isEquipped())
-									and (ArmorisArmorEquipped(self.parent.player, item) == false)
 									and (item ~= pweapon)
 									and (item ~= self.parent.LastGunUsed)
 									and (item ~= self.parent.LastMeleUsed)
