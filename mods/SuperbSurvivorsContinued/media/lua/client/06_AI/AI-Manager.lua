@@ -46,15 +46,7 @@ function AIManager(TaskMangerIn)
 		return false
 	end
 
-	local Bravery = ASuperSurvivor:getBravePoints()
-	if (Bravery == 0) then ASuperSurvivor:setBravePoints(4) end -- should never be 0
-	local CanTollerateEnemiesOnMe = 1;
-	if (Bravery >= 10) then
-		CanTollerateEnemiesOnMe = 2
-	end --need to by pass some hard coded values to give players option to have more fearless fighters
-	if (SurvivorBravery >= 20) then
-		CanTollerateEnemiesOnMe = 20
-	end
+	local Bravery = ASuperSurvivor:getBravePoints();
 
 	local EnemyIsSurvivor = (instanceof(ASuperSurvivor.LastEnemeySeen, "IsoPlayer"))
 	local EnemyIsZombie = (instanceof(ASuperSurvivor.LastEnemeySeen, "IsoZombie"))
@@ -200,9 +192,8 @@ function AIManager(TaskMangerIn)
 		-- Flee to heal  --
 		-- -----------   --
 		if (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and (
-				((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe) and (NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (not NPC:usingGun())) -- Melee
-				or ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe) and (NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
+			and ((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (not NPC:usingGun())) -- Melee
+				or (((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
 				or ((NPC.EnemiesOnMe > 0) and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))
 				or (IHaveInjury and NPC.dangerSeenCount > 0)
 				or (NPC.dangerSeenCount >= 5)
@@ -426,13 +417,6 @@ function AIManager(TaskMangerIn)
 			and (TaskMangerIn:getCurrentTask() ~= "Surender")
 			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor)))
 	then
-		if ((NPC.EnemiesOnMe > CanTollerateEnemiesOnMe)) then
-			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Enemies Attacking: " ..
-				tostring(NPC.EnemiesOnMe) .. " | can fight: " .. tostring(CanTollerateEnemiesOnMe));
-			CreateLogLine("AI-Manager", isFleeCallLogged, "too many enemies, Survivor is fleeing...");
-			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
-		end
 		if ((NPC.EnemiesOnMe > 0) and (ASuperSurvivor:usingGun() and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))) then
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking, but need to reload, Survivor is fleeing");
 			TaskMangerIn:AddToTop(FleeTask:new(ASuperSurvivor))
