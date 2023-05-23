@@ -20,10 +20,10 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	survivorObject.SwipeStateTicks = 0 -- used to check if survivor stuck in the same animation frame
 	survivorObject.AttackRange = 0.5;
 	survivorObject.UsingFullAuto = false;
-	survivorObject.UpdateDelayTicks = 20;
+	survivorObject.UpdateDelayTicks = 20;     -- Cows: I can't find any references using UpdateDelayTicks...
 	survivorObject.NumberOfBuildingsLooted = 0;
-	survivorObject.GroupBraveryBonus = 0;
-	survivorObject.GroupBraveryUpdatedTicks = 0;
+	survivorObject.GroupBraveryBonus = 0;     -- Cows: I can't find any references using GroupBraveryBonus...
+	survivorObject.GroupBraveryUpdatedTicks = 0; -- Cows: I can't find any references using GroupBraveryUpdatedTicks...
 	survivorObject.WaitTicks = 0;
 	survivorObject.AtkTicks = 2;
 	survivorObject.TriggerHeldDown = false;
@@ -38,7 +38,7 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	survivorObject.SayLine1 = "";
 
 	survivorObject.LastSurvivorSeen = nil;
-	survivorObject.LastMemberSeen = nil;
+	survivorObject.LastMemberSeen = nil; -- Cows: I can't find any references using LastMemberSeen...
 	survivorObject.TicksAtLastDetectNoFood = 0;
 	survivorObject.NoFoodNear = false;
 	survivorObject.TicksAtLastDetectNoWater = 0;
@@ -47,9 +47,9 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	survivorObject.seenCount = 0;
 	survivorObject.dangerSeenCount = 0;
 	survivorObject.LastEnemeySeen = false;
-	survivorObject.Reducer = ZombRand(1, 100);
+	survivorObject.Reducer = ZombRand(1, 100); -- Cows: What is this "Reducer"?
 	survivorObject.Container = false;
-	survivorObject.Room = false;
+	survivorObject.Room = false;            -- Cows: I can't find any references using Room...
 	survivorObject.Building = false;
 	survivorObject.WalkingPermitted = true;
 	survivorObject.TargetBuilding = nil;
@@ -60,10 +60,10 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	survivorObject.StuckDoorTicks = 0;
 	survivorObject.StuckCount = 0;
 	survivorObject.EnemiesOnMe = 0;
-	survivorObject.BaseBuilding = nil;
+	survivorObject.BaseBuilding = nil; -- Cows: It's set, and gets... but no other functions are referencing it...
 
 	survivorObject.GoFindThisCounter = 0;
-	survivorObject.PathingCounter = 0;
+	survivorObject.PathingCounter = 0; -- Cows: I can't find any references using PathingCounter...
 	survivorObject.SpokeToRecently = {};
 	survivorObject.SquareWalkToAttempts = {};
 	survivorObject.SquaresExplored = {};
