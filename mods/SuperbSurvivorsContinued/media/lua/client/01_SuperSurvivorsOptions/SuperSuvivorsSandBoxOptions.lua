@@ -12,8 +12,6 @@ HostileSpawnRateBase = SandboxVars.SuperbSurvivorsContinued.HostileSpawnRateBase
 HostileSpawnRateMax = SandboxVars.SuperbSurvivorsContinued.HostileSpawnRateMax;
 
 -- Raiders, Always hostile
-Limit_Raiders_Groups = SandboxVars.SuperbSurvivorsContinued.Limit_Raiders_Groups;
-Limit_Raiders_Spawn = SandboxVars.SuperbSurvivorsContinued.Limit_Raiders_Spawn;
 RaidersSpawnChance = SandboxVars.SuperbSurvivorsContinued.RaidersSpawnChance;
 RaidersSpawnFrequencyByHours = SandboxVars.SuperbSurvivorsContinued.RaidersSpawnFrequencyByHours;
 RaidersStartAfterHours = SandboxVars.SuperbSurvivorsContinued.RaidersStartAfterHours;

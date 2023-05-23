@@ -48,8 +48,6 @@ local function log_SS_SandboxOptions()
     CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
     CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
     CreateLogLine("SS_OptionsValues", true, "");
-    CreateLogLine("SS_OptionsValues", true, "Limit_Raiders_Groups: " .. tostring(Limit_Raiders_Groups));
-    CreateLogLine("SS_OptionsValues", true, "Limit_Raiders_Spawn: " .. tostring(Limit_Raiders_Spawn));
     CreateLogLine("SS_OptionsValues", true, "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
     CreateLogLine("SS_OptionsValues", true, "RaidersSpawnFrequencyByHours: " .. tostring(RaidersSpawnFrequencyByHours));
     CreateLogLine("SS_OptionsValues", true, "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));

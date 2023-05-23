@@ -10,7 +10,7 @@ Max_Group_Size = 4; -- WIP - PlaceHolder - Cows: Max number of members in a grou
 Min_Group_Size = 1; -- WIP - PlaceHolder - Cows: Min number of members in a group
 
 -- NPC Spawning
-Limit_Npc_Groups = 4;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
+Limit_Npc_Groups = 8;     -- WIP - PlaceHolder - Cows: Max npc groups, independent of Raider Groups.
 Limit_Npcs_Spawn = 12;    -- WIP - PlaceHolder - Cows: Max npc spwans, independent of raiders spawns.
 IsWifeSpawn = true;       -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
 NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
@@ -19,9 +19,7 @@ HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on
 HostileSpawnRateMax = 10; -- WIP - Cows: Chance the NPCs will be hostile on spawn as time pass, capped at this value... need to test and verify.
 
 -- Raiders, Always hostile
-Limit_Raiders_Groups = 4;          -- WIP - PlaceHolder - Cows: Max raider groups, independent of npc groups.
-Limit_Raiders_Spawn = 8;           -- WIP - PlaceHolder - Cows: Max raiders spaws, independent of npcs spawns.
-RaidersSpawnChance = 50;           -- WIP - Cows: this is still in testing... apparently used to check for a raiders spawn every 10 minutes...
+RaidersSpawnChance = 50;           -- WIP - Cows: Raiders spawn based on this frequency every hour between it and regular npcs.
 RaidersSpawnFrequencyByHours = 24; -- WIP - Cows: Spawn frequency in this example is to guarantee a raiders spawn once every 24 hours
 RaidersStartAfterHours = 0;        -- WIP - Cows: Supposedly determines when raider can start spawning after set hours.
 

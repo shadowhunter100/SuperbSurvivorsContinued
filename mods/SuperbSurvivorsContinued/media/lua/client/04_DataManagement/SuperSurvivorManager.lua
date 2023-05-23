@@ -275,22 +275,23 @@ end
 
 function SuperSurvivorManager:GetClosestNonParty()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetClosestNonParty() called");
-	local closestSoFar = 20
-	local closestID = 0
+	local closestSoFar = 20;
+	local closestID = 0;
+	
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
-			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0))
+			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0));
 			if (distance < closestSoFar) and (self.SuperSurvivors[i]:getGroupID() == nil) then
-				closestID = i
-				closestSoFar = distance
+				closestID = i;
+				closestSoFar = distance;
 			end
 		end
 	end
 
 	if (closestID ~= 0) then
-		return self.SuperSurvivors[closestID]
+		return self.SuperSurvivors[closestID];
 	else
-		return nil
+		return nil;
 	end
 end
 
