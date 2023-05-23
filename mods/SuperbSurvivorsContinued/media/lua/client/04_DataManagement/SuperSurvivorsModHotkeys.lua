@@ -35,6 +35,9 @@ function SuperSurvivorKeyBindAction(keyNum)
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs: " .. tostring(activeNpcs));
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
                 local ss = SuperSurvivorSpawnNpc(playerSurvivor:getCurrentSquare());
+                local name = ss:getName();
+                ss.player:getModData().isRobber = false;
+                ss:setName("Spawned " .. name);
             else
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs limit reached, no spawn.");
             end
@@ -49,9 +52,9 @@ function SuperSurvivorKeyBindAction(keyNum)
             end
             playerSurvivor:Say("Stay closer(" .. tostring(GFollowDistance) .. ")");
         elseif (keyNum == getCore():getKey("Call Closest Non-Group Member")) then
-            local mySS = SSM:Get(0)
+            local mySS = SSM:Get(0);
+            local SS = SSM:GetClosestNonParty();
 
-            local SS = SSM:GetClosestNonParty()
             if (SS) then
                 mySS:Speak(Get_SS_Dialogue("HeyYou"))
                 SS:getTaskManager():AddToTop(ListenTask:new(SS, mySS:Get(), false))

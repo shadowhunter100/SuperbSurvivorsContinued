@@ -24,19 +24,13 @@ Sandbox_EN = {
 
 	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateMax = "Hostile NPC Chance Cap",
 	Sandbox_SuperbSurvivorsContinued_HostileSpawnRateMax_tooltip = "NPCs grow more hostile to player over time, capped at this value. WIP - This is incomplete.",
-	
-	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Groups = "Limit Raiders Groups",
-	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Groups_tooltip = "Stops spawning new groups after set numbers. WIP - This is incomplete",
-
-	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Spawn = "Limit Raiders Spawn",
-	Sandbox_SuperbSurvivorsContinued_Limit_Raiders_Spawn_tooltip = " "Maximum number of Raiders that can be active in-game. WIP - This is incomplete.",
 
 	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance = "Raiders Spawn Chance",
 	Sandbox_SuperbSurvivorsContinued_RaidersSpawnChance_tooltip = "At each in-game hour, Raiders have a chance to spawn.",
-	
+
 	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours = "Guaranteed Raiders Spawn",
 	Sandbox_SuperbSurvivorsContinued_RaidersSpawnFrequencyByHours_tooltip = "Guaranteed raiders spawn once every set hours.",
-	
+
 	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours = "Raiders Start Time",
 	Sandbox_SuperbSurvivorsContinued_RaidersStartAfterHours_tooltip = "Raiders can start appearing after set hours in-game.",
 	
