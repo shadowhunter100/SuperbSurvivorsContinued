@@ -2723,7 +2723,7 @@ function SuperSurvivor:PlayerUpdate()
 			end
 		end
 
-		self:WalkToUpdate(self.player)
+		self:WalkToUpdate();
 	end
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:PlayerUpdate() end ---");
 end
