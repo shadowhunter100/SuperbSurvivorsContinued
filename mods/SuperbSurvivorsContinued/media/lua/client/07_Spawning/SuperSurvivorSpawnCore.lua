@@ -171,7 +171,7 @@ function SuperSurvivorSpawnNpcAtSquare(square)
     end
 
     CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "zRemoved: " .. tostring(zRemoved));
-    CreateLogLine("NpcGroupsSpawnsCore", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
     return ASuperSurvivor;
 end
 
