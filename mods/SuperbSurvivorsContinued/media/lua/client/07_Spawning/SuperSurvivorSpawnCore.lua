@@ -64,8 +64,6 @@ function Equip_SS_RandomNpc(npc, isRaider)
             bag:AddItem(food);
         end
     else
-
-        -- Cows: Can't find anything related to "CannedFoods" on wiki nor TIS docs... but there is no error here so it stays.
         for i = 1, count do
             food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]); 
             bag:AddItem(food);
@@ -132,7 +130,7 @@ end
 ---@param square any
 ---@return unknown|nil
 function SuperSurvivorSpawnNpcAtSquare(square)
-    local isLocalFunctionLoggingEnabled = true;
+    local isLocalFunctionLoggingEnabled = false;
     CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
     local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
     local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
@@ -200,6 +198,7 @@ function SuperSurvivorSpawnWife(player)
         wife:setMeleWep(baseballBat);
         wife:setGunWep(pistol);
 
+
         MData.MetPlayer = true;
         MData.isHostile = false;
 
@@ -214,12 +213,13 @@ function SuperSurvivorSpawnWife(player)
             Group = SSGM:GetGroupById(GID);
         end
 
-        Group:addMember(wife, "Worker")
+        Group:addMember(wife, Get_SS_JobText("Companion"))
 
         local followtask = FollowTask:new(wife, getSpecificPlayer(0));
         local tm = wife:getTaskManager();
         wife:setAIMode("Follow");
         tm:AddToTop(followtask);
+        Add_SS_NpcPerkLevel(wife.player, "Aiming", 3); -- Cows: So wife can actually hit things with the pistol...
     end
 end
 
