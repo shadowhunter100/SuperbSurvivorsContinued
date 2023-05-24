@@ -128,7 +128,7 @@ function SuperSurvivorsRandomSpawn()
     if (getSpecificPlayer(0) == nil or hisGroup == nil) then
         return false;
     end
-
+    -- Cows: ... this might be problematic... I'm guessing this means if the bounds exist due to a group's base area, it won't spawn npcs near the player...
     local center = Get_SS_PlayerGroupBoundsCenter(hisGroup);
     local spawnSquare = Set_SS_SpawnSquare(hisGroup, center);
 
