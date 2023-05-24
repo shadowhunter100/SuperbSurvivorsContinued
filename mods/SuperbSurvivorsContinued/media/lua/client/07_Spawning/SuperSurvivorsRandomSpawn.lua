@@ -11,9 +11,10 @@ local function spawnNpcs(mySS, spawnSquare)
     -- WIP - Cows: Need to rework the spawning functions and logic...
     -- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
     if (spawnSquare ~= nil) then
+        local isGroupHostile = false;
         local npcSurvivorGroup;
         local actualLimit = Limit_Npc_Groups + 1; -- Cows: +1 because the player group was is part of the GroupCount total...
-
+        local GroupSize = ZombRand(1, Max_Group_Size);
         if (SSGM.GroupCount < actualLimit) then
             npcSurvivorGroup = SSGM:newGroup();
         else
@@ -22,26 +23,23 @@ local function spawnNpcs(mySS, spawnSquare)
             npcSurvivorGroup = SSGM:GetGroupById(rng);
         end
 
-        local GroupSize = ZombRand(1, Max_Group_Size);
+        if (FinalChanceToBeHostile > ZombRand(0, 100)) then
+            isGroupHostile = true;
+        end
 
         for i = 1, GroupSize do
             local npcSurvivor = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
             if (npcSurvivor) then
                 local name = npcSurvivor:getName();
+                npcSurvivor:setHostile(isGroupHostile);
 
-                -- Updated so alt spawns can decide to be hostile or not.
-                if (FinalChanceToBeHostile > ZombRand(0, 100)) then
-                    npcSurvivor:setHostile(true);
-                else
-                    npcSurvivor:setHostile(false);
-                end
 
                 local isPlayerSurvivorGroup = SuperSurvivorGroup:isMember(mySS);
 
                 if (i == 1 and not isPlayerSurvivorGroup) then
-                    npcSurvivorGroup:addMember(npcSurvivor, "Leader");
+                    npcSurvivorGroup:addMember(npcSurvivor, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                 else
-                    npcSurvivorGroup:addMember(npcSurvivor, "Guard");
+                    npcSurvivorGroup:addMember(npcSurvivor, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
                 end
 
                 npcSurvivor.player:getModData().isRobber = false;
@@ -86,9 +84,9 @@ local function spawnRaiders(mySS, spawnSquare)
                     local name = raider:getName();
 
                     if (i == 1) then
-                        raiderGroup:addMember(raider, "Leader");
+                        raiderGroup:addMember(raider, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                     else
-                        raiderGroup:addMember(raider, "Guard");
+                        raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
                     end
                     raider:setHostile(true);
                     raider.player:getModData().isRobber = true;
