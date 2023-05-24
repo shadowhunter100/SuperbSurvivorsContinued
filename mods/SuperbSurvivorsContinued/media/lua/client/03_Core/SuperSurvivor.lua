@@ -72,22 +72,6 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	return survivorObject;
 end
 
---- Cows: Wrote this helper function to reduce the number of loops in spawnPlayer()
----@param npc any -- SurvivorFactory.CreateSurvivor() object
----@param perkName any -- string,
----@param levels any -- integer / number
----@return any
-local function setNpcPerkLevel(npc, perkName, levels)
-	local isLocalFunctionLoggingEnabled = false;
-	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "setNpcPerkLevel() called");
-	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled,
-		"Setting: " .. tostring(perkName) .. " to level " .. tostring(levels));
-
-	for i = 0, levels do
-		npc:LevelPerk(Perks.FromString(perkName));
-	end
-	return npc;
-end
 
 ---comment
 ---@param square any
@@ -129,9 +113,9 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	Buddy:setNPC(true);
 
 	-- required perks ------------
-	Buddy = setNpcPerkLevel(Buddy, "Strength", 4);
-	Buddy = setNpcPerkLevel(Buddy, "Sneak", 2);
-	Buddy = setNpcPerkLevel(Buddy, "Lightfoot", 3);
+	Buddy = Add_SS_NpcPerkLevel(Buddy, "Strength", 4);
+	Buddy = Add_SS_NpcPerkLevel(Buddy, "Sneak", 2);
+	Buddy = Add_SS_NpcPerkLevel(Buddy, "Lightfoot", 3);
 
 	-- random perks -------------------
 	-- Cows: WIP - What is this random perks about? Maxing a random survivor's perk?
@@ -3644,6 +3628,7 @@ function SuperSurvivor:getWeaponDamage(weapon, distance)
 end
 
 --- Gets the change of a shoot based on aiming skill, weapon, victim's distance
+--- Cows: I've updated it with all the weird cover-based and distance modifier removed.
 ---@param weapon any
 ---@param victim any
 ---@return number represents the chance of a hit

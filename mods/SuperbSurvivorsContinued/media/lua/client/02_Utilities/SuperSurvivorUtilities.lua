@@ -156,6 +156,25 @@ function SetSurvivorWeapon(mapKey)
 	return weapon;
 end
 
+--- Cows: Wrote this helper function to reduce the number of loops in spawnPlayer()
+--- Can also be used to level any specified NPC's perk levels.
+---@param npc any -- SurvivorFactory.CreateSurvivor() object
+---@param perkName any -- string,
+---@param levels any -- integer / number
+---@return any
+function Add_SS_NpcPerkLevel(npc, perkName, levels)
+	local isLocalFunctionLoggingEnabled = false;
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled, "setNpcPerkLevel() called");
+	CreateLogLine("SuperSurvivor", isLocalFunctionLoggingEnabled,
+		"Setting: " .. tostring(perkName) .. " to level " .. tostring(levels));
+
+	for i = 0, levels do
+		npc:LevelPerk(Perks.FromString(perkName));
+	end
+	return npc;
+end
+
+
 --- Cows: Count and return the number of non-dead NPCs
 ---@return integer
 function Get_SS_Alive_Count()
