@@ -45,7 +45,7 @@ IsPVPEnabled = true;
 IsDisplayingNpcName = true;
 IsDisplayingHostileColor = true;
 
-local isDebuggingLogged = true;
+local isDebuggingLogged = false;
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Max_Group_Size: " .. tostring(Max_Group_Size));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));

@@ -39,7 +39,7 @@ IsPVPEnabled = SandboxVars.SuperbSurvivorsContinued.IsPVPEnabled;
 IsDisplayingNpcName = SandboxVars.SuperbSurvivorsContinued.IsDisplayingNpcName;
 IsDisplayingHostileColor = SandboxVars.SuperbSurvivorsContinued.IsDisplayingHostileColor;
 
-local isDebuggingLogged = true;
+local isDebuggingLogged = false;
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Max_Group_Size: " .. tostring(Max_Group_Size));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
@@ -72,17 +72,3 @@ CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsPVPEnabled
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars: " .. tostring(SandboxVars.SuperbSurvivorsContinued));
-
-for k, v in pairs(SandboxVars.SuperbSurvivorsContinued) do
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars key: " .. tostring(k));
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars val: " .. tostring(v));
-end
-
-CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Attempt to reset superb survivors SandboxVars...");
-
-SandboxVars.SuperbSurvivorsContinued = {};
-
-for k, v in pairs(SandboxVars.SuperbSurvivorsContinued) do
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars key: " .. tostring(k));
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars val: " .. tostring(v));
-end
