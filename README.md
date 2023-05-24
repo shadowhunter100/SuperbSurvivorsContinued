@@ -12,7 +12,7 @@ Original GitHub repo:
 
 Since there has no updates for months and I felt this was too much to be abandoned to rot, I have decide to do what I can to make NPCs viable in PZ.
 
-* *At least until whenever the official NPCs are added to the game.*
+* *At least until whenever the official NPCs are added to the game -OR- I feel tired of updating this thing.*
 
 ## *It is important to know there were many other authors and creators who have contributed (unknowingly) to Superb Survivors.*  
 ### If you believe your work was used in this mod, please reach out and we can work to resolve your issues.
