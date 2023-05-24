@@ -14,8 +14,8 @@ option SuperbSurvivorsContinued.Limit_Npc_Groups
 {
 	type = integer,
 	min = 4,
-	max = 12,
-	default = 4,
+	max = 20,
+	default = 8,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_Limit_Npc_Groups,
@@ -26,7 +26,7 @@ option SuperbSurvivorsContinued.Limit_Npcs_Spawn
 	type = integer,
 	min = 1,
 	max = 50,
-	default = 12,
+	default = 30,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
@@ -39,15 +39,6 @@ option SuperbSurvivorsContinued.IsWifeSpawn
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_IsWifeSpawn,
-}
-
-option SuperbSurvivorsContinued.NoPresetSpawn
-{
-	type = boolean,
-	default = true,
-
-	page = SuperbSurvivorsContinued,
-	translation = SuperbSurvivorsContinued_NoPresetSpawn,
 }
 
 option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
@@ -66,7 +57,7 @@ option SuperbSurvivorsContinued.NpcSpawnChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 30,
+	default = 50,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_NpcSpawnChance,

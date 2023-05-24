@@ -6,7 +6,6 @@ Max_Group_Size = SandboxVars.SuperbSurvivorsContinued.Max_Group_Size;
 Limit_Npc_Groups = SandboxVars.SuperbSurvivorsContinued.Limit_Npc_Groups;
 Limit_Npcs_Spawn = SandboxVars.SuperbSurvivorsContinued.Limit_Npcs_Spawn;
 IsWifeSpawn = SandboxVars.SuperbSurvivorsContinued.IsWifeSpawn;
-NoPresetSpawn = SandboxVars.SuperbSurvivorsContinued.NoPresetSpawn;
 NpcGroupsSpawnsSize = SandboxVars.SuperbSurvivorsContinued.NpcGroupsSpawnsSize;
 NpcSpawnChance = SandboxVars.SuperbSurvivorsContinued.NpcSpawnChance;
 HostileSpawnRateBase = SandboxVars.SuperbSurvivorsContinued.HostileSpawnRateBase;
@@ -40,12 +39,11 @@ IsPVPEnabled = SandboxVars.SuperbSurvivorsContinued.IsPVPEnabled;
 IsDisplayingNpcName = SandboxVars.SuperbSurvivorsContinued.IsDisplayingNpcName;
 IsDisplayingHostileColor = SandboxVars.SuperbSurvivorsContinued.IsDisplayingHostileColor;
 
-local isDebuggingLogged = true;
+local isDebuggingLogged = false;
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Max_Group_Size: " .. tostring(Max_Group_Size));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
-CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
@@ -74,17 +72,3 @@ CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsPVPEnabled
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
 CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars: " .. tostring(SandboxVars.SuperbSurvivorsContinued));
-
-for k, v in pairs(SandboxVars.SuperbSurvivorsContinued) do
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars key: " .. tostring(k));
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars val: " .. tostring(v));
-end
-
-CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "Attempt to reset superb survivors SandboxVars...");
-
-SandboxVars.SuperbSurvivorsContinued = {};
-
-for k, v in pairs(SandboxVars.SuperbSurvivorsContinued) do
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars key: " .. tostring(k));
-    CreateLogLine("SS_SuperSuvivorsSandBoxOptions", isDebuggingLogged, "SandboxVars val: " .. tostring(v));
-end

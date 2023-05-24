@@ -43,7 +43,7 @@ end
 ---@return any
 function Equip_SS_RandomNpc(npc, isRaider)
     local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: Equip_SS_RandomNpc() called");
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: Equip_SS_RandomNpc() called");
 
     if (npc:hasWeapon() == false) then
         npc:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
@@ -64,6 +64,7 @@ function Equip_SS_RandomNpc(npc, isRaider)
             bag:AddItem(food);
         end
     else
+
         -- Cows: Can't find anything related to "CannedFoods" on wiki nor TIS docs... but there is no error here so it stays.
         for i = 1, count do
             food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]); 
@@ -131,8 +132,8 @@ end
 ---@param square any
 ---@return unknown|nil
 function SuperSurvivorSpawnNpcAtSquare(square)
-    local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
+    local isLocalFunctionLoggingEnabled = true;
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: SuperSurvivorSpawnNpcAtSquare() called");
     local hoursSurvived = math.floor(getGameTime():getWorldAgeHours());
     local ASuperSurvivor = SSM:spawnSurvivor(nil, square);
 
@@ -152,8 +153,8 @@ function SuperSurvivorSpawnNpcAtSquare(square)
     local zlist = getCell():getZombieList();
     local zRemoved = 0;
     if (zlist ~= nil) then
-        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Z List Size" .. tostring(zlist:size()));
-        CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "Clearing Zs from cell...");
+        CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "Z List Size: " .. tostring(zlist:size()));
+        CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "Clearing Zs from cell...");
         for i = zlist:size() - 1, 0, -1 do
             local z = zlist:get(i);
 
@@ -169,7 +170,8 @@ function SuperSurvivorSpawnNpcAtSquare(square)
         end
     end
 
-    CreateLogLine("SuperSurvivorsMod", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "zRemoved: " .. tostring(zRemoved));
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
     return ASuperSurvivor;
 end
 
@@ -190,6 +192,8 @@ function SuperSurvivorSpawnWife(player)
         wife:Get():getModData().seenZombie = true;
         local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
         local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");
+        wife:Get():getInventory():AddItem("Base.TinOpener");
+        wife:Get():getInventory():AddItem("Base.ElectronicsMag4");
 
         wife:Get():setPrimaryHandItem(baseballBat);
         wife:Get():setSecondaryHandItem(baseballBat);
