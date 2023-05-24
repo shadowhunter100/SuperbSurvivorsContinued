@@ -26,7 +26,7 @@ option SuperbSurvivorsContinued.Limit_Npcs_Spawn
 	type = integer,
 	min = 1,
 	max = 50,
-	default = 20,
+	default = 30,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
