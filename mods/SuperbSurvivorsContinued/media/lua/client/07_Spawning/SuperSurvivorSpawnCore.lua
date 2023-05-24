@@ -164,13 +164,13 @@ function SuperSurvivorSpawnNpcAtSquare(square)
                 and (math.abs(z:getY() - square:getY()) < 2)
                 and (z:getZ() == square:getZ())
             then
-                CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "zRemoved: " .. tostring(zRemoved));
                 zRemoved = zRemoved + 1;
                 z:removeFromWorld();
             end
         end
     end
 
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "zRemoved: " .. tostring(zRemoved));
     CreateLogLine("NpcGroupsSpawnsCore", isLocalLoggingEnabled, "--- function: SuperSurvivorSpawnNpcAtSquare() end ---");
     return ASuperSurvivor;
 end
@@ -192,6 +192,8 @@ function SuperSurvivorSpawnWife(player)
         wife:Get():getModData().seenZombie = true;
         local pistol = wife:Get():getInventory():AddItem("Base.Pistol");
         local baseballBat = wife:Get():getInventory():AddItem("Base.BaseballBat");
+        wife:Get():getInventory():AddItem("Base.TinOpener");
+        wife:Get():getInventory():AddItem("Base.ElectronicsMag4");
 
         wife:Get():setPrimaryHandItem(baseballBat);
         wife:Get():setSecondaryHandItem(baseballBat);
