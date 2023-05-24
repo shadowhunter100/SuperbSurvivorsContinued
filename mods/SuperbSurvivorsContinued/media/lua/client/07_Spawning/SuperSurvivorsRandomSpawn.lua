@@ -68,7 +68,7 @@ local function spawnRaiders(mySS, spawnSquare)
         if (spawnSquare ~= nil) then
             local raiderGroup;
 
-            if (SSGM.GroupCount < Limit_Npc_Groups) then
+            if (SSGM.GroupCount < Limit_Npc_Groups + 1) then
                 raiderGroup = SSGM:newGroup();
             else
                 -- something ... repopulate the previous groups?
@@ -143,7 +143,6 @@ function SuperSurvivorsRandomSpawn()
         -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
         local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
         local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));
-
 
         if (isSpawning) then
             if (isSpawningRaiders) then
