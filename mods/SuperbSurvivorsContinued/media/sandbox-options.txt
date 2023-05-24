@@ -41,15 +41,6 @@ option SuperbSurvivorsContinued.IsWifeSpawn
 	translation = SuperbSurvivorsContinued_IsWifeSpawn,
 }
 
-option SuperbSurvivorsContinued.NoPresetSpawn
-{
-	type = boolean,
-	default = true,
-
-	page = SuperbSurvivorsContinued,
-	translation = SuperbSurvivorsContinued_NoPresetSpawn,
-}
-
 option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
 {
 	type = integer,

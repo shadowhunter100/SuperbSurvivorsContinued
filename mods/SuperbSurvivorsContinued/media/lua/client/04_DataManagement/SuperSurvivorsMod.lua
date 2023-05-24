@@ -52,16 +52,6 @@ function SuperSurvivorsLoadGridsquare(square)
 			i = 1;
 			SurvivorMap[key] = {} -- i think this is faster
 		end
-
-		-- WIP - Cows: Need to rework the spawning functions and logic...
-		if (square:getModData().SurvivorSquareLoaded == nil)
-			and (square:getZ() == 0 or square:isOutside() == false)
-			and (not SuperSurvivorPresetSpawn(square))
-		then
-			SurvivorMap[key] = {};
-			square:getModData().SurvivorSquareLoaded = true;
-			-- Events.LoadGridsquare.Remove(SuperSurvivorsLoadGridsquare); -- WIP - Cows: Can't remove the LoadGridsquare right away... Need a better solution
-		end
 	end
 end
 

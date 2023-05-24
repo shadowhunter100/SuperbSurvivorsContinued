@@ -13,7 +13,6 @@ Min_Group_Size = 1; -- WIP - PlaceHolder - Cows: Min number of members in a grou
 Limit_Npc_Groups = 8;     -- WIP - PlaceHolder - Cows: Max npc groups
 Limit_Npcs_Spawn = 22;    -- WIP - PlaceHolder - Cows: Max npc spwans
 IsWifeSpawn = true;       -- Cows: true to spawn wife / 1st follower, false to not spawn wife / 1st follower
-NoPresetSpawn = true;     -- Cows: true to disable preset spawns.
 NpcGroupsSpawnsSize = 4; -- Cows: The max number of groups that can spawn every time.
 NpcSpawnChance = 50;      -- WIP - Cows: NpcSpawnChance (formerly "AlternativeSpawning") is used when the player is in the current map area
 HostileSpawnRateBase = 1; -- Cows: Chance that NPCs will be hostile initially on spawn
@@ -51,7 +50,6 @@ CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Max_Group_Size
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
-CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
 CreateLogLine("SS_SuperSurvivorsInitOptions", isDebuggingLogged, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));

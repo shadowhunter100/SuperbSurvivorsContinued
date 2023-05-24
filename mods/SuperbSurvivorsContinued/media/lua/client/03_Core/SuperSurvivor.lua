@@ -519,10 +519,8 @@ function SuperSurvivor:WearThis(ClothingItemName) -- should already be in invent
 	self.player:getInventory():AddItem(ClothingItem)
 
 	if instanceof(ClothingItem, "InventoryContainer") and ClothingItem:canBeEquipped() ~= "" then
-		--self.player:setWornItem(ClothingItem:canBeEquipped(), ClothingItem);
 		self.player:setClothingItem_Back(ClothingItem)
 		getSpecificPlayer(self.player:getPlayerNum()).playerInventory:refreshBackpacks()
-		--self.player:initSpritePartsEmpty();
 	elseif ClothingItem:getCategory() == "Clothing" then
 		if ClothingItem:getBodyLocation() ~= "" then
 			self.player:setWornItem(ClothingItem:getBodyLocation(), nil);
@@ -4063,9 +4061,6 @@ function SuperSurvivor:SuitUp(SuitName)
 	self.player:getInventory():clear();
 
 	self.player:setWornItem("Jacket", nil);
-
-	-- Select the preset if applicable
-	local tempTable = SurvivorRandomSuits["Preset"]
 
 	if SuitName:contains("Preset_") then
 		SetRandomSurvivorSuit(self, "Preset", SuitName)

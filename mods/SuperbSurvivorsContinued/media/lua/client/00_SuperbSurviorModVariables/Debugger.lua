@@ -43,7 +43,6 @@ local function log_SS_SandboxOptions()
     CreateLogLine("SS_OptionsValues", true, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
     CreateLogLine("SS_OptionsValues", true, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
     CreateLogLine("SS_OptionsValues", true, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
-    CreateLogLine("SS_OptionsValues", true, "NoPresetSpawn: " .. tostring(NoPresetSpawn));
     CreateLogLine("SS_OptionsValues", true, "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
     CreateLogLine("SS_OptionsValues", true, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
     CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
