@@ -33,13 +33,14 @@ local function spawnNpcs(mySS, spawnSquare)
                 local name = npcSurvivor:getName();
                 npcSurvivor:setHostile(isGroupHostile);
 
-
                 local isPlayerSurvivorGroup = SuperSurvivorGroup:isMember(mySS);
 
                 if (i == 1 and not isPlayerSurvivorGroup) then
                     npcSurvivorGroup:addMember(npcSurvivor, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                 else
-                    npcSurvivorGroup:addMember(npcSurvivor, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
+                    -- npcSurvivorGroup:addMember(npcSurvivor, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
+                    npcSurvivorGroup:addMember(npcSurvivor, "Random Solo"); -- Cows: I can't set "follow" nor "companion" because these roles defaults to following the player...
+                    npcSurvivor:NPCTask_DoWander();
                 end
 
                 npcSurvivor.player:getModData().isRobber = false;
@@ -86,7 +87,9 @@ local function spawnRaiders(mySS, spawnSquare)
                     if (i == 1) then
                         raiderGroup:addMember(raider, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                     else
-                        raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
+                        -- raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
+                        raiderGroup:addMember(raider, "Random Solo");
+                        raider:NPCTask_DoWander();
                     end
                     raider:setHostile(true);
                     raider.player:getModData().isRobber = true;
