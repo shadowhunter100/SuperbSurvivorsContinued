@@ -126,6 +126,11 @@ function SuperSurvivorsRandomSpawn()
     CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsRandomSpawn() called");
     local mySS = SSM:Get(0);
     local hisGroup = mySS:getGroup();
+
+    if (getSpecificPlayer(0) == nil or hisGroup == nil) then
+        return false;
+    end
+
     local center = Get_SS_PlayerGroupBoundsCenter(hisGroup);
     local spawnSquare = Set_SS_SpawnSquare(hisGroup, center);
 
@@ -138,9 +143,6 @@ function SuperSurvivorsRandomSpawn()
         local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
         local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));
 
-        if (getSpecificPlayer(0) == nil or hisGroup == nil) then
-            return false;
-        end
 
         if (isSpawning) then
             if (isSpawningRaiders) then
