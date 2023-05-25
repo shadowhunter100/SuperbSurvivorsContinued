@@ -35,9 +35,12 @@ function SuperSurvivorKeyBindAction(keyNum)
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs: " .. tostring(activeNpcs));
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
                 local ss = SuperSurvivorSpawnNpcAtSquare(playerSurvivor:getCurrentSquare());
-                local name = ss:getName();
-                ss.player:getModData().isRobber = false;
-                ss:setName("Spawned " .. name);
+                -- Check if superb survivor spawned successfully
+                if (ss) then
+                    local name = ss:getName();
+                    ss.player:getModData().isRobber = false;
+                    ss:setName("Spawned " .. name);
+                end
             else
                 CreateLogLine("SuperSurvivorsHotKeys", isLocalFunctionLoggingEnabled, "activeNpcs limit reached, no spawn.");
             end
@@ -109,4 +112,8 @@ function SuperSurvivorKeyBindAction(keyNum)
     end
 end
 
-Events.OnKeyPressed.Add(SuperSurvivorKeyBindAction);
+local function ss_HotKeyPress()
+    Events.OnKeyPressed.Add(SuperSurvivorKeyBindAction);
+end
+
+Events.OnGameStart.Add(ss_HotKeyPress); -- Cows: This is to prevent the function from being called BEFORE the game starts.
