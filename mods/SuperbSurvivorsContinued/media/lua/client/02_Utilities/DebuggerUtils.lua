@@ -58,13 +58,6 @@ local function log_SS_SandboxOptions()
         "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
     CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
         "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
-
-
-    CreateLogLine("SS_SandboxOptionsValues", true, "Begin Sandbox Data from table");
-    for key, val in pairs(SS_SandboxOptions) do
-        CreateLogLine("SS_SandboxOptionsValues", true, "key: " .. tostring(key));
-        CreateLogLine("SS_SandboxOptionsValues", true, "val: " .. tostring(val));
-    end
 end
 
 local function log_SS_PlayerInfo()
