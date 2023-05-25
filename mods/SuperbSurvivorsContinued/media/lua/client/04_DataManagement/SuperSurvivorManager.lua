@@ -154,29 +154,33 @@ function SuperSurvivorManager:OnDeath(ID)
 end
 
 function SuperSurvivorManager:UpdateSurvivorsRoutine()
-	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:UpdateSurvivorsRoutine() called");
+	local isLocalFunctionLoggingEnabled = false;
+
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
-			if (self.SuperSurvivors[i].TargetSquare ~= nil
-					and self.SuperSurvivors[i].TargetSquare:getZ() ~= self.SuperSurvivors[i].player:getZ()
-					and getGameSpeed() > 1)
+			if (self.SuperSurvivors[i]:updateTime())
+				and (not self.SuperSurvivors[i].player:isAsleep())
+				and (self.SuperSurvivors[i]:isInCell())
 			then
-				self.SuperSurvivors[i].TargetSquare = nil;
-				self.SuperSurvivors[i]:StopWalk();
-				self.SuperSurvivors[i]:Wait(10);
+				self.SuperSurvivors[i]:update();
+				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
+					"Updating " .. tostring(self.SuperSurvivors[i]:getName()) .. " routine...");
 			end
-		end
 
-		if (self.SuperSurvivors[i] ~= nil) and (self.MainPlayer ~= i)
-			and (self.SuperSurvivors[i]:updateTime())
-			and (not self.SuperSurvivors[i].player:isAsleep())
-			and (self.SuperSurvivors[i]:isInCell())
-		then
-			self.SuperSurvivors[i]:update();
+			if (self.SuperSurvivors[i]:getCurrentTask() == "None"
+					and self.SuperSurvivors[i]:getGroup() ~= 0
+				) then
+				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
+					"No Current Task for " .. tostring(self.SuperSurvivors[i]:getName()) .. "...");
+				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
+					tostring(self.SuperSurvivors[i]:getName()) .. " will now start wandering...");
+				self.SuperSurvivors[i]:NPCTask_DoWander();
+			end
 		end
 	end
 end
 
+---comment
 function SuperSurvivorManager:AsleepHealAll()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:AsleepHealAll() called");
 	for i = 1, self.SurvivorCount + 1 do
