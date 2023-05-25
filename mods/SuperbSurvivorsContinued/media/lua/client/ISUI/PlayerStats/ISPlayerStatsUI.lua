@@ -791,4 +791,4 @@ function ISPlayerStatsUI.OnOpenPanel()
     ui:setVisible(true);
 end
 
-Events.OnReceiveUserlog.Add(ISPlayerStatsUI.receiveUserLog);
+-- Events.OnReceiveUserlog.Add(ISPlayerStatsUI.receiveUserLog); -- Cows: seems useless... commented out until proven it is needed.
