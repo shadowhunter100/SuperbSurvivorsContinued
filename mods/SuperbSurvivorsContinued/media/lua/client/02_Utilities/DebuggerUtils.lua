@@ -1,75 +1,70 @@
-require "00_SuperbSurviorModVariables.SuperSurviorsGlobalVariables";
-
-ModId = "SuperbSurvivorsContinued";
-local isLocalLoggingEnabled = false;
-
---[[
-    Credit to "haram gaming#4572" in PZ Discord for providing a text file writing example.
-    Credit to "albion#0123" in PZ Discord for explaining the difference between "getFileWriter" and "getModFileWriter"
-    CreateLogLine will create a log file under the "<user>/Zomboid/Lua/<ModId>/logs".
---]]
--- Use this function to write a line to a text file, this is useful to identify when and how many times a function is called.
-function CreateLogLine(fileName, isEnabled, newLine)
-    if (isEnabled) then
-        local timestamp = os.time();
-        local formattedTimeDay = os.date("%Y-%m-%d", timestamp);
-        local formattedTime = os.date("%Y-%m-%d %H:%M:%S", timestamp);
-        local file = getFileWriter(
-            ModId .. "/logs/" .. formattedTimeDay .. "_" .. ModId .. "_" .. fileName .. "_Logs.txt", true, true);
-        local content = formattedTime .. " : " .. "CreateLogLine called";
-
-        if newLine then
-            content = formattedTime .. " : " .. newLine;
-        end
-
-        file:write(content .. "\r\n");
-        file:close();
-    end
-end
-
---[[
-    Log the key-value pairs of a table to a specified file.
--- ]]
-function LogTableKVPairs(fileName, isEnabled, table)
-    if (isEnabled) then
-        for key, value in pairs(table) do
-            CreateLogLine(fileName, isEnabled, "key:" .. tostring(key) .. " | value: " .. tostring(value));
-        end
-    end
-end
-
 local function log_SS_SandboxOptions()
-    CreateLogLine("SS_OptionsValues", true, "Max_Group_Size: " .. tostring(Max_Group_Size));
-    CreateLogLine("SS_OptionsValues", true, "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
-    CreateLogLine("SS_OptionsValues", true, "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
-    CreateLogLine("SS_OptionsValues", true, "IsWifeSpawn: " .. tostring(IsWifeSpawn));
-    CreateLogLine("SS_OptionsValues", true, "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
-    CreateLogLine("SS_OptionsValues", true, "NpcSpawnChance: " .. tostring(NpcSpawnChance));
-    CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
-    CreateLogLine("SS_OptionsValues", true, "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
-    CreateLogLine("SS_OptionsValues", true, "");
-    CreateLogLine("SS_OptionsValues", true, "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
-    CreateLogLine("SS_OptionsValues", true, "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));
-    CreateLogLine("SS_OptionsValues", true, "");
-    CreateLogLine("SS_OptionsValues", true, "CanIdleChat: " .. tostring(CanIdleChat));
-    CreateLogLine("SS_OptionsValues", true, "CanNpcsCreateBase: " .. tostring(CanNpcsCreateBase));
-    CreateLogLine("SS_OptionsValues", true, "IsInfiniteAmmoEnabled: " .. tostring(IsInfiniteAmmoEnabled));
-    CreateLogLine("SS_OptionsValues", true, "IsRoleplayEnabled: " .. tostring(IsRoleplayEnabled));
-    CreateLogLine("SS_OptionsValues", true, "IsSpeakEnabled: " .. tostring(IsSpeakEnabled));
-    CreateLogLine("SS_OptionsValues", true, "SurvivorCanFindWork: " .. tostring(SurvivorCanFindWork));
-    CreateLogLine("SS_OptionsValues", true, "SurvivorNeedsFoodWater: " .. tostring(SurvivorNeedsFoodWater));
-    CreateLogLine("SS_OptionsValues", true, "SurvivorBravery: " .. tostring(SurvivorBravery));
-    CreateLogLine("SS_OptionsValues", true, "SurvivorFriendliness: " .. tostring(SurvivorFriendliness));
-    CreateLogLine("SS_OptionsValues", true, "SleepGeneralHealRate: " .. tostring(SleepGeneralHealRate));
-    CreateLogLine("SS_OptionsValues", true, "GFollowDistance: " .. tostring(GFollowDistance));
-    CreateLogLine("SS_OptionsValues", true, "PanicDistance: " .. tostring(PanicDistance));
-    CreateLogLine("SS_OptionsValues", true, "WepSpawnRateGun: " .. tostring(WepSpawnRateGun));
-    CreateLogLine("SS_OptionsValues", true, "WepSpawnRateMelee: " .. tostring(WepSpawnRateMelee));
-    CreateLogLine("SS_OptionsValues", true, "");
-    CreateLogLine("SS_OptionsValues", true, "IsPlayerBaseSafe: " .. tostring(IsPlayerBaseSafe));
-    CreateLogLine("SS_OptionsValues", true, "IsPVPEnabled: " .. tostring(IsPVPEnabled));
-    CreateLogLine("SS_OptionsValues", true, "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
-    CreateLogLine("SS_OptionsValues", true, "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
+    local isLoggingDebugInfo = true;
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "Max_Group_Size: " .. tostring(Max_Group_Size));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "Limit_Npc_Groups: " .. tostring(Limit_Npc_Groups));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "Limit_Npcs_Spawn: " .. tostring(Limit_Npcs_Spawn));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsWifeSpawn: " .. tostring(IsWifeSpawn));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "NpcGroupsSpawnsSize: " .. tostring(NpcGroupsSpawnsSize));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "NpcSpawnChance: " .. tostring(NpcSpawnChance));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "HostileSpawnRateBase: " .. tostring(HostileSpawnRateBase));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "HostileSpawnRateMax: " .. tostring(HostileSpawnRateMax));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo, "");
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "RaidersSpawnChance: " .. tostring(RaidersSpawnChance));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "RaidersStartAfterHours: " .. tostring(RaidersStartAfterHours));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo, "");
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "CanIdleChat: " .. tostring(CanIdleChat));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "CanNpcsCreateBase: " .. tostring(CanNpcsCreateBase));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsInfiniteAmmoEnabled: " .. tostring(IsInfiniteAmmoEnabled));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsRoleplayEnabled: " .. tostring(IsRoleplayEnabled));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsSpeakEnabled: " .. tostring(IsSpeakEnabled));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "SurvivorCanFindWork: " .. tostring(SurvivorCanFindWork));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "SurvivorNeedsFoodWater: " .. tostring(SurvivorNeedsFoodWater));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "SurvivorBravery: " .. tostring(SurvivorBravery));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "SurvivorFriendliness: " .. tostring(SurvivorFriendliness));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "SleepGeneralHealRate: " .. tostring(SleepGeneralHealRate));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo, "GFollowDistance: " .. tostring(GFollowDistance));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "PanicDistance: " .. tostring(PanicDistance));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "WepSpawnRateGun: " .. tostring(WepSpawnRateGun));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "WepSpawnRateMelee: " .. tostring(WepSpawnRateMelee));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo, "");
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsPlayerBaseSafe: " .. tostring(IsPlayerBaseSafe));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsPVPEnabled: " .. tostring(IsPVPEnabled));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsDisplayingNpcName: " .. tostring(IsDisplayingNpcName));
+    CreateLogLine("SS_OptionsValues", isLoggingDebugInfo,
+        "IsDisplayingHostileColor: " .. tostring(IsDisplayingHostileColor));
+
+
+    CreateLogLine("SS_SandboxOptionsValues", true, "Begin Sandbox Data from table");
+    for key, val in pairs(SS_SandboxOptions) do
+        CreateLogLine("SS_SandboxOptionsValues", true, "key: " .. tostring(key));
+        CreateLogLine("SS_SandboxOptionsValues", true, "val: " .. tostring(val));
+    end
 end
 
 local function log_SS_PlayerInfo()
@@ -167,6 +162,7 @@ local function log_SS_SurvivorsInfo()
             end
         end
     end
+
     CreateLogLine("SS_Debugger", isLoggingDebugInfo, "Total Survivors: " .. tostring(SSM.SurvivorCount));
     CreateLogLine("SS_Debugger", isLoggingDebugInfo,
         "Actual Living NPCs: " .. tostring(actualLivingSurvivors));
@@ -175,12 +171,9 @@ end
 function LogSSDebugInfo()
     local playerSurvivor = getSpecificPlayer(0);
     playerSurvivor:Say("Logging Debug info...");
-    log_SS_SandboxOptions();
     log_SS_PlayerInfo();
     log_SS_GroupsInfo();
     log_SS_SurvivorsInfo();
+    log_SS_SandboxOptions();
     playerSurvivor:Say("Logging Debug info complete...");
 end
-
--- Example usage:
-CreateLogLine("SS_Debugger", isLocalLoggingEnabled, "Start...");
