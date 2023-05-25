@@ -15,10 +15,10 @@ local function spawnNpcs(mySS, spawnSquare)
         local npcSurvivorGroup;
         local actualLimit = Limit_Npc_Groups + 1; -- Cows: +1 because the player group was is part of the GroupCount total...
         local GroupSize = ZombRand(1, Max_Group_Size);
+        -- Cows: Spawn a new group if possible.
         if (SSGM.GroupCount < actualLimit) then
             npcSurvivorGroup = SSGM:newGroup();
         else
-            -- something ... repopulate the previous groups?
             local rng = ZombRand(1, actualLimit);
             npcSurvivorGroup = SSGM:GetGroupById(rng);
         end
@@ -45,7 +45,6 @@ local function spawnNpcs(mySS, spawnSquare)
 
                 npcSurvivor.player:getModData().isRobber = false;
                 npcSurvivor:setName("Survivor " .. name);
-                npcSurvivor:getTaskManager():AddToTop(WanderTask:new(npcSurvivor));
 
                 Equip_SS_RandomNpc(npcSurvivor, false);
                 GetRandomSurvivorSuit(npcSurvivor) -- WIP: Cows - Consider creating a preset outfit for raiders?
@@ -55,10 +54,6 @@ local function spawnNpcs(mySS, spawnSquare)
 end
 
 local function spawnRaiders(mySS, spawnSquare)
-    if (getSpecificPlayer(0):getModData().LastRaidTime == nil) then
-        getSpecificPlayer(0):getModData().LastRaidTime = (RaidersStartAfterHours + 2);
-    end
-
     local hours = math.floor(getGameTime():getWorldAgeHours());
     local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
 
@@ -68,10 +63,10 @@ local function spawnRaiders(mySS, spawnSquare)
         if (spawnSquare ~= nil) then
             local raiderGroup;
 
+            -- Cows: Spawn a new group if possible.
             if (SSGM.GroupCount < Limit_Npc_Groups + 1) then
                 raiderGroup = SSGM:newGroup();
             else
-                -- something ... repopulate the previous groups?
                 local rng = ZombRand(1, Limit_Npc_Groups);
                 raiderGroup = SSGM:GetGroupById(rng);
             end
@@ -108,7 +103,6 @@ local function spawnRaiders(mySS, spawnSquare)
                 end
             end
 
-            getSpecificPlayer(0):getModData().LastRaidTime = hours;
             if (getSpecificPlayer(0):isAsleep() and nearestRaiderDistance < 15) then
                 getSpecificPlayer(0):Say(Get_SS_Dialogue("IGotABadFeeling"));
                 getSpecificPlayer(0):forceAwake();
