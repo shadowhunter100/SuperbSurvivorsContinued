@@ -1,40 +1,42 @@
+local ss_options = SandboxVars.SuperbSurvivorsContinued;
+
 -- Group Size applies to both npcs and raiders.
-Max_Group_Size = SandboxVars.SuperbSurvivorsContinued.Max_Group_Size;
--- Min_Group_Size = SandboxVars.SuperbSurvivorsContinued.Min_Group_Size; -- Cows: Doesn't need to be set, min group size is always 1.
+Max_Group_Size = ss_options.Max_Group_Size;
+-- Min_Group_Size = ss_options.Min_Group_Size; -- Cows: Doesn't need to be set, min group size is always 1.
 
 -- NPC Spawning
-Limit_Npc_Groups = SandboxVars.SuperbSurvivorsContinued.Limit_Npc_Groups;
-Limit_Npcs_Spawn = SandboxVars.SuperbSurvivorsContinued.Limit_Npcs_Spawn;
-IsWifeSpawn = SandboxVars.SuperbSurvivorsContinued.IsWifeSpawn;
-NpcGroupsSpawnsSize = SandboxVars.SuperbSurvivorsContinued.NpcGroupsSpawnsSize;
-NpcSpawnChance = SandboxVars.SuperbSurvivorsContinued.NpcSpawnChance;
-HostileSpawnRateBase = SandboxVars.SuperbSurvivorsContinued.HostileSpawnRateBase;
-HostileSpawnRateMax = SandboxVars.SuperbSurvivorsContinued.HostileSpawnRateMax;
+Limit_Npc_Groups = ss_options.Limit_Npc_Groups;
+Limit_Npcs_Spawn = ss_options.Limit_Npcs_Spawn;
+IsWifeSpawn = ss_options.IsWifeSpawn;
+NpcGroupsSpawnsSize = ss_options.NpcGroupsSpawnsSize;
+NpcSpawnChance = ss_options.NpcSpawnChance;
+HostileSpawnRateBase = ss_options.HostileSpawnRateBase;
+HostileSpawnRateMax = ss_options.HostileSpawnRateMax;
 
 -- Raiders, Always hostile
-RaidersSpawnChance = SandboxVars.SuperbSurvivorsContinued.RaidersSpawnChance;
-RaidersStartAfterHours = SandboxVars.SuperbSurvivorsContinued.RaidersStartAfterHours;
+RaidersSpawnChance = ss_options.RaidersSpawnChance;
+RaidersStartAfterHours = ss_options.RaidersStartAfterHours;
 
 -- NPC Configuration
-CanIdleChat = SandboxVars.SuperbSurvivorsContinued.CanIdleChat;
-CanNpcsCreateBase = SandboxVars.SuperbSurvivorsContinued.CanNpcsCreateBase;
-IsInfiniteAmmoEnabled = SandboxVars.SuperbSurvivorsContinued.IsInfiniteAmmoEnabled;
-IsRoleplayEnabled = SandboxVars.SuperbSurvivorsContinued.IsRoleplayEnabled;
-IsSpeakEnabled = SandboxVars.SuperbSurvivorsContinued.IsSpeakEnabled;
-SurvivorCanFindWork = SandboxVars.SuperbSurvivorsContinued.SurvivorCanFindWork;
-SurvivorNeedsFoodWater = SandboxVars.SuperbSurvivorsContinued.SurvivorNeedsFoodWater;
-SurvivorBravery = SandboxVars.SuperbSurvivorsContinued.SurvivorBravery;
-SurvivorFriendliness = SandboxVars.SuperbSurvivorsContinued.SurvivorFriendliness;
-SleepGeneralHealRate = SandboxVars.SuperbSurvivorsContinued.SleepGeneralHealRate;
-GFollowDistance = SandboxVars.SuperbSurvivorsContinued.GFollowDistance;
-PanicDistance = SandboxVars.SuperbSurvivorsContinued.PanicDistance;
-WepSpawnRateGun = SandboxVars.SuperbSurvivorsContinued.WepSpawnRateGun;
-WepSpawnRateMelee = SandboxVars.SuperbSurvivorsContinued.WepSpawnRateMelee;
+CanIdleChat = ss_options.CanIdleChat;
+CanNpcsCreateBase = ss_options.CanNpcsCreateBase;
+IsInfiniteAmmoEnabled = ss_options.IsInfiniteAmmoEnabled;
+IsRoleplayEnabled = ss_options.IsRoleplayEnabled;
+IsSpeakEnabled = ss_options.IsSpeakEnabled;
+SurvivorCanFindWork = ss_options.SurvivorCanFindWork;
+SurvivorNeedsFoodWater = ss_options.SurvivorNeedsFoodWater;
+SurvivorBravery = ss_options.SurvivorBravery;
+SurvivorFriendliness = ss_options.SurvivorFriendliness;
+SleepGeneralHealRate = ss_options.SleepGeneralHealRate;
+GFollowDistance = ss_options.GFollowDistance;
+PanicDistance = ss_options.PanicDistance;
+WepSpawnRateGun = ss_options.WepSpawnRateGun;
+WepSpawnRateMelee = ss_options.WepSpawnRateMelee;
 
 -- Player Related
-IsPlayerBaseSafe = SandboxVars.SuperbSurvivorsContinued.IsPlayerBaseSafe;
-IsPVPEnabled = SandboxVars.SuperbSurvivorsContinued.IsPVPEnabled;
+IsPlayerBaseSafe = ss_options.IsPlayerBaseSafe;
+IsPVPEnabled = ss_options.IsPVPEnabled;
 
 -- UI Related
-IsDisplayingNpcName = SandboxVars.SuperbSurvivorsContinued.IsDisplayingNpcName;
-IsDisplayingHostileColor = SandboxVars.SuperbSurvivorsContinued.IsDisplayingHostileColor;
+IsDisplayingNpcName = ss_options.IsDisplayingNpcName;
+IsDisplayingHostileColor = ss_options.IsDisplayingHostileColor;
