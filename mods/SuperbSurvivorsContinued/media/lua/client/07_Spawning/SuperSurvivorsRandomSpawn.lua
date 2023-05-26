@@ -39,7 +39,7 @@ local function spawnNpcs(mySS, spawnSquare)
                     npcSurvivorGroup:addMember(npcSurvivor, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                 else
                     -- npcSurvivorGroup:addMember(npcSurvivor, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
-                    npcSurvivorGroup:addMember(npcSurvivor, "Random Solo"); -- Cows: I can't set "follow" nor "companion" because these roles defaults to following the player...
+                    npcSurvivorGroup:addMember(npcSurvivor, "Follower"); -- Cows: I can't set "follow" nor "companion" because these roles defaults to following the player...
                     npcSurvivor:NPCTask_DoWander();
                 end
 
@@ -83,7 +83,7 @@ local function spawnRaiders(mySS, spawnSquare)
                         raiderGroup:addMember(raider, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
                     else
                         -- raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
-                        raiderGroup:addMember(raider, "Random Solo");
+                        raiderGroup:addMember(raider, "Follower");
                         raider:NPCTask_DoWander();
                     end
                     raider:setHostile(true);

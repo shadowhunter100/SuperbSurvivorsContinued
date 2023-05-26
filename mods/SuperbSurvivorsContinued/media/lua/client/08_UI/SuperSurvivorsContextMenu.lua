@@ -34,11 +34,11 @@ function AskToJoin(test, player) -- When the NPC asks another npc to join a grou
 				for x = 1, #members do
 					if (members[x] and members[x].player ~= nil) then
 						members[x]:Speak(Get_SS_DialogueSpeech("Roger"));
-						group:addMember(members[x], Get_SS_JobText("Partner")); -- WIP - Cows: where did Partner come from?
+						group:addMember(members[x], Get_SS_JobText("Companion"));
 					end
 				end
 			else
-				group:addMember(MySS, Get_SS_JobText("Partner")); -- WIP - Cows: where did Partner come from?
+				group:addMember(MySS, Get_SS_JobText("Companion"));
 			end
 		end
 	else
@@ -71,7 +71,7 @@ function InviteToParty(test, player) -- When the player offers an NPC to join th
 		end
 
 		if (Group) then
-			Group:addMember(SS, Get_SS_JobText("Companion")) -- was Partner
+			Group:addMember(SS, Get_SS_JobText("Companion"))
 		else
 			CreateLogLine("SuperSurvivorsContextMenu", isLocalLoggingEnabled, "error could not find or create group");
 		end
