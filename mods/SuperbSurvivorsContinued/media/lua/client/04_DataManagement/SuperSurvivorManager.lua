@@ -154,7 +154,6 @@ function SuperSurvivorManager:OnDeath(ID)
 end
 
 function SuperSurvivorManager:UpdateSurvivorsRoutine()
-	local isLocalFunctionLoggingEnabled = false;
 
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
@@ -163,17 +162,11 @@ function SuperSurvivorManager:UpdateSurvivorsRoutine()
 				and (self.SuperSurvivors[i]:isInCell())
 			then
 				self.SuperSurvivors[i]:update();
-				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
-					"Updating " .. tostring(self.SuperSurvivors[i]:getName()) .. " routine...");
 			end
-
+			-- Cows: Have the npcs wander if there are no tasks, otherwise they are stuck in place...
 			if (self.SuperSurvivors[i]:getCurrentTask() == "None"
 					and self.SuperSurvivors[i]:getGroup() ~= 0
 				) then
-				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
-					"No Current Task for " .. tostring(self.SuperSurvivors[i]:getName()) .. "...");
-				CreateLogLine("SuperSurvivorManager", isLocalFunctionLoggingEnabled,
-					tostring(self.SuperSurvivors[i]:getName()) .. " will now start wandering...");
 				self.SuperSurvivors[i]:NPCTask_DoWander();
 			end
 		end
