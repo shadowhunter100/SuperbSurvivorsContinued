@@ -36,6 +36,9 @@ function FleeTask:update()
 	self.parent:setRunning(true)
 
 	if (not self:isValid()) then return false end
-	self.parent:setSneaking(false)
-	self.parent:walkTo(GetFleeSquare(self.parent.player, self.parent.LastEnemeySeen, 7))
+
+	if (self.parent.player and self.parent.LastEnemeySeen) then
+		self.parent:setSneaking(false);
+		self.parent:walkTo(GetFleeSquare(self.parent.player, self.parent.LastEnemeySeen, 7))
+	end
 end

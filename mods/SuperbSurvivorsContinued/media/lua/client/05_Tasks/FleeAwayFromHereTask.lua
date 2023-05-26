@@ -42,9 +42,11 @@ end
 
 function FleeFromHereTask:update()
 	if (not self:isValid()) then return false end
-	self.parent:setSneaking(false)
-	self.parent:setRunning(true)
+	self.parent:setSneaking(false);
+	self.parent:setRunning(true);
 
-	self.parent:walkTo(GetFleeSquare(self.parent.player, self.fleeFromHere, 7))
-	self.parent:NPC_EnforceWalkNearMainPlayer()
+	if (self.parent.player and self.fleeFromHere) then
+		self.parent:walkTo(GetFleeSquare(self.parent.player, self.fleeFromHere, 7))
+		self.parent:NPC_EnforceWalkNearMainPlayer()
+	end
 end
