@@ -120,6 +120,7 @@ function SuperSurvivorsRandomSpawn()
     local isLocalFunctionLoggingEnabled = false;
     CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsRandomSpawn() called");
     local mySS = SSM:Get(0);
+    if not mySS then return end -- inhibit spawn while the main player is dead.
     local hisGroup = mySS:getGroup();
 
     if (getSpecificPlayer(0) == nil or hisGroup == nil) then
