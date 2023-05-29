@@ -144,7 +144,8 @@
         "ISBaseTimedAction",
         "ISHealthPanel",
         "ISInventoryPage",
-        "ISGrabItemAction"
+        "ISGrabItemAction",
+        "ISMedicalCheckAction"
     ],
     "Lua.diagnostics.disable": [
         "missing-return"

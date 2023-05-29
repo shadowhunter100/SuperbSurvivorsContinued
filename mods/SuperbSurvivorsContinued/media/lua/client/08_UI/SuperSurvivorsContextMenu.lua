@@ -6,6 +6,71 @@ require "04_Group.SuperSurvivorManager";
 
 local isLocalLoggingEnabled = false;
 
+--- Cows: By Request, SwapWeaponsSurvivor() will be restored when/if it is fixed...
+---@param test any
+---@param SS any
+---@param Type any
+function SwapWeaponsSurvivor(test, SS, Type)
+	local player = SS:Get(); -- Cows: I'm guessing this is actually the current player character...
+	local PP = getSpecificPlayer(0):getPrimaryHandItem();
+	local PS = getSpecificPlayer(0):getSecondaryHandItem();
+
+	local toPlayer; -- Cows: And this is supposed to be the NPC...
+
+	if (Type == "Gun") then
+		toPlayer = SS.LastGunUsed;
+		SS:setGunWep(PP);
+	else
+		toPlayer = SS.LastMeleUsed;
+		SS:setMeleWep(PP);
+	end
+
+	local PNW; -- Cows: Dunno what PNW is and there is no explanation.
+	if (toPlayer) then
+		PNW = getSpecificPlayer(0):getInventory():AddItem(toPlayer);
+	end
+	getSpecificPlayer(0):setPrimaryHandItem(PNW);
+	if (PNW) and (PNW:isTwoHandWeapon()) then
+		getSpecificPlayer(0):setSecondaryHandItem(PNW);
+	end
+	if (toPlayer) then
+		player:getInventory():Remove(toPlayer)
+		if (SS:getBag():contains(toPlayer)) then
+			SS:getBag():Remove(toPlayer);
+		end
+	end
+
+	if (PP == PS) then
+		getSpecificPlayer(0):setSecondaryHandItem(nil);
+	end
+
+	local SNW = player:getInventory():AddItem(PP); -- Cows: Dunno what SNW is and there is no explanation.
+
+	player:setPrimaryHandItem(SNW)
+	if (SNW:isTwoHandWeapon()) then
+		player:setSecondaryHandItem(SNW);
+	end
+
+	if (player:getSecondaryHandItem() == toPlayer) then
+		player:setSecondaryHandItem(nil);
+		player:removeFromHands(nil);
+	end
+	getSpecificPlayer(0):getInventory():Remove(PP);
+
+	if SNW and SNW:getBodyLocation() ~= "" then
+		player:removeFromHands(nil);
+		player:setWornItem(item:getBodyLocation(), SNW);
+	end
+	triggerEvent("OnClothingUpdated", player)
+	player:initSpritePartsEmpty();
+
+	if PNW and PNW:getBodyLocation() ~= "" then
+		getSpecificPlayer(0):removeFromHands(nil)
+		getSpecificPlayer(0):setWornItem(item:getBodyLocation(), PNW);
+	end
+	triggerEvent("OnClothingUpdated", getSpecificPlayer(0));
+	getSpecificPlayer(0):initSpritePartsEmpty();
+end
 
 function MedicalCheckSurvivor(test, player)
 	if luautils.walkAdj(getSpecificPlayer(0), player:getCurrentSquare()) then
@@ -250,7 +315,36 @@ local function survivorMenu(context, o)
 					end
 					i = i + 1;
 				end
-				submenu:addSubMenu(orderOption, subsubmenu)
+				submenu:addSubMenu(orderOption, subsubmenu);
+
+
+				if (getSpecificPlayer(0):getPrimaryHandItem() ~= nil) and (instanceof(getSpecificPlayer(0):getPrimaryHandItem(), "HandWeapon")) then
+					local OfferWeapon = getSpecificPlayer(0):getPrimaryHandItem()
+					local Type = "Gun"
+					local Label = ""
+
+					if (not OfferWeapon:isAimedFirearm()) then
+						Type = "Mele"
+					end
+					local swapWeaponsOption, tooltipText;
+
+					if (Type == "Gun") then
+						-- Cows: this is likely where the issue arose... if the npc had no weapon to begin with, they can't "swap" the gun.
+						if SS.LastGunUsed == nil then
+							Label = Get_SS_ContextMenuText("GiveGun")
+						else
+							Label = Get_SS_ContextMenuText("SwapGuns")
+						end
+						swapWeaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Gun");
+					else
+						if SS.LastMeleUsed == nil then
+							Label = Get_SS_ContextMenuText("GiveWeapon")
+						else
+							Label = Get_SS_ContextMenuText("SwapWeapons")
+						end
+						swapWeaponsOption = submenu:addOption(Label, nil, SwapWeaponsSurvivor, SS, "Mele");
+					end
+				end
 
 				if (o:getPrimaryHandItem() ~= SS.LastMeleUsed) and (SS.LastMeleUsed ~= nil) then
 					local ForceMeleOption = submenu:addOption(Get_SS_ContextMenuText("UseMele"), nil, ForceWeaponType, SS,
