@@ -53,15 +53,17 @@ AreaColors = {
 -- Utility
 --****************************************************
 function UIUtil_GetGroup()
-    local group_id = SSM:Get(0):getGroupID()
+    local mySS = SSM:Get(0);
+    if not mySS then return nil end -- inhibit group management while the main player is dead.
+    local group_id = mySS:getGroupID()
     local group = SSGM:GetGroupById(group_id)
     if group == nil then
         group = SSGM:newGroup()
-        group:addMember(SSM:Get(0), Get_SS_ContextMenuText("Job_Leader"))
+        group:addMember(mySS, Get_SS_ContextMenuText("Job_Leader"))
     end
     if group then
-        if not group:isMember(SSM:Get(0)) then
-            group:addMember(SSM:Get(0), Get_SS_ContextMenuText("Job_Leader"))
+        if not group:isMember(mySS) then
+            group:addMember(mySS, Get_SS_ContextMenuText("Job_Leader"))
         elseif not group:hasLeader() then
             group:setLeader(0)
         end
