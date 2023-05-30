@@ -38,6 +38,7 @@ function PanelGroup:dupdate()
     local dy = 0
     local switch = 0
     local group = UIUtil_GetGroup()
+    if not group then return end--clear panel on player death
     local group_members = group:getMembers()
     for i = 1, #group_members do
         local name, role = UIUtil_GetMemberInfo(i)
@@ -126,6 +127,7 @@ end
 
 function is_area_set(area_name)
     local group = UIUtil_GetGroup()
+    if not group then return false end--no area set on player dead
     local sum = 0
     if area_name == "Bounds" then
         for _, j in ipairs(group.Bounds) do
@@ -199,6 +201,7 @@ function PanelBase:dupdate()
     local switch = 0
     local group_id = SSM:Get(0):getGroupID()
     local group = UIUtil_GetGroup()
+    if not group then return end--clear panel on player death
     -- bounds area
     local base_set = (is_area_set("Bounds")) and "set" or "not set"
     local panel_entry_base = PanelBaseEntry:new(0, dy, window_width, 30, "Bounds", base_set,
@@ -259,6 +262,7 @@ function PanelCompanions:dupdate()
     local dy = 0
     local switch = 0
     local group = UIUtil_GetGroup()
+    if not group then return end--clear panel on player death
     local group_members = group:getMembers()
     local companion_count = 0
     for i = 1, #group_members do
