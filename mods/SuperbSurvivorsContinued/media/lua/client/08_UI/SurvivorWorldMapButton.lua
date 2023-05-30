@@ -57,7 +57,9 @@ local worldmap_render = ISWorldMap.render
 ISWorldMap.render = function(self)
     worldmap_render(self)
     if flag_show then
-        local group_members = UIUtil_GetGroup():getMembers()
+        local group = UIUtil_GetGroup()
+        if not group then return end--no more member drawing on map while player dead
+        local group_members = group:getMembers()
         for i = 2, #group_members do
             local member = group_members[i]
             local x = self.mapAPI:worldToUIX(member.player:getX(), member.player:getY()) - 3
