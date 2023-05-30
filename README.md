@@ -10,7 +10,7 @@ Original GitHub repo:
 * Permission to work on and update the mod by Ryuu: https://github.com/DartVonRyuu/SuperiorSurvivors_Revisited/discussions/52#discussioncomment-5738269
 * Permission to distribute and update as a separate workshop item from Nolan: ![image](https://github.com/shadowhunter100/SuperbSurvivorsContinued/assets/131904770/fa6e471b-a012-4deb-8f1a-74f69d649987)
 
-Since there has no updates for months and I felt this was too much to be abandoned to rot, I have decide to do what I can to make NPCs viable in PZ.
+Since there were no updates for months and I felt this was too much to be abandoned to rot, I have decide to do what I can to make NPCs viable in PZ.
 
 * *At least until whenever the official NPCs are added to the game -OR- I feel tired of updating this thing.*
 
