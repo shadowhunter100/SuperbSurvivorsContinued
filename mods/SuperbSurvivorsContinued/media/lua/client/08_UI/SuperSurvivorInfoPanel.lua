@@ -159,6 +159,10 @@ end
 
 function ShowSurvivorInfo(member_index)
     local group = UIUtil_GetGroup()
+    if not group then
+        panel_survivor_info:setVisible(false)
+        return
+    end
     local group_members = group:getMembers()
     local group_member = group_members[member_index]
     local text_info = getText("ContextMenu_SS_SurvivorInfoName_Before") ..
