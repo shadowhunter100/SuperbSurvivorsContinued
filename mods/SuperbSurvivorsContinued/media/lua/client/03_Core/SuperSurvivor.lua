@@ -1406,6 +1406,16 @@ function SuperSurvivor:RealCanSee(character)
 	return (self.player:CanSee(character) and (self.player:getDotWithForwardDirection(character:getX(), character:getY()) + visioncone) >= 1.0)
 end
 
+--This method allows other mods to adapt to Superb Survivors continued
+--I let it as a method on purpose for other mods to use self if they dare (better not using it -or carefully- though for compatibility over time)
+--target is an IsoMovingObject
+--survivor is an IsoPlayer
+function SuperSurvivor:isAThreat(target, survivor)
+    return (target ~= nil) and (survivor ~= nil) and (target ~= survivor)
+        and (instanceof(target, "IsoZombie") or instanceof(target, "IsoPlayer"))
+        and (target:isDead() == false)
+end
+
 -- WIP - Cows: DoVision() likely has issues with threat assessment... hence the npcs keep running around like idiots when indoors.
 function SuperSurvivor:DoVision()
 	local isFunctionLoggingEnabled = false;
@@ -1436,11 +1446,8 @@ function SuperSurvivor:DoVision()
 			local character = spottedList:get(i);
 			CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "DoVision: " .. tostring(character));
 
-			if (character ~= nil) and (character ~= self.player)
-				and (instanceof(character, "IsoZombie")
-					or instanceof(character, "IsoPlayer"))
+			if self:isAThreat(character, self.player)
 			then
-				if (character:isDead() == false) then
 					CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
 					tempdistance = tonumber(GetDistanceBetween(character, self.player))
 
@@ -1467,7 +1474,6 @@ function SuperSurvivor:DoVision()
 						closestSurvivorSoFar = tempdistance
 						self.LastSurvivorSeen = character
 					end
-				end
 			end
 		end
 
