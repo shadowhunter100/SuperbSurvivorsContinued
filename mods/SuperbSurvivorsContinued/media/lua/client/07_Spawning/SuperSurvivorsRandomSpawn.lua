@@ -13,13 +13,13 @@ local function spawnNpcs(mySS, spawnSquare)
     if (spawnSquare ~= nil) then
         local isGroupHostile = false;
         local npcSurvivorGroup;
-        local actualLimit = Limit_Npc_Groups + 1; -- Cows: +1 because the player group was is part of the GroupCount total...
+        local actualGroupsLimit = Limit_Npc_Groups + 1; -- Cows: +1 because the player group was is part of the GroupCount total...
         local GroupSize = ZombRand(1, Max_Group_Size);
         -- Cows: Spawn a new group if possible.
-        if (SSGM.GroupCount < actualLimit) then
+        if (SSGM.GroupCount < actualGroupsLimit) then
             npcSurvivorGroup = SSGM:newGroup();
         else
-            local rng = ZombRand(1, actualLimit);
+            local rng = ZombRand(1, actualGroupsLimit);
             npcSurvivorGroup = SSGM:GetGroupById(rng);
         end
 
@@ -54,61 +54,56 @@ local function spawnNpcs(mySS, spawnSquare)
 end
 
 local function spawnRaiders(mySS, spawnSquare)
-    local hours = math.floor(getGameTime():getWorldAgeHours());
-    local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
+    -- WIP - Cows: Need to rework the spawning functions and logic...
+    -- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
+    if (spawnSquare ~= nil) then
+        local raiderGroup;
+        local actualGroupsLimit = Limit_Npc_Groups + 1;
+        -- Cows: Spawn a new group if possible.
+        if (SSGM.GroupCount < actualGroupsLimit) then
+            raiderGroup = SSGM:newGroup();
+        else
+            local rng = ZombRand(1, actualGroupsLimit);
+            raiderGroup = SSGM:GetGroupById(rng);
+        end
 
-    if (RaidersStartTimePassed) then
-        -- WIP - Cows: Need to rework the spawning functions and logic...
-        -- TODO: Capped the number of groups, now to cap the number of survivors and clean up dead ones.
-        if (spawnSquare ~= nil) then
-            local raiderGroup;
+        local GroupSize = ZombRand(1, Max_Group_Size);
+        local nearestRaiderDistance = 30;
 
-            -- Cows: Spawn a new group if possible.
-            if (SSGM.GroupCount < Limit_Npc_Groups + 1) then
-                raiderGroup = SSGM:newGroup();
-            else
-                local rng = ZombRand(1, Limit_Npc_Groups);
-                raiderGroup = SSGM:GetGroupById(rng);
-            end
+        for i = 1, GroupSize do
+            local raider = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
+            if (raider) then
+                local name = raider:getName();
 
-            local GroupSize = ZombRand(1, Max_Group_Size);
-            local nearestRaiderDistance = 30;
+                if (i == 1) then
+                    raiderGroup:addMember(raider, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
+                else
+                    -- raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
+                    raiderGroup:addMember(raider, "Follower");
+                    raider:NPCTask_DoWander();
+                end
+                raider:setHostile(true);
+                raider.player:getModData().isRobber = true;
+                raider:setName("Raider " .. name);
+                raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()));
 
-            for i = 1, GroupSize do
-                local raider = SuperSurvivorSpawnNpcAtSquare(spawnSquare);
-                if (raider) then
-                    local name = raider:getName();
+                Equip_SS_RandomNpc(raider, true);
 
-                    if (i == 1) then
-                        raiderGroup:addMember(raider, "Leader"); -- Cows: funny enough the leader still isn't set to the group with this role assignment...
-                    else
-                        -- raiderGroup:addMember(raider, "Guard"); -- Cows: This... needs to be reworked because npcs would spawn in and do NOTHING.
-                        raiderGroup:addMember(raider, "Follower");
-                        raider:NPCTask_DoWander();
-                    end
-                    raider:setHostile(true);
-                    raider.player:getModData().isRobber = true;
-                    raider:setName("Raider " .. name);
-                    raider:getTaskManager():AddToTop(PursueTask:new(raider, mySS:Get()));
+                local number = ZombRand(1, 3);
+                SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number));
+                local currentRaiderDistanceFromPlayer = GetDistanceBetween(raider, mySS);
 
-                    Equip_SS_RandomNpc(raider, true);
-
-                    local number = ZombRand(1, 3);
-                    SetRandomSurvivorSuit(raider, "Rare", "Bandit" .. tostring(number));
-                    local currentRaiderDistanceFromPlayer = GetDistanceBetween(raider, mySS);
-
-                    if (nearestRaiderDistance > currentRaiderDistanceFromPlayer) then
-                        nearestRaiderDistance = currentRaiderDistanceFromPlayer;
-                    end
+                if (nearestRaiderDistance > currentRaiderDistanceFromPlayer) then
+                    nearestRaiderDistance = currentRaiderDistanceFromPlayer;
                 end
             end
+        end
 
-            if (getSpecificPlayer(0):isAsleep() and nearestRaiderDistance < 15) then
-                getSpecificPlayer(0):Say(Get_SS_Dialogue("IGotABadFeeling"));
-                getSpecificPlayer(0):forceAwake();
-            else
-                getSpecificPlayer(0):Say(Get_SS_Dialogue("WhatWasThatSound"));
-            end
+        if (getSpecificPlayer(0):isAsleep() and nearestRaiderDistance < 15) then
+            getSpecificPlayer(0):Say(Get_SS_Dialogue("IGotABadFeeling"));
+            getSpecificPlayer(0):forceAwake();
+        else
+            getSpecificPlayer(0):Say(Get_SS_Dialogue("WhatWasThatSound"));
         end
     end
 end
@@ -118,7 +113,7 @@ end
 ---@return any
 function SuperSurvivorsRandomSpawn()
     local isLocalFunctionLoggingEnabled = false;
-    CreateLogLine("SuperSurvivorsMod", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsRandomSpawn() called");
+    CreateLogLine("SuperSurvivorsRandomSpawn", isLocalFunctionLoggingEnabled, "function: SuperSurvivorsRandomSpawn() called");
     local mySS = SSM:Get(0);
     if not mySS then return end -- inhibit spawn while the main player is dead.
     local hisGroup = mySS:getGroup();
@@ -133,14 +128,18 @@ function SuperSurvivorsRandomSpawn()
     local activeNpcs = Get_SS_Alive_Count();
     local spawnChanceVal = NpcSpawnChance;
 
+    local hours = math.floor(getGameTime():getWorldAgeHours());
+    local RaidersStartTimePassed = (hours >= RaidersStartAfterHours);
     -- Cows: Spawn up to this many npc groups.
     for i = 1, NpcGroupsSpawnsSize do
         -- Cows: Spawn if spawnChanceVal is greater than the random roll between 0 and 100, and activeNPCs are less than the limit.
         local isSpawning = (spawnChanceVal > ZombRand(0, 100) and activeNpcs < Limit_Npcs_Spawn);
-        local isSpawningRaiders = (RaidersSpawnChance > ZombRand(0, 100));
+        local rngRaiderSpawnCheck = (RaidersSpawnChance > ZombRand(0, 100));
+        local isSpawningRaiders = (rngRaiderSpawnCheck and RaidersStartTimePassed);
 
         if (isSpawning) then
             if (isSpawningRaiders) then
+                CreateLogLine("SuperSurvivorsRandomSpawn", isLocalFunctionLoggingEnabled, "Spawning Raiders");
                 spawnRaiders(mySS, spawnSquare);
             else
                 spawnNpcs(mySS, spawnSquare);
