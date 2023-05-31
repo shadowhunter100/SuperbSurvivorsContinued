@@ -13,7 +13,7 @@ option SuperbSurvivorsContinued.Max_Group_Size
 option SuperbSurvivorsContinued.Limit_Npc_Groups
 {
 	type = integer,
-	min = 4,
+	min = 1,
 	max = 20,
 	default = 8,
 
