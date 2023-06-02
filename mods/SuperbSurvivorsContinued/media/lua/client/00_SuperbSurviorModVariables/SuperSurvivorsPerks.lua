@@ -17,7 +17,6 @@ SurvivorPerks = {
 	"Lightfoot",
 	"Nimble",
 	"PlantScavenging",
-	"Reloading",
 	"Sneak",
 	"Strength",
 	"Survivalist"
