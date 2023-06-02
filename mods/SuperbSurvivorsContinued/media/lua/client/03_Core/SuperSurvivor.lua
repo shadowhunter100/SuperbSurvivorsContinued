@@ -1442,9 +1442,9 @@ function SuperSurvivor:DoVision()
 	self.EnemiesOnMe = 0;
 	self.LastEnemeySeen = nil;
 	self.LastSurvivorSeen = nil;
-	-- Cows: perhaps we can use "isInSameBuildingWithEnemyAlt" to check and reduce the dangerRange while indoors...
-	if (self:isInSameBuildingWithEnemyAlt() == true) then
-		dangerRange = 3; -- Cows: 3 should be good... 2 would be too close for comfort and 1 is pretty much on top of the character.
+
+	if self.AttackRange > dangerRange then
+		dangerRange = self.AttackRange;
 	end
 
 	local closestNumber = nil;
@@ -1760,7 +1760,7 @@ function SuperSurvivor:NPC_FleeWhileReadyingGun()
 	if (self:hasGun() == true) then
 		if (self:getGroupRole() == "Random Solo") then -- Prevents any job classes from doing the following
 			if (self:ReadyGun(Weapon_HandGun)) and (NPCsDangerSeen > 0) and (Enemy_Is_a_Zombie) then
-				self:NPCTask_Clear();
+				self:getTaskManager():clear();
 				self:NPCTask_DoFlee();
 				self:NPC_EnforceWalkNearMainPlayer();
 			end
@@ -1768,7 +1768,7 @@ function SuperSurvivor:NPC_FleeWhileReadyingGun()
 	end
 	-- Cows: Updated the distance code... so companions should NEVER leave the player's side.
 	if (self:getGroupRole() == "Companion") and (Distance_MainPlayer > GFollowDistance) then
-		self:NPCTask_Clear(); -- Cows: Always clear the tasks...
+		self:getTaskManager():clear(); -- Cows: Always clear the tasks...
 		self:getTaskManager():AddToTop(FollowTask:new(self, getSpecificPlayer(0)));
 	end
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_FleeWhileReadyingGun() END ---");
@@ -2041,26 +2041,15 @@ function SuperSurvivor:Task_IsPursue_SC()
 				and (self:isWalkingPermitted())
 			then
 				return true
-			else
-				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
-				return false
 			end
-		else
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
-			return false
 		end
-	else
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
-		return false
 	end
 
-	-- return true
+	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:Task_IsPursue_SC() end --- ");
+	return false;
 end
 
-function SuperSurvivor:NPCTask_Clear()
-	self:getTaskManager():clear()
-end
-
+--- Cows: This is probably useless... as the AI-Manager attempts to handle everything...
 function SuperSurvivor:NPCTask_DoAttack()
 	if (self:getTaskManager():getCurrentTask() ~= "Attack") then
 		self:getTaskManager():AddToTop(AttackTask:new(self))
@@ -3084,6 +3073,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 			end
 		end
 		ammotypes = GetAmmoBullets(weapon);
+---@diagnostic disable-next-line: need-check-nil
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
 		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "no ammo types for weapon:" .. tostring(weapon:getType()));
@@ -3713,9 +3703,10 @@ end
 
 function SuperSurvivor:DrinkFromObject(waterObject)
 	local playerObj = self.player
-	self:Speak(Get_SS_UIActionText("Drinking"))
+	self:Speak(Get_SS_UIActionText("Drinking"));
+	--
 	if not waterObject:getSquare() or not luautils.walkAdj(playerObj, waterObject:getSquare()) then
-		return
+		return;
 	end
 	local waterAvailable = waterObject:getWaterAmount()
 	local waterNeeded = math.min(math.ceil(playerObj:getStats():getThirst() * 10), 10)
