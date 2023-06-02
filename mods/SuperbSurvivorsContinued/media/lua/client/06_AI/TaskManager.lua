@@ -94,7 +94,6 @@ function TaskManager:moveDown()
 	end
 
 	self.TaskUpdateCount = 0
-	--self.TaskUpdateLimit = 0
 
 	return false
 end
@@ -155,7 +154,8 @@ function TaskManager:update()
 		self:moveDown();
 
 		CreateLogLine("TaskManager", isLocalLoggingEnabled,
-			self.parent:getName() .. " stopped their task due to setTaskUpdateLimit");
+			self.parent:getName() .. " stopped their task due to setTaskUpdateLimit"
+		);
 	elseif (self.Tasks[0] ~= nil)
 		and (self.Tasks[0] ~= false)
 		and (self.Tasks[0]:isComplete() == false) then

@@ -220,15 +220,6 @@ function AIManager(TaskMangerIn)
 	-- Companion follower related code | END   --
 	-- --------------------------------------- --
 
-
-
-	-- --------------------------------------------------------------------- --
-	-- ------------------- Non Companion Shared ---------------------------- --
-	-- 	if(ASuperSurvivor:Get():getModData().isHostile) and (ASuperSurvivor:isSpeaking() == false) then ASuperSurvivor:Speak(getSpeech("GonnaGetYou")) end
-	--	Removed. You want it? Add it back in the line above pursuetask		 --
-	-- --------------------------------------------------------------------- --
-
-	-- 'If enemy is in a fair range and Pursue_SC checks out, and the NPC's enemy is in Pursue Score's range'
 	-- --------------------------------------- --
 	-- Pursue Task 							   --
 	-- --------------------------------------- --
@@ -247,9 +238,10 @@ function AIManager(TaskMangerIn)
 	-- 		Surrender Task	
 	-- ----------------------------- --
 	if (getSpecificPlayer(0) ~= nil) then
-		local facingResult = getSpecificPlayer(0):getDotWithForwardDirection(ASuperSurvivor.player:getX(),
-			ASuperSurvivor.player:getY())
-		--ASuperSurvivor:Speak( tostring(facingResult) )
+		local facingResult = getSpecificPlayer(0):getDotWithForwardDirection(
+			ASuperSurvivor.player:getX(),
+			ASuperSurvivor.player:getY()
+		);
 		if ((TaskMangerIn:getCurrentTask() ~= "Surender")
 				and (TaskMangerIn:getCurrentTask() ~= "Flee")
 				and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
