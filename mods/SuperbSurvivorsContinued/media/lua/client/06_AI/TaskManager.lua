@@ -134,9 +134,12 @@ end
 
 function TaskManager:getTaskFromName(thisName)
 	for i = 1, self.TaskCount - 1 do
-		if (self.Tasks[i] ~= nil) and (self.Tasks[i].Name == thisName) then return self.Tasks[i] end
+		if (self.Tasks[i] ~= nil) and (self.Tasks[i].Name == thisName) then
+			return self.Tasks[i];
+		end
 	end
-	return nil
+
+	return nil;
 end
 
 function TaskManager:update()
