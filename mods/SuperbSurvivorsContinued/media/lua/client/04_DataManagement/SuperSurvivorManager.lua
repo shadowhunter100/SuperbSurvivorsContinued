@@ -89,9 +89,7 @@ function SuperSurvivorManager:LoadSurvivor(ID, square)
 			end
 		end
 
-		if (self.SuperSurvivors[ID]:getAIMode() == "FollowRoute") then
-			self.SuperSurvivors[ID]:getTaskManager():AddToTop(FollowRouteTask:new(self.SuperSurvivors[ID], 0))
-		elseif (self.SuperSurvivors[ID]:getAIMode() == "Follow") then
+		if (self.SuperSurvivors[ID]:getAIMode() == "Follow") then
 			self.SuperSurvivors[ID]:getTaskManager():AddToTop(FollowTask:new(self.SuperSurvivors[ID], nil))
 		elseif (self.SuperSurvivors[ID]:getAIMode() == "Guard") then
 			if self.SuperSurvivors[ID]:getGroup() ~= nil then
@@ -154,19 +152,16 @@ function SuperSurvivorManager:OnDeath(ID)
 end
 
 function SuperSurvivorManager:UpdateSurvivorsRoutine()
-
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil and self.MainPlayer ~= i) then
 			if (self.SuperSurvivors[i]:updateTime())
 				and (not self.SuperSurvivors[i].player:isAsleep())
 				and (self.SuperSurvivors[i]:isInCell())
 			then
-				self.SuperSurvivors[i]:update();
+				self.SuperSurvivors[i]:updateSurvivorStatus();
 			end
 			-- Cows: Have the npcs wander if there are no tasks, otherwise they are stuck in place...
-			if (self.SuperSurvivors[i]:getCurrentTask() == "None"
-					and self.SuperSurvivors[i]:getGroupRole() ~= "Companion"
-				) then
+			if (self.SuperSurvivors[i]:getCurrentTask() == "None" and self.SuperSurvivors[i]:getGroupRole() ~= "Companion") then
 				self.SuperSurvivors[i]:NPCTask_DoWander();
 			end
 		end
@@ -274,7 +269,7 @@ function SuperSurvivorManager:GetClosestNonParty()
 	CreateLogLine("SuperSurvivorManager", isLocalLoggingEnabled, "SuperSurvivorManager:GetClosestNonParty() called");
 	local closestSoFar = 20;
 	local closestID = 0;
-	
+
 	for i = 1, self.SurvivorCount + 1 do
 		if (self.SuperSurvivors[i] ~= nil) and (self.SuperSurvivors[i]:isInCell()) then
 			local distance = GetDistanceBetween(self.SuperSurvivors[i]:Get(), getSpecificPlayer(0));
