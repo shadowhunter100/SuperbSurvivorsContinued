@@ -141,7 +141,6 @@ function AIManager(TaskMangerIn)
 			--and ( (ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)))  -- this make them not move to engage zombie even a few tiles away when in follow mode? is that intentional
 			and (ASuperSurvivor:getDangerSeenCount() > 0)                                                           -- cant attack what you don't see. must have seen an enemy in danger range to attack
 			and ((GetDistanceBetween(ASuperSurvivor.LastEnemeySeen, ImFollowingThisChar) < (GFollowDistance + AttackRange))) -- move to engage an enemie only if they within follow range (when following)
-		--	and (ASuperSurvivor:inFrontOfLockedDoor() == false)
 		then
 			if (ASuperSurvivor.player ~= nil)
 				and (ASuperSurvivor.player:getModData().isRobber)
@@ -264,7 +263,6 @@ function AIManager(TaskMangerIn)
 	-- ----------------------------- --
 	-- Attack / Threaten Target Task --
 	-- ----------------------------- --
-	--	if ((TaskMangerIn:getCurrentTask() ~= "Attack") and (TaskMangerIn:getCurrentTask() ~= "Threaten") and not ((TaskMangerIn:getCurrentTask() == "Surender") and EnemyIsSurvivor) and (TaskMangerIn:getCurrentTask() ~= "Doctor") and (ASuperSurvivor:isInSameRoom(ASuperSurvivor.LastEnemeySeen)) and (TaskMangerIn:getCurrentTask() ~= "Flee")) and ((ASuperSurvivor:hasWeapon() and ((ASuperSurvivor:getDangerSeenCount() >= 1) or (ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)))) or (ASuperSurvivor:hasWeapon() == false and (ASuperSurvivor:getDangerSeenCount() == 1) and (not EnemyIsSurvivor))) and (IHaveInjury == false) and (ASuperSurvivor:inFrontOfLockedDoor() == false)  then
 
 	if not (AiNPC_Job_Is(NPC, "Companion")) then
 		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
@@ -280,7 +278,6 @@ function AIManager(TaskMangerIn)
 			and (ASuperSurvivor:getDangerSeenCount() > 0)                                                                                               -- cant attack what you don't see. must have seen an enemy in danger range to attack
 			and (NPC:getCurrentTask() ~= "Follow" or (GetDistanceBetween(ASuperSurvivor.LastEnemeySeen, ImFollowingThisChar) < (GFollowDistance + AttackRange))) -- move to engage an enemie only if they within follow range (when following)
 
-		--	and (ASuperSurvivor:inFrontOfLockedDoor() == false)
 		then
 			if (ASuperSurvivor.player ~= nil)
 				and (ASuperSurvivor.player:getModData().isRobber)
