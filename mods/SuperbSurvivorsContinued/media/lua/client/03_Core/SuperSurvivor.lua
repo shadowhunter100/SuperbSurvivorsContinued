@@ -1781,10 +1781,8 @@ end
 -- This needed 'not a companion' check to keep the NPC in question not to run away when they're following main player.
 function SuperSurvivor:NPC_FleeWhileReadyingGun()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_FleeWhileReadyingGun() called");
-	-- local Distance_AnyEnemy = GetDistanceBetween(self.LastEnemeySeen, self.player) -- WIP - Commented out, unused variable
 	local Distance_MainPlayer = GetDistanceBetween(getSpecificPlayer(0), self.player)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
-	-- local Enemy_Is_a_Human = (instanceof(self.LastEnemeySeen, "IsoPlayer")) -- WIP - Commented out, unused variable
 	local Enemy_Is_a_Zombie = (instanceof(self.LastEnemeySeen, "IsoZombie"))
 	local Weapon_HandGun = self.player:getPrimaryHandItem()
 	local NPCsDangerSeen = self:getDangerSeenCount()
@@ -1796,7 +1794,6 @@ function SuperSurvivor:NPC_FleeWhileReadyingGun()
 			if (self:ReadyGun(Weapon_HandGun)) and (NPCsDangerSeen > 0) and (Enemy_Is_a_Zombie) then
 				self:NPCTask_Clear()
 				self:NPCTask_DoFlee()
-				--	self:NPCTask_DoFleeFromHere()
 				self:NPC_EnforceWalkNearMainPlayer()
 			end
 		end
@@ -1817,7 +1814,6 @@ function SuperSurvivor:NPC_TaskCheck_EnterLeaveBuilding()
 		(self:getTaskManager():getCurrentTask() ~= "Enter New Building") and -- AttemptEntryIntoBuildingTask
 		(
 			(self:getTaskManager():getCurrentTask() == "Find New Building") or -- FindUnlootedBuildingTask
-			--	(self:getTaskManager():getCurrentTask() == "Flee From Spot") or
 			(self:getTaskManager():getCurrentTask() == "Wander In Area") or
 			(self:getTaskManager():getCurrentTask() == "Wander In Base") or
 			(self:getTaskManager():getCurrentTask() == "Loot Category") or
@@ -1825,7 +1821,6 @@ function SuperSurvivor:NPC_TaskCheck_EnterLeaveBuilding()
 			(self:getTaskManager():getCurrentTask() == "Threaten") or
 			(self:getTaskManager():getCurrentTask() == "Attack") or
 			(self:getTaskManager():getCurrentTask() == "Pursue") or
-			--	(self:getTaskManager():getCurrentTask() == "Wander") or
 			(self:getTaskManager():getCurrentTask() == "Flee")
 		)
 	then
@@ -2071,15 +2066,12 @@ function SuperSurvivor:Task_IsPursue_SC()
 
 		if (self:NPC_CheckPursueScore() > Distance_AnyEnemy) then -- Task priority checker
 			if (self:hasWeapon())
-				--	and (self:Task_IsAttack() and (not zNPC_AttackRange)) 		
 				and (self:Task_IsNotThreaten())
 				and (zNPC_AttackRange)
 				and (self:Task_IsNotPursue())
 				and (self:Task_IsNotSurender())
 				and (self:Task_IsNotFlee())
-				--	and (self:Task_IsNotAttemptEntryIntoBuilding() )
 				and (self:isWalkingPermitted())
-			--	and ((self:isEnemy(self.LastEnemeySeen)) or (self:isEnemy(self.LastSurvivorSeen)))
 			then
 				return true
 			else
@@ -2158,48 +2150,6 @@ function SuperSurvivor:NPCTask_DoAttemptEntryIntoBuilding()
 	end
 end
 
-function SuperSurvivor:Task_IsThreaten_Verify() -- You want this function to return 'true'
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
-	if (self.LastEnemeySeen ~= nil) then
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
-		local distance = GetDistanceBetween(self.player, self.LastEnemeySeen)
-
-		if (self:Task_IsThreaten() == true) and (distance > 1)
-			and ((self:NPC_TargetIsOutside()) and (self:NPC_IsOutside()))
-			or ((not self:NPC_TargetIsOutside()) and (not self:NPC_IsOutside()))
-		then
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
-			return true
-		else
-			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
-			return false
-		end
-	else
-		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:Task_IsPursue_SC() called");
-		return false -- If LastEnemySeen is nil
-	end
-end
-
-function SuperSurvivor:inFrontOfStairs()
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:inFrontOfStairs() called");
-	local cs = self.player:getCurrentSquare()
-
-	if cs:HasStairs() then return true end
-	local osquare = GetAdjSquare(cs, "N")
-	if cs and osquare and osquare:HasStairs() then return true end
-
-	osquare = GetAdjSquare(cs, "E")
-	if cs and osquare and osquare:HasStairs() then return true end
-
-	osquare = GetAdjSquare(cs, "S")
-	if cs and osquare and osquare:HasStairs() then return true end
-
-	osquare = GetAdjSquare(cs, "W")
-	if cs and osquare and osquare:HasStairs() then return true end
-
-	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "-- SuperSurvivor:inFrontOfStairs() End ---");
-	return false;
-end
 
 function SuperSurvivor:updateTime()
 	self:renderName();
