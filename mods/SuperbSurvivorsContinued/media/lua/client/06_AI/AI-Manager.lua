@@ -58,7 +58,7 @@ function AIManager(TaskMangerIn)
 	local ImFollowingThisChar = currentNPC:getFollowChar();
 	local distanceBetweenEnemyAndFollowTarget = GetDistanceBetween(currentNPC.LastEnemeySeen, ImFollowingThisChar);
 	local followAttackRange = GFollowDistance + AttackRange;
-	-- Cows: Why was this even used if it is not even known to work or not work?...
+	-- Cows: Why was this even used if it is not even known to work or not work?... Guess I'm testing it.
 	local Distance_AnyEnemy = GetDistanceBetween(currentNPC.LastEnemeySeen, currentNPC:Get()); -- idk if this works
 	--
 	if (HisGroup) then
@@ -76,21 +76,14 @@ function AIManager(TaskMangerIn)
 	-- --------------------------------------- --
 	-- Companion follower related code         --
 	-- --------------------------------------- --
-	if (currentNPC:getGroupRole() == "Companion") then
+
+	if (AiNPC_Job_Is(currentNPC, "Companion")) then
 		--
 		if (currentNPC:needToFollow()) then
 			currentNPC.LastEnemeySeen = nil;
 			TaskMangerIn:clear();
 			TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)));
 		end
-	end
-
-	if (AiNPC_Job_Is(currentNPC, "Companion")) then
-		-- ------------------------- --
-		-- Edit: I have trid so many other ways to do this. Any other way the companion just doesn't do anything.
-		-- So it's staying like this for now
-		-- Don't add 'and AiNPC_TaskIsNot(AiTmi,"First Aide")' because you want companions to still attack enemies while hurt
-		-- ------------------------- --
 
 		-- ------------ --
 		-- Pursue
@@ -111,9 +104,7 @@ function AIManager(TaskMangerIn)
 		-- Attack
 		-- ----------- --
 		-- ------------------------- --
-		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
-		if (
-				(TaskMangerIn:getCurrentTask() ~= "Attack")
+		if ((TaskMangerIn:getCurrentTask() ~= "Attack")
 				and (TaskMangerIn:getCurrentTask() ~= "Threaten")
 				and (TaskMangerIn:getCurrentTask() ~= "First Aide")
 				and (Task_Is_Not("Flee"))
@@ -184,8 +175,7 @@ function AIManager(TaskMangerIn)
 		-- Healing	   --
 		-- ----------- --
 		if (npcIsInjured and currentNPC:getDangerSeenCount() <= 0) then
-			if (TaskMangerIn:getCurrentTask() ~= "First Aide")
-			then
+			if (TaskMangerIn:getCurrentTask() ~= "First Aide") then
 				TaskMangerIn:AddToTop(FirstAideTask:new(currentNPC)) -- If general healing
 			end
 		end
@@ -282,7 +272,7 @@ function AIManager(TaskMangerIn)
 	end
 
 	-- ----------------------------- --
-	-- find safe place if injured and enemies near		this needs updating
+	-- find safe place if injured and enemies near this needs updating
 	-- ----------------------------- --
 	--	if (TaskMangerIn:getCurrentTask() ~= "Find Building") and (TaskMangerIn:getCurrentTask() ~= "Flee") and (npcIsInjured) and (currentNPC:getDangerSeenCount() > 0) then
 	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
@@ -321,7 +311,7 @@ function AIManager(TaskMangerIn)
 	end
 
 	-- ----------------------------- --
-	-- flee from too many zombies
+	-- flee from too many zombies - Cows: What is this garbage?
 	-- ----------------------------- --
 	if not (AiNPC_Job_Is(currentNPC, "Companion")) then -- To ABSOLUTELY prevent these two jobs from listening to this task.
 		if (TaskMangerIn:getCurrentTask() ~= "Flee")
@@ -380,7 +370,8 @@ function AIManager(TaskMangerIn)
 
 	if ((TaskMangerIn:getCurrentTask() ~= "Flee")
 			and (TaskMangerIn:getCurrentTask() ~= "Surender")
-			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor)))
+			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor))
+		)
 	then
 		if ((currentNPC.EnemiesOnMe > 0) and (currentNPC:usingGun() and ((currentNPC:needToReload()) or (currentNPC:needToReadyGun(npcWeapon))))) then
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking, but need to reload, Survivor is fleeing");
@@ -394,14 +385,16 @@ function AIManager(TaskMangerIn)
 			CreateLogLine("AI-Manager", isFleeCallLogged,
 				"Survivor is injured and enemy is attacking, Survivor is fleeing..."
 			);
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC))
+			TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
 			-- Cows: Really shouldn't start fleeing unless the threat is actually within a set range... let's try "Distance_AnyEnemy" compared against 3
 		elseif (currentNPC:getDangerSeenCount() > npcBravery and Distance_AnyEnemy < 3) then
 			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Dangers seen: " .. tostring(currentNPC:getDangerSeenCount()) .. " | npcBravery: " .. tostring(npcBravery)
+				"Dangers seen: " .. tostring(currentNPC:getDangerSeenCount()) ..
+				" | npcBravery: " .. tostring(npcBravery) ..
+				" | distance to nearest enemy: " .. tostring(Distance_AnyEnemy)
 			);
 			CreateLogLine("AI-Manager", isFleeCallLogged, "npcBravery checked failed, Survivor is fleeing...");
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC))
+			TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
 		end
 	end
 
@@ -476,15 +469,12 @@ function AIManager(TaskMangerIn)
 	-- ----------------------------- --
 	-- 			Listen to Task
 	-- ----------------------------- --
-	if ((currentNPC:Get():getModData().InitGreeting ~= nil)
-			or (currentNPC:getAIMode() == "Random Solo")
-		)
+	if ((currentNPC:Get():getModData().InitGreeting ~= nil) or (currentNPC:getAIMode() == "Random Solo"))
 		and (TaskMangerIn:getCurrentTask() ~= "Listen")
 		and (TaskMangerIn:getCurrentTask() ~= "Surender")
 		and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
 		and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
 		and (currentNPC.LastSurvivorSeen ~= nil)
-		--and (currentNPC.LastSurvivorSeen:isGhostMode() == false)
 		and (currentNPC:getSpokeTo(currentNPC.LastSurvivorSeen:getModData().ID) == false)
 		and (GetDistanceBetween(currentNPC.LastSurvivorSeen, currentNPC:Get()) < 8)
 		and (currentNPC:getDangerSeenCount() == 0) and (TaskMangerIn:getCurrentTask() ~= "First Aide")
@@ -494,7 +484,6 @@ function AIManager(TaskMangerIn)
 		currentNPC:SpokeTo(currentNPC.LastSurvivorSeen:getModData().ID)
 		TaskMangerIn:AddToTop(ListenTask:new(currentNPC, currentNPC.LastSurvivorSeen, true))
 	end
-
 
 	-- ----------------------------- --
 	-- 	Gun Readying / Reloading     --
@@ -518,15 +507,13 @@ function AIManager(TaskMangerIn)
 	-- 	Equip Weapon Task            --
 	-- ----------------------------- --
 	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (currentNPC:hasWeapon()) and (currentNPC:Get():getPrimaryHandItem() == nil) and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon") then
-			TaskMangerIn:AddToTop(EquipWeaponTask:new(currentNPC))
+		if (currentNPC:hasWeapon())
+			and (currentNPC:Get():getPrimaryHandItem() == nil)
+			and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon")
+		then
+			TaskMangerIn:AddToTop(EquipWeaponTask:new(currentNPC));
 		end
-	end
 
-	-- ----------------------------- --
-	-- 	Equip Weapon Task            --
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then -- removed and (currentNPC:getNeedAmmo() == false) condition as I dont remember what that is for
 		if (IsInAction == false)
 			and currentNPC:usingGun()
 			and (currentNPC:getDangerSeenCount() == 0)
@@ -534,10 +521,9 @@ function AIManager(TaskMangerIn)
 				or (currentNPC:needToReadyGun(npcWeapon)))
 			and (currentNPC:NPC_FleeWhileReadyingGun())
 		then
-			currentNPC:ReadyGun(npcWeapon)
+			currentNPC:ReadyGun(npcWeapon);
 		end
 	end
-
 	-- ---------------------------------------------------------- --
 	-- ------------------- Base Tasks---------------------------- --
 	-- ---------------------------------------------------------- --
@@ -549,7 +535,7 @@ function AIManager(TaskMangerIn)
 		-- -------
 		-- Guard
 		-- -------
-		if (currentNPC:getGroupRole() == "Guard") then
+		if (AiNPC_Job_Is(currentNPC, "Guard")) then
 			-- if getGroupArea 'getGroupArea = does this area exist'
 
 			if (Task_Is_Not("Attack")
@@ -588,7 +574,7 @@ function AIManager(TaskMangerIn)
 		end
 
 		if (currentNPC:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
-			if (not SurvivorCanFindWork) and (currentNPC:getGroupRole() == "Doctor") then
+			if (not SurvivorCanFindWork) and (AiNPC_Job_Is(currentNPC, "Doctor")) then
 				local randresult = ZombRand(10) + 1
 				if (randresult == 1) then
 					currentNPC:Speak(Get_SS_UIActionText("IGoRelax"))
@@ -607,7 +593,7 @@ function AIManager(TaskMangerIn)
 					TaskMangerIn:AddToTop(DoctorTask:new(currentNPC))
 					return TaskMangerIn
 				end
-			elseif (not SurvivorCanFindWork) and (currentNPC:getGroupRole() == "Farmer") then
+			elseif (not SurvivorCanFindWork) and (AiNPC_Job_Is(currentNPC, "Farmer")) then
 				if (SurvivorCanFindWork) and (RainManager.isRaining() == false) then
 					local randresult = ZombRand(10) + 1
 
@@ -626,12 +612,8 @@ function AIManager(TaskMangerIn)
 						end
 					end
 				end
-
-				-- ModderNote: From what I've observed, companion isn't used on anything else except to follow
-				-- So exploiting that knowledge, I made the companion more of a 'class job priority' set of jobs at the top of the code.
-				-- So if you are another modder that has the torch, that's looking to make Followers listen to you more, Follower = 'companion'
-			elseif (currentNPC:getGroupRole() == "Companion") then -- Not new, this was here before
-				TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)))
+			elseif (AiNPC_Job_Is(currentNPC, "Companion")) then
+				TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)));
 			elseif (SurvivorCanFindWork)
 				and not (AiNPC_Job_Is(currentNPC, "Guard"))
 				and not (AiNPC_Job_Is(currentNPC, "Leader"))
