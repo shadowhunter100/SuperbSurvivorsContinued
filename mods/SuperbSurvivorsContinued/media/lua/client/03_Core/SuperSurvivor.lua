@@ -72,7 +72,6 @@ function SuperSurvivor:CreateBaseSurvivorObject()
 	return survivorObject;
 end
 
-
 ---comment
 ---@param square any
 ---@param isFemale any
@@ -623,11 +622,6 @@ end
 function SuperSurvivor:getCurrentTask()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:getCurrentTask() called");
 	return self:getTaskManager():getCurrentTask()
-end
-
--- WIP - Cows: Completely removed the old messy logic; survivors are never scared to fight... for now.
-function SuperSurvivor:isTooScaredToFight()
-	return false;
 end
 
 function SuperSurvivor:usingGun()
@@ -1411,9 +1405,9 @@ end
 --target is an IsoMovingObject
 --survivor is an IsoPlayer
 function SuperSurvivor:isAThreat(target, survivor)
-    return (target ~= nil) and (survivor ~= nil) and (target ~= survivor)
-        and (instanceof(target, "IsoZombie") or instanceof(target, "IsoPlayer"))
-        and (target:isDead() == false)
+	return (target ~= nil) and (survivor ~= nil) and (target ~= survivor)
+		and (instanceof(target, "IsoZombie") or instanceof(target, "IsoPlayer"))
+		and (target:isDead() == false)
 end
 
 -- WIP - Cows: DoVision() likely has issues with threat assessment... hence the npcs keep running around like idiots when indoors.
@@ -1446,34 +1440,33 @@ function SuperSurvivor:DoVision()
 			local character = spottedList:get(i);
 			CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "DoVision: " .. tostring(character));
 
-			if self:isAThreat(character, self.player)
-			then
-					CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
-					tempdistance = tonumber(GetDistanceBetween(character, self.player))
+			if self:isAThreat(character, self.player) then
+				CreateLogLine("SuperSurvivor", isFunctionLoggingEnabled, "SuperSurvivor:GetDistanceBetween() called");
+				tempdistance = tonumber(GetDistanceBetween(character, self.player))
 
-					if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
-						local CanSee = self:RealCanSee(character)
+				if ((tempdistance <= atLeastThisClose) and self:isEnemy(character)) then
+					local CanSee = self:RealCanSee(character)
 
-						if (tempdistance < 1) and (character:getZ() == self.player:getZ()) then
-							self.EnemiesOnMe = self.EnemiesOnMe + 1
-						end
-						if (tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
-							--if (character:CanSee(self.player)) and (self:isInSameRoom(character) or (tempdistance <= 1)) then
-							self.dangerSeenCount = self.dangerSeenCount + 1
-							--end
-						end
-						if (CanSee) then
-							self.seenCount = self.seenCount + 1
-						end
-						if ((CanSee or (tempdistance < 0.5)) and (tempdistance < closestSoFar)) then
-							closestSoFar = tempdistance;
-							self.player:getModData().seenZombie = true;
-							closestNumber = i;
-						end
-					elseif (tempdistance < closestSurvivorSoFar) and false then
-						closestSurvivorSoFar = tempdistance
-						self.LastSurvivorSeen = character
+					if (tempdistance < 1) and (character:getZ() == self.player:getZ()) then
+						self.EnemiesOnMe = self.EnemiesOnMe + 1
 					end
+					if (tempdistance < dangerRange) and (character:getZ() == self.player:getZ()) then
+						--if (character:CanSee(self.player)) and (self:isInSameRoom(character) or (tempdistance <= 1)) then
+						self.dangerSeenCount = self.dangerSeenCount + 1
+						--end
+					end
+					if (CanSee) then
+						self.seenCount = self.seenCount + 1
+					end
+					if ((CanSee or (tempdistance < 0.5)) and (tempdistance < closestSoFar)) then
+						closestSoFar = tempdistance;
+						self.player:getModData().seenZombie = true;
+						closestNumber = i;
+					end
+				elseif (tempdistance < closestSurvivorSoFar) and false then
+					closestSurvivorSoFar = tempdistance
+					self.LastSurvivorSeen = character
+				end
 			end
 		end
 
@@ -1964,9 +1957,9 @@ function SuperSurvivor:NPC_CheckPursueScore()
 		-- lots of enemies the npc sees --		
 		-- ------------------------------------  --		
 		if (not self:getGroupRole() == "Companion")
-			and (((self:getSeenCount() > 4)
-					and (self:isEnemyInRange()))
-				or (self:isTooScaredToFight()))
+			and ((self:getSeenCount() > 4)
+				and (self:isEnemyInRange()))
+
 		then
 			zRangeToPursue = 0
 			return zRangeToPursue
@@ -2557,7 +2550,7 @@ function SuperSurvivor:update()
 
 	-- WIP - Cows: There is actually an error here, and it will run often if the player dies.
 	if (not getSpecificPlayer(0):isAsleep())
-		and (self:getGroupRole() ~= "Random Solo")  -- WIP - Cows: ... "Random Solo" apparently doesn't get tasks updates...
+		and (self:getGroupRole() ~= "Random Solo") -- WIP - Cows: ... "Random Solo" apparently doesn't get tasks updates...
 		and (getSpecificPlayer(0):isAlive()) -- WIP - Cows: Added a check isPlayerAlive, otherwise errors will be thrown here.
 	then
 		self.MyTaskManager:update()
@@ -3605,10 +3598,10 @@ end
 function SuperSurvivor:CanAttackAlt()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:CanAttackAlt() called");
 	if
-		(self.player:getCurrentState() == SwipeStatePlayer.instance()) or -- Is in the middle of an attack | WAS AN 'or' statement
-		(self.player:getModData().felldown)                         -- Has fallen on the ground
+		(self.player:getCurrentState() == SwipeStatePlayer.instance()) -- Is in the middle of an attack | WAS AN 'or' statement
+		or (self.player:getModData().felldown)                   -- Has fallen on the ground
 	then
-		return false                                                -- Because NPC shouldn't be able to attack when already hitting, has fallen, or hit by something
+		return false                                             -- Because NPC shouldn't be able to attack when already hitting, has fallen, or hit by something
 	else
 		return true
 	end
@@ -4018,14 +4011,18 @@ function SuperSurvivor:FindThisNearBy(itemType, TypeOrCategory)
 end
 
 function SuperSurvivor:ensureInInv(item)
-	if (self:getBag():contains(item)) then self:getBag():Remove(item) end
+	if (self:getBag():contains(item)) then
+		self:getBag():Remove(item)
+	end
 
 	if (item:getWorldItem() ~= nil) then
 		item:getWorldItem():removeFromSquare()
 		item:setWorldItem(nil)
 	end
 
-	if (not self:Get():getInventory():contains(item)) then self:Get():getInventory():AddItem(item) end
+	if (not self:Get():getInventory():contains(item)) then
+		self:Get():getInventory():AddItem(item)
+	end
 
 	return item
 end
@@ -4039,7 +4036,10 @@ function SuperSurvivor:getUnEquipedArmors()
 	for i = 1, items:size() - 1 do
 		local item = items:get(i)
 
-		if item ~= nil and ((item:getCategory() == "Clothing") or (item:getCategory() == "Container" and item:getWeight() > 0)) and item:isEquipped() == false then
+		if item ~= nil
+			and ((item:getCategory() == "Clothing") or (item:getCategory() == "Container" and item:getWeight() > 0))
+			and item:isEquipped() == false
+		then
 			table.insert(armors, item)
 		end
 	end

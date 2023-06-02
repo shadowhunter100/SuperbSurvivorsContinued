@@ -82,7 +82,7 @@ end
 -- WIP - Cows: NEED TO REWORK THE NESTED LOOP CALLS
 function LootCategoryTask:update()
 	CreateLogLine("LootTask", isLocalLoggingEnabled, "function: LootCategoryTask:update() called");
-	if (not self:isValid()) or self.parent:isTooScaredToFight() then
+	if (not self:isValid()) then
 		self.Complete = true
 		return false
 	end
@@ -101,11 +101,9 @@ function LootCategoryTask:update()
 	self.PlayerBag = self.parent:getBag()
 
 	if (not self.Building) then
-
 		self.Complete = true
 		self.parent:Speak(Get_SS_UIActionText("NotInBuilding"))
 	elseif (not self.parent:hasRoomInBag()) then
-
 		self.Container = nil
 		self.Complete = true
 		self.parent:Speak(Get_SS_UIActionText("CantCarryMore"))
@@ -123,9 +121,7 @@ function LootCategoryTask:update()
 			local closestSoFar = 999
 
 			for z = 2, 0, -1 do
-
 				for x = bdef:getX() - 2, (bdef:getX() + bdef:getW()) + 2 do
-
 					if (stoploop) then break end
 
 					for y = bdef:getY() - 2, (bdef:getY() + bdef:getH()) + 2 do
@@ -139,7 +135,6 @@ function LootCategoryTask:update()
 							local tempDistance = GetDistanceBetween(sq, self.parent.player); -- WIP - literally spammed inside the nested for loops...
 
 							for j = 0, items:size() - 1 do
-
 								if (items:get(j):getContainer() ~= nil) then
 									local container = items:get(j):getContainer()
 
@@ -244,7 +239,7 @@ function LootCategoryTask:update()
 
 					if (item ~= nil) then
 						local ssquare = getSourceSquareOfItem(item, self.parent.player)
-						
+
 						if (ssquare ~= nil) then
 							local OwnerGroupId = SSGM:GetGroupIdFromSquare(ssquare)
 							local TakerGroupId = self.parent.player:getModData().Group

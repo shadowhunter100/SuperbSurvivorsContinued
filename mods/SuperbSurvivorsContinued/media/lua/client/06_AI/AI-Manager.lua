@@ -141,8 +141,6 @@ function AIManager(TaskMangerIn)
 			--and ( (ASuperSurvivor:isEnemyInRange(ASuperSurvivor.LastEnemeySeen)))  -- this make them not move to engage zombie even a few tiles away when in follow mode? is that intentional
 			and (ASuperSurvivor:getDangerSeenCount() > 0)                                                           -- cant attack what you don't see. must have seen an enemy in danger range to attack
 			and ((GetDistanceBetween(ASuperSurvivor.LastEnemeySeen, ImFollowingThisChar) < (GFollowDistance + AttackRange))) -- move to engage an enemie only if they within follow range (when following)
-
-			and (not NPC:isTooScaredToFight())
 		--	and (ASuperSurvivor:inFrontOfLockedDoor() == false)
 		then
 			if (ASuperSurvivor.player ~= nil)
@@ -193,7 +191,7 @@ function AIManager(TaskMangerIn)
 		-- -----------   --
 		if (TaskMangerIn:getCurrentTask() ~= "Flee")
 			and ((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (not NPC:usingGun())) -- Melee
-				or (((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
+			or (((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
 				or ((NPC.EnemiesOnMe > 0) and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))
 				or (IHaveInjury and NPC.dangerSeenCount > 0)
 				or (NPC.dangerSeenCount >= 5)
@@ -291,7 +289,6 @@ function AIManager(TaskMangerIn)
 			and (ASuperSurvivor:getDangerSeenCount() > 0)                                                                                               -- cant attack what you don't see. must have seen an enemy in danger range to attack
 			and (NPC:getCurrentTask() ~= "Follow" or (GetDistanceBetween(ASuperSurvivor.LastEnemeySeen, ImFollowingThisChar) < (GFollowDistance + AttackRange))) -- move to engage an enemie only if they within follow range (when following)
 
-			and (not NPC:isTooScaredToFight())
 		--	and (ASuperSurvivor:inFrontOfLockedDoor() == false)
 		then
 			if (ASuperSurvivor.player ~= nil)
@@ -328,7 +325,6 @@ function AIManager(TaskMangerIn)
 		if (TaskMangerIn:getCurrentTask() ~= "Find Building")
 			and (TaskMangerIn:getCurrentTask() ~= "First Aide")
 			and (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and ((IHaveInjury) and (ASuperSurvivor:isTooScaredToFight()))
 			and (ASuperSurvivor:getDangerSeenCount() > 0)
 		then
 			TaskMangerIn:AddToTop(FindBuildingTask:new(ASuperSurvivor))
@@ -386,8 +382,6 @@ function AIManager(TaskMangerIn)
 
 					or (IHaveInjury and ASuperSurvivor:getDangerSeenCount() > 0)
 					or (EnemyIsSurvivorHasGun and ASuperSurvivor:hasGun() == false)
-
-					or (ASuperSurvivor:isTooScaredToFight())
 				)
 			)
 		then

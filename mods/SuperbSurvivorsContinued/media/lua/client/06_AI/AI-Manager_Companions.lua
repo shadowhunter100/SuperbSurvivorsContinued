@@ -79,7 +79,6 @@ function AIManager_Companion(TMI)
 		-- Pursue
 		-- ------------ --
 		if NPC_TaskIsNot("First Aide") and NPC_TaskIsNot("Pursue") and NPC_TaskIsNot("Attack") then
-
 			if (EnemyIsSurvivor or EnemyIsZombie) then
 				TMI:AddToTop(PursueTask:new(NPC, NPC.LastEnemeySeen))
 			end
@@ -88,7 +87,6 @@ function AIManager_Companion(TMI)
 		-- Attack
 		-- ----------- --
 		if (NPC_TaskIsNot("First Aide")) then
-
 			if (
 					(TMI:getCurrentTask() ~= "Attack")
 					and (TMI:getCurrentTask() ~= "Threaten")
@@ -100,9 +98,7 @@ function AIManager_Companion(TMI)
 					or (NPC:hasWeapon() == false and (NPC:getDangerSeenCount() == 1) and (not EnemyIsSurvivor))
 				)
 
-				--and ((not NPC:isTooScaredToFight() and (IHaveInjury == false)) -- This. I may want to change this to 'too many injuries' function
-
-				and (not NPC:isTooScaredToFight())
+			--and ((not NPC:isTooScaredToFight() and (IHaveInjury == false)) -- This. I may want to change this to 'too many injuries' function
 			--	and (NPC:inFrontOfLockedDoor() == false)
 			then
 				if (NPC.player ~= nil)
