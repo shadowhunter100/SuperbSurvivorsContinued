@@ -17,7 +17,6 @@ end
 ---@param TaskMangerIn any
 ---@return any
 function AIManager(TaskMangerIn)
-	local isFleeCallLogged = false;
 	local currentNPC = TaskMangerIn.parent; -- replaces both "ASuperbSurvivor" and "NPC".
 
 	if (TaskMangerIn == nil) or (currentNPC == nil) then
@@ -30,434 +29,47 @@ function AIManager(TaskMangerIn)
 		return TaskMangerIn
 	end -- if in vehicle skip AI -- or high priority follow
 
-
-	local EnemyIsSurvivor = (instanceof(currentNPC.LastEnemeySeen, "IsoPlayer"))
-	local EnemyIsZombie = (instanceof(currentNPC.LastEnemeySeen, "IsoZombie"))
-	local EnemySuperSurvivor = nil
-	local EnemyIsSurvivorHasGun = false
-
-	if (EnemyIsSurvivor) then
-		local id = currentNPC.LastEnemeySeen:getModData().ID;
-
-		EnemySuperSurvivor = SSM:Get(id);
-		--
-		if (EnemySuperSurvivor) then
-			EnemyIsSurvivorHasGun = EnemySuperSurvivor:hasGun()
-		end
-	end
-
-	local npcBravery = currentNPC:getBravePoints();
-	local npcIsInjured = currentNPC:HasInjury();
-	local npcWeapon = currentNPC.player:getPrimaryHandItem();
-	local AttackRange = currentNPC:getAttackRange();
-	local IsInAction = currentNPC:isInAction();
-	local HisGroup = currentNPC:getGroup();
-	local IsInBase = currentNPC:isInBase();
-	local CenterBaseSquare = nil
-	local DistanceBetweenMainPlayer = GetDistanceBetween(getSpecificPlayer(0), currentNPC:Get());
-	local ImFollowingThisChar = currentNPC:getFollowChar();
-	local distanceBetweenEnemyAndFollowTarget = GetDistanceBetween(currentNPC.LastEnemeySeen, ImFollowingThisChar);
-	local followAttackRange = GFollowDistance + AttackRange;
-	-- Cows: Why was this even used if it is not even known to work or not work?... Guess I'm testing it.
-	local Distance_AnyEnemy = GetDistanceBetween(currentNPC.LastEnemeySeen, currentNPC:Get()); -- idk if this works
+	local dangerRange = 6;
+	local npcIsInAction = currentNPC:isInAction();
+	local npcGroup = currentNPC:getGroup();
+	local npcIsInBase = currentNPC:isInBase();
+	local centerBaseSquare = nil;
+	local distanceBetweenMainPlayer = GetDistanceBetween(getSpecificPlayer(0), currentNPC:Get());
+	local isEnemySurvivor = (instanceof(currentNPC.LastEnemeySeen, "IsoPlayer"));
 	--
-	if (HisGroup) then
-		CenterBaseSquare = HisGroup:getBaseCenter();
+	if (npcGroup) then
+		centerBaseSquare = npcGroup:getBaseCenter();
 	end
 
 	-- Simplified Local functions
-	local function Task_Is_Not(TaskName)
-		return (TaskMangerIn:getCurrentTask() ~= TaskName)
-	end
 	local function Task_Is(TaskName)
 		return (TaskMangerIn:getCurrentTask() == TaskName)
 	end
-
-	-- --------------------------------------- --
-	-- Companion follower related code         --
-	-- --------------------------------------- --
-
+	-- 
 	if (AiNPC_Job_Is(currentNPC, "Companion")) then
-		--
-		if (currentNPC:needToFollow()) then
-			currentNPC.LastEnemeySeen = nil;
-			TaskMangerIn:clear();
-			TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)));
-		end
-
-		-- ------------ --
-		-- Pursue
-		-- ------------ --
-		if AiNPC_TaskIsNot(TaskMangerIn, "First Aide")
-			and AiNPC_TaskIsNot(TaskMangerIn, "Pursue")
-			and AiNPC_TaskIsNot(TaskMangerIn, "Attack")
-			and AiNPC_TaskIsNot(TaskMangerIn, "Flee")
-			and (currentNPC.LastEnemeySeen ~= nil
-				and Distance_AnyEnemy < currentNPC:NPC_CheckPursueScore()
-			)
-		then
-			if (EnemyIsSurvivor or EnemyIsZombie) then
-				TaskMangerIn:AddToTop(PursueTask:new(currentNPC, currentNPC.LastEnemeySeen));
-			end
-		end
-		-- ----------- --
-		-- Attack
-		-- ----------- --
-		-- ------------------------- --
-		if ((TaskMangerIn:getCurrentTask() ~= "Attack")
-				and (TaskMangerIn:getCurrentTask() ~= "Threaten")
-				and (TaskMangerIn:getCurrentTask() ~= "First Aide")
-				and (Task_Is_Not("Flee"))
-				and (currentNPC:isInSameRoom(currentNPC.LastEnemeySeen))
-			)
-			and (currentNPC:getDangerSeenCount() > 0)                -- cant attack what you don't see. must have seen an enemy in danger range to attack
-			and ((distanceBetweenEnemyAndFollowTarget < (followAttackRange))) -- move to engage an enemie only if they within follow range (when following)
-		then
-			if (currentNPC.player ~= nil)
-				and (currentNPC.player:getModData().isRobber)
-				and (not currentNPC.player:getModData().hitByCharacter)
-				and EnemyIsSurvivor
-				and (not EnemySuperSurvivor.player:getModData().dealBreaker)
-			then
-				TaskMangerIn:AddToTop(ThreatenTask:new(currentNPC, EnemySuperSurvivor, "Scram"));
-			else
-				TaskMangerIn:AddToTop(AttackTask:new(currentNPC));
-			end
-		end
-
-		-- --------------------------------- --
-		-- 	Reload Gun
-		-- --------------------------------- --
-		if (currentNPC:getNeedAmmo()) and (currentNPC:hasAmmoForPrevGun()) then
-			currentNPC:setNeedAmmo(false);
-			currentNPC:reEquipGun();
-		end
-
-		-- --------------------------------- --
-		-- 	Ready Weapon
-		-- --------------------------------- --
-		if ((currentNPC:needToReload())
-				or (currentNPC:needToReadyGun(npcWeapon)))
-			and ((currentNPC:hasAmmoForPrevGun())
-				or IsInfiniteAmmoEnabled)
-			and currentNPC:usingGun() -- removed and (currentNPC:getNeedAmmo() condition -
-		then
-			currentNPC:ReadyGun(npcWeapon)
-		end
-
-		-- ----------------------------- --
-		-- 	Equip Weapon                 --
-		-- ----------------------------- --
-		if (currentNPC:hasWeapon()) and (currentNPC:Get():getPrimaryHandItem() == nil) and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon") then
-			TaskMangerIn:AddToTop(EquipWeaponTask:new(currentNPC))
-		end
-
-		-- Careful setting up Flee to heal and 'healing', they will conflict very easily.
-		-- -----------   --
-		-- Flee to heal  --
-		-- -----------   --
-		if (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and ((currentNPC:getDangerSeenCount() > npcBravery) and (currentNPC:hasWeapon()) and (not currentNPC:usingGun())) -- Melee
-			or (((currentNPC:getDangerSeenCount() > npcBravery) and (currentNPC:hasWeapon()) and (currentNPC:usingGun())) -- Gun general
-				or ((currentNPC.EnemiesOnMe > 0) and ((currentNPC:needToReload()) or (currentNPC:needToReadyGun(npcWeapon))))
-				or (npcIsInjured and currentNPC:getDangerSeenCount() > 0)
-			)
-		then
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Dangers Seen: " .. tostring(currentNPC:getDangerSeenCount()));
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking: " .. tostring(currentNPC.EnemiesOnMe));
-			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Survivor is reloading: " .. tostring(currentNPC:needToReload()));
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC))
-		end
-
-		-- ----------- --
-		-- Healing	   --
-		-- ----------- --
-		if (npcIsInjured and currentNPC:getDangerSeenCount() <= 0) then
-			if (TaskMangerIn:getCurrentTask() ~= "First Aide") then
-				TaskMangerIn:AddToTop(FirstAideTask:new(currentNPC)) -- If general healing
-			end
-		end
-	end
-
-	-- --------------------------------------- --
-	-- Companion follower related code | END   --
-	-- --------------------------------------- --
-
-	-- --------------------------------------- --
-	-- Pursue Task 							   --
-	-- --------------------------------------- --
-	-- To make NPCs find their target that's very close by
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (currentNPC:Task_IsPursue_SC() == true) and (Distance_AnyEnemy <= 9) and (Distance_AnyEnemy < currentNPC:NPC_CheckPursueScore()) then
-			if (currentNPC:NPC_FleeWhileReadyingGun()) then
-				TaskMangerIn:AddToTop(PursueTask:new(currentNPC, currentNPC.LastEnemeySeen)) -- If all checks out, pursue target
-			end
-		end
-	end
-
-	-- I haven't tampered with this one, it does OK for the most part.
-	-- Bug: If you shoot the gun and it has nothing in it, the NPC will still keep their hands up
-	-- ----------------------------- --
-	-- 		Surrender Task	
-	-- ----------------------------- --
-	if (getSpecificPlayer(0) ~= nil) then
-		local facingResult = getSpecificPlayer(0):getDotWithForwardDirection(
-			currentNPC.player:getX(),
-			currentNPC.player:getY()
-		);
-		if ((TaskMangerIn:getCurrentTask() ~= "Surender")
-				and (TaskMangerIn:getCurrentTask() ~= "Flee")
-				and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
-				and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory")
-				and (SSM:Get(0) ~= nil and SSM:Get(0):usingGun())
-				and getSpecificPlayer(0)
-				and getSpecificPlayer(0):CanSee(currentNPC.player)
-				and (not currentNPC:usingGun() or (not currentNPC:RealCanSee(getSpecificPlayer(0)) and DistanceBetweenMainPlayer <= 3))
-				and getSpecificPlayer(0):isAiming()
-				and IsoPlayer.getCoopPVP()
-				and not currentNPC:isInGroup(getSpecificPlayer(0))
-				and (facingResult > 0.95)
-				and (DistanceBetweenMainPlayer < 6))
-		then
-			TaskMangerIn:clear()
-			TaskMangerIn:AddToTop(SurenderTask:new(currentNPC, SSM:Get(0)))
-			return TaskMangerIn
-		end
-	end
-
-	-- ----------------------------- --
-	-- Attack / Threaten Target Task --
-	-- ----------------------------- --
-
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		--Nolan:removed a lot of conditions here so that we can just focus on adjusting conditions inside isTooScaredToFight() function
-		if ((TaskMangerIn:getCurrentTask() ~= "Attack")
-				and (TaskMangerIn:getCurrentTask() ~= "Threaten")
-				and (TaskMangerIn:getCurrentTask() ~= "First Aide")
-				and (Task_Is_Not("Flee"))
-				and (currentNPC:isInSameRoom(currentNPC.LastEnemeySeen))
-			)
-			and (currentNPC:getDangerSeenCount() > 0)            -- cant attack what you don't see. must have seen an enemy in danger range to attack
-			and (currentNPC:getCurrentTask() ~= "Follow"
-				or (distanceBetweenEnemyAndFollowTarget < followAttackRange) -- move to engage an enemie only if they within follow range (when following)
-			)
-
-		then
-			if (currentNPC.player ~= nil)
-				and (currentNPC.player:getModData().isRobber)
-				and (not currentNPC.player:getModData().hitByCharacter)
-				and EnemyIsSurvivor
-				and (not EnemySuperSurvivor.player:getModData().dealBreaker)
-			then
-				TaskMangerIn:AddToTop(ThreatenTask:new(currentNPC, EnemySuperSurvivor, "Scram"))
-			else
-				TaskMangerIn:AddToTop(AttackTask:new(currentNPC))
-			end
-		end
-	end
-
-	-- ----------------------------- --
-	-- New: To attempt players that are NOT trying to encounter a fight,
-	-- should be able to run away. maybe a dice roll for the future?
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (EnemyIsSurvivor) and ((Task_Is("Threaten")) and (Distance_AnyEnemy > 10)) and (Task_Is_Not("Flee")) then
-			TaskMangerIn:AddToTop(WanderTask:new(currentNPC))
-			TaskMangerIn:AddToTop(AttemptEntryIntoBuildingTask:new(currentNPC, nil))
-			TaskMangerIn:AddToTop(WanderTask:new(currentNPC))
-			TaskMangerIn:AddToTop(FindBuildingTask:new(currentNPC))
-		end
-	end
-
-	-- ----------------------------- --
-	-- find safe place if injured and enemies near this needs updating
-	-- ----------------------------- --
-	--	if (TaskMangerIn:getCurrentTask() ~= "Find Building") and (TaskMangerIn:getCurrentTask() ~= "Flee") and (npcIsInjured) and (currentNPC:getDangerSeenCount() > 0) then
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (TaskMangerIn:getCurrentTask() ~= "Find Building")
-			and (TaskMangerIn:getCurrentTask() ~= "First Aide")
-			and (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and (currentNPC:getDangerSeenCount() > 0)
-		then
-			TaskMangerIn:AddToTop(FindBuildingTask:new(currentNPC))
-		end
-	end
-	-- ----------------------------- --
-	-- bandage injuries if no threat near by
-	-- Companions have their own healing rule
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (npcIsInjured) then
-			if (TaskMangerIn:getCurrentTask() ~= "First Aide")
-				and (TaskMangerIn:getCurrentTask() ~= "Flee")
-				and (TaskMangerIn:getCurrentTask() ~= "Doctor")
-				and ((currentNPC:getSeenCount() >= 1) and (Distance_AnyEnemy <= 6)) -- This line doesn't make sense, what if the npc needs to heal outside of hostiles?
-			then
-				TaskMangerIn:AddToTop(FirstAideTask:new(currentNPC))         -- If general healing
-				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is injured... Survivor is fleeing");
-				TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
-
-				if (ZombRand(3) == 0) then
-					currentNPC:NPC_ShouldRunOrWalk()
-				end
-
-				if ((currentNPC:getSeenCount() >= 3) and (Distance_AnyEnemy <= 3)) then -- If EMERGENCY run away and heal
-					TaskMangerIn:AddToTop(FirstAideTask:new(currentNPC))
-				end
-			end
-		end
-	end
-
-	-- ----------------------------- --
-	-- flee from too many zombies - Cows: What is this garbage?
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then -- To ABSOLUTELY prevent these two jobs from listening to this task.
-		if (TaskMangerIn:getCurrentTask() ~= "Flee")
-			and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
-			and (TaskMangerIn:getCurrentTask() ~= "Surender")
-			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and not EnemyIsSurvivor)
-			and
-			(
-				(((currentNPC:needToReload()) or (currentNPC:needToReadyGun(npcWeapon)))
-					and ((currentNPC:getDangerSeenCount() > 1
-						and (Distance_AnyEnemy < 3)
-						and (EnemyIsZombie)) or ((currentNPC:getSeenCount() >= 2) and (Distance_AnyEnemy <= 2)
-						and (EnemyIsZombie)))
-				) -- AH HA, gun running away for non-companions when the npc is trying to reload or ready gun
-				or (((currentNPC:needToReload()) or (currentNPC:needToReadyGun(npcWeapon)))
-					and ((currentNPC:getDangerSeenCount() > 1
-							and (Distance_AnyEnemy <= 2)
-							and (EnemyIsSurvivor))
-						or ((Distance_AnyEnemy <= 2) and (EnemyIsSurvivor))
-					)
-				) -- AH HA, gun running away for non-companions when the npc is trying to reload or ready gun
-				-- To check for EnemyIsZombie, which will look there and go 'OH GOD, I can't fight THIS many zombies'
-				-- Update: I may of already fixed this issue on the lines above...
-				-- now that I understand that getDangerSeenCount means if something is like SUPER close to the npc, you can simulate
-				-- the idea of 'there's an enemy basically on me and I see more in the distance, I don't think this is worth fighting'
-				or (
-					(currentNPC.EnemiesOnMe > 3 and currentNPC:getDangerSeenCount() > 3 and currentNPC:getSeenCount() > 3)
-					or (not currentNPC:hasWeapon() and (currentNPC:getDangerSeenCount() > 0))
-					or (npcIsInjured and currentNPC:getDangerSeenCount() > 0)
-					or (EnemyIsSurvivorHasGun and currentNPC:hasGun() == false)
-				)
-			)
-		then
-			--when piling corpses the survivor may not be holding weapon, this should not count as not having a weapon
-			-- so in this case simply end the pile corpse task (which will cause re-equip weapon and trigger more reasonable reaction)
-			if ((TaskMangerIn:getCurrentTask() == "LootCategoryTask")
-					or (TaskMangerIn:getCurrentTask() == "Pile Corpses"))
-			then
-				local task = TaskMangerIn:getTask();
-				if (task ~= nil) then task:ForceFinish() end
-			else
-				currentNPC:getTaskManager():clear();
-				CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
-				TaskMangerIn:AddToTop(FleeTask:new(currentNPC))
-
-				if not (AiNPC_Job_Is(currentNPC, "Guard"))
-					and not (AiNPC_Job_Is(currentNPC, "Doctor"))
-				then
-					CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is not a guard");
-					CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
-					TaskMangerIn:AddToTop(FleeFromHereTask:new(currentNPC, currentNPC:Get():getCurrentSquare()))
-				end
-			end
-		end
-	end
-
-	if ((TaskMangerIn:getCurrentTask() ~= "Flee")
-			and (TaskMangerIn:getCurrentTask() ~= "Surender")
-			and ((TaskMangerIn:getCurrentTask() ~= "Surender") and (not EnemyIsSurvivor))
-		)
-	then
-		if ((currentNPC.EnemiesOnMe > 0) and (currentNPC:usingGun() and ((currentNPC:needToReload()) or (currentNPC:needToReadyGun(npcWeapon))))) then
-			CreateLogLine("AI-Manager", isFleeCallLogged, "Enemies Attacking, but need to reload, Survivor is fleeing");
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
-			--
-		elseif (npcIsInjured and (currentNPC:getDangerSeenCount() > 0)) then
-			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Dangers seen: " ..
-				tostring(currentNPC:getDangerSeenCount()) .. " | isInjured? " .. tostring(npcIsInjured)
-			);
-			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Survivor is injured and enemy is attacking, Survivor is fleeing..."
-			);
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
-			-- Cows: Really shouldn't start fleeing unless the threat is actually within a set range... let's try "Distance_AnyEnemy" compared against 3
-		elseif (currentNPC:getDangerSeenCount() > npcBravery and Distance_AnyEnemy < 3) then
-			CreateLogLine("AI-Manager", isFleeCallLogged,
-				"Dangers seen: " .. tostring(currentNPC:getDangerSeenCount()) ..
-				" | npcBravery: " .. tostring(npcBravery) ..
-				" | distance to nearest enemy: " .. tostring(Distance_AnyEnemy)
-			);
-			CreateLogLine("AI-Manager", isFleeCallLogged, "npcBravery checked failed, Survivor is fleeing...");
-			TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
-		end
-	end
-
-	-- ----------------------------- --
-	-- If NPC is Starving or drhydrating, force leave group
-	-- To do - Give player option to let this task happen or not too
-	-- ----------------------------- --
-	if (false) and (currentNPC:getAIMode() ~= "Random Solo") and ((currentNPC:isStarving()) or (currentNPC:isDyingOfThirst())) then
-		-- leave group and look for food if starving
-
-		currentNPC:setAIMode("Random Solo")
-
-		if (currentNPC:getGroupID() ~= nil) then
-			local group = SSGM:GetGroupById(currentNPC:getGroupID())
-			group:removeMember(currentNPC:getID())
-		end
-		currentNPC:getTaskManager():clear()
-		if (currentNPC:Get():getStats():getHunger() > 0.40) then currentNPC:Get():getStats():setHunger(0.40) end
-		if (currentNPC:Get():getStats():getThirst() > 0.40) then currentNPC:Get():getStats():setThirst(0.40) end
-		currentNPC:Speak(Get_SS_Dialogue("LeaveGroupHungry"))
-	elseif (TaskMangerIn:getCurrentTask() ~= "Enter New Building")
-		and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory")
-		and (IsInAction == false)
-		and (TaskMangerIn:getCurrentTask() ~= "Eat Food")
-		and (TaskMangerIn:getCurrentTask() ~= "Find This")
-		and (TaskMangerIn:getCurrentTask() ~= "First Aide")
-		and (TaskMangerIn:getCurrentTask() ~= "Listen")
-		and (((currentNPC:isHungry())
-				and (IsInBase))
-			or currentNPC:isVHungry())
-		and (currentNPC:getDangerSeenCount() == 0)
-	then
-		if (not currentNPC:hasFood()) and (currentNPC:getNoFoodNearBy() == false) and ((getSpecificPlayer(0) == nil) or (not getSpecificPlayer(0):isAsleep())) then
-			if (HisGroup) then
-				local area = HisGroup:getGroupAreaCenterSquare("FoodStorageArea")
-				if (area) then
-					currentNPC:walkTo(area)
-				end
-			end
-			TaskMangerIn:AddToTop(FindThisTask:new(currentNPC, "Food", "Category", 1))
-		elseif (currentNPC:hasFood()) then
-			TaskMangerIn:AddToTop(EatFoodTask:new(currentNPC, currentNPC:getFood()))
-		end
+		AI_Companion(TaskMangerIn);
+	else
+		AI_NonCompanion(TaskMangerIn);
 	end
 
 	-- ----------------------------- --
 	-- Find food / drink - like task --
 	-- ----------------------------- --
 	if (TaskMangerIn:getCurrentTask() ~= "Enter New Building")
-		and (IsInAction == false)
+		and (npcIsInAction == false)
 		and (TaskMangerIn:getCurrentTask() ~= "Eat Food")
 		and (TaskMangerIn:getCurrentTask() ~= "Find This")
 		and (TaskMangerIn:getCurrentTask() ~= "First Aide")
 		and (((currentNPC:isThirsty())
-				and (IsInBase))
+				and (npcIsInBase))
 			or currentNPC:isVThirsty())
 		and (currentNPC:getDangerSeenCount() == 0)
 	then
 		if (currentNPC:getNoWaterNearBy() == false)
 			and ((getSpecificPlayer(0) == nil) or (not getSpecificPlayer(0):isAsleep()))
 		then
-			if (HisGroup) then
-				local area = HisGroup:getGroupAreaCenterSquare("FoodStorageArea")
+			if (npcGroup) then
+				local area = npcGroup:getGroupAreaCenterSquare("FoodStorageArea")
 				if (area) then currentNPC:walkTo(area) end
 				currentNPC:Speak("I'm going to get some food before I die of hunger.")
 			end
@@ -465,65 +77,6 @@ function AIManager(TaskMangerIn)
 		end
 	end
 
-
-	-- ----------------------------- --
-	-- 			Listen to Task
-	-- ----------------------------- --
-	if ((currentNPC:Get():getModData().InitGreeting ~= nil) or (currentNPC:getAIMode() == "Random Solo"))
-		and (TaskMangerIn:getCurrentTask() ~= "Listen")
-		and (TaskMangerIn:getCurrentTask() ~= "Surender")
-		and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
-		and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
-		and (currentNPC.LastSurvivorSeen ~= nil)
-		and (currentNPC:getSpokeTo(currentNPC.LastSurvivorSeen:getModData().ID) == false)
-		and (GetDistanceBetween(currentNPC.LastSurvivorSeen, currentNPC:Get()) < 8)
-		and (currentNPC:getDangerSeenCount() == 0) and (TaskMangerIn:getCurrentTask() ~= "First Aide")
-		and (currentNPC:Get():CanSee(currentNPC.LastSurvivorSeen))
-	then
-		currentNPC:Speak(Get_SS_Dialogue("HeyYou"))
-		currentNPC:SpokeTo(currentNPC.LastSurvivorSeen:getModData().ID)
-		TaskMangerIn:AddToTop(ListenTask:new(currentNPC, currentNPC.LastSurvivorSeen, true))
-	end
-
-	-- ----------------------------- --
-	-- 	Gun Readying / Reloading     --
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (currentNPC:getNeedAmmo())
-			and (currentNPC:hasAmmoForPrevGun())
-			and (IsInAction == false)
-			and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
-			and (TaskMangerIn:getCurrentTask() ~= "Flee")  -- New
-			and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot") -- New
-			and (currentNPC:getDangerSeenCount() == 0)
-		then
-			currentNPC:setNeedAmmo(false)
-			-- Reminder: re-enable this
-			currentNPC:reEquipGun()
-		end
-	end
-
-	-- ----------------------------- --
-	-- 	Equip Weapon Task            --
-	-- ----------------------------- --
-	if not (AiNPC_Job_Is(currentNPC, "Companion")) then
-		if (currentNPC:hasWeapon())
-			and (currentNPC:Get():getPrimaryHandItem() == nil)
-			and (TaskMangerIn:getCurrentTask() ~= "Equip Weapon")
-		then
-			TaskMangerIn:AddToTop(EquipWeaponTask:new(currentNPC));
-		end
-
-		if (IsInAction == false)
-			and currentNPC:usingGun()
-			and (currentNPC:getDangerSeenCount() == 0)
-			and ((currentNPC:needToReload())
-				or (currentNPC:needToReadyGun(npcWeapon)))
-			and (currentNPC:NPC_FleeWhileReadyingGun())
-		then
-			currentNPC:ReadyGun(npcWeapon);
-		end
-	end
 	-- ---------------------------------------------------------- --
 	-- ------------------- Base Tasks---------------------------- --
 	-- ---------------------------------------------------------- --
@@ -538,58 +91,67 @@ function AIManager(TaskMangerIn)
 		if (AiNPC_Job_Is(currentNPC, "Guard")) then
 			-- if getGroupArea 'getGroupArea = does this area exist'
 
-			if (Task_Is_Not("Attack")
-					and Task_Is_Not("Threaten")
-					and Task_Is_Not("Pursue")
-					and Task_Is_Not("Flee")
-					and Task_Is_Not("First Aide")
-					and Task_Is_Not("Find This")
-					and Task_Is_Not("Eat Food")
-					and Task_Is_Not("Follow")
-					and (IsInAction == false))
+			if (not Task_Is("Attack")
+					and not Task_Is("Threaten")
+					and not Task_Is("Pursue")
+					and not Task_Is("Flee")
+					and not Task_Is("First Aide")
+					and not Task_Is("Find This")
+					and not Task_Is("Eat Food")
+					and not Task_Is("Follow")
+					and (npcIsInAction == false))
 			then
-				if (HisGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (HisGroup:getGroupArea("GuardArea")) then
-					if (GetDistanceBetween(HisGroup:getGroupAreaCenterSquare("GuardArea"), currentNPC:Get():getCurrentSquare()) > 10) then
-						TaskMangerIn:clear()
-						TaskMangerIn:AddToTop(GuardTask:new(currentNPC,
-							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
+				if (npcGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (npcGroup:getGroupArea("GuardArea")) then
+					if (GetDistanceBetween(npcGroup:getGroupAreaCenterSquare("GuardArea"), currentNPC:Get():getCurrentSquare()) > 10) then
+						TaskMangerIn:clear();
+						TaskMangerIn:AddToTop(
+							GuardTask:new(currentNPC, GetRandomAreaSquare(npcGroup:getGroupArea("GuardArea")))
+						);
 					end
 				end
 
-				if (GetDistanceBetween(HisGroup:getGroupAreaCenterSquare("GuardArea"), currentNPC:Get():getCurrentSquare()) <= 10) then
-					if (HisGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (HisGroup:getGroupArea("GuardArea")) then
+				if (GetDistanceBetween(npcGroup:getGroupAreaCenterSquare("GuardArea"), currentNPC:Get():getCurrentSquare()) <= 10) then
+					if (npcGroup:getGroupAreaCenterSquare("GuardArea") ~= nil) and (npcGroup:getGroupArea("GuardArea")) then
 						TaskMangerIn:AddToTop(GuardTask:new(currentNPC,
-							GetRandomAreaSquare(HisGroup:getGroupArea("GuardArea"))))
+							GetRandomAreaSquare(npcGroup:getGroupArea("GuardArea"))))
 					end
 				end
 
-				if (HisGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (CenterBaseSquare ~= nil) and not (IsInBase) then
+				if (npcGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (centerBaseSquare ~= nil) and not (npcIsInBase) then
 					TaskMangerIn:AddToTop(WanderInBaseTask:new(currentNPC))
-				elseif (HisGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (CenterBaseSquare == nil) and not (IsInBase) then
-					TaskMangerIn:AddToTop(GuardTask:new(currentNPC, HisGroup:getRandomBaseSquare()))
+				elseif (npcGroup:getGroupAreaCenterSquare("GuardArea") == nil) and (centerBaseSquare == nil) and not (npcIsInBase) then
+					TaskMangerIn:AddToTop(GuardTask:new(currentNPC, npcGroup:getRandomBaseSquare()))
 				end
 			else
 				if Task_Is("Flee") then currentNPC:NPC_ShouldRunOrWalk() end
 			end
 		end
 
-		if (currentNPC:getCurrentTask() == "None") and (IsInBase) and (not IsInAction) and (ZombRand(4) == 0) then
-			if (not SurvivorCanFindWork) and (AiNPC_Job_Is(currentNPC, "Doctor")) then
-				local randresult = ZombRand(10) + 1
+		if (currentNPC:getCurrentTask() == "None") and (npcIsInBase) and (not npcIsInAction) and (ZombRand(4) == 0) then
+			if (AiNPC_Job_Is(currentNPC, "Companion")) then
+				TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)));
+			elseif (not SurvivorCanFindWork) and (AiNPC_Job_Is(currentNPC, "Doctor")) then
+				local randresult = ZombRand(10) + 1;
+				--
 				if (randresult == 1) then
 					currentNPC:Speak(Get_SS_UIActionText("IGoRelax"))
 					TaskMangerIn:AddToTop(WanderInBaseTask:new(currentNPC))
 				else
-					local medicalarea = HisGroup:getGroupArea("MedicalStorageArea")
-
-					local gotoSquare
+					local medicalarea = npcGroup:getGroupArea("MedicalStorageArea");
+					local gotoSquare;
+					--
 					if (medicalarea) and (medicalarea[1] ~= 0) then
 						gotoSquare = GetCenterSquareFromArea(medicalarea[1],
-							medicalarea[2], medicalarea[3], medicalarea[4], medicalarea[5])
+							medicalarea[2], medicalarea[3], medicalarea[4], medicalarea[5]);
 					end
-					if (not gotoSquare) then gotoSquare = CenterBaseSquare end
-
-					if (gotoSquare) then currentNPC:walkTo(gotoSquare) end
+					--
+					if (not gotoSquare) then
+						gotoSquare = centerBaseSquare;
+					end
+					--
+					if (gotoSquare) then
+						currentNPC:walkTo(gotoSquare);
+					end
 					TaskMangerIn:AddToTop(DoctorTask:new(currentNPC))
 					return TaskMangerIn
 				end
@@ -602,7 +164,7 @@ function AIManager(TaskMangerIn)
 						TaskMangerIn:AddToTop(WanderInBaseTask:new(currentNPC))
 						TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 					else
-						local area = HisGroup:getGroupArea("FarmingArea")
+						local area = npcGroup:getGroupArea("FarmingArea")
 						if (area) then
 							currentNPC:Speak(Get_SS_UIActionText("IGoFarm"))
 							TaskMangerIn:AddToTop(FarmingTask:new(currentNPC))
@@ -612,8 +174,6 @@ function AIManager(TaskMangerIn)
 						end
 					end
 				end
-			elseif (AiNPC_Job_Is(currentNPC, "Companion")) then
-				TaskMangerIn:AddToTop(FollowTask:new(currentNPC, getSpecificPlayer(0)));
 			elseif (SurvivorCanFindWork)
 				and not (AiNPC_Job_Is(currentNPC, "Guard"))
 				and not (AiNPC_Job_Is(currentNPC, "Leader"))
@@ -624,10 +184,10 @@ function AIManager(TaskMangerIn)
 					if (SafeToGoOutAndWork) then
 						TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 
-						local forageSquare = HisGroup:getGroupAreaCenterSquare("ForageArea")
-						local chopWoodSquare = HisGroup:getGroupAreaCenterSquare("ChopTreeArea")
-						local farmingArea = HisGroup:getGroupArea("FarmingArea")
-						local guardArea = HisGroup:getGroupArea("GuardArea")
+						local forageSquare = npcGroup:getGroupAreaCenterSquare("ForageArea")
+						local chopWoodSquare = npcGroup:getGroupAreaCenterSquare("ChopTreeArea")
+						local farmingArea = npcGroup:getGroupArea("FarmingArea")
+						local guardArea = npcGroup:getGroupArea("GuardArea")
 
 						local jobScores = {}
 						local job = "Relax"
@@ -664,18 +224,18 @@ function AIManager(TaskMangerIn)
 						-- reduce scores for jobs already being worked on
 						for key, value in pairs(jobScores) do
 							if key == "Guard" then
-								jobScores[key] = value - HisGroup:getTaskCount("Wander In Area")
+								jobScores[key] = value - npcGroup:getTaskCount("Wander In Area")
 							elseif key == "Doctor" then
 								-- no point in more than one doctor at a time
-								jobScores[key] = value - (HisGroup:getTaskCount(key) * 10)
+								jobScores[key] = value - (npcGroup:getTaskCount(key) * 10)
 							elseif key == "Farming" then
 								-- no point in more than one farmer at a time
-								jobScores[key] = value - (HisGroup:getTaskCount(key) * 10)
+								jobScores[key] = value - (npcGroup:getTaskCount(key) * 10)
 							elseif key == "Forage" then
 								-- little point in more than one forager at a time
-								jobScores[key] = value - (HisGroup:getTaskCount(key) * 2)
+								jobScores[key] = value - (npcGroup:getTaskCount(key) * 2)
 							else
-								jobScores[key] = value - HisGroup:getTaskCount(key)
+								jobScores[key] = value - npcGroup:getTaskCount(key)
 							end
 						end
 
@@ -727,8 +287,8 @@ function AIManager(TaskMangerIn)
 							TaskMangerIn:AddToTop(WanderInBaseTask:new(currentNPC))
 						elseif (job == "Gather Wood") then
 							currentNPC:Speak(Get_SS_UIActionText("IGoGetWood"))
-							local dropSquare = CenterBaseSquare
-							local woodstoragearea = HisGroup:getGroupArea("WoodStorageArea")
+							local dropSquare = centerBaseSquare
+							local woodstoragearea = npcGroup:getGroupArea("WoodStorageArea")
 							if (woodstoragearea[1] ~= 0) then
 								dropSquare = GetCenterSquareFromArea(woodstoragearea[1],
 									woodstoragearea[2], woodstoragearea[3], woodstoragearea[4], woodstoragearea[5])
@@ -737,9 +297,9 @@ function AIManager(TaskMangerIn)
 							TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 						elseif (job == "Pile Corpses") then
 							currentNPC:Speak(Get_SS_UIActionText("IGoPileCorpse"))
-							local baseBounds = HisGroup:getBounds()
+							local baseBounds = npcGroup:getBounds()
 							local dropSquare = getCell():getGridSquare(baseBounds[1] - 5, baseBounds[3] - 5, 0)
-							local storagearea = HisGroup:getGroupArea("CorpseStorageArea")
+							local storagearea = npcGroup:getGroupArea("CorpseStorageArea")
 							if (storagearea[1] ~= 0) then
 								dropSquare = GetCenterSquareFromArea(storagearea[1],
 									storagearea[2], storagearea[3], storagearea[4], storagearea[5])
@@ -749,8 +309,8 @@ function AIManager(TaskMangerIn)
 								TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 							end
 						elseif (job == "Forage") then
-							local dropSquare = CenterBaseSquare
-							local FoodStorageCenter = HisGroup:getGroupAreaCenterSquare("FoodStorageArea")
+							local dropSquare = centerBaseSquare
+							local FoodStorageCenter = npcGroup:getGroupAreaCenterSquare("FoodStorageArea")
 							if (FoodStorageCenter) then dropSquare = FoodStorageCenter end
 
 							if (forageSquare ~= nil) then
@@ -787,22 +347,22 @@ function AIManager(TaskMangerIn)
 								CreateLogLine("AI-Manager", isLocalLoggingEnabled, "guardArea area was nil");
 							end
 						elseif (job == "Doctor") then
-							local medicalarea = HisGroup:getGroupArea("MedicalStorageArea")
+							local medicalarea = npcGroup:getGroupArea("MedicalStorageArea")
 
 							local gotoSquare
 							if (medicalarea) and (medicalarea[1] ~= 0) then
 								gotoSquare = GetCenterSquareFromArea(
 									medicalarea[1], medicalarea[2], medicalarea[3], medicalarea[4], medicalarea[5])
 							end
-							if (not gotoSquare) then gotoSquare = CenterBaseSquare end
+							if (not gotoSquare) then gotoSquare = centerBaseSquare end
 
 							if (gotoSquare) then currentNPC:walkTo(gotoSquare) end
 							TaskMangerIn:AddToTop(DoctorTask:new(currentNPC))
 							TaskMangerIn:setTaskUpdateLimit(AutoWorkTaskTimeLimit)
 						elseif (job == "Clean Inventory") then
 							currentNPC:Speak("Cleaning Inventory")
-							local dropSquare = CenterBaseSquare
-							local ToolStorageCenter = HisGroup:getGroupAreaCenterSquare("ToolStorageArea")
+							local dropSquare = centerBaseSquare
+							local ToolStorageCenter = npcGroup:getGroupAreaCenterSquare("ToolStorageArea")
 							if (ToolStorageCenter) then dropSquare = ToolStorageCenter end
 							TaskMangerIn:AddToTop(SortLootTask:new(currentNPC, false))
 						elseif (job == "Wash Self") then
@@ -817,8 +377,9 @@ function AIManager(TaskMangerIn)
 		end
 
 		-- Oop, found this. I could use this for followers to get back to main player
-		if (currentNPC:getCurrentTask() == "None") and (IsInBase == false) and (not IsInAction) and (HisGroup ~= nil) then
-			local baseSq = CenterBaseSquare
+		if (currentNPC:getCurrentTask() == "None") and (npcIsInBase == false) and (not npcIsInAction) and (npcGroup ~= nil) then
+			local baseSq = centerBaseSquare;
+			--
 			if (baseSq ~= nil) then
 				currentNPC:Speak(Get_SS_UIActionText("IGoBackBase"))
 				TaskMangerIn:AddToTop(ReturnToBaseTask:new(currentNPC))
@@ -830,8 +391,50 @@ function AIManager(TaskMangerIn)
 	-- ------ END -------- Base Tasks ------- END ---------------- --
 	-- ----------------------------------------------------------- --
 
-	-- TODO test: maybe add 'if not in attack / pursue / threaten , then do ' along with the 'none tasks'
+	-- ----------------------------- --
+	-- Cows: Begin Random Solo(?)
+	-- ----------------------------- --
+	-- If NPC is Starving or dehydrating, force leave group
+	-- To do - Give player option to let this task happen or not too
+	-- ----------------------------- --
+	if (false) and (currentNPC:getAIMode() ~= "Random Solo") and ((currentNPC:isStarving()) or (currentNPC:isDyingOfThirst())) then
+		currentNPC:setAIMode("Random Solo");
 
+		-- leave group and look for food if starving
+		if (currentNPC:getGroupID() ~= nil) then
+			local group = SSGM:GetGroupById(currentNPC:getGroupID())
+			group:removeMember(currentNPC:getID())
+		end
+		currentNPC:getTaskManager():clear()
+		if (currentNPC:Get():getStats():getHunger() > 0.40) then currentNPC:Get():getStats():setHunger(0.40) end
+		if (currentNPC:Get():getStats():getThirst() > 0.40) then currentNPC:Get():getStats():setThirst(0.40) end
+		currentNPC:Speak(Get_SS_Dialogue("LeaveGroupHungry"))
+	elseif (TaskMangerIn:getCurrentTask() ~= "Enter New Building")
+		and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory")
+		and (npcIsInAction == false)
+		and (TaskMangerIn:getCurrentTask() ~= "Eat Food")
+		and (TaskMangerIn:getCurrentTask() ~= "Find This")
+		and (TaskMangerIn:getCurrentTask() ~= "First Aide")
+		and (TaskMangerIn:getCurrentTask() ~= "Listen")
+		and (((currentNPC:isHungry())
+				and (npcIsInBase))
+			or currentNPC:isVHungry())
+		and (currentNPC:getDangerSeenCount() == 0)
+	then
+		if (not currentNPC:hasFood()) and (currentNPC:getNoFoodNearBy() == false) and ((getSpecificPlayer(0) == nil) or (not getSpecificPlayer(0):isAsleep())) then
+			if (npcGroup) then
+				local area = npcGroup:getGroupAreaCenterSquare("FoodStorageArea")
+				if (area) then
+					currentNPC:walkTo(area)
+				end
+			end
+			TaskMangerIn:AddToTop(FindThisTask:new(currentNPC, "Food", "Category", 1))
+		elseif (currentNPC:hasFood()) then
+			TaskMangerIn:AddToTop(EatFoodTask:new(currentNPC, currentNPC:getFood()))
+		end
+	end
+
+	-- TODO test: maybe add 'if not in attack / pursue / threaten , then do ' along with the 'none tasks'
 	if (currentNPC:getAIMode() == "Random Solo")
 		and (TaskMangerIn:getCurrentTask() ~= "Listen")
 		and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
@@ -843,7 +446,7 @@ function AIManager(TaskMangerIn)
 		then
 			TaskMangerIn:AddToTop(AttemptEntryIntoBuildingTask:new(currentNPC, currentNPC.TargetBuilding))
 		elseif (TaskMangerIn:getCurrentTask() == "None")
-			and ((not EnemyIsSurvivor)
+			and ((not isEnemySurvivor)
 				or (not currentNPC:isEnemyInRange(currentNPC.LastEnemeySeen)))
 		then
 			TaskMangerIn:AddToTop(FindUnlootedBuildingTask:new(currentNPC))
@@ -868,7 +471,7 @@ function AIManager(TaskMangerIn)
 			end
 		end
 		if (CanNpcsCreateBase) and
-			(IsInAction == false) and -- New. Hopefully to stop spam
+			(npcIsInAction == false) and -- New. Hopefully to stop spam
 			(currentNPC:getBaseBuilding() == nil) and
 			(currentNPC:getBuilding()) and
 			(TaskMangerIn:getCurrentTask() ~= "First Aide") and
@@ -914,7 +517,6 @@ function AIManager(TaskMangerIn)
 			end
 		end
 
-
 		if ((CanNpcsCreateBase)
 				and (currentNPC:isStarving())
 				or (currentNPC:isDyingOfThirst())
@@ -935,6 +537,55 @@ function AIManager(TaskMangerIn)
 			currentNPC:setBaseBuilding(nil)
 			if (currentNPC:Get():getStats():getHunger() > 0.30) then currentNPC:Get():getStats():setHunger(0.30) end
 			if (currentNPC:Get():getStats():getThirst() > 0.30) then currentNPC:Get():getStats():setThirst(0.30) end
+		end
+	end
+
+	-- ----------------------------- --
+	-- 			Listen to Task
+	-- ----------------------------- --
+	if ((currentNPC:Get():getModData().InitGreeting ~= nil) or (currentNPC:getAIMode() == "Random Solo"))
+		and (TaskMangerIn:getCurrentTask() ~= "Listen")
+		and (TaskMangerIn:getCurrentTask() ~= "Surender")
+		and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
+		and (TaskMangerIn:getCurrentTask() ~= "Take Gift")
+		and (currentNPC.LastSurvivorSeen ~= nil)
+		and (currentNPC:getSpokeTo(currentNPC.LastSurvivorSeen:getModData().ID) == false)
+		and (GetDistanceBetween(currentNPC.LastSurvivorSeen, currentNPC:Get()) < 8)
+		and (currentNPC:getDangerSeenCount() == 0) and (TaskMangerIn:getCurrentTask() ~= "First Aide")
+		and (currentNPC:Get():CanSee(currentNPC.LastSurvivorSeen))
+	then
+		currentNPC:Speak(Get_SS_Dialogue("HeyYou"))
+		currentNPC:SpokeTo(currentNPC.LastSurvivorSeen:getModData().ID)
+		TaskMangerIn:AddToTop(ListenTask:new(currentNPC, currentNPC.LastSurvivorSeen, true))
+	end
+
+	-- I haven't tampered with this one, it does OK for the most part.
+	-- Bug: If you shoot the gun and it has nothing in it, the NPC will still keep their hands up
+	-- ----------------------------- --
+	-- 		Surrender Task	
+	-- ----------------------------- --
+	if (getSpecificPlayer(0) ~= nil) then
+		local facingResult = getSpecificPlayer(0):getDotWithForwardDirection(
+			currentNPC.player:getX(),
+			currentNPC.player:getY()
+		);
+		if ((TaskMangerIn:getCurrentTask() ~= "Surender")
+				and (TaskMangerIn:getCurrentTask() ~= "Flee")
+				and (TaskMangerIn:getCurrentTask() ~= "Flee From Spot")
+				and (TaskMangerIn:getCurrentTask() ~= "Clean Inventory")
+				and (SSM:Get(0) ~= nil and SSM:Get(0):usingGun())
+				and getSpecificPlayer(0)
+				and getSpecificPlayer(0):CanSee(currentNPC.player)
+				and (not currentNPC:usingGun() or (not currentNPC:RealCanSee(getSpecificPlayer(0)) and distanceBetweenMainPlayer <= 3))
+				and getSpecificPlayer(0):isAiming()
+				and IsoPlayer.getCoopPVP()
+				and not currentNPC:isInGroup(getSpecificPlayer(0))
+				and (facingResult > 0.95)
+				and (distanceBetweenMainPlayer < dangerRange))
+		then
+			TaskMangerIn:clear()
+			TaskMangerIn:AddToTop(SurenderTask:new(currentNPC, SSM:Get(0)))
+			return TaskMangerIn
 		end
 	end
 
