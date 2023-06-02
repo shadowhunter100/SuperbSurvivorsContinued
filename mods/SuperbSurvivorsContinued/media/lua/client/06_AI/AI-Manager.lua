@@ -194,7 +194,6 @@ function AIManager(TaskMangerIn)
 			or (((NPC.dangerSeenCount > Bravery) and (NPC:hasWeapon()) and (NPC:usingGun())) -- Gun general
 				or ((NPC.EnemiesOnMe > 0) and ((ASuperSurvivor:needToReload()) or (ASuperSurvivor:needToReadyGun(weapon))))
 				or (IHaveInjury and NPC.dangerSeenCount > 0)
-				or (NPC.dangerSeenCount >= 5)
 			)
 		then
 			CreateLogLine("AI-Manager", isFleeCallLogged, "Survivor is fleeing...");
