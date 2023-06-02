@@ -175,7 +175,7 @@ function GetDistanceBetween(z1, z2)
 		" | z2: " .. tostring(z2)
 	);
 	if (z1 == nil) or (z2 == nil) then
-		return -1
+		return 1;
 	end
 
 	local z1x = z1:getX()
@@ -190,7 +190,13 @@ function GetDistanceBetween(z1, z2)
 	local dy = z1y - z2y
 	local dz = z1z - z2z
 
-	return math.sqrt(dx * dx + dy * dy + (dz * dz * 2))
+	local distance = math.sqrt(dx * dx + dy * dy + (dz * dz * 2));
+	--
+	if (distance ~= nil) then
+		return distance;
+	end
+
+	return 1;
 end
 
 --- gets the distance between 2 coordinates
