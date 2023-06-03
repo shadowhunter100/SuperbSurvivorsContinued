@@ -2421,12 +2421,15 @@ function SuperSurvivor:updateSurvivorStatus()
 	self:CheckForIfStuck() -- New function to cleanup the update() function
 	self:NPCcalculateWalkSpeed()
 
-	-- WIP - Cows: There is actually an error here, and it will run often if the player dies.
-	if (not getSpecificPlayer(0):isAsleep())
-		and (self:getGroupRole() ~= "Random Solo") -- WIP - Cows: ... "Random Solo" apparently doesn't get tasks updates...
-		and (getSpecificPlayer(0):isAlive()) -- WIP - Cows: Added a check isPlayerAlive, otherwise errors will be thrown here.
-	then
-		self.MyTaskManager:update()
+	-- WIP - Cows: Check if player(0) exists, because during respawn after death, player actually does not exist!
+	if (getSpecificPlayer(0) ~= nil) then
+		-- WIP - Cows: There is actually an error here, and it will run often if the player dies.
+		if (not getSpecificPlayer(0):isAsleep())
+			and (self:getGroupRole() ~= "Random Solo") -- WIP - Cows: ... "Random Solo" apparently doesn't get tasks updates...
+			and (getSpecificPlayer(0):isAlive()) -- WIP - Cows: Added a check isPlayerAlive, otherwise errors will be thrown here.
+		then
+			self.MyTaskManager:update()
+		end
 	end
 
 	if (self.Reducer % 480 == 0) then
@@ -2436,15 +2439,14 @@ function SuperSurvivor:updateSurvivorStatus()
 
 		local group = self:getGroup()
 		if (group) then group:checkMember(self:getID()) end
-		self:SaveSurvivor()
+
 		if (self:Get():getPrimaryHandItem() ~= nil) and (((self:Get():getPrimaryHandItem():getDisplayName() == "Corpse") and (self:getCurrentTask() ~= "Pile Corpses")) or (self:Get():getPrimaryHandItem():isBroken())) then
 			ISTimedActionQueue.add(ISDropItemAction:new(self:Get(), self:Get():getPrimaryHandItem(), 30))
-			self:Get():setPrimaryHandItem(nil)
-			self:Get():setSecondaryHandItem(nil)
+			self:Get():setPrimaryHandItem(nil);
+			self:Get():setSecondaryHandItem(nil);
 		end
 		if (self:Get():getPrimaryHandItem() == nil) and (self:getWeapon()) then
-			self:Get():setPrimaryHandItem(self
-				:getWeapon())
+			self:Get():setPrimaryHandItem(self:getWeapon());
 		end
 
 		self:ManageXP()
@@ -2453,8 +2455,6 @@ function SuperSurvivor:updateSurvivorStatus()
 		self.player:getModData().semiHostile = false
 		self.player:getModData().felldown = nil
 		self.UpdateDelayTicks = 20
-	else
-		self:SaveSurvivorOnMap()
 	end
 
 	if (self.GoFindThisCounter > 0) then self.GoFindThisCounter = self.GoFindThisCounter - 1 end

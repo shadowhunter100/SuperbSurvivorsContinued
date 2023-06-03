@@ -142,9 +142,9 @@ end
 ---@return string
 function SetSurvivorWeapon(mapKey)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SetSurvivorWeapon() called");
-	local weapon = "Base.Pistol3";
+	local weapon = "Base.Pistol";
 	local weaponTableDefault = {
-		[1] = "Base.Shotgun",
+		[1] = "Base.Pistol3",
 		[2] = "Base.VarmintRifle",
 		[3] = "Base.AssaultRifle"
 	};

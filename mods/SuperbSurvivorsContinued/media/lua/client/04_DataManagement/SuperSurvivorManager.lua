@@ -161,7 +161,9 @@ function SuperSurvivorManager:UpdateSurvivorsRoutine()
 				self.SuperSurvivors[i]:updateSurvivorStatus();
 			end
 			-- Cows: Have the npcs wander if there are no tasks, otherwise they are stuck in place...
-			if (self.SuperSurvivors[i]:getCurrentTask() == "None" and self.SuperSurvivors[i]:getGroupRole() ~= "Companion") then
+			if (self.SuperSurvivors[i]:getCurrentTask() == "None")
+				and (SurvivorRoles[self.SuperSurvivors[i]:getGroupRole()] == nil) -- Cows: This check is to ensure actual assigned roles do not wander off to die.
+			then
 				self.SuperSurvivors[i]:NPCTask_DoWander();
 			end
 		end
