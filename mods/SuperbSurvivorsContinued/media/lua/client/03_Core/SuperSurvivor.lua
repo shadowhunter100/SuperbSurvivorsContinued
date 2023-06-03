@@ -1751,7 +1751,6 @@ end
 -- This needed 'not a companion' check to keep the NPC in question not to run away when they're following main player.
 function SuperSurvivor:NPC_FleeWhileReadyingGun()
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:NPC_FleeWhileReadyingGun() called");
-	local Distance_MainPlayer = GetDistanceBetween(getSpecificPlayer(0), self.player);
 	local Enemy_Is_a_Zombie = (instanceof(self.LastEnemeySeen, "IsoZombie"));
 	local Weapon_HandGun = self.player:getPrimaryHandItem();
 	local NPCsDangerSeen = self:getDangerSeenCount();
@@ -1765,11 +1764,6 @@ function SuperSurvivor:NPC_FleeWhileReadyingGun()
 				self:NPC_EnforceWalkNearMainPlayer();
 			end
 		end
-	end
-	-- Cows: Updated the distance code... so companions should NEVER leave the player's side.
-	if (self:getGroupRole() == "Companion") and (Distance_MainPlayer > GFollowDistance) then
-		self:getTaskManager():clear(); -- Cows: Always clear the tasks...
-		self:getTaskManager():AddToTop(FollowTask:new(self, getSpecificPlayer(0)));
 	end
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "--- SuperSurvivor:NPC_FleeWhileReadyingGun() END ---");
 	return true;
