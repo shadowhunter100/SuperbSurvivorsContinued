@@ -68,6 +68,7 @@ function TaskManager:Display()
 end
 
 function TaskManager:clear()
+	-- Cows: Why do we need to force complete the tasks?
 	for i = 1, self.TaskCount - 1 do -- before clearing run the force complete task of any task that has one
 		if (self.Tasks[i] ~= nil) and (self.Tasks[i].ForceComplete ~= nil) then
 			return self.Tasks[i]:ForceComplete()
@@ -94,7 +95,6 @@ function TaskManager:moveDown()
 	end
 
 	self.TaskUpdateCount = 0
-	--self.TaskUpdateLimit = 0
 
 	return false
 end
@@ -135,9 +135,12 @@ end
 
 function TaskManager:getTaskFromName(thisName)
 	for i = 1, self.TaskCount - 1 do
-		if (self.Tasks[i] ~= nil) and (self.Tasks[i].Name == thisName) then return self.Tasks[i] end
+		if (self.Tasks[i] ~= nil) and (self.Tasks[i].Name == thisName) then
+			return self.Tasks[i];
+		end
 	end
-	return nil
+
+	return nil;
 end
 
 function TaskManager:update()
@@ -155,7 +158,8 @@ function TaskManager:update()
 		self:moveDown();
 
 		CreateLogLine("TaskManager", isLocalLoggingEnabled,
-			self.parent:getName() .. " stopped their task due to setTaskUpdateLimit");
+			self.parent:getName() .. " stopped their task due to setTaskUpdateLimit"
+		);
 	elseif (self.Tasks[0] ~= nil)
 		and (self.Tasks[0] ~= false)
 		and (self.Tasks[0]:isComplete() == false) then
