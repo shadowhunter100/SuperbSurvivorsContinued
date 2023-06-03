@@ -21,5 +21,4 @@ SS_MeleeWeapons = {
 };
 
 SS_RangeWeapons = { "Base.Pistol2", "Base.Revolver_Short", "Base.Revolver", "Base.Pistol", "Base.Revolver_Long",
-    "Base.VarmintRifle", "Base.HuntingRifle", "Base.Pistol", "Base.Shotgun", "Base.ShotgunSawnoff", "Base.Pistol",
-    "Base.Shotgun" };
+    "Base.VarmintRifle", "Base.HuntingRifle", "Base.Pistol3" };
