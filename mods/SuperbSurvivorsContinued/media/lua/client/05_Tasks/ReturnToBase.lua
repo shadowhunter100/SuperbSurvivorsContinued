@@ -54,7 +54,6 @@ function ReturnToBaseTask:update()
 				self.parent.player:setX(self.BaseCoords[1])
 				self.parent.player:setY(self.BaseCoords[2])
 				self.parent.player:setZ(self.BaseCoords[3])
-				self.parent:SaveSurvivorOnMap()
 			else
 				self.parent:walkTowards(self.BaseCoords[1], self.BaseCoords[2], self.BaseCoords[3])
 			end
