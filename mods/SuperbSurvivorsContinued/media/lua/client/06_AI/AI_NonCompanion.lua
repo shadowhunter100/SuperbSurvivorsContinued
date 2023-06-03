@@ -25,15 +25,11 @@ function AI_NonCompanion(TaskMangerIn)
 
     local isEnemySurvivor = (instanceof(currentNPC.LastEnemeySeen, "IsoPlayer"));
     local enemySurvivor = nil;
-    local enemySurvivorHasGun = false;
 
     if (isEnemySurvivor) then
         local id = currentNPC.LastEnemeySeen:getModData().ID;
         enemySurvivor = SSM:Get(id);
         --
-        if (enemySurvivor) then
-            enemySurvivorHasGun = enemySurvivor:hasGun();
-        end
     end
 
     -- local help functions
@@ -137,13 +133,6 @@ function AI_NonCompanion(TaskMangerIn)
                 currentNPC:Speak("I need some space here!");
                 TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
             end
-        elseif (enemySurvivorHasGun == true   -- Cows: Or if the enemy survivor has a gun...
-                and not currentNPC:usingGun() -- Cows: And the current NPC does not have a gun...
-                and distance_AnyEnemy > 6
-            )
-        then
-            currentNPC:Speak("That fella is packing heat! That's too much for me!");
-            TaskMangerIn:AddToTop(FleeTask:new(currentNPC));
         end
     end
     -- Heal self if there are no dangers nearby
