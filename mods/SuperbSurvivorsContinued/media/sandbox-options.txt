@@ -15,7 +15,7 @@ option SuperbSurvivorsContinued.Limit_Npc_Groups
 	type = integer,
 	min = 1,
 	max = 20,
-	default = 8,
+	default = 2,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_Limit_Npc_Groups,
@@ -26,7 +26,7 @@ option SuperbSurvivorsContinued.Limit_Npcs_Spawn
 	type = integer,
 	min = 1,
 	max = 50,
-	default = 30,
+	default = 10,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
@@ -46,7 +46,7 @@ option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
 	type = integer,
 	min = 1,
 	max = 8,
-	default = 4,
+	default = 3,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_NpcGroupsSpawnsSize,
@@ -57,7 +57,7 @@ option SuperbSurvivorsContinued.NpcSpawnChance
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 50,
+	default = 30,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_NpcSpawnChance,
@@ -101,7 +101,7 @@ option SuperbSurvivorsContinued.RaidersStartAfterHours
 	type = integer,
 	min = 0,
 	max = 100,
-	default = 12,
+	default = 24,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_RaidersStartAfterHours,
