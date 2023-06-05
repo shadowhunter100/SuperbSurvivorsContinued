@@ -146,7 +146,8 @@
         "ISInventoryPage",
         "ISGrabItemAction",
         "ISMedicalCheckAction",
-        "luautils"
+        "luautils",
+        "getActivatedMods"
     ],
     "Lua.diagnostics.disable": [
         "missing-return"
