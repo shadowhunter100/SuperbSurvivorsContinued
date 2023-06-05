@@ -161,9 +161,16 @@ local function log_SS_SurvivorsInfo()
         "Actual Living NPCs: " .. tostring(actualLivingSurvivors));
 end
 
+local function logActiveMods()
+    local isLoggingDebugInfo = true;
+    local activatedMods = getActivatedMods();
+    CreateLogLine("SS_ActiveModsFound", isLoggingDebugInfo, tostring(activatedMods));
+end
+
 function LogSSDebugInfo()
     local playerSurvivor = getSpecificPlayer(0);
     playerSurvivor:Say("Logging Debug info...");
+    logActiveMods();
     log_SS_PlayerInfo();
     log_SS_GroupsInfo();
     log_SS_SurvivorsInfo();

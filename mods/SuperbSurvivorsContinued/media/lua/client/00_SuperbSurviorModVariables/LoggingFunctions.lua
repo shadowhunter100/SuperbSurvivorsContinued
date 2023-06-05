@@ -12,7 +12,10 @@ function CreateLogLine(fileName, isEnabled, newLine)
         local formattedTimeDay = os.date("%Y-%m-%d", timestamp);
         local formattedTime = os.date("%Y-%m-%d %H:%M:%S", timestamp);
         local file = getFileWriter(
-            ModId .. "/logs/" .. formattedTimeDay .. "_" .. ModId .. "_" .. fileName .. "_Logs.txt", true, true);
+            ModId .. "/logs/" .. formattedTimeDay .. "_" .. ModId .. "_" .. fileName .. "_Logs.txt",
+            true, -- true to create file if null
+            true  -- true to "append" to existing file, false to replace.
+        );
         local content = formattedTime .. " : " .. "CreateLogLine called";
 
         if newLine then

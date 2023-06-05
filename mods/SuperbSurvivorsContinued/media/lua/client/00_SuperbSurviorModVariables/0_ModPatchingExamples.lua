@@ -4,6 +4,8 @@ local activatedMods = getActivatedMods();
 
 -- Cows: Check if active mod lists includes <ModId> and write for handler for dealing with it.
 -- This block may need to be added to relevant functions such as equipment, perks, traits.
-if activatedMods:contains("ModId") then
-
+function CheckForMod()
+    if activatedMods:contains("ModId") then
+        -- Do Something
+    end
 end
