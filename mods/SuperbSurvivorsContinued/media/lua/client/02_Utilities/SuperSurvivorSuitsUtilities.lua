@@ -10,7 +10,6 @@ function GetRandomSurvivorSuit(SS)
 
 	local roll = ZombRand(0, 101)
 	local tempTable = nil
-	local randomize = false
 	CreateLogLine("SuperSurvivorSuitsUtilities", isLocalLoggingEnabled, "rolled: " .. tostring(roll));
 
 	if (roll == 1) then -- choose legendary suit
@@ -31,7 +30,6 @@ function GetRandomSurvivorSuit(SS)
 	else -- chose common suit
 		CreateLogLine("SuperSurvivorSuitsUtilities", isLocalLoggingEnabled, "Got: " .. "Common suit");
 		tempTable = SurvivorRandomSuits["Common"]
-		randomize = false
 	end
 
 	local result = table.randFrom(tempTable)
@@ -51,17 +49,6 @@ function GetRandomSurvivorSuit(SS)
 	for i = 1, #suitTable do
 		if (suitTable[i] ~= nil) then
 			SS:WearThis(suitTable[i])
-		end
-	end
-
-	if randomize then
-		-- WIP - Cows: Why even iterate? I thought the suit was mapped?...
-		for i = 1, ZombRand(0, 3) do
-			tempTable = SurvivorRandomSuits[table.randFrom(SurvivorRandomSuits)]
-			local rresult = table.randFrom(tempTable)
-			local rsuitTable = tempTable[rresult]
-			local item = suitTable[ZombRand(1, #rsuitTable)]
-			SS:WearThis(item)
 		end
 	end
 
