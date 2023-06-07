@@ -2435,7 +2435,8 @@ function SuperSurvivor:updateSurvivorStatus()
 	if (self.Reducer % 480 == 0) then
 		self:setSneaking(false)
 
-		self.player:setNPC(true)
+		self.player:setNPC(true);
+		self:SaveSurvivor();
 
 		local group = self:getGroup()
 		if (group) then group:checkMember(self:getID()) end
@@ -2454,7 +2455,8 @@ function SuperSurvivor:updateSurvivorStatus()
 		self.player:getModData().hitByCharacter = false
 		self.player:getModData().semiHostile = false
 		self.player:getModData().felldown = nil
-		self.UpdateDelayTicks = 20
+		self.UpdateDelayTicks = 20;
+		self:SaveSurvivorOnMap();
 	end
 
 	if (self.GoFindThisCounter > 0) then self.GoFindThisCounter = self.GoFindThisCounter - 1 end
