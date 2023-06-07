@@ -2456,7 +2456,6 @@ function SuperSurvivor:updateSurvivorStatus()
 		self.player:getModData().semiHostile = false
 		self.player:getModData().felldown = nil
 		self.UpdateDelayTicks = 20;
-		self:SaveSurvivorOnMap();
 	end
 
 	if (self.GoFindThisCounter > 0) then self.GoFindThisCounter = self.GoFindThisCounter - 1 end
