@@ -174,7 +174,6 @@ function Add_SS_NpcPerkLevel(npc, perkName, levels)
 	return npc;
 end
 
-
 --- Cows: Count and return the number of non-dead NPCs
 ---@return integer
 function Get_SS_Alive_Count()
@@ -182,11 +181,44 @@ function Get_SS_Alive_Count()
 
 	for i = 0, SSM.SurvivorCount + 1 do
 		if (SSM.SuperSurvivors[i] ~= nil) then
-            if (not SSM.SuperSurvivors[i]:isDead()) then
-                actualLivingSurvivors = actualLivingSurvivors + 1;
-            end
+			if (not SSM.SuperSurvivors[i]:isDead()) then
+				actualLivingSurvivors = actualLivingSurvivors + 1;
+			end
 		end
 	end
 
 	return actualLivingSurvivors;
+end
+
+--- Cows: Remove any non-player grouped NPCs from the world after they are a set distance away from the player.
+---@return any
+function Remove_SS_FromWorld()
+	local isLocalFunctionLoggingEnabled = false;
+	local clearDistance = 90; -- 90 squares is about 3 screens on a 1080p monitor.
+	local playerSurvivor = getSpecificPlayer(0);
+	--
+	local playerSS = SSM:Get(0);
+	local playerGroupID = playerSS:getGroupID();
+	--
+	for i = 0, SSM.SurvivorCount + 1 do
+		local ss = SSM.SuperSurvivors[i];
+		-- Cows: check if ss is not nil
+		if (ss ~= nil) then
+			local ssGroupId = ss:getGroupID();
+			-- Cows: Check if the npc is not in player group
+			if (ssGroupId ~= playerGroupID) or (ssGroupId == nil) then
+				local ssDistance = GetDistanceBetween(ss:Get(), playerSurvivor);
+				CreateLogLine("SuperSurvivor_RemovedNPCs", isLocalFunctionLoggingEnabled,
+					"npc: " .. tostring(ss:getName()) .. " | Distance: " .. tostring(ssDistance)
+				);
+				-- Cows: check if npc distance is greater than clearDistance and remove said npc if true.
+				if (ssDistance > clearDistance) then
+					CreateLogLine("SuperSurvivor_RemovedNPCs", isLocalFunctionLoggingEnabled, "Removed: " .. tostring(ss:getName()));
+					ss.player:removeFromWorld();
+					ss.player:removeFromSquare();
+					SSM.SuperSurvivors[i] = nil;
+				end
+			end
+		end
+	end
 end
