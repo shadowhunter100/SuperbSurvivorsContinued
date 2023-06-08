@@ -2834,22 +2834,19 @@ function SuperSurvivor:FindClosestOutsideSquare(thisBuildingSquare)
 	return thisBuildingSquare
 end
 
+--- Cows: Need to rewrite this function...
 function SuperSurvivor:ReadyGun(weapon)
 	CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "SuperSurvivor:ReadyGun() called");
-	local readyGun_AntiStuck_Ticks = 0
-
-	if (not weapon) or (not weapon:isAimedFirearm()) or readyGun_AntiStuck_Ticks >= 5 then return true end
 
 	if weapon:isJammed() then
-		weapon:setJammed(false)
-		readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 5
+		weapon:setJammed(false);
+		self:Wait(2); -- Cows: Wait 2 ticks to clear the Jam.
+		self:Speak("Damn my gun is jammed!");
 	end
 
 	if weapon:haveChamber() and not weapon:isRoundChambered() then
-		readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
 		if (ISReloadWeaponAction.canRack(weapon)) then
 			ISReloadWeaponAction.OnPressRackButton(self.player, weapon)
-			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
 			return true
 		end
 	end
@@ -2865,31 +2862,21 @@ function SuperSurvivor:ReadyGun(weapon)
 			end
 
 			if magazine then
-				readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
-
 				local ammotype = magazine:getAmmoType();
+
 				if (not self.player:getInventory():containsWithModule(ammotype)) and (magazine:getCurrentAmmoCount() == 0) and (IsInfiniteAmmoEnabled) then
-					readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 5
 					magazine:setCurrentAmmoCount(magazine:getMaxAmmo())
 				end
 
-				if readyGun_AntiStuck_Ticks > 0 and readyGun_AntiStuck_Ticks < 15 then
-					ISTimedActionQueue.add(ISInsertMagazine:new(self.player, weapon, magazine))
-					ISReloadWeaponAction.ReloadBestMagazine(self.player, weapon)
-					readyGun_AntiStuck_Ticks = 0
-				end
+				ISTimedActionQueue.add(ISInsertMagazine:new(self.player, weapon, magazine))
+				ISReloadWeaponAction.ReloadBestMagazine(self.player, weapon)
 
 				return true
-			else
-				CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
-					self:getName() .. " error trying to spawn mag for gun?");
 			end
 		end
 
 
 		if weapon:isContainsClip() then
-			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
-
 			local magazine = weapon:getBestMagazine(self.player)
 
 			if (magazine == nil) then magazine = self.player:getInventory():getFirstTypeRecurse(weapon:getMagazineType()) end
@@ -2930,7 +2917,6 @@ function SuperSurvivor:ReadyGun(weapon)
 		local magazine = weapon:getBestMagazine(self.player)
 
 		if magazine then
-			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1
 			ISInventoryPaneContextMenu.transferIfNeeded(self.player, magazine)
 			ISTimedActionQueue.add(ISInsertMagazine:new(self.player, weapon, magazine))
 			return true
@@ -2939,7 +2925,6 @@ function SuperSurvivor:ReadyGun(weapon)
 		ISReloadWeaponAction.ReloadBestMagazine(self.player, weapon)
 	else -- gun with no magazine
 		if (self:gunAmmoInInvCount(weapon) < 1) and (IsInfiniteAmmoEnabled) then
-			readyGun_AntiStuck_Ticks = readyGun_AntiStuck_Ticks + 1;
 			local maxammo = weapon:getMaxAmmo();
 			local ammotype = weapon:getAmmoType();
 			CreateLogLine("SuperSurvivor", isLocalLoggingEnabled,
@@ -3068,7 +3053,7 @@ function SuperSurvivor:giveWeapon(weaponType, equipIt)
 			end
 		end
 		ammotypes = GetAmmoBullets(weapon);
----@diagnostic disable-next-line: need-check-nil
+		---@diagnostic disable-next-line: need-check-nil
 		self.player:getModData().ammoCount = self:FindAndReturnCount(ammotypes[1])
 	else
 		CreateLogLine("SuperSurvivor", isLocalLoggingEnabled, "no ammo types for weapon:" .. tostring(weapon:getType()));
