@@ -31,7 +31,7 @@ function SuperSurvivorKeyBindAction(keyNum)
     --
     if (playerSurvivor and playerSurvivor:isAlive()) then
         --
-        if (keyNum == 56) then -- the NumPad enter key
+        if (keyNum == 156) then -- the NumPad enter key
             local activeNpcs = Get_SS_Alive_Count();
             --
             if (activeNpcs < Limit_Npcs_Spawn) then
