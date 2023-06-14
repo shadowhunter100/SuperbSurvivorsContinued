@@ -16,7 +16,7 @@ local function getBoyNames()
 
   local names = {}
   for i = 1, boyNamesCount, 1 do
-    names[i] = Get_SS_Name("Names" .. tostring(i))
+    names[i] = Get_SS_Name("Namb" .. tostring(i))
   end
 
   return names
