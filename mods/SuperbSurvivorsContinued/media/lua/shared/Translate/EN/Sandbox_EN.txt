@@ -19,6 +19,9 @@ Sandbox_EN = {
 	Sandbox_SuperbSurvivorsContinued_IsWifeSpawnNumb = "Wife Numb",
 	Sandbox_SuperbSurvivorsContinued_IsWifeSpawnNumb_tooltip = "Determine how many wife followers to spawn at the start of the game.",
 
+	Sandbox_SuperbSurvivorsContinued_WifeIsGirl = "Wife Is Girl"
+	Sandbox_SuperbSurvivorsContinued_WifeIsGirl_tooltip = "Your wife is girl.",
+
 	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize = "Groups per Spawn",
 	Sandbox_SuperbSurvivorsContinued_NpcGroupsSpawnsSize_tooltip = "Up to this number of npc groups can spawn at every hour. Capped by Limit Npc Groups",
 

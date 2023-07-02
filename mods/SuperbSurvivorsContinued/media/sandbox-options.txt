@@ -61,6 +61,15 @@ option SuperbSurvivorsContinued.IsWifeSpawnNumb
 	translation = SuperbSurvivorsContinued_IsWifeSpawnNumb,
 }
 
+option SuperbSurvivorsContinued.WifeIsGirl
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_WifeIsGirl,
+}
+
 option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
 {
 	type = integer,
