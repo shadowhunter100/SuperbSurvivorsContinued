@@ -50,6 +50,17 @@ option SuperbSurvivorsContinued.IsWifeSpawn
 	translation = SuperbSurvivorsContinued_IsWifeSpawn,
 }
 
+option SuperbSurvivorsContinued.IsWifeSpawnNumb
+{
+	type = integer,
+	min = 1,
+	max = 10,
+	default = 1,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_IsWifeSpawnNumb,
+}
+
 option SuperbSurvivorsContinued.NpcGroupsSpawnsSize
 {
 	type = integer,

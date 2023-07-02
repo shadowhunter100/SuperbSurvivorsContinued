@@ -10,6 +10,8 @@ function Get_SS_SandboxOptions()
     -- Set the skill level of all NPCs to 10. 设置所有npc的技能等级为10级
     Perk_Level = ss_options.Perk_Level;
     IsWifeSpawn = ss_options.IsWifeSpawn;
+    -- add Optional number of Wife.
+    IsWifeSpawnNumb = ss_options.IsWifeSpawnNumb;
     NpcGroupsSpawnsSize = ss_options.NpcGroupsSpawnsSize;
     NpcSpawnChance = ss_options.NpcSpawnChance;
     HostileSpawnRateBase = ss_options.HostileSpawnRateBase;
