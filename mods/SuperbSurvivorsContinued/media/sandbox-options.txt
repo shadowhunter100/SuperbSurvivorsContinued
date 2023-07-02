@@ -32,6 +32,15 @@ option SuperbSurvivorsContinued.Limit_Npcs_Spawn
 	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
 }
 
+option SuperbSurvivorsContinued.Perk_Level
+{
+	type = boolean,
+	default = true,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Perk_Level,
+}
+
 option SuperbSurvivorsContinued.IsWifeSpawn
 {
 	type = boolean,

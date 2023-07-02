@@ -10,6 +10,9 @@ Sandbox_EN = {
 	Sandbox_SuperbSurvivorsContinued_Limit_Npcs_Spawn = "Limit NPC Spawns",
 	Sandbox_SuperbSurvivorsContinued_Limit_Npcs_Spawn_tooltip = "Maximum number of NPCs that can be active in-game. WIP - This is incomplete",
 
+	Sandbox_SuperbSurvivorsContinued_Perk_Level = "survivors skill Level is 10",
+	Sandbox_SuperbSurvivorsContinued_Perk_Level_tooltip = "Set the skill level of all survivors to 10.",
+
 	Sandbox_SuperbSurvivorsContinued_IsWifeSpawn = "Spawn Wife",
 	Sandbox_SuperbSurvivorsContinued_IsWifeSpawn_tooltip = "Spawns a wife follower at the start of the game in your group.",
 
