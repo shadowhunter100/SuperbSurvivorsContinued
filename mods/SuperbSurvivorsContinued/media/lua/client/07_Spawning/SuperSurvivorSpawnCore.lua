@@ -1,80 +1,80 @@
-本地isLocalLoggingEnabled = false ;
+local isLocalLoggingEnabled = false;
 
 ---
 --[[
-	合并 SuperSurvivorsNewSurvivorManager() 和 SuperSurvivorDoRandomSpawns() 中的相同代码块
-	Cows：显然，无论出于何种原因，这些功能都需要定期运行......
-	我能理解睡眠召唤，因为NPC可以在玩家睡觉时进行治疗。
-	不知道内部愈合是否会影响感染状态或受伤...
+	Merged identical code block from SuperSurvivorsNewSurvivorManager() and SuperSurvivorDoRandomSpawns()
+	Cows: Apparently for whatever reason those functions needs to be run regularly...
+	The sleep call I can understand because npcs can heal while the player sleeps.
+	No clue if gernal healing affects infection status or injuries...
 --]]
-函数Refresh_SS_NpcStatus()
-    --这与袭击者无关，但需要偶尔运行一次
-    -- WIP - 奶牛：为什么需要运行？
-    getSpecificPlayer( 0 ):getModData().hitByCharacter = false ;
-    getSpecificPlayer( 0 ):getModData().semiHostile = false ;
-    getSpecificPlayer( 0 ):getModData().dealBreaker = nil ;
+function Refresh_SS_NpcStatus()
+    --this unrelated to raiders but need this to run every once in a while
+    -- WIP - Cows: WHY DOES THIS NEED TO RUN?
+    getSpecificPlayer(0):getModData().hitByCharacter = false;
+    getSpecificPlayer(0):getModData().semiHostile = false;
+    getSpecificPlayer(0):getModData().dealBreaker = nil;
 
-    if (getSpecificPlayer( 0 ):isAsleep()) then
+    if (getSpecificPlayer(0):isAsleep()) then
         SSM:AsleepHealAll()
-    结尾
-结尾
+    end
+end
 
---- 合并 SuperSurvivorsNewSurvivorManager() 和 SuperSurvivorDoRandomSpawns() 中的相同代码块
----@param playerGroup 任意
----@返回任何
-函数Get_SS_PlayerGroupBoundsCenter(playerGroup)
-    本地边界=playerGroup:getBounds();
-    当地中心；
+--- Merged identical code block from SuperSurvivorsNewSurvivorManager() and SuperSurvivorDoRandomSpawns()
+---@param playerGroup any
+---@return any
+function Get_SS_PlayerGroupBoundsCenter(playerGroup)
+    local bounds = playerGroup:getBounds();
+    local center;
 
-    如果（界限）那么
-        中心 = GetCenterSquareFromArea(边界[ 1 ], 边界[ 2 ], 边界[ 3 ], 边界[ 4 ], 边界[ 5 ]);
-    结尾
+    if (bounds) then
+        center = GetCenterSquareFromArea(bounds[1], bounds[2], bounds[3], bounds[4], bounds[5]);
+    end
 
-    如果（不是中心）那么
-        中心 = getSpecificPlayer( 0 ):getCurrentSquare();
-    结尾
+    if (not center) then
+        center = getSpecificPlayer(0):getCurrentSquare();
+    end
 
-    退货中心；
-结尾
+    return center;
+end
 
-- -评论
----@param npc 任意
----@param isRaider 任意
----@返回任何
-函数Equip_SS_RandomNpc(npc, isRaider)
-    本地isLocalFunctionLoggingEnabled = false ;
-    CreateLogLine( "NpcGroupsSpawnsCore" , isLocalFunctionLoggingEnabled, "函数：调用了 Equip_SS_RandomNpc()" );
+---comment
+---@param npc any
+---@param isRaider any
+---@return any
+function Equip_SS_RandomNpc(npc, isRaider)
+    local isLocalFunctionLoggingEnabled = false;
+    CreateLogLine("NpcGroupsSpawnsCore", isLocalFunctionLoggingEnabled, "function: Equip_SS_RandomNpc() called");
 
-    if (npc:hasWeapon() == false )那么
-        npc:giveWeapon(SS_MeleeWeapons[ZombRand( 1 , #SS_MeleeWeapons)]);
-    结尾
+    if (npc:hasWeapon() == false) then
+        npc:giveWeapon(SS_MeleeWeapons[ZombRand(1, #SS_MeleeWeapons)]);
+    end
 
-    本地包 = npc:getBag();
-    当地食物；
-    本地计数 = ZombRand( 0 , 3 );
+    local bag = npc:getBag();
+    local food;
+    local count = ZombRand(0, 3);
 
     if (isRaider) then
-        对于i = 1，数do
-            食物= “Base.CannedCorn” ;
-            袋：AddItem(食物);
-        结尾
-        本地rCount = ZombRand( 0 , 3 );
-        对于i = 1， rCount做
-            食物= “Base.Apple”；
-            袋：AddItem(食物);
-        结尾
-    别的
-        对于i = 1，数do
-            食物= “基础”。.. tostring(CannedFoods[ZombRand(#CannedFoods) + 1 ]);
-            袋：AddItem(食物);
-        结尾
+        for i = 1, count do
+            food = "Base.CannedCorn";
+            bag:AddItem(food);
+        end
+        local rCount = ZombRand(0, 3);
+        for i = 1, rCount do
+            food = "Base.Apple";
+            bag:AddItem(food);
+        end
+    else
+        for i = 1, count do
+            food = "Base." .. tostring(CannedFoods[ZombRand(#CannedFoods) + 1]); 
+            bag:AddItem(food);
+        end
 
-        本地rCount = ZombRand( 0 , 3 );
-        对于i = 1， rCount做
-            食物= “Base.TinnedBeans”；
-            袋：AddItem(食物);
-        结尾
-    结尾
+        local rCount = ZombRand(0, 3);
+        for i = 1, rCount do
+            food = "Base.TinnedBeans";
+            bag:AddItem(food);
+        end
+    end
 
     return npc;
 end
@@ -319,5 +319,3 @@ function SuperSurvivorsInit()
 		end
 	end
 end
-
-Events.OnGameStart.Add(SuperSurvivorsInit)
