@@ -11,9 +11,9 @@ function Get_SS_SandboxOptions()
     Perk_Level = ss_options.Perk_Level;
     IsWifeSpawn = ss_options.IsWifeSpawn;
     -- add Optional number of Wife.
-    IsWifeSpawnNumb = ss_options.IsWifeSpawnNumb;
-    -- Wife Is Girl ?
-    WifeIsGirl = ss_options.WifeIsGirl;
+    WifeCount = ss_options.WifeCount;
+    -- Wife Is Female ?
+    WifeIsFemale = ss_options.WifeIsFemale;
     NpcGroupsSpawnsSize = ss_options.NpcGroupsSpawnsSize;
     NpcSpawnChance = ss_options.NpcSpawnChance;
     HostileSpawnRateBase = ss_options.HostileSpawnRateBase;
