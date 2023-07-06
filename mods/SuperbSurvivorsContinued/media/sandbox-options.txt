@@ -32,6 +32,15 @@ option SuperbSurvivorsContinued.Limit_Npcs_Spawn
 	translation = SuperbSurvivorsContinued_Limit_Npcs_Spawn,
 }
 
+option SuperbSurvivorsContinued.Perk_Level
+{
+	type = boolean,
+	default = false,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_Perk_Level,
+}
+
 option SuperbSurvivorsContinued.IsWifeSpawn
 {
 	type = boolean,
@@ -39,6 +48,26 @@ option SuperbSurvivorsContinued.IsWifeSpawn
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_IsWifeSpawn,
+}
+
+option SuperbSurvivorsContinued.WifeCount
+{
+	type = integer,
+	min = 1,
+	max = 10,
+	default = 1,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_WifeCount,
+}
+
+option SuperbSurvivorsContinued.WifeIsFemale
+{
+	type = boolean,
+	default = false,
+
+	page = SuperbSurvivorsContinued,
+	translation = SuperbSurvivorsContinued_WifeIsFemale,
 }
 
 option SuperbSurvivorsContinued.NpcGroupsSpawnsSize

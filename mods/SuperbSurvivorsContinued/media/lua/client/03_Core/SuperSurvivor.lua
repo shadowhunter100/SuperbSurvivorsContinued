@@ -111,10 +111,34 @@ function SuperSurvivor:spawnPlayer(square, isFemale)
 	Buddy:setBlockMovement(true);
 	Buddy:setNPC(true);
 
+	-- Set the skill level of all NPCs to 10,Of course, it also includes invaders. (Evil grin). 设置所有npc的技能等级为10级,侵略者也是如此。
+	if Perk_Level == true then
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Aiming", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Axe", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Combat", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "SmallBlade", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "LongBlade", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "SmallBlunt", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Blunt", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Maintenance", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Spear", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Doctor", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Farming", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Firearm", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Reloading", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Fitness", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Lightfoot", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Nimble", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "PlantScavenging", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Sneak", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Strength", 10)
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Survivalist", 10)
+	else
 	-- required perks ------------
-	Buddy = Add_SS_NpcPerkLevel(Buddy, "Strength", 4);
-	Buddy = Add_SS_NpcPerkLevel(Buddy, "Sneak", 2);
-	Buddy = Add_SS_NpcPerkLevel(Buddy, "Lightfoot", 3);
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Strength", 4);
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Sneak", 2);
+		Buddy = Add_SS_NpcPerkLevel(Buddy, "Lightfoot", 3);
+	end
 
 	-- random perks -------------------
 	-- Cows: WIP - What is this random perks about? Maxing a random survivor's perk?
