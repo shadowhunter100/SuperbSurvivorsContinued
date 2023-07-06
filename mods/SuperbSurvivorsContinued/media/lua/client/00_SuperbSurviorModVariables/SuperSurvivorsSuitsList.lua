@@ -234,7 +234,8 @@ SurvivorRandomSuits["Preset"]["Preset_MarinesCamo"] = {
   "Base.Vest_BulletArmy",
   "Base.Trousers_CamoGreen",
   "Base.Shoes_ArmyBoots",
-  "Base.Bag_ALICEpack",
+  -- The survivor with the military Base.Bag_ALICEpack is unable to move and starts giving an error message.
+  -- "Base.Bag_ALICEpack",
   "Base.Belt2"
 }
 SurvivorRandomSuits["Preset"]["Preset_ArmyCamo"] = {
@@ -245,7 +246,7 @@ SurvivorRandomSuits["Preset"]["Preset_ArmyCamo"] = {
   "Base.Jacket_ArmyCamoDesert",
   "Base.Trousers_CamoDesert",
   "Base.Shoes_ArmyBootsDesert",
-  "Base.Bag_ALICEpack",
+  -- "Base.Bag_ALICEpack",
   "Base.Belt2"
 }
 SurvivorRandomSuits["Preset"]["Preset_Chef"] = {
