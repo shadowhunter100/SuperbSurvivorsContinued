@@ -7,7 +7,7 @@ function Get_SS_SandboxOptions()
     -- NPC Spawning
     Limit_Npc_Groups = ss_options.Limit_Npc_Groups;
     Limit_Npcs_Spawn = ss_options.Limit_Npcs_Spawn;
-    -- Set the skill level of all NPCs to 10. 设置所有npc的技能等级为10级
+    -- Sets ALL skills of all NPCs to level 10. 设置所有npc的技能等级为10级
     Perk_Level = ss_options.Perk_Level;
     IsWifeSpawn = ss_options.IsWifeSpawn;
     -- Add an optional number of companions in sandbox mode..
