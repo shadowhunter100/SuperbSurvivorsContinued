@@ -64,7 +64,7 @@ option SuperbSurvivorsContinued.WifeCount
 option SuperbSurvivorsContinued.WifeIsFemale
 {
 	type = boolean,
-	default = false,
+	default = true,
 
 	page = SuperbSurvivorsContinued,
 	translation = SuperbSurvivorsContinued_WifeIsFemale,
