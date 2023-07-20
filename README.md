@@ -1,5 +1,8 @@
 # SuperbSurvivorsContinued
 
+## Update: I am no longer actively working on this project, my attention is now on PZNS NPC Framework to do what SS/SSC cannot do.  
+* https://github.com/shadowhunter100/PZNS
+
 ## All original code credits goes to the original creators, Ryuu and nolanritchie*
 The code files in this repo are based on the Steam workshop item as of April 25, 2023.  
 * https://steamcommunity.com/sharedfiles/filedetails/?id=1905148104
@@ -38,7 +41,8 @@ In this "Continuation", I will attempt to fix the known (and unknown) issues whi
 
 ## Why no new features?
 * A functional NPC spawning framework is all I plan for this continuation.
-* The intention is to make this mod extensible, so that others can continue to work on their own things as they please without worrying about breakage and overlaps.  
+* ~The intention is to make this mod extensible, so that others can continue to work on their own things as they please without worrying about breakage and overlaps.~
+  * SS/SSC is simply not extensible due to how it was written.  
 * There are already many issues with the mod itself that it is questionable all of the issues can be fixed.
 
 In other words, I don't have the time nor will to make a "super" All-in-One platform mod with RPG quest support and a storyline.  
