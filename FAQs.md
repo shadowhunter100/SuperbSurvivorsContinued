@@ -59,7 +59,7 @@ Which is why disabling original SS will break your game and prevent the save fro
 
 ## About PZNS (Project Zomboid NPC Spawning) Framework
 - I am working on a separate new framework, the preview is available on the workshop.
-
 - https://steamcommunity.com/sharedfiles/filedetails/?id=3001908830
-- I have added a [url=https://github.com/shadowhunter100/PZNS_AgentWong/blob/main/Creating%20Your%20Own%20NPC%20in%20Project%20Zomboid%20with%20PZNS.pdf] basic tutorial draft pdf for creating your own NPC with the framework[/url].
--  Remember to have fun and *ask questions*.
+- I have added a basic tutorial draft pdf for creating your own NPC with the framework
+  - https://github.com/shadowhunter100/PZNS_AgentWong/blob/main/Creating%20Your%20Own%20NPC%20in%20Project%20Zomboid%20with%20PZNS.pdf
+- Remember to have fun and *ask questions*.
